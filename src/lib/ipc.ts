@@ -213,9 +213,9 @@ export interface QuestionContext {
 export async function submitAnswer(
   sessionId: string,
   answer: Answer,
-  question?: QuestionContext
+  question: QuestionContext
 ): Promise<Feedback> {
-  return tauriInvoke<Feedback>("submit_answer", { sessionId, answer, question: question ?? { conceptId: "", questionType: "multiple_choice", prompt: "" } });
+  return tauriInvoke<Feedback>("submit_answer", { sessionId, answer, question });
 }
 
 export async function completeQuiz(
@@ -284,7 +284,53 @@ export async function getSubmissionFeedback(
 
 export async function getGamificationState(): Promise<GamificationState | null> {
   if (!isTauri()) return null;
-  return tauriInvoke<GamificationState>("get_gamification_state");
+  const raw = await tauriInvoke<Record<string, unknown>>("get_gamification_state");
+  if (!raw) return null;
+  return normalizeGamificationState(raw);
+}
+
+/**
+ * Normalize the backend GamificationState into the frontend shape.
+ * Handles both the new nested shape and legacy flat shape for robustness.
+ */
+function normalizeGamificationState(raw: Record<string, unknown>): GamificationState {
+  // XP: accept either "xp" (new) or "total_xp"/"totalXp" (legacy)
+  const xp = Number(raw.xp ?? raw.totalXp ?? raw.total_xp ?? 0);
+
+  // Level: accept nested object (new) or flat integer (legacy)
+  const level =
+    typeof raw.level === "object" && raw.level !== null
+      ? (raw.level as GamificationState["level"])
+      : {
+          current: Number(raw.level ?? 1),
+          title: "",
+          xpForCurrent: 0,
+          xpForNext: Number(raw.xpToNextLevel ?? raw.xp_to_next_level ?? 100),
+          progress: 0,
+        };
+
+  // Streak: accept nested object (new) or flat fields (legacy)
+  const streak =
+    typeof raw.streak === "object" && raw.streak !== null
+      ? (raw.streak as GamificationState["streak"])
+      : {
+          currentDays: Number(raw.currentStreakDays ?? raw.current_streak_days ?? 0),
+          longestDays: Number(raw.longestStreakDays ?? raw.longest_streak_days ?? 0),
+          todayCompleted: false,
+          freezesAvailable: 0,
+          freezeActive: false,
+          lastActiveDate: "",
+        };
+
+  const badges = Array.isArray(raw.badges)
+    ? (raw.badges as GamificationState["badges"])
+    : [];
+
+  const recentXpEvents = Array.isArray(raw.recentXpEvents)
+    ? (raw.recentXpEvents as GamificationState["recentXpEvents"])
+    : [];
+
+  return { xp, level, streak, badges, recentXpEvents };
 }
 
 export async function awardXp(

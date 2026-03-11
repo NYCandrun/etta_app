@@ -62,6 +62,14 @@ pub fn initialize_database() -> Result<Connection, Box<dyn std::error::Error>> {
             model_version   TEXT,
             created_at      TEXT NOT NULL
         );
+
+        CREATE TABLE IF NOT EXISTS xp_events (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            amount          INTEGER NOT NULL,
+            source          TEXT NOT NULL,
+            description     TEXT NOT NULL DEFAULT '',
+            created_at      TEXT NOT NULL
+        );
         ",
     )?;
 
