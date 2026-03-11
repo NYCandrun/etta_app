@@ -345,25 +345,13 @@ pub fn complete_quiz(
         clamped.iter().sum::<f64>() / clamped.len() as f64
     };
 
-    // Calculate XP based on score
+    // Calculate XP to report back to frontend (frontend awards XP via award_xp)
     let base_xp = 10u32;
     let bonus_xp = (total_score * 40.0) as u32; // Up to 40 bonus XP for perfect score
     let xp_earned = base_xp + bonus_xp;
 
-    // Award XP via settings
-    {
-        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
-        let current_xp = db::settings::get_setting(&conn, "total_xp")
-            .map_err(|e| format!("DB error: {e}"))?
-            .and_then(|v| v.parse::<i64>().ok())
-            .unwrap_or(0);
-
-        let new_xp = current_xp + xp_earned as i64;
-        let _ = db::settings::set_setting(&conn, "total_xp", &new_xp.to_string());
-
-        // Log the quiz completion
-        eprintln!("Quiz {} completed: score={:.2}, xp={}", session_id, total_score, xp_earned);
-    }
+    // Log the quiz completion (XP is NOT awarded here — frontend calls award_xp separately)
+    eprintln!("Quiz {} completed: score={:.2}, xp_suggested={}", session_id, total_score, xp_earned);
 
     Ok(QuizCompletionResult {
         total_score,

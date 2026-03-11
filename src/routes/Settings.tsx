@@ -45,10 +45,7 @@ export default function Settings() {
       setApiKey("");
       setTestResult(null);
     } catch {
-      // Silently fail in browser
-      setApiKeySet(true);
-      setApiKeyMasked(true);
-      setApiKey("");
+      // Don't set apiKeySet=true on failure — key wasn't actually stored
     } finally {
       setSaving(false);
     }

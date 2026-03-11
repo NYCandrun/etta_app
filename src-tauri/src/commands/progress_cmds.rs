@@ -307,11 +307,11 @@ fn determine_status(
         return "in_progress".to_string();
     }
 
-    // Check if prerequisites are met.
+    // Check if prerequisites are mastered (>= 0.8 mastery threshold).
     let prereqs_met = concept.prerequisites.iter().all(|prereq_id| {
         all_concepts
             .iter()
-            .any(|c| c.id == *prereq_id && c.mastery_score > 0.0)
+            .any(|c| c.id == *prereq_id && c.mastery_score >= 0.8)
     });
 
     if prereqs_met {

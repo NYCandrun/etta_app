@@ -99,7 +99,7 @@ pub fn get_due_concepts(conn: &Connection, today: &str) -> Result<Vec<Concept>> 
 }
 
 /// Get concepts that have never been reviewed (next_review IS NULL) and whose
-/// prerequisites are all met (mastery_score > 0 for each prerequisite).
+/// prerequisites are all mastered (mastery_score >= 0.8 for each prerequisite).
 pub fn get_unlocked_new_concepts(conn: &Connection) -> Result<Vec<Concept>> {
     let all = get_all_concepts(conn)?;
     let mut unlocked = Vec::new();
@@ -110,10 +110,10 @@ pub fn get_unlocked_new_concepts(conn: &Connection) -> Result<Vec<Concept>> {
             continue;
         }
 
-        // Check prerequisites.
+        // Check prerequisites — require mastery, not just any progress.
         let prereqs_met = concept.prerequisites.iter().all(|prereq_id| {
             all.iter()
-                .any(|c| c.id == *prereq_id && c.mastery_score > 0.0)
+                .any(|c| c.id == *prereq_id && c.mastery_score >= 0.8)
         });
 
         if prereqs_met {
