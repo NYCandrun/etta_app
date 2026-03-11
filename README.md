@@ -2,15 +2,15 @@
 
 **From Algebra to Astrophysics: An Adaptive, Gamified Desktop Learning Application for macOS**
 
-Version 1.0 | March 2026 | Prepared for Jacob Nikolau
+Version 1.1 (Minimal Surface Area Revision) | March 2026 | Prepared for Jacob Nikolau
 
 ---
 
 ## 1. Executive Summary
 
-Astrolabe is a native macOS desktop application that takes a self-motivated adult learner from foundational algebra through calculus, physics, and into university-level astrophysics. It uses the Claude API as its content and tutoring engine, a local SQLite database for state, and a single Electron shell to keep the architecture as lean as possible. The pedagogy is grounded in current learning science: spaced repetition for long-term retention, mastery-based progression so nothing is skipped, retrieval practice through varied question formats, interleaved topic sequencing to deepen transfer, and Duolingo-style gamification to sustain motivation day after day.
+Astrolabe is a native macOS desktop application that takes a self-motivated adult learner from foundational algebra through calculus, physics, and into university-level astrophysics. It uses the Claude API as its sole content and tutoring engine, a local SQLite database for all state, and a Tauri shell (leveraging macOS's built-in WebKit) to keep the installed footprint under 15 MB with zero bundled runtimes. The pedagogy is grounded in current learning science: spaced repetition for long-term retention, mastery-based progression so nothing is skipped, retrieval practice through varied question formats, interleaved topic sequencing to deepen transfer, and Duolingo-style gamification to sustain motivation day after day.
 
-The application runs entirely on the user's Mac with no backend services, no user accounts, and no cloud sync. All progress, scheduling data, and submitted work live in a single local database file. The only network dependency is the Claude API for generating and evaluating content.
+The application runs entirely on the user's Mac with no backend services, no user accounts, no cloud sync, and no Node.js runtime. All progress, scheduling data, and submitted work live in a single local database file. The only network dependency is the Claude API for generating and evaluating content. File uploads (PDF, DOCX, PNG, JPG, plaintext) are sent directly to the Claude API's native document and vision capabilities — no intermediate parsing libraries are required.
 
 ---
 
@@ -79,37 +79,54 @@ Module and concept content is generated dynamically by the Claude API using a st
 
 ### 5.1 Design Philosophy: Minimal Surface Area
 
-The guiding constraint is to minimize moving parts. There is no backend server, no microservice mesh, no message queue, no Redis cache. The entire application is a single Electron process on the user's Mac that talks to exactly one external service: the Claude API over HTTPS.
+The guiding constraint is to minimize moving parts. There is no backend server, no microservice mesh, no message queue, no Redis cache, and no bundled browser engine. The entire application is a Tauri process (a thin Rust binary + macOS's built-in WebKit webview) that talks to exactly one external service: the Claude API over HTTPS. The installed app is under 15 MB.
 
 ### 5.2 Component Stack
 
 | Layer | Technology | Responsibility |
 |---|---|---|
-| Shell | Electron (macOS) | Window management, native file dialogs, menu bar, notifications, auto-update |
+| Shell | Tauri 2.x (macOS) | Window management, native file dialogs, menu bar, notifications, auto-update. Uses system WebKit — no bundled Chromium. |
 | UI | React + Tailwind CSS | All views: dashboard, lessons, quizzes, projects, settings, progress charts |
-| State | SQLite (via better-sqlite3) | All persistent data: progress, SR schedules, submissions, settings, curriculum graph |
-| AI Engine | Claude API (claude-sonnet-4-6) | Content generation, answer evaluation, adaptive explanations, project feedback |
-| File Handling | Native Node.js fs + sharp | Read uploaded docs/PDFs/images, thumbnail generation, local storage |
+| Backend | Rust (Tauri commands) | SQLite access, file I/O, macOS Keychain integration, Claude API HTTP calls |
+| State | SQLite (via rusqlite) | All persistent data: progress, concept mastery, submissions, settings, content cache |
+| AI Engine | Claude API (claude-sonnet-4-6) | Content generation, answer evaluation, adaptive explanations, project feedback, document/image parsing |
 
-### 5.3 Data Flow
+**Zero processing libraries.** PDF, DOCX, and image uploads are read as raw bytes by Rust and sent directly to the Claude API, which handles document parsing and vision natively. No pdf-parse, no mammoth.js, no sharp, no Node.js runtime.
 
-All data flows are synchronous from the user's perspective: the learner clicks, the app queries SQLite for state, calls the Claude API if new content is needed, writes the result back to SQLite, and renders the updated UI. There is no pub/sub, no websocket, no background worker. Long API calls show a skeleton loader with an encouraging micro-message (e.g., "Crafting your next challenge...").
+### 5.3 Claude API Integration: Single Unified Prompt
 
-### 5.4 Offline Behavior
+Rather than maintaining a library of separate versioned system prompts for lessons, quizzes, explanations, and evaluation, Astrolabe uses a single "tutor" system prompt with a structured `mode` parameter. The system prompt contains the full voice guidelines, curriculum context, and learner history. The mode parameter tells Claude which output shape to produce:
+
+| Mode | Output | Token Budget |
+|---|---|---|
+| `lesson` | Explanatory content with LaTeX, worked examples, diagrams | 4,000 |
+| `quiz` | Array of questions with answers, hints, and explanations | 1,500 |
+| `explain` | Alternative explanation using a specified strategy (analogy, Socratic, scaffold-down) | 2,000 |
+| `evaluate` | Rubric-based feedback on a submitted file | 6,000 |
+| `review` | Spaced-repetition recall questions for due concepts | 1,500 |
+
+One prompt to maintain. One API calling pattern. The mode and learner context (mastery scores, attempt history, current concept) are injected as structured parameters in the user message.
+
+### 5.4 Data Flow
+
+All data flows are synchronous from the user's perspective: the learner clicks, the Rust backend queries SQLite for state, calls the Claude API if new content is needed, writes the result back to SQLite, and returns the data to the React UI over Tauri's IPC bridge. There is no pub/sub, no websocket, no background worker. Long API calls show a skeleton loader with an encouraging micro-message (e.g., "Crafting your next challenge...").
+
+### 5.5 Offline Behavior
 
 If the network is unreachable, the app falls back to a "review-only" mode: it serves spaced-repetition quizzes from its local cache of previously generated questions. New lessons and project feedback are unavailable until connectivity returns. A subtle banner indicates offline status without alarm.
 
-### 5.5 Data Storage Schema
+### 5.6 Data Storage Schema (Flattened)
+
+The schema is consolidated from seven tables down to four by merging quiz history and SR scheduling into a single concept progress table, and folding gamification fields into settings.
 
 | Table | Key Fields | Purpose |
 |---|---|---|
-| concepts | id, domain, module, title, prerequisites, mastery_score | Curriculum graph nodes |
-| sr_schedule | concept_id, next_review, interval_days, ease_factor | SM-2 spaced repetition state |
-| quiz_history | concept_id, timestamp, question_type, correct, latency_ms | Raw performance data |
-| submissions | concept_id, project_id, file_path, mime_type, feedback_json | Project uploads and AI feedback |
-| gamification | xp, level, streak_days, streak_start, badges_json | Player profile |
-| settings | key, value | API key, theme, daily goal, notification prefs |
-| content_cache | concept_id, content_type, payload_json, created_at | Cached lessons/questions for offline |
+| concepts | id, domain, module, title, prerequisites, mastery_score, ease_factor, interval_days, next_review, last_correct, last_latency_ms, attempt_count, streak_correct | Curriculum graph + per-concept SR state + performance history (replaces separate sr_schedule and quiz_history tables) |
+| submissions | concept_id, project_id, file_path, mime_type, feedback_json, status, submitted_at | Project uploads and AI feedback |
+| settings | key, value | API key (reference to Keychain), theme, daily goal, notification prefs, xp, level, streak_days, streak_start, badges_json |
+| content_cache | concept_id, content_type, payload_json, model_version, created_at | Cached lessons/questions for offline mode |
+
+Four tables. One file. No migrations framework — schema is created on first launch via a bundled SQL init script.
 
 ---
 
@@ -182,7 +199,7 @@ When a learner answers incorrectly or clicks "I don't get it," the app escalates
 3. **Attempt 3:** Socratic questioning that walks the learner backward to the specific point of confusion.
 4. **Attempt 4:** Scaffold down to the prerequisite concept and re-teach it before returning.
 
-Each attempt is a separate Claude API call with a system prompt that specifies the explanation strategy, the learner's history with this concept, and the voice guidelines.
+Each attempt is a Claude API call using the unified tutor prompt in `explain` mode, with a `strategy` parameter specifying the approach (textbook, analogy, socratic, or scaffold-down) and the learner's full history with this concept injected as context.
 
 ---
 
@@ -203,10 +220,12 @@ Learners upload their work through a native file dialog. Supported formats:
 
 | Format | MIME Type | Processing |
 |---|---|---|
-| PDF | application/pdf | Text extracted via pdf-parse; images extracted and sent to Claude Vision |
-| DOCX | application/vnd.openxmlformats... | Text extracted via mammoth.js |
-| PNG / JPG | image/png, image/jpeg | Sent directly to Claude Vision for handwriting/diagram analysis |
-| Plaintext | text/plain | Sent directly as string |
+| PDF | application/pdf | Read as raw bytes by Rust, sent directly to Claude API (native PDF support) |
+| DOCX | application/vnd.openxmlformats... | Read as raw bytes by Rust, sent directly to Claude API (native document support) |
+| PNG / JPG | image/png, image/jpeg | Read as raw bytes by Rust, sent directly to Claude Vision for handwriting/diagram analysis |
+| Plaintext | text/plain | Read by Rust, sent directly as string |
+
+No intermediate parsing libraries are involved. The Rust backend reads the file from disk and attaches it to the Claude API request as a base64-encoded content block. Claude handles all text extraction, OCR, and image analysis natively.
 
 The Claude API evaluates the submission against a rubric generated from the project's learning objectives. Feedback is always constructive: it identifies what the learner did well, where the reasoning diverged, and suggests a specific next step. No letter grades — only qualitative feedback and a pass/revise status.
 
@@ -217,29 +236,31 @@ The Claude API evaluates the submission against a rubric generated from the proj
 ### 9.1 Platform and Distribution
 
 - **OS:** macOS 13 (Ventura) and later. Universal binary (Apple Silicon + Intel).
-- **Framework:** Electron 30+ with context isolation and sandboxing enabled.
-- **Packaging:** electron-builder producing a signed, notarized .dmg. Auto-update via electron-updater from a static file host (S3 or GitHub Releases).
-- **Size target:** < 150 MB installed. No bundled LLM weights; all AI is via API.
+- **Framework:** Tauri 2.x. Uses macOS's built-in WebKit — no bundled browser engine.
+- **Packaging:** Tauri's built-in bundler producing a signed, notarized .dmg. Auto-update via Tauri's updater plugin from a static file host (S3 or GitHub Releases).
+- **Size target:** < 15 MB installed. No bundled runtimes, no LLM weights; all AI is via API.
+- **Dependencies:** Rust (compiled to native binary), React + Tailwind (bundled as static assets), rusqlite (statically linked). Zero npm runtime dependencies.
 
 ### 9.2 Claude API Integration
 
-- **Model:** claude-sonnet-4-6 for content generation and evaluation. Configurable to allow future model upgrades.
-- **Authentication:** User provides their own API key in Settings. Stored in macOS Keychain via keytar, never in SQLite.
-- **Rate management:** Client-side token budgeting. Each lesson generation capped at 4,000 output tokens; quiz questions at 1,500; project feedback at 6,000.
-- **System prompts:** A library of versioned system prompts stored as JSON in the app bundle, one per interaction type (lesson, quiz, explanation, evaluation). All include the voice guidelines.
+- **Model:** claude-sonnet-4-6 for all interactions. Configurable to allow future model upgrades.
+- **Authentication:** User provides their own API key in Settings. Stored in macOS Keychain via Tauri's native Keychain plugin, never in SQLite.
+- **Rate management:** Client-side token budgeting per mode (see Section 5.3).
+- **System prompt:** A single unified tutor prompt bundled in the app binary. Mode, learner context, and concept metadata are injected per-request as structured parameters. One prompt to version and maintain.
 - **Caching:** Generated content is cached in `content_cache` table keyed by `(concept_id, content_type, model_version)`. Cache is invalidated when the curriculum graph changes or the model version is updated.
 
 ### 9.3 Performance Targets
 
 | Metric | Target |
 |---|---|
-| Cold launch to dashboard | < 3 seconds |
-| Lesson load (cached) | < 200 ms |
+| Cold launch to dashboard | < 1.5 seconds (Tauri launches faster than Electron) |
+| Lesson load (cached) | < 100 ms |
 | Lesson load (API) | < 8 seconds (with streaming) |
 | Quiz question generation | < 4 seconds |
 | Project feedback | < 20 seconds |
-| SQLite query (any) | < 50 ms |
-| Memory footprint (idle) | < 200 MB |
+| SQLite query (any) | < 10 ms (rusqlite is native, not N-API bridged) |
+| Memory footprint (idle) | < 80 MB (no Chromium process) |
+| Installed size | < 15 MB |
 
 ---
 
@@ -267,9 +288,9 @@ Mastery scores decay over time using an exponential forgetting curve calibrated 
 
 ### 11.1 Security
 
-- API key stored in macOS Keychain, not on disk or in SQLite.
+- API key stored in macOS Keychain via Tauri's native Keychain plugin, not on disk or in SQLite.
 - No user data ever leaves the machine except as Claude API requests (subject to Anthropic's data retention policies).
-- Electron context isolation and `nodeIntegration: false`.
+- Tauri's security model: no Node.js runtime, no `nodeIntegration` concern. The Rust backend exposes only explicitly defined IPC commands to the webview.
 - Content Security Policy restricts all external resource loading except the Claude API endpoint.
 
 ### 11.2 Privacy
@@ -297,16 +318,16 @@ Mastery scores decay over time using an exponential forgetting curve calibrated 
 
 | Milestone | Scope | Duration |
 |---|---|---|
-| M0: Skeleton | Electron shell, SQLite schema, settings screen, API key entry, single hardcoded lesson rendering | 3 weeks |
-| M1: Core Loop | Curriculum graph for Algebra, lesson generation, quiz generation, mastery scoring, basic SR scheduling | 6 weeks |
+| M0: Skeleton | Tauri shell, Rust backend with rusqlite, SQLite schema (4 tables), settings screen, API key → Keychain, single hardcoded lesson rendering | 3 weeks |
+| M1: Core Loop | Curriculum graph for Algebra, unified tutor prompt, lesson + quiz mode generation, mastery scoring, basic SR scheduling | 5 weeks |
 | M2: Gamification | XP, streaks, levels, badges, dashboard with skill tree, daily goal ring | 3 weeks |
-| M3: Adaptive Engine | Multi-strategy explanation pipeline, scaffold-down logic, interleaved problem sets | 4 weeks |
-| M4: Projects | Project prompts, file upload (PDF/DOCX/PNG/JPG/TXT), Claude evaluation, feedback rendering | 4 weeks |
+| M3: Adaptive Engine | Multi-strategy explanation pipeline (explain mode), scaffold-down logic, interleaved problem sets | 4 weeks |
+| M4: Projects | Project prompts, native file dialog upload, raw-bytes-to-Claude evaluation (evaluate mode), feedback rendering | 3 weeks |
 | M5: Full Curriculum | Extend curriculum graph through all 12 domains. Automated testing of generated content quality. | 6 weeks |
-| M6: Polish | Offline mode, accessibility audit, VoiceOver, auto-update, .dmg packaging, notarization | 4 weeks |
+| M6: Polish | Offline mode, accessibility audit, VoiceOver, Tauri auto-updater, .dmg packaging, notarization | 3 weeks |
 | M7: Beta | Closed beta with 10–20 testers. Iterate on pacing, difficulty curves, and gamification balance. | 4 weeks |
 
-Total estimated timeline: approximately 34 weeks from kickoff to beta, assuming a solo developer or small team.
+Total estimated timeline: approximately 31 weeks from kickoff to beta, assuming a solo developer or small team. The reduction from 34 weeks reflects the simpler architecture: no Node.js runtime to configure, no document-parsing libraries to integrate and debug, and fewer database tables to manage.
 
 ---
 
@@ -332,7 +353,7 @@ Total estimated timeline: approximately 34 weeks from kickoff to beta, assuming 
 | API cost at scale | Medium | Medium | Aggressive caching. Sonnet-tier model for routine tasks. Token budgets per interaction type. User sees estimated cost per session. |
 | Learner burnout | Medium | High | Configurable daily goals. Streak freezes. Encouraging tone. Auto-suggest breaks after 60 min. Weekly "fun fact" interludes. |
 | Curriculum pacing too fast/slow | High | Medium | Beta testing with real learners. Adjustable mastery thresholds in Settings. Monthly review recalibrates ease factors. |
-| Electron app size bloat | Low | Low | No heavy native modules. Tree-shake unused Electron APIs. Target < 150 MB. |
+| Rust learning curve | Medium | Low | Tauri's IPC layer is straightforward. The Rust backend is thin (SQLite + HTTP + file I/O). No complex concurrency needed. |
 | Offline mode limitations | Low | Medium | Cache last 50 generated questions per domain. Clearly communicate that new content requires connectivity. |
 
 ---
