@@ -34,7 +34,11 @@ export function useSaveProgress() {
       savedAt: new Date().toISOString(),
     };
     try {
-      await ipc.setSetting(SAVE_KEY, JSON.stringify(progress));
+      // Save both screen position AND learning progress data
+      await Promise.all([
+        ipc.setSetting(SAVE_KEY, JSON.stringify(progress)),
+        ipc.saveProgress(), // triggers mastery snapshot in backend
+      ]);
       return true;
     } catch {
       return false;

@@ -1,9 +1,17 @@
 use crate::db;
-use crate::engine::decay;
+use crate::engine::{decay, snapshots};
 use crate::AppState;
 use serde::Serialize;
 use std::collections::HashMap;
 use tauri::State;
+
+/// Manually trigger a mastery snapshot to persist current learning progress.
+#[tauri::command]
+pub fn save_progress(state: State<'_, AppState>) -> Result<(), String> {
+    let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+    snapshots::record_mastery_snapshots(&conn)?;
+    Ok(())
+}
 
 /// A frontend-compatible concept with all fields the UI needs.
 #[derive(Debug, Serialize)]

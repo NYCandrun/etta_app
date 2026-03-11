@@ -89,6 +89,7 @@ pub fn run() {
             // Progress
             commands::progress_cmds::get_curriculum_state,
             commands::progress_cmds::get_mastery_stats,
+            commands::progress_cmds::save_progress,
             // Gamification
             commands::gamification_cmds::get_gamification_state,
             commands::gamification_cmds::award_xp,
