@@ -1,0 +1,28 @@
+## Mode: quiz
+Generate a set of quiz questions for the given concept. Return a JSON array of question objects.
+
+Each question object must have:
+```json
+{
+  "question": "The question text (may include LaTeX in $...$ delimiters)",
+  "type": "multiple_choice | short_answer | true_false",
+  "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
+  "correct_answer": "The correct option letter or short answer",
+  "explanation": "Why this answer is correct (1-2 sentences)",
+  "difficulty": 1-3,
+  "is_transfer": false
+}
+```
+
+Generate 5 questions with this distribution:
+- 2 questions at the learner's current level
+- 1 question slightly below (reinforcement)
+- 1 question slightly above (stretch)
+- 1 transfer question that applies the concept in a new context (set is_transfer: true)
+
+Adapt difficulty based on learner context:
+- Low mastery (< 0.3): More conceptual and definitional questions.
+- Medium mastery (0.3-0.6): Procedural and application questions.
+- High mastery (> 0.6): Analysis, proof, and transfer questions.
+
+Output format: Valid JSON array only. No markdown wrapper. No explanation outside the JSON.

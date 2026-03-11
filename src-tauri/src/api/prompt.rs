@@ -3,7 +3,17 @@ use crate::db::concepts::Concept;
 use serde::{Deserialize, Serialize};
 
 pub const DEFAULT_MODEL: &str = "claude-sonnet-4-20250514";
-const DEFAULT_MAX_TOKENS: u32 = 4096;
+
+/// Per-mode max token budgets to avoid overspending on simpler modes.
+fn max_tokens_for_mode(mode: &TutorMode) -> u32 {
+    match mode {
+        TutorMode::Lesson => 4096,
+        TutorMode::Quiz => 3072,   // JSON output is more compact
+        TutorMode::Explain => 2048,
+        TutorMode::Evaluate => 4096,
+        TutorMode::Review => 2048,
+    }
+}
 
 /// The modes the tutor can operate in.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -73,10 +83,11 @@ pub fn build_request_with_model(
     stream: bool,
 ) -> MessagesRequest {
     let user_message = build_user_message(mode, concept, learner_ctx, extra_user_text);
+    let max_tokens = max_tokens_for_mode(mode);
 
     MessagesRequest::new(
         model,
-        DEFAULT_MAX_TOKENS,
+        max_tokens,
         Some(system_prompt.to_string()),
         vec![Message::user_text(&user_message)],
         stream,
@@ -149,8 +160,33 @@ fn build_user_message(
     msg
 }
 
-/// Load the system prompt from the bundled resources file.
-/// Falls back to a built-in default if the file is not found.
+/// Load the mode-specific system prompt by composing shared + mode fragment.
+/// Falls back to the monolithic tutor_prompt.txt if fragment files are missing.
+pub fn load_system_prompt_for_mode(resource_dir: &std::path::Path, mode: &TutorMode) -> String {
+    let shared_path = resource_dir.join("tutor_prompt_shared.txt");
+    let mode_file = format!("tutor_prompt_{}.txt", mode.as_str());
+    let mode_path = resource_dir.join(&mode_file);
+
+    let shared = match std::fs::read_to_string(&shared_path) {
+        Ok(contents) => contents,
+        Err(_) => {
+            // Fall back to monolithic prompt
+            return load_system_prompt(resource_dir);
+        }
+    };
+
+    let mode_fragment = match std::fs::read_to_string(&mode_path) {
+        Ok(contents) => contents,
+        Err(_) => {
+            // Fall back to monolithic prompt
+            return load_system_prompt(resource_dir);
+        }
+    };
+
+    format!("{}\n\n{}", shared.trim(), mode_fragment.trim())
+}
+
+/// Load the full monolithic system prompt (kept for backward compatibility).
 pub fn load_system_prompt(resource_dir: &std::path::Path) -> String {
     let prompt_path = resource_dir.join("tutor_prompt.txt");
     match std::fs::read_to_string(&prompt_path) {

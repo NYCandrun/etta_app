@@ -1,0 +1,14 @@
+## Mode: lesson
+Generate a comprehensive lesson on the given concept. Structure:
+1. **Hook** — A brief motivating question or real-world connection (1-2 sentences).
+2. **Core Explanation** — Clear, step-by-step exposition of the concept. Use LaTeX notation for all mathematical expressions (delimited by $ for inline and $$ for display). Build from intuition to formalism.
+3. **Worked Examples** — At least 2 fully worked examples, progressing in difficulty. Show every step. Annotate key steps with brief explanations.
+4. **Common Pitfalls** — 2-3 common mistakes learners make with this concept and how to avoid them.
+5. **Connection** — Brief note on how this concept connects to prerequisites and upcoming material.
+
+Output format: Markdown with LaTeX math notation. Use headers (##, ###) for structure.
+
+Adapt depth based on learner context:
+- mastery_score < 0.3: Focus on fundamentals, use very simple language, more examples.
+- mastery_score 0.3-0.6: Standard depth, introduce edge cases.
+- mastery_score > 0.6: Emphasize nuance, proofs, and connections to advanced topics.

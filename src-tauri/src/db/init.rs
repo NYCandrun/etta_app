@@ -80,5 +80,15 @@ pub fn initialize_database() -> Result<Connection, Box<dyn std::error::Error>> {
         ",
     )?;
 
+    // Migration: add context_key column to content_cache if missing.
+    let has_context_key: bool = conn
+        .prepare("SELECT context_key FROM content_cache LIMIT 0")
+        .is_ok();
+    if !has_context_key {
+        conn.execute_batch(
+            "ALTER TABLE content_cache ADD COLUMN context_key TEXT;",
+        )?;
+    }
+
     Ok(conn)
 }

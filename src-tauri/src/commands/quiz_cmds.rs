@@ -20,42 +20,24 @@ fn xml_escape(s: &str) -> String {
         .replace('\'', "&apos;")
 }
 
+/// Bucket mastery into coarse tiers for cache keying.
+fn mastery_bucket(score: f64) -> &'static str {
+    if score < 0.3 {
+        "low"
+    } else if score <= 0.6 {
+        "mid"
+    } else {
+        "high"
+    }
+}
+
 #[tauri::command]
 pub async fn get_quiz(
     state: State<'_, AppState>,
     app_handle: tauri::AppHandle,
     concept_id: String,
 ) -> Result<String, String> {
-    // Check cache.
-    {
-        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
-        if let Some(cached) =
-            db::content_cache::get_cached_content(&conn, &concept_id, "quiz")
-                .map_err(|e| format!("DB error: {e}"))?
-        {
-            return Ok(cached.payload_json);
-        }
-    }
-
-    let concept = {
-        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
-        db::concepts::get_concept(&conn, &concept_id)
-            .map_err(|e| format!("DB error: {e}"))?
-            .ok_or_else(|| format!("Concept not found: {concept_id}"))?
-    };
-
-    let api_key = keychain::get_api_key()?
-        .ok_or_else(|| "API key not configured.".to_string())?;
-
-    let resource_dir = app_handle
-        .path()
-        .resource_dir()
-        .map_err(|e| format!("Failed to resolve resource dir: {e}"))?;
-    let system_prompt = prompt::load_system_prompt(&resource_dir);
-
-    let learner_ctx = LearnerContext::from(&concept);
-
-    // Use user-configured base model if available
+    // Resolve model early for cache keying.
     let model = {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         db::settings::get_setting(&conn, "base_model")
@@ -66,6 +48,37 @@ pub async fn get_quiz(
             .unwrap_or_else(|| prompt::DEFAULT_MODEL.to_string())
     };
 
+    let concept = {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        db::concepts::get_concept(&conn, &concept_id)
+            .map_err(|e| format!("DB error: {e}"))?
+            .ok_or_else(|| format!("Concept not found: {concept_id}"))?
+    };
+
+    // Context-aware cache: match model + mastery bucket.
+    let bucket = mastery_bucket(concept.mastery_score);
+    {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        if let Some(cached) =
+            db::content_cache::get_cached_content_ctx(&conn, &concept_id, "quiz", &model, bucket)
+                .map_err(|e| format!("DB error: {e}"))?
+        {
+            return Ok(cached.payload_json);
+        }
+    }
+
+    let api_key = keychain::get_api_key()?
+        .ok_or_else(|| "API key not configured.".to_string())?;
+
+    // Load mode-specific system prompt (shared + quiz fragment only).
+    let resource_dir = app_handle
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Failed to resolve resource dir: {e}"))?;
+    let system_prompt = prompt::load_system_prompt_for_mode(&resource_dir, &TutorMode::Quiz);
+
+    let learner_ctx = LearnerContext::from(&concept);
+
     let request = prompt::build_request_with_model(
         &model, &TutorMode::Quiz, &concept, &learner_ctx, &system_prompt, None, false,
     );
@@ -74,7 +87,14 @@ pub async fn get_quiz(
     let response = client.send(&request).await?;
     let text = extract_text(&response);
 
-    // Cache the quiz.
+    // Log token usage.
+    eprintln!(
+        "[quiz] concept={} model={} in={} out={} stop={}",
+        concept_id, response.model, response.usage.input_tokens, response.usage.output_tokens,
+        response.stop_reason.as_deref().unwrap_or("none")
+    );
+
+    // Cache with context key.
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         let entry = db::content_cache::CachedContent {
@@ -83,6 +103,7 @@ pub async fn get_quiz(
             content_type: "quiz".to_string(),
             payload_json: text.clone(),
             model_version: Some(response.model),
+            context_key: Some(bucket.to_string()),
             created_at: chrono::Utc::now().to_rfc3339(),
         };
         let _ = db::content_cache::insert_cache_entry(&conn, &entry);
@@ -234,6 +255,14 @@ pub async fn submit_answer(
                 last_correct.as_deref(),
                 time_ms,
                 new_streak,
+            );
+
+            // Invalidate cached content when mastery crosses a tier boundary.
+            let _ = db::content_cache::invalidate_on_mastery_shift(
+                &conn,
+                &question.concept_id,
+                concept.mastery_score,
+                new_mastery,
             );
         }
     }

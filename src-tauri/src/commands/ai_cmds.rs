@@ -1,4 +1,5 @@
 use crate::api::client::{extract_text, ClaudeClient};
+use crate::api::prompt::{self, LearnerContext, TutorMode};
 use crate::api::types::{ContentBlock, ImageSource, Message, MessagesRequest};
 use crate::db;
 use crate::keychain;
@@ -104,6 +105,13 @@ pub async fn explain_mistake(
 
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+
+    eprintln!(
+        "[explain_mistake] model={} in={} out={} stop={}",
+        response.model, response.usage.input_tokens, response.usage.output_tokens,
+        response.stop_reason.as_deref().unwrap_or("none")
+    );
+
     Ok(extract_text(&response))
 }
 
@@ -176,6 +184,13 @@ pub async fn regrade_with_reasoning(
 
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+
+    eprintln!(
+        "[regrade] model={} in={} out={} stop={}",
+        response.model, response.usage.input_tokens, response.usage.output_tokens,
+        response.stop_reason.as_deref().unwrap_or("none")
+    );
+
     let text = extract_text(&response);
 
     // Parse the JSON response
@@ -303,17 +318,17 @@ pub async fn request_explanation(
     let strategy = strategies.get(attempt as usize % strategies.len()).unwrap_or(&"default");
     let next_strategy = strategies.get((attempt as usize + 1) % strategies.len()).map(|s| s.to_string());
 
+    // Load mode-specific prompt (shared + explain fragment) instead of the full monolithic prompt.
     let resource_dir = app_handle
         .path()
         .resource_dir()
         .map_err(|e| format!("Failed to resolve resource dir: {e}"))?;
-    let system_prompt = crate::api::prompt::load_system_prompt(&resource_dir);
+    let base_prompt = prompt::load_system_prompt_for_mode(&resource_dir, &TutorMode::Explain);
 
     let system = format!(
         "{}\n\nThe student is requesting an additional explanation (attempt #{}) for the concept below. \
-         Use the '{}' strategy: {}. \
-         Use LaTeX notation wrapped in $ delimiters for math. Be encouraging.",
-        system_prompt,
+         Use the '{}' strategy: {}.",
+        base_prompt,
         attempt + 1,
         strategy,
         match *strategy {
@@ -325,15 +340,21 @@ pub async fn request_explanation(
         }
     );
 
-    let user_msg = format!(
-        "<concept>\n  <id>{}</id>\n  <title>{}</title>\n  <domain>{}</domain>\n  <module>{}</module>\n</concept>\n\n\
-         Please explain this concept again using the {} approach.",
-        concept.id, concept.title, concept.domain, concept.module, strategy
+    // Route through build_request_with_model so learner context and mode tags are included.
+    let learner_ctx = LearnerContext::from(&concept);
+    let extra = format!("Please explain this concept again using the {} approach.", strategy);
+    let request = prompt::build_request_with_model(
+        &model, &TutorMode::Explain, &concept, &learner_ctx, &system, Some(&extra), false,
     );
 
-    let request = MessagesRequest::new(&model, 2048, Some(system), vec![Message::user_text(&user_msg)], false);
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+
+    eprintln!(
+        "[explain] concept={} model={} attempt={} in={} out={} stop={}",
+        concept_id, response.model, attempt, response.usage.input_tokens, response.usage.output_tokens,
+        response.stop_reason.as_deref().unwrap_or("none")
+    );
 
     Ok(ExplanationResponse {
         content: extract_text(&response),
@@ -384,6 +405,13 @@ pub async fn verify_no_right_answer(
     let request = MessagesRequest::new(&model, 512, Some(system), vec![Message::user_text(&user_msg)], false);
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+
+    eprintln!(
+        "[verify_no_right] model={} in={} out={} stop={}",
+        response.model, response.usage.input_tokens, response.usage.output_tokens,
+        response.stop_reason.as_deref().unwrap_or("none")
+    );
+
     let text = extract_text(&response);
 
     #[derive(Deserialize)]

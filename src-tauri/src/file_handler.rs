@@ -7,6 +7,10 @@ use std::path::Path;
 /// Maximum file size: 25 MB.
 const MAX_FILE_SIZE: u64 = 25 * 1024 * 1024;
 
+/// Stricter limit for text-based files (source code, markdown, etc.)
+/// since they expand fully into tokens when sent to the API.
+const MAX_TEXT_FILE_SIZE: u64 = 512 * 1024; // 512 KB
+
 /// Allowed MIME types for file uploads.
 const ALLOWED_MIME_TYPES: &[&str] = &[
     "application/pdf",
@@ -72,6 +76,17 @@ pub fn process_file(path: &str) -> Result<ProcessedFile, String> {
         std::fs::read(&canonical).map_err(|e| format!("Failed to read file: {e}"))?;
 
     let mime_type = detect_mime_type(&canonical, &bytes);
+
+    // Apply stricter limit for text files (they expand fully into tokens).
+    if mime_type.starts_with("text/") || mime_type == "application/json" {
+        if metadata.len() > MAX_TEXT_FILE_SIZE {
+            return Err(format!(
+                "Text file is too large ({:.0} KB). Maximum for text files is {} KB to limit API costs.",
+                metadata.len() as f64 / 1024.0,
+                MAX_TEXT_FILE_SIZE / 1024
+            ));
+        }
+    }
 
     // Validate MIME type against whitelist
     if !ALLOWED_MIME_TYPES.contains(&mime_type.as_str()) {

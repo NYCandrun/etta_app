@@ -1,6 +1,6 @@
 use crate::api::client::{extract_text, ClaudeClient};
 use crate::api::prompt::{self, LearnerContext, TutorMode};
-use crate::api::types::{ContentBlock, DocumentSource, ImageSource, Message, MessageContent};
+use crate::api::types::{ContentBlock, DocumentSource, ImageSource, Message};
 use crate::db;
 use crate::file_handler;
 use crate::keychain;
@@ -97,7 +97,7 @@ pub async fn submit_project(
         .path()
         .resource_dir()
         .map_err(|e| format!("Failed to resolve resource dir: {e}"))?;
-    let system_prompt = prompt::load_system_prompt(&resource_dir);
+    let system_prompt = prompt::load_system_prompt_for_mode(&resource_dir, &TutorMode::Evaluate);
 
     // Build the API request with the file attached.
     let learner_ctx = LearnerContext::from(&concept);
@@ -118,8 +118,19 @@ pub async fn submit_project(
 
     let messages = vec![Message::user_blocks(vec![text_block, file_block])];
 
+    // Use user-configured base model for evaluation.
+    let model = {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        db::settings::get_setting(&conn, "base_model")
+            .ok()
+            .flatten()
+            .map(|v| v.trim_matches('"').to_string())
+            .filter(|v| !v.is_empty())
+            .unwrap_or_else(|| prompt::DEFAULT_MODEL.to_string())
+    };
+
     let request = crate::api::types::MessagesRequest::new(
-        "claude-sonnet-4-20250514",
+        &model,
         4096,
         Some(system_prompt),
         messages,
@@ -129,6 +140,12 @@ pub async fn submit_project(
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
     let feedback = extract_text(&response);
+
+    eprintln!(
+        "[evaluate] concept={} model={} in={} out={} file_size={} stop={}",
+        submission.concept_id, response.model, response.usage.input_tokens, response.usage.output_tokens,
+        processed.size_bytes, response.stop_reason.as_deref().unwrap_or("none")
+    );
 
     // Update the submission with feedback.
     {

@@ -1,0 +1,15 @@
+## Mode: review
+Generate a review session for a concept the learner has studied before. This is for spaced repetition — the learner has seen this material but needs to refresh.
+
+Structure:
+1. **Quick Recall** — 2-3 rapid-fire questions to activate prior knowledge.
+2. **Key Ideas** — Bullet-point summary of the most important facts and procedures (not a full lesson).
+3. **Practice Problem** — One challenging problem that tests deep understanding, with a hidden solution the learner can reveal.
+
+Adapt based on learner context:
+- If ease_factor is high (> 2.5): Learner finds this easy — focus on edge cases and connections.
+- If ease_factor is low (< 2.0): Learner finds this difficult — provide more scaffolding and simpler problems.
+- If streak_correct is high (> 5): Challenge them with harder problems.
+- If streak_correct is 0: They just got one wrong — be extra encouraging and rebuild confidence.
+
+Output format: Markdown with LaTeX math notation.
