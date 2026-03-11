@@ -1,7 +1,7 @@
 import { tauriInvoke, isTauri } from "@/hooks/useInvoke";
 import type { CurriculumState, Concept, ConceptState } from "@/types/concept";
 import type { LessonContent, ExplanationResponse } from "@/types/lesson";
-import type { QuizSession, Answer, Feedback } from "@/types/quiz";
+import type { QuizSession, Question, Answer, Feedback } from "@/types/quiz";
 import type {
   ProjectDefinition,
   Submission,
@@ -354,6 +354,38 @@ export async function getQuiz(conceptId: string): Promise<QuizSession> {
  * Normalize the backend quiz response into the frontend QuizSession shape.
  * Backend returns a raw JSON string; the frontend expects a parsed QuizSession.
  */
+/**
+ * Strip markdown code-block wrappers (```json ... ```) that LLMs sometimes add
+ * despite being told not to.
+ */
+function stripMarkdownCodeBlock(text: string): string {
+  const trimmed = text.trim();
+  const match = trimmed.match(/^```(?:json)?\s*\n?([\s\S]*?)\n?\s*```$/);
+  return match?.[1]?.trim() ?? trimmed;
+}
+
+function normalizeQuestion(q: Record<string, unknown>, i: number, conceptId: string): Question {
+  return {
+    id: String(q.id ?? `q_${i}`),
+    conceptId: String(q.conceptId ?? q.concept_id ?? conceptId),
+    type: String(q.type ?? q.questionType ?? q.question_type ?? "multiple_choice") as Question["type"],
+    prompt: String(q.prompt ?? q.question ?? ""),
+    options: Array.isArray(q.options)
+      ? q.options.map((o: Record<string, unknown>, j: number) => ({
+          id: String(o.id ?? `opt_${j}`),
+          text: String(o.text ?? o.label ?? ""),
+          isCorrect: Boolean(o.isCorrect ?? o.is_correct ?? o.correct ?? false),
+        }))
+      : undefined,
+    blanks: Array.isArray(q.blanks ?? q.expectedBlanks ?? q.expected_blanks)
+      ? (q.blanks ?? q.expectedBlanks ?? q.expected_blanks) as string[]
+      : undefined,
+    rubric: (q.rubric as string) ?? undefined,
+    difficulty: Number(q.difficulty ?? 1),
+    explanation: String(q.explanation ?? ""),
+  };
+}
+
 function normalizeQuizSession(raw: QuizSession | string, conceptId: string): QuizSession {
   if (typeof raw === "object" && raw !== null && "questions" in raw) {
     return raw;
@@ -362,43 +394,47 @@ function normalizeQuizSession(raw: QuizSession | string, conceptId: string): Qui
   const text = typeof raw === "string" ? raw : JSON.stringify(raw);
 
   try {
-    const parsed = JSON.parse(text);
-    if (typeof parsed === "object" && parsed !== null) {
-      const questions = Array.isArray(parsed.questions)
-        ? parsed.questions.map((q: Record<string, unknown>, i: number) => ({
-            id: q.id ?? `q_${i}`,
-            type: String(q.type ?? q.questionType ?? q.question_type ?? "multiple_choice"),
-            prompt: String(q.prompt ?? q.question ?? ""),
-            options: Array.isArray(q.options)
-              ? q.options.map((o: Record<string, unknown>, j: number) => ({
-                  id: o.id ?? `opt_${j}`,
-                  text: String(o.text ?? o.label ?? ""),
-                  isCorrect: Boolean(o.isCorrect ?? o.is_correct ?? o.correct ?? false),
-                }))
-              : undefined,
-            blanks: Array.isArray(q.blanks ?? q.expectedBlanks ?? q.expected_blanks)
-              ? (q.blanks ?? q.expectedBlanks ?? q.expected_blanks) as string[]
-              : undefined,
-            rubric: (q.rubric as string) ?? undefined,
-            explanation: (q.explanation as string) ?? undefined,
-          }))
-        : [];
+    const jsonStr = stripMarkdownCodeBlock(text);
+    const parsed = JSON.parse(jsonStr);
+
+    // The prompt asks for a JSON array of questions directly (not wrapped in an object).
+    // Handle both formats: bare array [...] and object { questions: [...] }.
+    let questions: Question[] = [];
+
+    if (Array.isArray(parsed)) {
+      questions = parsed.map((q: Record<string, unknown>, i: number) =>
+        normalizeQuestion(q, i, conceptId),
+      );
+    } else if (typeof parsed === "object" && parsed !== null) {
+      const rawQuestions = Array.isArray(parsed.questions) ? parsed.questions : [];
+      questions = rawQuestions.map((q: Record<string, unknown>, i: number) =>
+        normalizeQuestion(q, i, conceptId),
+      );
+    }
+
+    if (questions.length > 0) {
+      const id = Array.isArray(parsed)
+        ? `quiz_${conceptId}_${Date.now()}`
+        : (parsed.id ?? `quiz_${conceptId}_${Date.now()}`);
+      const sessionConceptId = Array.isArray(parsed)
+        ? conceptId
+        : (parsed.conceptId ?? parsed.concept_id ?? conceptId);
 
       return {
-        id: parsed.id ?? `quiz_${conceptId}_${Date.now()}`,
-        conceptId: parsed.conceptId ?? parsed.concept_id ?? conceptId,
+        id,
+        conceptId: sessionConceptId,
         questions,
         answers: [],
         feedbacks: [],
         currentIndex: 0,
-        startedAt: parsed.startedAt ?? new Date().toISOString(),
+        startedAt: Array.isArray(parsed) ? new Date().toISOString() : (parsed.startedAt ?? new Date().toISOString()),
         completedAt: null,
         totalScore: 0,
         xpEarned: 0,
       };
     }
   } catch {
-    // Not valid JSON
+    console.error("[normalizeQuizSession] Failed to parse quiz JSON:", text.slice(0, 200));
   }
 
   // Fallback: empty quiz

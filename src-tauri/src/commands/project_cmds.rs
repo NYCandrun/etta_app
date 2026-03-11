@@ -91,7 +91,7 @@ pub async fn submit_project(
             .ok_or_else(|| format!("Concept not found: {}", submission.concept_id))?
     };
 
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
     let resource_dir = app_handle

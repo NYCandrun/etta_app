@@ -31,7 +31,7 @@ pub async fn get_lesson(
     };
 
     // Get API key.
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured. Please set your API key in Settings.".to_string())?;
 
     // Load system prompt.

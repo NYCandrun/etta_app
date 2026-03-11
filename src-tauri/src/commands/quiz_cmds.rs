@@ -44,7 +44,7 @@ pub async fn get_quiz(
             .ok_or_else(|| format!("Concept not found: {concept_id}"))?
     };
 
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
     let resource_dir = app_handle
@@ -305,7 +305,7 @@ async fn grade_free_response(
     user_answer: &str,
     rubric: Option<&str>,
 ) -> Result<(bool, f64), String> {
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
     let model = {
