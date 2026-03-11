@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { QuizShell } from "@/components/quiz/QuizShell";
@@ -13,14 +13,33 @@ export default function Quiz() {
     useSession();
   const { awardXP } = useGamification();
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const xpAwarded = useRef(false);
+
+  const fetchQuiz = useCallback(async () => {
+    if (!currentConcept) return;
+    setLoading(true);
+    setLoadError(false);
+    try {
+      const quiz = await loadQuiz(currentConcept.id);
+      if (!quiz || quiz.questions.length === 0) {
+        setLoadError(true);
+      }
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentConcept, loadQuiz]);
 
   useEffect(() => {
     if (currentConcept && !quizSession) {
-      setLoading(true);
-      void loadQuiz(currentConcept.id).finally(() => setLoading(false));
+      void fetchQuiz();
     }
-  }, [currentConcept, quizSession, loadQuiz]);
+  }, [currentConcept, quizSession, fetchQuiz]);
+
+  // Detect empty quiz that was "loaded" but has no questions
+  const quizIsEmpty = quizSession !== null && quizSession.questions.length === 0;
 
   const handleComplete = async (completedSession: QuizSession) => {
     setQuizSession(completedSession);
@@ -91,6 +110,31 @@ export default function Quiz() {
         <div className="card">
           <SkeletonLoader lines={6} />
         </div>
+      ) : (loadError || quizIsEmpty) ? (
+        <div className="card py-12 text-center">
+          <p className="text-warm-400 dark:text-warm-500">
+            {quizIsEmpty
+              ? "No quiz questions were generated. Try again."
+              : "Unable to load quiz. Please try again."}
+          </p>
+          <div className="mt-4 flex justify-center gap-3">
+            <button
+              onClick={() => {
+                setQuizSession(null);
+                void fetchQuiz();
+              }}
+              className="btn-primary"
+            >
+              Retry
+            </button>
+            <button
+              onClick={() => navigate("/lesson")}
+              className="btn-secondary"
+            >
+              Back to Lesson
+            </button>
+          </div>
+        </div>
       ) : quizSession ? (
         <QuizShell
           session={quizSession}
@@ -99,14 +143,22 @@ export default function Quiz() {
       ) : (
         <div className="card py-12 text-center">
           <p className="text-warm-400 dark:text-warm-500">
-            Unable to load quiz. Please try again later.
+            Unable to load quiz. Please try again.
           </p>
-          <button
-            onClick={() => navigate("/lesson")}
-            className="btn-secondary mt-4"
-          >
-            Back to Lesson
-          </button>
+          <div className="mt-4 flex justify-center gap-3">
+            <button
+              onClick={() => void fetchQuiz()}
+              className="btn-primary"
+            >
+              Retry
+            </button>
+            <button
+              onClick={() => navigate("/lesson")}
+              className="btn-secondary"
+            >
+              Back to Lesson
+            </button>
+          </div>
         </div>
       )}
     </motion.div>

@@ -2,9 +2,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useGamification } from "@/hooks/useGamification";
 import { useSettings } from "@/hooks/useSettings";
 import { useSession } from "@/hooks/useSession";
+import { useSaveProgress } from "@/hooks/useSaveProgress";
 import { formatXP } from "@/lib/format";
 import type { CurriculumState } from "@/types/concept";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as ipc from "@/lib/ipc";
 
 const ROUTE_TITLES: Record<string, string> = {
@@ -23,7 +24,18 @@ export function TopBar() {
   const { xp, streak, level } = useGamification();
   const { dailyGoal } = useSettings();
   const { currentConcept, startLearningPath } = useSession();
+  const { save } = useSaveProgress();
   const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+
+  const handleSave = useCallback(async () => {
+    setSaveStatus("saving");
+    const ok = await save();
+    setSaveStatus(ok ? "saved" : "idle");
+    if (ok) {
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    }
+  }, [save]);
 
   const title =
     location.pathname.startsWith("/path/")
@@ -97,6 +109,27 @@ export function TopBar() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
           </svg>
           {currentConcept ? "Continue Learning" : "Start Learning"}
+        </button>
+
+        {/* Save Progress button */}
+        <button
+          onClick={() => void handleSave()}
+          disabled={saveStatus === "saving"}
+          title="Save your current position"
+          className="flex items-center gap-1.5 rounded-lg border border-warm-200 px-3 py-1.5 text-xs font-medium text-warm-600 transition-all hover:bg-warm-100 active:scale-[0.97] dark:border-warm-700 dark:text-warm-400 dark:hover:bg-warm-800"
+        >
+          {saveStatus === "saving" ? (
+            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-warm-300 border-t-primary-500" />
+          ) : saveStatus === "saved" ? (
+            <svg className="h-3.5 w-3.5 text-success-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          ) : (
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+            </svg>
+          )}
+          {saveStatus === "saved" ? "Saved!" : "Save Progress"}
         </button>
 
         <div className="h-5 w-px bg-warm-200 dark:bg-warm-700" />
