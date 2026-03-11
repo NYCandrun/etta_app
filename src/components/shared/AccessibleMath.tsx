@@ -46,21 +46,20 @@ export function AccessibleMath({
   }, [latex, display]);
 
   if (rendered.error) {
+    console.warn("[AccessibleMath] KaTeX failed to parse:", latex);
     return (
-      <code
-        className={`rounded bg-warm-100 px-1.5 py-0.5 text-sm font-mono text-danger-600 dark:bg-warm-800 dark:text-danger-400 ${className}`}
-        role="math"
-        aria-label={latex}
+      <span
+        className={`inline-block rounded bg-warm-100 px-1.5 py-0.5 text-sm italic text-warm-500 dark:bg-warm-800 dark:text-warm-400 ${className}`}
       >
-        {latex}
-      </code>
+        Math display error
+      </span>
     );
   }
 
   if (display) {
     return (
       <div
-        className={`katex-display my-4 overflow-x-auto ${className}`}
+        className={`katex-display my-6 overflow-x-auto text-center ${className}`}
         role="math"
         aria-label={latex}
         dangerouslySetInnerHTML={{ __html: rendered.html }}

@@ -35,8 +35,8 @@ export function TopBar() {
       try {
         const state = await ipc.getCurriculumState();
         if (state) setCurriculum(state);
-      } catch {
-        // empty
+      } catch (err) {
+        console.error("[TopBar] Failed to load curriculum state:", err);
       }
     })();
   }, []);
