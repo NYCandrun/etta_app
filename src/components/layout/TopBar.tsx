@@ -1,7 +1,11 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useGamification } from "@/hooks/useGamification";
 import { useSettings } from "@/hooks/useSettings";
+import { useSession } from "@/hooks/useSession";
 import { formatXP } from "@/lib/format";
+import type { CurriculumState } from "@/types/concept";
+import { useState, useEffect } from "react";
+import * as ipc from "@/lib/ipc";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/": "Dashboard",
@@ -10,16 +14,69 @@ const ROUTE_TITLES: Record<string, string> = {
   "/projects": "Projects",
   "/progress": "Progress",
   "/settings": "Settings",
+  "/diagnostic": "Diagnostic",
 };
 
 export function TopBar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { xp, streak, level } = useGamification();
   const { dailyGoal } = useSettings();
-  const title = ROUTE_TITLES[location.pathname] ?? "Astrolabe";
+  const { currentConcept, startLearningPath } = useSession();
+  const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
 
-  // Mock daily progress (minutes completed today / goal)
-  // In production this would come from the session store
+  const title =
+    location.pathname.startsWith("/path/")
+      ? "Learning Path"
+      : (ROUTE_TITLES[location.pathname] ?? "Astrolabe");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const state = await ipc.getCurriculumState();
+        if (state) setCurriculum(state);
+      } catch {
+        // empty
+      }
+    })();
+  }, []);
+
+  const handleStartLearning = () => {
+    if (currentConcept) {
+      navigate("/lesson");
+      return;
+    }
+
+    if (!curriculum) {
+      navigate("/diagnostic");
+      return;
+    }
+
+    // Find in-progress concept first
+    const inProgress = curriculum.concepts.find(
+      (c) => c.state === "in_progress"
+    );
+
+    if (inProgress) {
+      const domainConcepts = curriculum.concepts.filter(
+        (c) => c.domain.id === inProgress.domain.id
+      );
+      startLearningPath(domainConcepts);
+      navigate("/lesson");
+    } else {
+      // Start at algebra (assumes no previous learning)
+      const algebraConcepts = curriculum.concepts.filter(
+        (c) => c.domain.id === "algebra"
+      );
+      if (algebraConcepts.length > 0) {
+        startLearningPath(algebraConcepts);
+        navigate("/lesson");
+      } else {
+        navigate("/diagnostic");
+      }
+    }
+  };
+
   const dailyProgress = streak.todayCompleted ? 1 : 0.4;
   const circumference = 2 * Math.PI * 10;
   const dashOffset = circumference * (1 - dailyProgress);
@@ -30,7 +87,20 @@ export function TopBar() {
         {title}
       </h1>
 
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-4">
+        {/* Start Learning button */}
+        <button
+          onClick={handleStartLearning}
+          className="flex items-center gap-2 rounded-xl bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-primary-700 hover:shadow-md active:scale-[0.98]"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+          </svg>
+          {currentConcept ? "Continue Learning" : "Start Learning"}
+        </button>
+
+        <div className="h-5 w-px bg-warm-200 dark:bg-warm-700" />
+
         {/* XP Display */}
         <div className="flex items-center gap-1.5">
           <svg className="h-4 w-4 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
@@ -58,36 +128,11 @@ export function TopBar() {
         {/* Daily goal mini ring */}
         <div className="relative flex items-center" title={`Daily goal: ${dailyGoal} min`}>
           <svg className="h-7 w-7 -rotate-90" viewBox="0 0 24 24">
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              className="text-warm-200 dark:text-warm-700"
-            />
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeDasharray={circumference}
-              strokeDashoffset={dashOffset}
-              strokeLinecap="round"
-              className={dailyProgress >= 1 ? "text-success-500" : "text-primary-500"}
-            />
+            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-warm-200 dark:text-warm-700" />
+            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray={circumference} strokeDashoffset={dashOffset} strokeLinecap="round" className={dailyProgress >= 1 ? "text-success-500" : "text-primary-500"} />
           </svg>
           {dailyProgress >= 1 && (
-            <svg
-              className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 text-success-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={3}
-            >
+            <svg className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 text-success-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
           )}

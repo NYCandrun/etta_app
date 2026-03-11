@@ -81,13 +81,14 @@ export function QuizShell({
   );
 
   const handleFreeResponseSubmit = useCallback(
-    (text: string) => {
+    (text: string, _file?: File) => {
       if (!currentQuestion) return;
       const answer: Answer = {
         questionId: currentQuestion.id,
         freeText: text,
         timeSpentMs: Date.now() - questionStartTime,
       };
+      // TODO: Upload file via IPC when backend supports it
       void handleSubmitAnswer(answer);
     },
     [currentQuestion, questionStartTime, handleSubmitAnswer]

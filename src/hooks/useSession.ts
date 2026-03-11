@@ -15,20 +15,36 @@ export function useSession() {
     async (concepts?: Concept[]) => {
       try {
         const session = await ipc.getDailySession();
-        if (session) {
+        if (session && session.concepts.length > 0) {
           store.setActiveSession(session.id);
           store.setSessionConcepts(session.concepts);
-          if (session.concepts.length > 0) {
-            store.setCurrentConcept(session.concepts[0] ?? null);
-          }
+          store.setCurrentConcept(session.concepts[0] ?? null);
+          return;
         }
       } catch {
-        // In browser mode, use provided concepts
-        if (concepts && concepts.length > 0) {
-          store.setSessionConcepts(concepts);
-          store.setCurrentConcept(concepts[0] ?? null);
-        }
+        // Fall through to provided concepts
       }
+      // Use provided concepts as fallback
+      if (concepts && concepts.length > 0) {
+        store.setSessionConcepts(concepts);
+        store.setCurrentConcept(concepts[0] ?? null);
+      }
+    },
+    [store]
+  );
+
+  /** Start a specific learning path from its first available concept. */
+  const startLearningPath = useCallback(
+    (concepts: Concept[]) => {
+      if (concepts.length === 0) return;
+      // Find the first non-mastered concept, or just the first one
+      const current =
+        concepts.find(
+          (c) => c.state === "in_progress" || c.state === "unlocked"
+        ) ?? concepts[0];
+      store.setSessionConcepts(concepts);
+      store.setCurrentConcept(current ?? null);
+      store.setActiveSession(`path_${current?.domain?.id ?? "custom"}`);
     },
     [store]
   );
@@ -97,6 +113,7 @@ export function useSession() {
     sessionConcepts: store.sessionConcepts,
     incrementExplanationAttempt: store.incrementExplanationAttempt,
     startSession,
+    startLearningPath,
     loadLesson,
     loadQuiz,
     selectConcept,

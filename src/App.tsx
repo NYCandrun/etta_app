@@ -13,6 +13,8 @@ import Quiz from "@/routes/Quiz";
 import Project from "@/routes/Project";
 import Progress from "@/routes/Progress";
 import Settings from "@/routes/Settings";
+import Diagnostic from "@/routes/Diagnostic";
+import LearningPath from "@/routes/LearningPath";
 
 export default function App() {
   const { initialize } = useSettings();
@@ -34,6 +36,8 @@ export default function App() {
             <Route path="/projects" element={<Project />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/diagnostic" element={<Diagnostic />} />
+            <Route path="/path/:domainId" element={<LearningPath />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>

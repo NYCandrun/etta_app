@@ -52,6 +52,7 @@ pub fn run() {
             // Quizzes
             commands::quiz_cmds::get_quiz,
             commands::quiz_cmds::submit_answer,
+            commands::quiz_cmds::complete_quiz,
             // Sessions
             commands::session_cmds::get_daily_session,
             // Progress

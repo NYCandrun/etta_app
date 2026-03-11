@@ -1,5 +1,5 @@
 import { tauriInvoke, isTauri } from "@/hooks/useInvoke";
-import type { CurriculumState, Concept } from "@/types/concept";
+import type { CurriculumState, Concept, ConceptState } from "@/types/concept";
 import type { LessonContent, ExplanationResponse } from "@/types/lesson";
 import type { QuizSession, Answer, Feedback } from "@/types/quiz";
 import type {
@@ -37,9 +37,105 @@ export async function testApiKey(): Promise<{ valid: boolean; message: string }>
 
 // ─── Curriculum ────────────────────────────────────────────
 
+/**
+ * Normalize a raw concept from the backend into the frontend Concept type.
+ * Handles both the new FrontendConcept shape and legacy flat shapes.
+ */
+function normalizeConcept(raw: Record<string, unknown>): Concept {
+  // If domain is a string (legacy), wrap it
+  const domain =
+    typeof raw.domain === "object" && raw.domain !== null
+      ? (raw.domain as Concept["domain"])
+      : {
+          id: String(raw.domain ?? "unknown"),
+          name: String(raw.domain ?? "Unknown"),
+          description: "",
+          color: "#6b7280",
+          iconName: "book",
+          moduleIds: [],
+        };
+
+  const state: ConceptState = (
+    ["locked", "unlocked", "in_progress", "mastered"].includes(
+      String(raw.state ?? "")
+    )
+      ? raw.state
+      : raw.masteryScore != null && Number(raw.masteryScore) >= 0.8
+        ? "mastered"
+        : raw.attemptCount != null && Number(raw.attemptCount) > 0
+          ? "in_progress"
+          : "unlocked"
+  ) as ConceptState;
+
+  return {
+    id: String(raw.id ?? ""),
+    name: String(raw.name ?? raw.title ?? ""),
+    description: String(raw.description ?? `Learn about ${raw.name ?? raw.title ?? ""}`),
+    domain,
+    moduleId: String(raw.moduleId ?? raw.module ?? ""),
+    state,
+    masteryScore: Number(raw.masteryScore ?? raw.mastery_score ?? 0),
+    prerequisites: Array.isArray(raw.prerequisites)
+      ? (raw.prerequisites as string[])
+      : [],
+    estimatedMinutes: Number(raw.estimatedMinutes ?? raw.estimated_minutes ?? 10),
+    lastReviewedAt: (raw.lastReviewedAt ?? raw.last_correct ?? null) as string | null,
+    nextReviewAt: (raw.nextReviewAt ?? raw.next_review ?? null) as string | null,
+  };
+}
+
 export async function getCurriculumState(): Promise<CurriculumState | null> {
   if (!isTauri()) return null;
-  return tauriInvoke<CurriculumState>("get_curriculum_state");
+  const raw = await tauriInvoke<unknown>("get_curriculum_state");
+  if (!raw) return null;
+
+  // If the backend returns the full CurriculumState shape, use it directly
+  if (
+    typeof raw === "object" &&
+    raw !== null &&
+    "domains" in raw &&
+    "concepts" in raw
+  ) {
+    const obj = raw as Record<string, unknown>;
+    const concepts = (obj.concepts as Record<string, unknown>[]).map(normalizeConcept);
+    return {
+      domains: obj.domains as CurriculumState["domains"],
+      modules: (obj.modules ?? []) as CurriculumState["modules"],
+      concepts,
+      totalMastery: Number(obj.totalMastery ?? 0),
+      conceptsCompleted: Number(obj.conceptsCompleted ?? 0),
+      conceptsTotal: Number(obj.conceptsTotal ?? concepts.length),
+    };
+  }
+
+  // Legacy: backend returns Vec<ConceptState> (flat array)
+  if (Array.isArray(raw)) {
+    const concepts = (raw as Record<string, unknown>[]).map(normalizeConcept);
+    const mastered = concepts.filter((c) => c.state === "mastered").length;
+    const totalMastery =
+      concepts.length > 0
+        ? concepts.reduce((s, c) => s + c.masteryScore, 0) / concepts.length
+        : 0;
+
+    // Derive domains from concepts
+    const domainMap = new Map<string, typeof concepts>();
+    for (const c of concepts) {
+      const arr = domainMap.get(c.domain.id) ?? [];
+      arr.push(c);
+      domainMap.set(c.domain.id, arr);
+    }
+
+    return {
+      domains: [...domainMap.values()].map((arr) => arr[0]!.domain),
+      modules: [],
+      concepts,
+      totalMastery,
+      conceptsCompleted: mastered,
+      conceptsTotal: concepts.length,
+    };
+  }
+
+  return null;
 }
 
 // ─── Sessions ──────────────────────────────────────────────
@@ -52,7 +148,24 @@ interface DailySessionResponse {
 
 export async function getDailySession(): Promise<DailySessionResponse | null> {
   if (!isTauri()) return null;
-  return tauriInvoke<DailySessionResponse>("get_daily_session");
+  const raw = await tauriInvoke<Record<string, unknown>>("get_daily_session");
+  if (!raw) return null;
+
+  // Normalize the concepts from the response
+  const rawConcepts = (raw.concepts ?? raw.reviews ?? []) as Record<string, unknown>[];
+  const concepts = rawConcepts.map(normalizeConcept);
+
+  // If there's a new_concept / newConcept, append it
+  const nc = (raw.newConcept ?? raw.new_concept) as Record<string, unknown> | undefined;
+  if (nc) {
+    concepts.push(normalizeConcept(nc));
+  }
+
+  return {
+    id: String(raw.id ?? `session_${new Date().toISOString().slice(0, 10)}`),
+    concepts,
+    estimatedMinutes: Number(raw.estimatedMinutes ?? raw.estimated_minutes ?? concepts.length * 10),
+  };
 }
 
 // ─── Lessons ───────────────────────────────────────────────

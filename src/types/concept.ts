@@ -40,3 +40,15 @@ export interface CurriculumState {
   conceptsCompleted: number;
   conceptsTotal: number;
 }
+
+/**
+ * A learning path represents a domain the user can enroll in.
+ */
+export interface LearningPath {
+  domainId: string;
+  domain: CurriculumDomain;
+  concepts: Concept[];
+  progress: number; // 0–1
+  enrolled: boolean;
+  currentConceptIndex: number;
+}

@@ -67,15 +67,19 @@ pub async fn get_quiz(
 
 /// Input for submitting an answer.
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AnswerSubmission {
     pub concept_id: String,
     pub correct: bool,
+    #[serde(default)]
     pub latency_ms: Option<i64>,
+    #[serde(default)]
     pub is_transfer: bool,
 }
 
 /// Output after processing an answer.
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AnswerResult {
     pub new_mastery: f64,
     pub new_ease_factor: f64,
@@ -95,32 +99,26 @@ pub fn submit_answer(
         .map_err(|e| format!("DB error: {e}"))?
         .ok_or_else(|| format!("Concept not found: {}", submission.concept_id))?;
 
-    // Update streak.
     let new_streak = if submission.correct {
         concept.streak_correct + 1
     } else {
         0
     };
 
-    // Build attempt record for mastery calculation.
     let attempt = mastery::AttemptRecord {
         correct: submission.correct,
         latency_ms: submission.latency_ms,
         is_transfer: submission.is_transfer,
     };
 
-    // For mastery, we use a window of recent attempts.
-    // For simplicity, we compute from the current attempt plus the existing score.
     let new_mastery = if concept.attempt_count == 0 {
         mastery::compute_mastery(&[attempt])
     } else {
-        // Blend: weighted average of existing score and new attempt score.
         let single_score = mastery::compute_mastery(&[attempt]);
         let weight = 1.0 / (concept.attempt_count as f64 + 1.0);
         concept.mastery_score * (1.0 - weight) + single_score * weight
     };
 
-    // Update spaced repetition schedule.
     let quality = spaced_rep::classify_response(
         submission.correct,
         new_streak,
@@ -157,5 +155,23 @@ pub fn submit_answer(
         new_interval_days: schedule.interval_days,
         next_review: schedule.next_review,
         streak_correct: new_streak,
+    })
+}
+
+/// Complete a quiz session and return summary.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct QuizCompletionResult {
+    pub total_score: f64,
+    pub xp_earned: u32,
+}
+
+#[tauri::command]
+pub fn complete_quiz(
+    _session_id: String,
+) -> Result<QuizCompletionResult, String> {
+    Ok(QuizCompletionResult {
+        total_score: 0.0,
+        xp_earned: 0,
     })
 }

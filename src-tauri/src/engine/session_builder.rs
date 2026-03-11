@@ -2,15 +2,16 @@ use crate::db::concepts::{self, Concept};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
-/// A daily learning session.
+/// A daily learning session — shaped to match the frontend's DailySessionResponse.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DailySession {
-    /// Concepts due for review today.
-    pub reviews: Vec<Concept>,
-    /// Next unlocked concept to learn (if any).
-    pub new_concept: Option<Concept>,
-    /// Total number of items in this session.
-    pub total_items: usize,
+    /// Synthetic session id (date-based).
+    pub id: String,
+    /// All concepts in this session (reviews + new concept).
+    pub concepts: Vec<Concept>,
+    /// Estimated total minutes.
+    pub estimated_minutes: u32,
 }
 
 /// Build a daily session for the learner.
@@ -28,11 +29,19 @@ pub fn build_daily_session(conn: &Connection) -> Result<DailySession, String> {
 
     let new_concept = unlocked.into_iter().next();
 
-    let total_items = reviews.len() + if new_concept.is_some() { 1 } else { 0 };
+    let mut session_concepts: Vec<Concept> = reviews;
+    if let Some(nc) = new_concept {
+        session_concepts.push(nc);
+    }
+
+    // Estimate ~10 min per concept
+    let estimated_minutes = (session_concepts.len() as u32) * 10;
+
+    let id = format!("session_{}", today);
 
     Ok(DailySession {
-        reviews,
-        new_concept,
-        total_items,
+        id,
+        concepts: session_concepts,
+        estimated_minutes,
     })
 }
