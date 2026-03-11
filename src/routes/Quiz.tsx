@@ -13,16 +13,20 @@ export default function Quiz() {
     useSession();
   const { awardXP } = useGamification();
   const [loading, setLoading] = useState(false);
+  const [xpAwarded, setXpAwarded] = useState(false);
 
   useEffect(() => {
     if (currentConcept && !quizSession) {
       setLoading(true);
+      setXpAwarded(false);
       void loadQuiz(currentConcept.id).finally(() => setLoading(false));
     }
   }, [currentConcept, quizSession, loadQuiz]);
 
   const handleComplete = async (completedSession: QuizSession) => {
     setQuizSession(completedSession);
+    if (xpAwarded) return;
+    setXpAwarded(true);
     const score = completedSession.totalScore;
     if (score >= 0.9) {
       await awardXP(100, "quiz_perfect", "Perfect quiz score!");

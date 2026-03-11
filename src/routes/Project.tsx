@@ -17,6 +17,7 @@ export default function Project() {
     useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { awardXP } = useGamification();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function Project() {
           if (p.length > 0) setSelectedProject(p[0] ?? null);
         }
       } catch {
-        // empty
+        if (!cancelled) setError("Failed to load projects. Please try again.");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -75,7 +76,7 @@ export default function Project() {
         );
         setCurrentSubmission(submission);
       } catch {
-        // Show inline error state
+        setError("Failed to submit project. Please try again.");
         setCurrentSubmission(null);
       } finally {
         setSubmitting(false);
@@ -104,6 +105,21 @@ export default function Project() {
       transition={{ duration: 0.2 }}
       className="mx-auto max-w-3xl space-y-6"
     >
+      {/* Error state */}
+      {error && (
+        <div className="card border border-danger-200 bg-danger-50 dark:border-danger-800 dark:bg-danger-950/30">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-danger-700 dark:text-danger-300">{error}</p>
+            <button
+              onClick={() => setError(null)}
+              className="rounded-lg bg-danger-100 px-3 py-1.5 text-xs font-medium text-danger-700 transition-colors hover:bg-danger-200 dark:bg-danger-900 dark:text-danger-300 dark:hover:bg-danger-800"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Project selector */}
       {projects.length > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-2">

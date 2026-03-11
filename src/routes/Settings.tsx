@@ -45,10 +45,10 @@ export default function Settings() {
       setApiKey("");
       setTestResult(null);
     } catch {
-      // Silently fail in browser
-      setApiKeySet(true);
-      setApiKeyMasked(true);
-      setApiKey("");
+      setTestResult({
+        valid: false,
+        message: "Failed to save API key. Please try again.",
+      });
     } finally {
       setSaving(false);
     }

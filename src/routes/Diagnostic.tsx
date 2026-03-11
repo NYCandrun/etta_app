@@ -119,7 +119,7 @@ export default function Diagnostic() {
   const [questions, setQuestions] = useState<DiagnosticQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Map<string, string>>(new Map());
-  const [phase, setPhase] = useState<"loading" | "intro" | "testing" | "results">("loading");
+  const [phase, setPhase] = useState<"loading" | "intro" | "testing" | "results" | "error">("loading");
   const [results, setResults] = useState<Map<string, { score: number; startIndex: number }> | null>(null);
 
   useEffect(() => {
@@ -130,11 +130,12 @@ export default function Diagnostic() {
           setCurriculum(state);
           const qs = buildDiagnosticQuestions(state);
           setQuestions(qs);
+          setPhase("intro");
+        } else {
+          setPhase("error");
         }
       } catch {
-        // empty
-      } finally {
-        setPhase("intro");
+        setPhase("error");
       }
     })();
   }, []);
@@ -204,6 +205,42 @@ export default function Diagnostic() {
       <div className="flex items-center justify-center py-20">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
       </div>
+    );
+  }
+
+  if (phase === "error") {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="mx-auto max-w-lg py-12 text-center"
+      >
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-danger-100 dark:bg-danger-900">
+          <svg className="h-10 w-10 text-danger-600 dark:text-danger-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        </div>
+        <h1 className="mb-3 text-2xl font-bold text-warm-900 dark:text-warm-100">
+          Unable to load diagnostic
+        </h1>
+        <p className="mb-8 text-warm-500 dark:text-warm-400">
+          Failed to load curriculum data. Please try again.
+        </p>
+        <div className="flex flex-col gap-3">
+          <button
+            onClick={() => window.location.reload()}
+            className="btn-primary w-full"
+          >
+            Retry
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            className="btn-secondary w-full"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </motion.div>
     );
   }
 
@@ -332,7 +369,18 @@ export default function Diagnostic() {
 
   // Testing phase
   const currentQ = questions[currentIndex];
-  if (!currentQ) return null;
+  if (!currentQ) {
+    return (
+      <div className="mx-auto max-w-lg py-12 text-center">
+        <p className="text-warm-500 dark:text-warm-400">
+          No diagnostic questions available.
+        </p>
+        <button onClick={() => navigate("/")} className="btn-primary mt-4">
+          Back to Dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <motion.div
