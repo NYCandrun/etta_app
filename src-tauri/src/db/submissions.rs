@@ -46,11 +46,11 @@ pub fn get_submission(conn: &Connection, id: i64) -> Result<Option<Submission>> 
     }
 }
 
-/// Get all submissions for a concept.
+/// Get recent submissions for a concept (capped at 100 to prevent unbounded queries).
 pub fn get_submissions_for_concept(conn: &Connection, concept_id: &str) -> Result<Vec<Submission>> {
     let mut stmt = conn.prepare(
         "SELECT id, concept_id, project_id, file_path, mime_type, feedback_json, status, submitted_at
-         FROM submissions WHERE concept_id = ?1 ORDER BY submitted_at DESC",
+         FROM submissions WHERE concept_id = ?1 ORDER BY submitted_at DESC LIMIT 100",
     )?;
 
     let rows = stmt.query_map(params![concept_id], |row| row_to_submission(row))?;
@@ -61,11 +61,11 @@ pub fn get_submissions_for_concept(conn: &Connection, concept_id: &str) -> Resul
     Ok(subs)
 }
 
-/// Get all submissions for a project.
+/// Get recent submissions for a project (capped at 100 to prevent unbounded queries).
 pub fn get_submissions_for_project(conn: &Connection, project_id: &str) -> Result<Vec<Submission>> {
     let mut stmt = conn.prepare(
         "SELECT id, concept_id, project_id, file_path, mime_type, feedback_json, status, submitted_at
-         FROM submissions WHERE project_id = ?1 ORDER BY submitted_at DESC",
+         FROM submissions WHERE project_id = ?1 ORDER BY submitted_at DESC LIMIT 100",
     )?;
 
     let rows = stmt.query_map(params![project_id], |row| row_to_submission(row))?;

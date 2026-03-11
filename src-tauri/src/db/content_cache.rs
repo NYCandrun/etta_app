@@ -45,20 +45,27 @@ pub fn insert_cache_entry(conn: &Connection, entry: &CachedContent) -> Result<i6
 
 /// Look up a cached entry by concept_id and content_type.
 /// Returns the most recent entry if multiple exist.
+/// Skips entries older than 7 days so learners get content calibrated to
+/// their current mastery level rather than stale cached material.
 pub fn get_cached_content(
     conn: &Connection,
     concept_id: &str,
     content_type: &str,
 ) -> Result<Option<CachedContent>> {
+    let stale_cutoff = chrono::Utc::now()
+        .checked_sub_signed(chrono::Duration::days(7))
+        .map(|d| d.to_rfc3339())
+        .unwrap_or_default();
+
     let mut stmt = conn.prepare(
         "SELECT id, concept_id, content_type, payload_json, model_version, created_at
          FROM content_cache
-         WHERE concept_id = ?1 AND content_type = ?2
+         WHERE concept_id = ?1 AND content_type = ?2 AND created_at >= ?3
          ORDER BY created_at DESC
          LIMIT 1",
     )?;
 
-    let mut rows = stmt.query(params![concept_id, content_type])?;
+    let mut rows = stmt.query(params![concept_id, content_type, stale_cutoff])?;
     match rows.next()? {
         Some(row) => Ok(Some(row_to_cached(row)?)),
         None => Ok(None),
