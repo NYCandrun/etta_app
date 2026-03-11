@@ -79,6 +79,14 @@ pub fn run() {
             commands::ai_cmds::explain_mistake,
             commands::ai_cmds::regrade_with_reasoning,
             commands::ai_cmds::list_available_models,
+            commands::ai_cmds::request_explanation,
+            commands::ai_cmds::verify_no_right_answer,
+            commands::ai_cmds::get_mastery_history,
+            commands::ai_cmds::get_review_forecast,
+            commands::ai_cmds::activate_streak_freeze,
+            commands::ai_cmds::get_submissions,
+            commands::ai_cmds::get_submission_feedback,
+            commands::ai_cmds::export_data,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Astrolabe");

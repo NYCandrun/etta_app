@@ -41,8 +41,21 @@ export function QuizShell({
   const handleSubmitAnswer = useCallback(
     async (answer: Answer) => {
       setSubmitted(true);
+      // Build question context for backend grading
+      const q = session.questions[session.currentIndex];
+      const questionCtx: ipc.QuestionContext | undefined = q
+        ? {
+            conceptId: session.conceptId,
+            questionType: q.type,
+            prompt: q.prompt,
+            correctOptionId: q.options?.find((o) => o.isCorrect)?.id,
+            expectedBlanks: q.blanks,
+            rubric: q.rubric,
+            explanation: q.explanation,
+          }
+        : undefined;
       try {
-        const feedback = await ipc.submitAnswer(session.id, answer);
+        const feedback = await ipc.submitAnswer(session.id, answer, questionCtx);
         setCurrentFeedback(feedback);
         setSession((prev) => ({
           ...prev,
@@ -66,7 +79,7 @@ export function QuizShell({
         }));
       }
     },
-    [session.id]
+    [session.id, session.conceptId, session.currentIndex, session.questions]
   );
 
   const handleMultipleChoiceSubmit = useCallback(
@@ -117,14 +130,17 @@ export function QuizShell({
 
   const handleContinue = useCallback(() => {
     if (isLastQuestion) {
+      const totalScore =
+        session.feedbacks.reduce((s, f) => s + f.score, 0) /
+        Math.max(1, session.feedbacks.length);
       const completed: QuizSession = {
         ...session,
         completedAt: new Date().toISOString(),
-        totalScore:
-          session.feedbacks.reduce((s, f) => s + f.score, 0) /
-          Math.max(1, session.feedbacks.length),
+        totalScore,
       };
       setSession(completed);
+      // Send scores to backend for XP calculation
+      void ipc.completeQuiz(session.id, session.feedbacks.map((f) => f.score));
       onComplete(completed);
     } else {
       setSession((prev) => ({

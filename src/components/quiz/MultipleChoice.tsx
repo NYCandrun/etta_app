@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Question, MultipleChoiceOption } from "@/types/quiz";
 import { RichText } from "@/components/lesson/LessonContent";
+import * as ipc from "@/lib/ipc";
 
 interface MultipleChoiceProps {
   question: Question;
@@ -45,25 +46,39 @@ export function MultipleChoice({
   const handleNoRightAnswers = async () => {
     setNoRightAnswerState("checking");
 
-    // Simulate AI reasoning model check (in production, this would call
-    // a Tauri command that invokes Claude Opus with extended thinking)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const result = await ipc.verifyNoRightAnswer(
+        question.prompt,
+        options.map((o) => o.text)
+      );
 
-    // Check if there actually is a correct answer in the options
-    const hasCorrectAnswer = options.some((o) => o.isCorrect);
-
-    if (!hasCorrectAnswer) {
-      setNoRightAnswerState("confirmed");
-      // Auto-advance after a moment
-      setTimeout(() => {
-        onSubmit("__no_correct_answer__");
-      }, 1500);
-    } else {
-      setNoRightAnswerState("denied");
-      // Reset after showing the popup
-      setTimeout(() => {
-        setNoRightAnswerState("idle");
-      }, 4000);
+      if (result.confirmed) {
+        setNoRightAnswerState("confirmed");
+        // Auto-advance after a moment
+        setTimeout(() => {
+          onSubmit("__no_correct_answer__");
+        }, 1500);
+      } else {
+        setNoRightAnswerState("denied");
+        // Reset after showing the popup
+        setTimeout(() => {
+          setNoRightAnswerState("idle");
+        }, 4000);
+      }
+    } catch {
+      // Fallback: check locally if the question has a correct answer marked
+      const hasCorrectAnswer = options.some((o) => o.isCorrect);
+      if (!hasCorrectAnswer) {
+        setNoRightAnswerState("confirmed");
+        setTimeout(() => {
+          onSubmit("__no_correct_answer__");
+        }, 1500);
+      } else {
+        setNoRightAnswerState("denied");
+        setTimeout(() => {
+          setNoRightAnswerState("idle");
+        }, 4000);
+      }
     }
   };
 

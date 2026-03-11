@@ -90,7 +90,12 @@ pub fn get_gamification_state(state: State<'_, AppState>) -> Result<Gamification
 }
 
 #[tauri::command]
-pub fn award_xp(state: State<'_, AppState>, amount: i64) -> Result<GamificationState, String> {
+pub fn award_xp(
+    state: State<'_, AppState>,
+    amount: i64,
+    #[allow(unused)] source: Option<String>,
+    #[allow(unused)] description: Option<String>,
+) -> Result<GamificationState, String> {
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
 
     let current_xp = db::settings::get_setting(&conn, "total_xp")

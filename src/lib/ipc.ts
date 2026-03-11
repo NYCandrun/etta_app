@@ -192,20 +192,55 @@ export async function getQuiz(conceptId: string): Promise<QuizSession> {
   return tauriInvoke<QuizSession>("get_quiz", { conceptId });
 }
 
+/** Context about the question so the backend can grade the answer. */
+export interface QuestionContext {
+  conceptId: string;
+  questionType: string;
+  prompt: string;
+  correctOptionId?: string;
+  expectedBlanks?: string[];
+  rubric?: string;
+  explanation?: string;
+}
+
 export async function submitAnswer(
   sessionId: string,
-  answer: Answer
+  answer: Answer,
+  question?: QuestionContext
 ): Promise<Feedback> {
-  return tauriInvoke<Feedback>("submit_answer", { sessionId, answer });
+  return tauriInvoke<Feedback>("submit_answer", { sessionId, answer, question: question ?? { conceptId: "", questionType: "multiple_choice", prompt: "" } });
 }
 
 export async function completeQuiz(
-  sessionId: string
+  sessionId: string,
+  scores?: number[]
 ): Promise<{ totalScore: number; xpEarned: number }> {
   return tauriInvoke<{ totalScore: number; xpEarned: number }>(
     "complete_quiz",
-    { sessionId }
+    { sessionId, scores: scores ?? [] }
   );
+}
+
+export interface NoRightAnswerResult {
+  confirmed: boolean;
+  explanation: string;
+}
+
+export async function verifyNoRightAnswer(
+  questionPrompt: string,
+  options: string[]
+): Promise<NoRightAnswerResult> {
+  if (!isTauri()) {
+    return { confirmed: false, explanation: "Not available in browser mode." };
+  }
+  try {
+    return await tauriInvoke<NoRightAnswerResult>("verify_no_right_answer", {
+      questionPrompt,
+      options,
+    });
+  } catch {
+    return { confirmed: false, explanation: "Unable to verify right now." };
+  }
 }
 
 // ─── Projects ──────────────────────────────────────────────
