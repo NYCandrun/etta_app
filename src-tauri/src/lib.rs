@@ -75,6 +75,10 @@ pub fn run() {
             // Projects
             commands::project_cmds::get_projects,
             commands::project_cmds::submit_project,
+            // AI — explain mistake, re-grade, model discovery
+            commands::ai_cmds::explain_mistake,
+            commands::ai_cmds::regrade_with_reasoning,
+            commands::ai_cmds::list_available_models,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Astrolabe");

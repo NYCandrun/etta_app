@@ -86,10 +86,10 @@ export function QuizShell({
   );
 
   const handleFreeResponseSubmit = useCallback(
-    (text: string, file?: File) => {
+    (text: string, files?: File[]) => {
       if (!currentQuestion) return;
       setLastUserAnswer(text);
-      setHasFileUpload(!!file);
+      setHasFileUpload(!!files && files.length > 0);
       const answer: Answer = {
         questionId: currentQuestion.id,
         freeText: text,
