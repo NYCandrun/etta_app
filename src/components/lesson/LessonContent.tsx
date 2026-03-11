@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import type { LessonContent as LessonContentType } from "@/types/lesson";
 import { parseLatexSegments } from "@/lib/katex-utils";
 import { AccessibleMath } from "@/components/shared/AccessibleMath";
@@ -10,10 +10,34 @@ interface LessonContentProps {
 }
 
 /**
- * Render inline markdown formatting (bold, italic, inline code) within a text string.
- * Does NOT handle block-level elements — those are handled by renderMarkdownBlocks.
+ * Render a string that may contain both LaTeX and inline markdown (bold, italic, code).
+ * LaTeX is parsed first so delimiters inside math are not treated as markdown.
  */
-function renderInlineFormatting(text: string): ReactNode[] {
+function renderRichInline(text: string, keyPrefix: string | number = 0): ReactNode[] {
+  const segments = parseLatexSegments(text);
+  const nodes: ReactNode[] = [];
+
+  for (let i = 0; i < segments.length; i++) {
+    const seg = segments[i]!;
+    const key = `${keyPrefix}-${i}`;
+
+    if (seg.type === "display-math") {
+      nodes.push(<AccessibleMath key={key} latex={seg.content} display />);
+    } else if (seg.type === "math") {
+      nodes.push(<AccessibleMath key={key} latex={seg.content} />);
+    } else {
+      // Text segment: apply inline markdown formatting
+      nodes.push(...renderInlineFormatting(seg.content, key));
+    }
+  }
+
+  return nodes;
+}
+
+/**
+ * Render inline markdown formatting (bold, italic, inline code) within a plain text string.
+ */
+function renderInlineFormatting(text: string, keyPrefix: string | number = 0): ReactNode[] {
   const nodes: ReactNode[] = [];
   // Match **bold**, *italic*, and `code`
   const inlineRe = /(\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`)/g;
@@ -25,13 +49,13 @@ function renderInlineFormatting(text: string): ReactNode[] {
       nodes.push(text.slice(lastIndex, match.index));
     }
     if (match[2]) {
-      nodes.push(<strong key={match.index}>{match[2]}</strong>);
+      nodes.push(<strong key={`${keyPrefix}-b-${match.index}`}>{match[2]}</strong>);
     } else if (match[3]) {
-      nodes.push(<em key={match.index}>{match[3]}</em>);
+      nodes.push(<em key={`${keyPrefix}-i-${match.index}`}>{match[3]}</em>);
     } else if (match[4]) {
       nodes.push(
         <code
-          key={match.index}
+          key={`${keyPrefix}-c-${match.index}`}
           className="rounded bg-warm-100 px-1 py-0.5 text-sm dark:bg-warm-800"
         >
           {match[4]}
@@ -47,22 +71,42 @@ function renderInlineFormatting(text: string): ReactNode[] {
 }
 
 /**
- * Renders text segments with markdown block structure (headings, lists, paragraphs).
+ * Renders content that may contain markdown block structure (headings, lists, paragraphs)
+ * mixed with LaTeX math expressions. Markdown is parsed at the line level first,
+ * then LaTeX + inline formatting is applied within each block.
  */
-function renderTextBlock(content: string, key: number): ReactNode {
-  const lines = content.split("\n");
+function RichText({ text }: { text: string }) {
+  const lines = text.split("\n");
   const blocks: ReactNode[] = [];
-  let listItems: string[] = [];
+  let listItems: { text: string; ordered: boolean }[] = [];
   let blockKey = 0;
+  let paragraphLines: string[] = [];
+
+  const flushParagraph = () => {
+    if (paragraphLines.length > 0) {
+      const content = paragraphLines.join(" ");
+      blocks.push(
+        <p key={`p-${blockKey++}`} className="my-2">
+          {renderRichInline(content, blockKey)}
+        </p>
+      );
+      paragraphLines = [];
+    }
+  };
 
   const flushList = () => {
     if (listItems.length > 0) {
+      const isOrdered = listItems[0]?.ordered ?? false;
+      const Tag = isOrdered ? "ol" : "ul";
+      const listClass = isOrdered
+        ? "my-2 list-decimal space-y-1 pl-6"
+        : "my-2 list-disc space-y-1 pl-6";
       blocks.push(
-        <ul key={`${key}-list-${blockKey++}`} className="my-2 list-disc space-y-1 pl-6">
+        <Tag key={`list-${blockKey++}`} className={listClass}>
           {listItems.map((item, li) => (
-            <li key={li}>{renderInlineFormatting(item)}</li>
+            <li key={li}>{renderRichInline(item.text, `li-${blockKey}-${li}`)}</li>
           ))}
-        </ul>
+        </Tag>
       );
       listItems = [];
     }
@@ -72,9 +116,10 @@ function renderTextBlock(content: string, key: number): ReactNode {
     const line = lines[i]!;
     const trimmed = line.trim();
 
-    // Headings
+    // Headings: # through ####
     const headingMatch = trimmed.match(/^(#{1,4})\s+(.+)$/);
     if (headingMatch) {
+      flushParagraph();
       flushList();
       const level = headingMatch[1]!.length;
       const headingText = headingMatch[2]!;
@@ -85,73 +130,52 @@ function renderTextBlock(content: string, key: number): ReactNode {
             ? "text-lg font-semibold mt-5 mb-2"
             : "text-base font-semibold mt-4 mb-1";
       const cls = `${sizeClass} text-warm-800 dark:text-warm-200`;
-      const rendered = renderInlineFormatting(headingText);
+      const rendered = renderRichInline(headingText, `h-${blockKey}`);
       if (level === 1) {
-        blocks.push(<h3 key={`${key}-h-${blockKey++}`} className={cls}>{rendered}</h3>);
+        blocks.push(<h3 key={`h-${blockKey++}`} className={cls}>{rendered}</h3>);
       } else if (level === 2) {
-        blocks.push(<h4 key={`${key}-h-${blockKey++}`} className={cls}>{rendered}</h4>);
+        blocks.push(<h4 key={`h-${blockKey++}`} className={cls}>{rendered}</h4>);
       } else {
-        blocks.push(<h5 key={`${key}-h-${blockKey++}`} className={cls}>{rendered}</h5>);
+        blocks.push(<h5 key={`h-${blockKey++}`} className={cls}>{rendered}</h5>);
       }
       continue;
     }
 
-    // List items (- or *)
-    const listMatch = trimmed.match(/^[-*]\s+(.+)$/);
-    if (listMatch) {
-      listItems.push(listMatch[1]!);
+    // Unordered list items (- or *)
+    const ulMatch = trimmed.match(/^[-*]\s+(.+)$/);
+    if (ulMatch) {
+      flushParagraph();
+      // If switching from ordered to unordered, flush
+      if (listItems.length > 0 && listItems[0]?.ordered) flushList();
+      listItems.push({ text: ulMatch[1]!, ordered: false });
       continue;
     }
 
-    // Numbered list items
-    const numListMatch = trimmed.match(/^\d+[.)]\s+(.+)$/);
-    if (numListMatch) {
-      listItems.push(numListMatch[1]!);
+    // Ordered list items (1. or 1))
+    const olMatch = trimmed.match(/^\d+[.)]\s+(.+)$/);
+    if (olMatch) {
+      flushParagraph();
+      if (listItems.length > 0 && !listItems[0]?.ordered) flushList();
+      listItems.push({ text: olMatch[1]!, ordered: true });
       continue;
     }
 
-    // Empty line: flush and add paragraph break
+    // Empty line: paragraph break
     if (trimmed === "") {
+      flushParagraph();
       flushList();
       continue;
     }
 
-    // Regular text
+    // Regular text: accumulate into paragraph
     flushList();
-    blocks.push(
-      <Fragment key={`${key}-p-${blockKey++}`}>
-        {renderInlineFormatting(trimmed)}
-        {i < lines.length - 1 && lines[i + 1]?.trim() !== "" ? " " : null}
-      </Fragment>
-    );
+    paragraphLines.push(trimmed);
   }
 
+  flushParagraph();
   flushList();
+
   return <>{blocks}</>;
-}
-
-/**
- * Renders a paragraph of text that may contain inline and display LaTeX,
- * as well as markdown formatting (headings, bold, italic, lists).
- */
-function RichText({ text }: { text: string }) {
-  const segments = parseLatexSegments(text);
-
-  return (
-    <>
-      {segments.map((seg, i) => {
-        if (seg.type === "text") {
-          return <Fragment key={i}>{renderTextBlock(seg.content, i)}</Fragment>;
-        }
-        if (seg.type === "display-math") {
-          return (
-            <AccessibleMath key={i} latex={seg.content} display />
-          );
-        }
-        return <AccessibleMath key={i} latex={seg.content} />;
-      })}
-    </>
-  );
 }
 
 export function LessonContent({ lesson, className = "" }: LessonContentProps) {

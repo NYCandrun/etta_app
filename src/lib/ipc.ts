@@ -248,13 +248,82 @@ function normalizeLessonContent(raw: LessonContent | string, conceptId: string):
     // Not valid JSON — treat as markdown
   }
 
-  // Fallback: wrap raw markdown text as a single-section lesson
+  // Fallback: parse raw markdown into sections by splitting on top-level headings
+  return parseMarkdownIntoLesson(text, conceptId);
+}
+
+/**
+ * Parse raw markdown into a structured lesson by splitting on headings.
+ * Extracts a title from the first # heading, then groups content by ## headings into sections.
+ */
+function parseMarkdownIntoLesson(markdown: string, conceptId: string): LessonContent {
+  const lines = markdown.split("\n");
+  let title = "";
+  let summary = "";
+  const sections: { id: string; title: string; content: string; order: number }[] = [];
+  let currentSectionTitle = "";
+  let currentSectionLines: string[] = [];
+  let sectionIndex = 0;
+
+  const flushSection = () => {
+    const content = currentSectionLines.join("\n").trim();
+    if (content || currentSectionTitle) {
+      // If we have no title yet and this is the first section, use its content as summary
+      if (sections.length === 0 && !currentSectionTitle && !title) {
+        summary = content;
+      } else {
+        sections.push({
+          id: `section_${sectionIndex}`,
+          title: currentSectionTitle || "Lesson",
+          content,
+          order: sectionIndex,
+        });
+        sectionIndex++;
+      }
+    }
+    currentSectionTitle = "";
+    currentSectionLines = [];
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // Top-level heading → lesson title
+    const h1Match = trimmed.match(/^#\s+(.+)$/);
+    if (h1Match && !title) {
+      flushSection();
+      title = h1Match[1]!;
+      continue;
+    }
+
+    // Second-level heading → new section
+    const h2Match = trimmed.match(/^##\s+(.+)$/);
+    if (h2Match) {
+      flushSection();
+      currentSectionTitle = h2Match[1]!;
+      continue;
+    }
+
+    currentSectionLines.push(line);
+  }
+  flushSection();
+
+  // If we never found any ## headings, wrap everything as one section
+  if (sections.length === 0) {
+    sections.push({
+      id: "section_0",
+      title: "Lesson",
+      content: markdown.trim(),
+      order: 0,
+    });
+  }
+
   return {
     id: `lesson_${conceptId}`,
     conceptId,
-    title: "",
-    summary: "",
-    sections: [{ id: "section_0", title: "Lesson", content: text, order: 0 }],
+    title,
+    summary,
+    sections,
     workedExamples: [],
     strategy: "default",
     estimatedMinutes: 10,
@@ -653,6 +722,14 @@ export async function regradeWithReasoning(
   } catch {
     return { isCorrect: false, score: 0, explanation: "Unable to re-grade right now." };
   }
+}
+
+// ─── Save Progress ────────────────────────────────────────
+
+/** Trigger an immediate mastery snapshot to persist all learning progress. */
+export async function saveProgress(): Promise<void> {
+  if (!isTauri()) return;
+  return tauriInvoke<void>("save_progress");
 }
 
 // ─── Data Export ───────────────────────────────────────────
