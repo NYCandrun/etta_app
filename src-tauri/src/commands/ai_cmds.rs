@@ -10,6 +10,21 @@ use tauri::State;
 const FALLBACK_BASE_MODEL: &str = "claude-sonnet-4-20250514";
 const FALLBACK_ESCALATION_MODEL: &str = "claude-opus-4-6";
 
+/// Escape user-supplied content for safe interpolation into XML-structured prompts.
+/// Prevents prompt injection via XML tag breakout.
+fn xml_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&apos;")
+}
+
+/// Settings keys that must never appear in exported data.
+const SENSITIVE_KEYS: &[&str] = &[
+    "api_key", "auth_token", "password", "secret", "token",
+];
+
 /// Helper: get the configured base model from settings, falling back to default.
 fn get_base_model(conn: &rusqlite::Connection) -> String {
     db::settings::get_setting(conn, "base_model")
@@ -68,11 +83,15 @@ pub async fn explain_mistake(
     );
 
     let user_msg = format!(
-        "<question>{question_prompt}</question>\n\n\
-         <student_answer>{user_answer}</student_answer>\n\n\
-         <correct_explanation>{correct_answer}</correct_explanation>\n\n\
-         <context>{context}</context>\n\n\
-         Please explain the student's mistake and help them understand the correct approach."
+        "<question>{}</question>\n\n\
+         <student_answer>{}</student_answer>\n\n\
+         <correct_explanation>{}</correct_explanation>\n\n\
+         <context>{}</context>\n\n\
+         Please explain the student's mistake and help them understand the correct approach.",
+        xml_escape(&question_prompt),
+        xml_escape(&user_answer),
+        xml_escape(&correct_answer),
+        xml_escape(&context),
     );
 
     let request = MessagesRequest::new(
@@ -124,10 +143,13 @@ pub async fn regrade_with_reasoning(
         .to_string();
 
     let user_text = format!(
-        "<question>{question_prompt}</question>\n\n\
-         <student_answer>{user_answer}</student_answer>\n\n\
-         <rubric>{rubric}</rubric>\n\n\
-         Re-grade this answer carefully. Consider partial credit."
+        "<question>{}</question>\n\n\
+         <student_answer>{}</student_answer>\n\n\
+         <rubric>{}</rubric>\n\n\
+         Re-grade this answer carefully. Consider partial credit.",
+        xml_escape(&question_prompt),
+        xml_escape(&user_answer),
+        xml_escape(&rubric),
     );
 
     // Build message content — include image if file data provided
@@ -178,7 +200,7 @@ pub async fn regrade_with_reasoning(
     match serde_json::from_str::<RawRegrade>(json_str) {
         Ok(parsed) => Ok(RegradeResult {
             is_correct: parsed.is_correct,
-            score: parsed.score,
+            score: parsed.score.clamp(0.0, 1.0),
             explanation: parsed.explanation,
         }),
         Err(_) => {
@@ -344,7 +366,7 @@ pub async fn verify_no_right_answer(
     };
 
     let options_text = options.iter().enumerate()
-        .map(|(i, o)| format!("  {}. {}", (b'A' + i as u8) as char, o))
+        .map(|(i, o)| format!("  {}. {}", (b'A' + i as u8) as char, xml_escape(o)))
         .collect::<Vec<_>>()
         .join("\n");
 
@@ -354,8 +376,9 @@ pub async fn verify_no_right_answer(
         .to_string();
 
     let user_msg = format!(
-        "<question>{question_prompt}</question>\n\n<options>\n{options_text}\n</options>\n\n\
-         Is it true that none of these options are correct? Verify carefully."
+        "<question>{}</question>\n\n<options>\n{options_text}\n</options>\n\n\
+         Is it true that none of these options are correct? Verify carefully.",
+        xml_escape(&question_prompt),
     );
 
     let request = MessagesRequest::new(&model, 512, Some(system), vec![Message::user_text(&user_msg)], false);
@@ -518,9 +541,10 @@ pub fn get_submissions(
         SubmissionInfo {
             id: s.id.unwrap_or(0),
             project_id: s.project_id,
-            file_name,
+            file_name: file_name.clone(),
             file_type: s.mime_type.unwrap_or_else(|| "application/octet-stream".to_string()),
-            file_path,
+            // Expose only the file name, not the full absolute path (privacy)
+            file_path: file_name,
             submitted_at: s.submitted_at,
             status: s.status,
             feedback: s.feedback_json,
@@ -586,11 +610,21 @@ pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
     let submissions = db::submissions::get_recent_submissions(&conn, 1000)
         .map_err(|e| format!("DB error: {e}"))?;
 
+    // Filter out sensitive settings (API keys, tokens, passwords)
+    let safe_settings: Vec<_> = settings
+        .into_iter()
+        .filter(|(k, _)| {
+            let lower = k.to_lowercase();
+            !SENSITIVE_KEYS.iter().any(|s| lower.contains(s))
+        })
+        .map(|(k, v)| serde_json::json!({"key": k, "value": v}))
+        .collect();
+
     let export = serde_json::json!({
         "exportedAt": chrono::Utc::now().to_rfc3339(),
         "version": "1.0",
         "concepts": concepts,
-        "settings": settings.into_iter().map(|(k, v)| serde_json::json!({"key": k, "value": v})).collect::<Vec<_>>(),
+        "settings": safe_settings,
         "submissions": submissions,
     });
 

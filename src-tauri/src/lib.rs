@@ -54,7 +54,7 @@ pub fn run() {
             // Settings
             commands::settings_cmds::get_setting,
             commands::settings_cmds::set_setting,
-            commands::settings_cmds::get_api_key,
+            commands::settings_cmds::has_api_key,
             commands::settings_cmds::store_api_key,
             commands::settings_cmds::test_api_key,
             // Lessons

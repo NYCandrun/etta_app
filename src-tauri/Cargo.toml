@@ -14,6 +14,7 @@ tokio = { version = "1", features = ["full"] }
 chrono = { version = "0.4", features = ["serde"] }
 base64 = "0.22"
 dirs = "5"
+keyring = { version = "3", features = ["sync-secret-service", "apple-native", "windows-native"] }
 futures-lite = "2"
 
 [build-dependencies]

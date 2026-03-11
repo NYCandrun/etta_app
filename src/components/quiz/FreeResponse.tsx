@@ -3,6 +3,11 @@ import type { Question } from "@/types/quiz";
 import { RichText } from "@/components/lesson/LessonContent";
 import { MathKeyboard } from "@/components/quiz/MathKeyboard";
 
+/** Maximum characters allowed in free-response textarea */
+const MAX_TEXT_LENGTH = 5000;
+/** Maximum file size in bytes (25 MB) */
+const MAX_FILE_SIZE = 25 * 1024 * 1024;
+
 interface FreeResponseProps {
   question: Question;
   onSubmit: (text: string, files?: File[]) => void;
@@ -28,7 +33,16 @@ export function FreeResponse({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      setUploadedFiles((prev) => [...prev, ...Array.from(files)]);
+      const valid = Array.from(files).filter((f) => {
+        if (f.size > MAX_FILE_SIZE) {
+          alert(`File "${f.name}" is too large (${(f.size / 1024 / 1024).toFixed(1)} MB). Maximum size is 25 MB.`);
+          return false;
+        }
+        return true;
+      });
+      if (valid.length > 0) {
+        setUploadedFiles((prev) => [...prev, ...valid]);
+      }
     }
   };
 
@@ -70,7 +84,8 @@ export function FreeResponse({
       <textarea
         ref={textareaRef}
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => setText(e.target.value.slice(0, MAX_TEXT_LENGTH))}
+        maxLength={MAX_TEXT_LENGTH}
         disabled={submitted}
         placeholder={
           isSimple
@@ -80,6 +95,11 @@ export function FreeResponse({
         rows={rows}
         className={`input w-full resize-y text-sm ${isSimple ? "" : "font-mono"}`}
       />
+      {text.length > MAX_TEXT_LENGTH * 0.9 && (
+        <p className="text-xs text-warm-400">
+          {text.length}/{MAX_TEXT_LENGTH} characters
+        </p>
+      )}
 
       {/* File upload section */}
       <div className="rounded-xl border border-dashed border-warm-300 p-4 dark:border-warm-600">

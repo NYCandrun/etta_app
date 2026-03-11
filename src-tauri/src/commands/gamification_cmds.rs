@@ -89,6 +89,9 @@ pub fn get_gamification_state(state: State<'_, AppState>) -> Result<Gamification
     })
 }
 
+/// Maximum XP that can be awarded in a single call.
+const MAX_XP_PER_AWARD: i64 = 100;
+
 #[tauri::command]
 pub fn award_xp(
     state: State<'_, AppState>,
@@ -96,6 +99,14 @@ pub fn award_xp(
     #[allow(unused)] source: Option<String>,
     #[allow(unused)] description: Option<String>,
 ) -> Result<GamificationState, String> {
+    // Validate XP amount to prevent abuse
+    if amount <= 0 || amount > MAX_XP_PER_AWARD {
+        return Err(format!(
+            "XP amount must be between 1 and {}.",
+            MAX_XP_PER_AWARD
+        ));
+    }
+
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
 
     let current_xp = db::settings::get_setting(&conn, "total_xp")
