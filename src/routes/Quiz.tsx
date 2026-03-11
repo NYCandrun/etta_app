@@ -70,7 +70,7 @@ export default function Quiz() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="mx-auto max-w-2xl space-y-6"
+      className="mx-auto max-w-3xl space-y-6"
     >
       {/* Header */}
       <div>

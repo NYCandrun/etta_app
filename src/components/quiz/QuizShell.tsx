@@ -163,7 +163,7 @@ export function QuizShell({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`card max-w-lg text-center ${className}`}
+        className={`card mx-auto max-w-2xl text-center ${className}`}
       >
         <div className="mb-4">
           {score >= 80 ? (
@@ -234,7 +234,7 @@ export function QuizShell({
   if (!currentQuestion) return null;
 
   return (
-    <div className={`max-w-2xl space-y-6 ${className}`}>
+    <div className={`max-w-3xl space-y-6 ${className}`}>
       {/* Progress bar */}
       <div className="flex items-center gap-4">
         <div className="flex-1">

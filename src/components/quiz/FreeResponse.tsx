@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import type { Question } from "@/types/quiz";
 import { RichText } from "@/components/lesson/LessonContent";
 import { MathKeyboard } from "@/components/quiz/MathKeyboard";
@@ -7,6 +7,19 @@ import { MathKeyboard } from "@/components/quiz/MathKeyboard";
 const MAX_TEXT_LENGTH = 5000;
 /** Maximum file size in bytes (25 MB) */
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
+
+/** Image preview that properly creates and revokes object URLs to avoid memory leaks. */
+function FilePreview({ file, alt }: { file: File; alt: string }) {
+  const url = useMemo(() => URL.createObjectURL(file), [file]);
+  useEffect(() => () => URL.revokeObjectURL(url), [url]);
+  return (
+    <img
+      src={url}
+      alt={alt}
+      className="ml-2 max-h-24 rounded-lg border border-warm-200 dark:border-warm-700"
+    />
+  );
+}
 
 interface FreeResponseProps {
   question: Question;
@@ -102,7 +115,7 @@ export function FreeResponse({
               : "Show your reasoning step by step. You can type plain text or use the math keyboard below..."
           }
           rows={rows}
-          className={`input w-full resize-y text-sm leading-relaxed ${isSimple ? "" : "font-mono"}`}
+          className="input w-full resize-y text-sm leading-relaxed"
           style={{ minHeight: isSimple ? "8rem" : "12rem" }}
         />
 
@@ -204,11 +217,7 @@ export function FreeResponse({
                     </button>
                   )}
                   {file.type.startsWith("image/") && (
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={`Preview: ${file.name}`}
-                      className="ml-2 max-h-24 rounded-lg border border-warm-200 dark:border-warm-700"
-                    />
+                    <FilePreview file={file} alt={`Preview: ${file.name}`} />
                   )}
                 </div>
               ))}
