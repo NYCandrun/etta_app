@@ -6,7 +6,7 @@ use crate::engine::{mastery, spaced_rep, struggle};
 use crate::keychain;
 use crate::AppState;
 use serde::{Deserialize, Serialize};
-use tauri::State;
+use tauri::{Manager, State};
 
 /// Maximum length for free-response text (characters).
 const MAX_FREE_RESPONSE_LEN: usize = 5000;

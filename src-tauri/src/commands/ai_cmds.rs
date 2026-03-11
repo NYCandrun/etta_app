@@ -4,7 +4,7 @@ use crate::db;
 use crate::keychain;
 use crate::AppState;
 use serde::{Deserialize, Serialize};
-use tauri::State;
+use tauri::{Manager, State};
 
 /// Default models — can be overridden by user settings.
 const FALLBACK_BASE_MODEL: &str = "claude-sonnet-4-20250514";

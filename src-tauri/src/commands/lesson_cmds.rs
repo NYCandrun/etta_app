@@ -3,7 +3,7 @@ use crate::api::prompt::{self, LearnerContext, TutorMode};
 use crate::db;
 use crate::keychain;
 use crate::AppState;
-use tauri::State;
+use tauri::{Manager, State};
 
 #[tauri::command]
 pub async fn get_lesson(

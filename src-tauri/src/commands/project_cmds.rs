@@ -7,7 +7,7 @@ use crate::file_handler;
 use crate::keychain;
 use crate::AppState;
 use serde::{Deserialize, Serialize};
-use tauri::State;
+use tauri::{Manager, State};
 
 #[derive(Debug, Serialize)]
 pub struct ProjectInfo {
