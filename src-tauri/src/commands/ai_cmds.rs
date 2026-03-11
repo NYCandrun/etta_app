@@ -26,7 +26,7 @@ const SENSITIVE_KEYS: &[&str] = &[
 ];
 
 /// Helper: get the configured base model from settings, falling back to default.
-fn get_base_model(conn: &rusqlite::Connection) -> String {
+pub(crate) fn get_base_model(conn: &rusqlite::Connection) -> String {
     db::settings::get_setting(conn, "base_model")
         .ok()
         .flatten()
@@ -477,7 +477,7 @@ pub fn get_review_forecast(state: State<'_, AppState>) -> Result<Vec<ReviewForec
 pub fn activate_streak_freeze(state: State<'_, AppState>) -> Result<bool, String> {
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
 
-    let freezes = db::settings::get_setting(&conn, "streak_freezes")
+    let freezes = db::settings::get_setting(&conn, "streak_freezes_available")
         .map_err(|e| format!("DB error: {e}"))?
         .and_then(|v| v.parse::<i64>().ok())
         .unwrap_or(1); // Default 1 free freeze
@@ -487,7 +487,7 @@ pub fn activate_streak_freeze(state: State<'_, AppState>) -> Result<bool, String
     }
 
     // Use a freeze
-    db::settings::set_setting(&conn, "streak_freezes", &(freezes - 1).to_string())
+    db::settings::set_setting(&conn, "streak_freezes_available", &(freezes - 1).to_string())
         .map_err(|e| format!("DB error: {e}"))?;
     db::settings::set_setting(&conn, "streak_freeze_active", "true")
         .map_err(|e| format!("DB error: {e}"))?;

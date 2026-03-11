@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { QuizShell } from "@/components/quiz/QuizShell";
@@ -13,6 +13,7 @@ export default function Quiz() {
     useSession();
   const { awardXP } = useGamification();
   const [loading, setLoading] = useState(false);
+  const xpAwarded = useRef(false);
 
   useEffect(() => {
     if (currentConcept && !quizSession) {
@@ -23,11 +24,14 @@ export default function Quiz() {
 
   const handleComplete = async (completedSession: QuizSession) => {
     setQuizSession(completedSession);
-    const score = completedSession.totalScore;
-    if (score >= 0.9) {
-      await awardXP(100, "quiz_perfect", "Perfect quiz score!");
-    } else if (score >= 0.6) {
-      await awardXP(50, "quiz_pass", "Quiz passed!");
+    if (!xpAwarded.current) {
+      xpAwarded.current = true;
+      const score = completedSession.totalScore;
+      if (score >= 0.9) {
+        await awardXP(100, "quiz_perfect", "Perfect quiz score!");
+      } else if (score >= 0.6) {
+        await awardXP(50, "quiz_pass", "Quiz passed!");
+      }
     }
   };
 

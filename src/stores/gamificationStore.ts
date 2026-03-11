@@ -52,7 +52,8 @@ export const useGamificationStore = create<GamificationStoreState>((set) => ({
   addXPEvent: (event) =>
     set((s) => ({
       recentXpEvents: [event, ...s.recentXpEvents].slice(0, 20),
-      xp: s.xp + event.amount,
+      // Don't add XP locally — let hydrate() sync the real value from backend
+      // to avoid double-counting (local + backend both incrementing).
     })),
   showPopup: (event) => set({ pendingPopup: event }),
   dismissPopup: () => set({ pendingPopup: null }),

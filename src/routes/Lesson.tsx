@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LessonContent } from "@/components/lesson/LessonContent";
@@ -23,6 +23,7 @@ export default function Lesson() {
 
   const [loading, setLoading] = useState(false);
   const [explanationLoading, setExplanationLoading] = useState(false);
+  const hasAwardedXP = useRef(false);
   const [extraExplanation, setExtraExplanation] =
     useState<ExplanationResponse | null>(null);
 
@@ -59,7 +60,10 @@ export default function Lesson() {
 
   const handleReadyForQuiz = async () => {
     if (currentConcept) {
-      await awardXP(25, "lesson_complete", `Completed lesson: ${currentConcept.name}`);
+      if (!hasAwardedXP.current) {
+        hasAwardedXP.current = true;
+        await awardXP(25, "lesson_complete", `Completed lesson: ${currentConcept.name}`);
+      }
       navigate("/quiz");
     }
   };

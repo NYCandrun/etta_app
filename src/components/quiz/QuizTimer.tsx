@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface QuizTimerProps {
   /** Total seconds for the timer */
@@ -25,19 +25,22 @@ export function QuizTimer({
     setRemaining(totalSeconds);
   }, [totalSeconds]);
 
+  const onTimeUpRef = useRef(onTimeUp);
+  onTimeUpRef.current = onTimeUp;
+
   useEffect(() => {
-    if (!running || remaining <= 0) return;
+    if (!running) return;
     const interval = setInterval(() => {
       setRemaining((prev) => {
         if (prev <= 1) {
-          onTimeUp?.();
+          onTimeUpRef.current?.();
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [running, remaining, onTimeUp]);
+  }, [running]);
 
   const progress = remaining / totalSeconds;
   const dashOffset = CIRCUMFERENCE * (1 - progress);

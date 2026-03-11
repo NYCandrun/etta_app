@@ -118,8 +118,13 @@ pub async fn submit_project(
 
     let messages = vec![Message::user_blocks(vec![text_block, file_block])];
 
+    let model = {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        crate::commands::ai_cmds::get_base_model(&conn)
+    };
+
     let request = crate::api::types::MessagesRequest::new(
-        "claude-sonnet-4-20250514",
+        &model,
         4096,
         Some(system_prompt),
         messages,
