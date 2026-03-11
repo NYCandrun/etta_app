@@ -8,6 +8,18 @@ use crate::AppState;
 use serde::{Deserialize, Serialize};
 use tauri::State;
 
+/// Maximum length for free-response text (characters).
+const MAX_FREE_RESPONSE_LEN: usize = 5000;
+
+/// Escape user-supplied content for safe interpolation into XML-structured prompts.
+fn xml_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&apos;")
+}
+
 #[tauri::command]
 pub async fn get_quiz(
     state: State<'_, AppState>,
@@ -133,6 +145,16 @@ pub async fn submit_answer(
     answer: FrontendAnswer,
     question: QuestionContext,
 ) -> Result<FeedbackResponse, String> {
+    // Validate free-response text length to prevent token exhaustion
+    if let Some(ref text) = answer.free_text {
+        if text.len() > MAX_FREE_RESPONSE_LEN {
+            return Err(format!(
+                "Free response text exceeds maximum length of {} characters.",
+                MAX_FREE_RESPONSE_LEN
+            ));
+        }
+    }
+
     let time_ms = answer.time_spent_ms;
 
     // Grade the answer based on question type
@@ -270,9 +292,12 @@ async fn grade_free_response(
         .to_string();
 
     let user_msg = format!(
-        "<question>{question_prompt}</question>\n\
-         <answer>{user_answer}</answer>\n\
-         <rubric>{rubric_text}</rubric>"
+        "<question>{}</question>\n\
+         <answer>{}</answer>\n\
+         <rubric>{}</rubric>",
+        xml_escape(question_prompt),
+        xml_escape(user_answer),
+        xml_escape(rubric_text),
     );
 
     let request = MessagesRequest::new(&model, 256, Some(system), vec![Message::user_text(&user_msg)], false);
@@ -292,7 +317,7 @@ async fn grade_free_response(
         .strip_suffix("```").unwrap_or(text.trim()).trim();
 
     match serde_json::from_str::<GradeResult>(json_str) {
-        Ok(parsed) => Ok((parsed.correct, parsed.score)),
+        Ok(parsed) => Ok((parsed.correct, parsed.score.clamp(0.0, 1.0))),
         Err(_) => Ok((false, 0.3)), // Fallback partial credit
     }
 }
@@ -312,10 +337,12 @@ pub fn complete_quiz(
     session_id: String,
     scores: Vec<f64>,
 ) -> Result<QuizCompletionResult, String> {
-    let total_score = if scores.is_empty() {
+    // Clamp individual scores to valid range and compute average
+    let clamped: Vec<f64> = scores.iter().map(|s| s.clamp(0.0, 1.0)).collect();
+    let total_score = if clamped.is_empty() {
         0.0
     } else {
-        scores.iter().sum::<f64>() / scores.len() as f64
+        clamped.iter().sum::<f64>() / clamped.len() as f64
     };
 
     // Calculate XP based on score

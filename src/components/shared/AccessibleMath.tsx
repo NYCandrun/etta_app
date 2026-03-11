@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import katex from "katex";
+import DOMPurify from "dompurify";
 
 interface AccessibleMathProps {
   /** The LaTeX expression to render */
@@ -10,8 +11,16 @@ interface AccessibleMathProps {
   className?: string;
 }
 
+// Configure DOMPurify to allow KaTeX output elements and MathML
+const PURIFY_CONFIG = {
+  USE_PROFILES: { mathMl: true, html: true },
+  ADD_TAGS: ["semantics", "annotation"] as string[],
+  ADD_ATTR: ["encoding", "aria-hidden", "style"] as string[],
+};
+
 /**
  * Renders a LaTeX expression using KaTeX with MathML for accessibility.
+ * Output is sanitized with DOMPurify to prevent XSS.
  * Falls back to a styled code block if KaTeX fails to parse.
  */
 export function AccessibleMath({
@@ -21,13 +30,15 @@ export function AccessibleMath({
 }: AccessibleMathProps) {
   const rendered = useMemo(() => {
     try {
-      const html = katex.renderToString(latex, {
+      const rawHtml = katex.renderToString(latex, {
         displayMode: display,
         throwOnError: false,
         output: "htmlAndMathml",
         trust: false,
         strict: "warn",
       });
+      // Sanitize KaTeX output to prevent XSS
+      const html = DOMPurify.sanitize(rawHtml, PURIFY_CONFIG);
       return { html, error: false };
     } catch {
       return { html: "", error: true };

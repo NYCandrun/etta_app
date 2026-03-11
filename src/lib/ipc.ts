@@ -28,6 +28,13 @@ export async function storeApiKey(apiKey: string): Promise<void> {
   return tauriInvoke<void>("store_api_key", { apiKey });
 }
 
+/** Check whether an API key is stored (without retrieving it). */
+export async function hasApiKey(): Promise<boolean> {
+  if (!isTauri()) return false;
+  return tauriInvoke<boolean>("has_api_key");
+}
+
+/** Test the stored API key via a lightweight API call. */
 export async function testApiKey(): Promise<{ valid: boolean; message: string }> {
   if (!isTauri()) {
     return { valid: false, message: "Tauri not available in browser mode" };

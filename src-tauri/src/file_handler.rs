@@ -4,6 +4,26 @@
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use std::path::Path;
 
+/// Maximum file size: 25 MB.
+const MAX_FILE_SIZE: u64 = 25 * 1024 * 1024;
+
+/// Allowed MIME types for file uploads.
+const ALLOWED_MIME_TYPES: &[&str] = &[
+    "application/pdf",
+    "image/png",
+    "image/jpeg",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "text/plain",
+    "text/markdown",
+    "text/x-python",
+    "text/x-rust",
+    "text/javascript",
+    "text/typescript",
+    "text/html",
+    "text/css",
+    "application/json",
+];
+
 /// A processed file ready for API submission.
 #[derive(Debug, Clone)]
 pub struct ProcessedFile {
@@ -14,6 +34,12 @@ pub struct ProcessedFile {
 }
 
 /// Read a file from disk, detect its MIME type, and base64-encode it.
+///
+/// Validates:
+/// - File exists and is a regular file (not directory/symlink to device)
+/// - File size is within the 25 MB limit
+/// - MIME type is in the allowed whitelist
+/// - Path is canonicalized to prevent traversal
 pub fn process_file(path: &str) -> Result<ProcessedFile, String> {
     let file_path = Path::new(path);
 
@@ -21,12 +47,42 @@ pub fn process_file(path: &str) -> Result<ProcessedFile, String> {
         return Err(format!("File not found: {path}"));
     }
 
-    let bytes =
-        std::fs::read(file_path).map_err(|e| format!("Failed to read file '{path}': {e}"))?;
+    // Canonicalize to resolve symlinks and prevent path traversal
+    let canonical = file_path
+        .canonicalize()
+        .map_err(|e| format!("Failed to resolve file path: {e}"))?;
 
-    let mime_type = detect_mime_type(file_path, &bytes);
+    // Ensure it's a regular file, not a directory, device, or pipe
+    let metadata = std::fs::metadata(&canonical)
+        .map_err(|e| format!("Failed to read file metadata: {e}"))?;
+    if !metadata.is_file() {
+        return Err("Path does not point to a regular file.".to_string());
+    }
+
+    // Check file size before reading into memory
+    if metadata.len() > MAX_FILE_SIZE {
+        return Err(format!(
+            "File is too large ({:.1} MB). Maximum allowed size is {} MB.",
+            metadata.len() as f64 / (1024.0 * 1024.0),
+            MAX_FILE_SIZE / (1024 * 1024)
+        ));
+    }
+
+    let bytes =
+        std::fs::read(&canonical).map_err(|e| format!("Failed to read file: {e}"))?;
+
+    let mime_type = detect_mime_type(&canonical, &bytes);
+
+    // Validate MIME type against whitelist
+    if !ALLOWED_MIME_TYPES.contains(&mime_type.as_str()) {
+        return Err(format!(
+            "File type '{}' is not allowed. Supported types: PDF, PNG, JPEG, DOCX, and plain text.",
+            mime_type
+        ));
+    }
+
     let data_base64 = B64.encode(&bytes);
-    let file_name = file_path
+    let file_name = canonical
         .file_name()
         .map(|n| n.to_string_lossy().to_string())
         .unwrap_or_else(|| "unknown".to_string());
