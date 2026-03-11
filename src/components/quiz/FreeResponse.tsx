@@ -130,7 +130,8 @@ export function FreeResponse({
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*,.pdf,.txt,.py,.js,.ts,.tex"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.md,.txt"
+            multiple
             onChange={handleFileChange}
             className="hidden"
           />

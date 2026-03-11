@@ -36,6 +36,16 @@ pub fn run() {
                     eprintln!("Warning: failed to seed curriculum: {e}");
                 }
             }
+
+            // Purge stale content cache entries (older than 30 days) to prevent bloat
+            let cutoff = (chrono::Utc::now() - chrono::Duration::days(30)).to_rfc3339();
+            match db::content_cache::purge_cache_before(&db, &cutoff) {
+                Ok(purged) if purged > 0 => {
+                    eprintln!("Purged {purged} stale cache entries (older than 30 days)");
+                }
+                _ => {}
+            }
+
             drop(db);
 
             Ok(())

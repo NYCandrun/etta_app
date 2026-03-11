@@ -37,6 +37,13 @@ const PATTERNS: DelimiterPattern[] = [
   { regex: /(?<!\$)\$(?!\$)((?:[^$\\]|\\.)+?)\$(?!\$)/, type: "math" },
   // \(...\) inline math
   { regex: /\\\(([\s\S]+?)\\\)/, type: "math" },
+  // Bare \begin{...}...\end{...} blocks (display math)
+  { regex: /\\begin\{(\w+)\}([\s\S]*?)\\end\{\1\}/, type: "display-math" },
+  // Bare LaTeX commands with braced args: \sqrt{...}, \frac{...}{...}, etc.
+  {
+    regex: /\\(sqrt|frac|vec|hat|bar|dot|ddot|tilde|overline|underline|mathbb|mathcal|mathbf|mathrm|text|textbf|operatorname)(\{(?:[^{}]|\{[^{}]*\})*\}(?:\{(?:[^{}]|\{[^{}]*\})*\})?)/,
+    type: "math",
+  },
 ];
 
 /**
@@ -55,12 +62,16 @@ function findEarliestMatch(
 
   for (const pattern of PATTERNS) {
     const m = pattern.regex.exec(text);
-    if (m && m[1] !== undefined) {
+    if (m) {
+      // For bare LaTeX command patterns (like \sqrt{...}), the whole match IS the LaTeX
+      const isBareCommand = m[0].startsWith("\\") && !m[0].startsWith("\\(") && !m[0].startsWith("\\[") && !m[0].startsWith("\\begin");
+      const content = isBareCommand ? m[0] : (m[1] ?? m[0]);
+
       if (best === null || m.index < best.index) {
         best = {
           index: m.index,
           fullMatch: m[0],
-          content: m[1],
+          content,
           type: pattern.type,
         };
       }
@@ -167,5 +178,5 @@ export function parseLatexSegments(input: string): Segment[] {
  * Quick check if a string likely contains LaTeX.
  */
 export function containsLatex(text: string): boolean {
-  return /\$[^$]|\\\(|\\\[/.test(text);
+  return /\$[^$]|\\\(|\\\[|\\(sqrt|frac|vec|hat|bar|overline|mathbb|begin)\{/.test(text);
 }
