@@ -52,6 +52,13 @@ CREATE TABLE IF NOT EXISTS xp_events (
     created_at      TEXT NOT NULL           -- ISO 8601 datetime
 );
 
+CREATE TABLE IF NOT EXISTS mastery_snapshots (
+    date            TEXT NOT NULL,              -- YYYY-MM-DD
+    domain          TEXT NOT NULL,
+    score           REAL NOT NULL DEFAULT 0.0,  -- average mastery 0.0–1.0
+    PRIMARY KEY (date, domain)
+);
+
 -- Indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_concepts_next_review ON concepts(next_review);
 CREATE INDEX IF NOT EXISTS idx_concepts_domain ON concepts(domain);
@@ -59,3 +66,4 @@ CREATE INDEX IF NOT EXISTS idx_submissions_concept ON submissions(concept_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_project ON submissions(project_id);
 CREATE INDEX IF NOT EXISTS idx_cache_concept_type ON content_cache(concept_id, content_type);
 CREATE INDEX IF NOT EXISTS idx_xp_events_created ON xp_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_mastery_snapshots_date ON mastery_snapshots(date);

@@ -70,6 +70,13 @@ pub fn initialize_database() -> Result<Connection, Box<dyn std::error::Error>> {
             description     TEXT NOT NULL DEFAULT '',
             created_at      TEXT NOT NULL
         );
+
+        CREATE TABLE IF NOT EXISTS mastery_snapshots (
+            date            TEXT NOT NULL,
+            domain          TEXT NOT NULL,
+            score           REAL NOT NULL DEFAULT 0.0,
+            PRIMARY KEY (date, domain)
+        );
         ",
     )?;
 

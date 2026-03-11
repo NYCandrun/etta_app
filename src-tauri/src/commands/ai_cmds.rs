@@ -424,25 +424,26 @@ pub fn get_mastery_history(state: State<'_, AppState>) -> Result<Vec<MasteryData
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
     let concepts = db::concepts::get_all_concepts(&conn).map_err(|e| format!("DB error: {e}"))?;
 
-    // Group by domain and compute average mastery per domain
+    // Compute today's average mastery per domain and record snapshots
+    let today = chrono::Local::now().format("%Y-%m-%d").to_string();
     let mut domain_scores: std::collections::HashMap<String, Vec<f64>> = std::collections::HashMap::new();
     for c in &concepts {
         domain_scores.entry(c.domain.clone()).or_default().push(c.mastery_score);
     }
-
-    let today = chrono::Local::now().format("%Y-%m-%d").to_string();
-    let mut history = Vec::new();
-    for (domain, scores) in domain_scores {
+    for (domain, scores) in &domain_scores {
         let avg = scores.iter().sum::<f64>() / scores.len() as f64;
-        history.push(MasteryDataPoint {
-            date: today.clone(),
-            domain,
-            score: avg,
-        });
+        let _ = db::mastery_snapshots::upsert_snapshot(&conn, &today, domain, avg);
     }
 
-    history.sort_by(|a, b| a.domain.cmp(&b.domain));
-    Ok(history)
+    // Return all stored snapshots (includes today's freshly-upserted data)
+    let snapshots = db::mastery_snapshots::get_all_snapshots(&conn)
+        .map_err(|e| format!("DB error: {e}"))?;
+
+    Ok(snapshots.into_iter().map(|s| MasteryDataPoint {
+        date: s.date,
+        domain: s.domain,
+        score: s.score,
+    }).collect())
 }
 
 // ── Review Forecast ─────────────────────────────────────────────────────────
@@ -664,6 +665,10 @@ pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
     let xp_events = db::xp_events::get_all_xp_events(&conn)
         .map_err(|e| format!("DB error: {e}"))?;
 
+    // Include mastery history
+    let mastery_snapshots = db::mastery_snapshots::get_all_snapshots(&conn)
+        .map_err(|e| format!("DB error: {e}"))?;
+
     // Filter out sensitive settings (API keys, tokens, passwords)
     let safe_settings: Vec<_> = settings
         .into_iter()
@@ -676,12 +681,13 @@ pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
 
     let export = serde_json::json!({
         "exportedAt": chrono::Utc::now().to_rfc3339(),
-        "version": "1.1",
+        "version": "1.2",
         "concepts": concepts,
         "settings": safe_settings,
         "submissions": submissions,
         "contentHistory": quiz_history,
         "xpEvents": xp_events,
+        "masterySnapshots": mastery_snapshots,
     });
 
     serde_json::to_string_pretty(&export).map_err(|e| format!("Serialization error: {e}"))
