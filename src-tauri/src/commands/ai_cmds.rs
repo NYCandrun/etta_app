@@ -56,7 +56,7 @@ pub async fn explain_mistake(
     context: String,
     escalate: bool,
 ) -> Result<String, String> {
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
     let model = {
@@ -126,7 +126,7 @@ pub async fn regrade_with_reasoning(
     file_data: Option<String>,
     file_mime_type: Option<String>,
 ) -> Result<RegradeResult, String> {
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
     let model = {
@@ -270,7 +270,7 @@ pub async fn request_explanation(
     _lesson_id: String,
     attempt: u32,
 ) -> Result<ExplanationResponse, String> {
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
     let concept = {
@@ -309,7 +309,7 @@ pub async fn request_explanation(
         strategy,
         match *strategy {
             "analogy" => "Explain using real-world analogies the student can relate to",
-            "visual" => "Describe the concept visually, using diagrams described in words",
+            "visual" => "Describe the concept using a text-based visual approach: ASCII diagrams, tables, number lines, or LaTeX-formatted expressions. Do NOT reference or generate images. Structure the explanation spatially using formatting the student can read as plain text.",
             "step_by_step" => "Break down into very small, numbered steps",
             "basics_review" => "Review the fundamental prerequisite concepts first",
             _ => "Explain in a clear, straightforward manner",
@@ -348,7 +348,7 @@ pub async fn verify_no_right_answer(
     question_prompt: String,
     options: Vec<String>,
 ) -> Result<NoRightAnswerResult, String> {
-    let api_key = keychain::get_api_key()?
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
     let model = {

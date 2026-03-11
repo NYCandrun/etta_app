@@ -38,6 +38,27 @@ pub fn delete_api_key() -> Result<(), String> {
     }
 }
 
+/// Retrieve the API key, using the in-memory cache on AppState to avoid
+/// repeated OS keychain prompts (which can require a password on Linux).
+pub fn get_api_key_cached(state: &crate::AppState) -> Result<Option<String>, String> {
+    let mut cache = state.cached_api_key.lock().map_err(|e| format!("Lock error: {e}"))?;
+    if let Some(ref key) = *cache {
+        return Ok(Some(key.clone()));
+    }
+    let key = get_api_key()?;
+    if let Some(ref k) = key {
+        *cache = Some(k.clone());
+    }
+    Ok(key)
+}
+
+/// Invalidate the cached API key (call when the user stores or deletes their key).
+pub fn invalidate_cache(state: &crate::AppState) {
+    if let Ok(mut cache) = state.cached_api_key.lock() {
+        *cache = None;
+    }
+}
+
 /// Check whether an API key is stored (without returning it).
 pub fn has_api_key() -> Result<bool, String> {
     Ok(get_api_key()?.is_some())

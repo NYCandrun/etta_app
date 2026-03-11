@@ -40,15 +40,18 @@ pub fn has_api_key() -> Result<bool, String> {
 }
 
 #[tauri::command]
-pub fn store_api_key(api_key: String) -> Result<(), String> {
-    keychain::store_api_key(&api_key)
+pub fn store_api_key(state: State<'_, AppState>, api_key: String) -> Result<(), String> {
+    keychain::store_api_key(&api_key)?;
+    // Invalidate the in-memory cache so the new key is picked up immediately.
+    keychain::invalidate_cache(&state);
+    Ok(())
 }
 
 /// Test the *stored* API key by making a lightweight API call.
 /// Does NOT accept an API key parameter — uses the key from the OS keychain.
 #[tauri::command]
-pub async fn test_api_key() -> Result<bool, String> {
-    let api_key = keychain::get_api_key()?
+pub async fn test_api_key(state: State<'_, AppState>) -> Result<bool, String> {
+    let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "No API key stored. Please store one first.".to_string())?;
     let client = ClaudeClient::new(&api_key);
     client.test_connection().await

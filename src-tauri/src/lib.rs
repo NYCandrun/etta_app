@@ -11,9 +11,11 @@ mod engine;
 mod file_handler;
 mod keychain;
 
-/// Shared application state holding the SQLite connection.
+/// Shared application state holding the SQLite connection and cached API key.
 pub struct AppState {
     pub db: Mutex<Connection>,
+    /// In-memory cache of the API key so the OS keychain is only prompted once.
+    pub cached_api_key: Mutex<Option<String>>,
 }
 
 /// Record mastery snapshots using the shared app state.
@@ -30,6 +32,7 @@ pub fn run() {
             let conn = db::init::initialize_database()?;
             let state = AppState {
                 db: Mutex::new(conn),
+                cached_api_key: Mutex::new(None),
             };
             app.manage(state);
 
