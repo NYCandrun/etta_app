@@ -2,7 +2,7 @@ use crate::api::client::{extract_text, ClaudeClient};
 use crate::api::prompt::{self, LearnerContext, TutorMode};
 use crate::api::types::{Message, MessagesRequest};
 use crate::db;
-use crate::engine::{mastery, spaced_rep};
+use crate::engine::{mastery, spaced_rep, struggle};
 use crate::keychain;
 use crate::AppState;
 use serde::{Deserialize, Serialize};
@@ -136,6 +136,9 @@ pub struct FeedbackResponse {
     pub encouragement: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_hint: Option<String>,
+    /// Struggle detection: populated when the learner is consistently failing.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub struggle_alert: Option<struggle::StruggleInfo>,
 }
 
 #[tauri::command]
@@ -195,7 +198,7 @@ pub async fn submit_answer(
         _ => (false, 0.0),
     };
 
-    // Update mastery for the concept
+    // Update mastery and award XP atomically (single db lock)
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         if let Ok(Some(concept)) = db::concepts::get_concept(&conn, &question.concept_id) {
@@ -235,8 +238,36 @@ pub async fn submit_answer(
                 time_ms,
                 new_streak,
             );
+
+            // Award per-answer XP atomically with the mastery update.
+            // 2 XP base per answer + up to 8 bonus for correct answers = max 10 per answer.
+            // This replaces the frontend-driven award_xp call for quiz answers.
+            let xp_amount = if is_correct { 2 + (score * 8.0) as i64 } else { 2 };
+            let current_xp = db::settings::get_setting(&conn, "total_xp")
+                .ok()
+                .flatten()
+                .and_then(|v| v.parse::<i64>().ok())
+                .unwrap_or(0);
+            let _ = db::settings::set_setting(&conn, "total_xp", &(current_xp + xp_amount).to_string());
+            let _ = db::xp_events::insert_xp_event(
+                &conn, xp_amount, "quiz_answer",
+                &format!("Answer for {}", concept.title),
+            );
         }
     }
+
+    // Check for struggle after mastery update
+    let struggle_alert = {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        if let Ok(Some(updated_concept)) = db::concepts::get_concept(&conn, &question.concept_id) {
+            let all_concepts = db::concepts::get_all_concepts(&conn)
+                .unwrap_or_default();
+            let info = struggle::detect_struggle(&updated_concept, &all_concepts);
+            if info.is_struggling { Some(info) } else { None }
+        } else {
+            None
+        }
+    };
 
     let explanation = question.explanation.unwrap_or_else(|| {
         if is_correct {
@@ -246,7 +277,9 @@ pub async fn submit_answer(
         }
     });
 
-    let encouragement = if is_correct {
+    let encouragement = if struggle_alert.is_some() {
+        "This concept seems challenging. Check the recommendation below for next steps.".to_string()
+    } else if is_correct {
         "Great job! Keep up the good work!".to_string()
     } else if score > 0.0 {
         "Good effort! You're on the right track.".to_string()
@@ -261,6 +294,7 @@ pub async fn submit_answer(
         explanation,
         encouragement,
         next_hint: None,
+        struggle_alert,
     })
 }
 

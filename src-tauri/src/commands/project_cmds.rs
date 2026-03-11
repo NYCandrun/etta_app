@@ -2,6 +2,7 @@ use crate::api::client::{extract_text, ClaudeClient};
 use crate::api::prompt::{self, LearnerContext, TutorMode};
 use crate::api::types::{ContentBlock, DocumentSource, ImageSource, Message, MessageContent};
 use crate::db;
+use crate::engine::{mastery, spaced_rep};
 use crate::file_handler;
 use crate::keychain;
 use crate::AppState;
@@ -142,6 +143,67 @@ pub async fn submit_project(
             .map_err(|e| format!("DB error: {e}"))?;
     }
 
+    // Parse the AI feedback score and update concept mastery.
+    // Project submissions count as practice — a reviewed project with a score
+    // updates mastery the same way a quiz answer does.
+    {
+        let score = parse_project_score(&feedback);
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        if let Ok(Some(concept)) = db::concepts::get_concept(&conn, &submission.concept_id) {
+            let is_correct = score >= 0.7;
+            let new_streak = if is_correct { concept.streak_correct + 1 } else { 0 };
+
+            let attempt = mastery::AttemptRecord {
+                correct: is_correct,
+                latency_ms: None,
+                is_transfer: true, // projects are application/transfer tasks
+            };
+
+            let new_mastery = if concept.attempt_count == 0 {
+                mastery::compute_mastery(&[attempt])
+            } else {
+                let single_score = mastery::compute_mastery(&[attempt]);
+                let weight = 1.0 / (concept.attempt_count as f64 + 1.0);
+                concept.mastery_score * (1.0 - weight) + single_score * weight
+            };
+
+            let quality = spaced_rep::classify_response(is_correct, new_streak, None);
+            let schedule = spaced_rep::update_schedule(quality, concept.ease_factor, concept.interval_days);
+
+            let last_correct = if is_correct {
+                Some(chrono::Local::now().format("%Y-%m-%d").to_string())
+            } else {
+                concept.last_correct.clone()
+            };
+
+            let _ = db::concepts::update_mastery(
+                &conn,
+                &submission.concept_id,
+                new_mastery,
+                schedule.ease_factor,
+                schedule.interval_days,
+                &schedule.next_review,
+                last_correct.as_deref(),
+                None,
+                new_streak,
+            );
+
+            // Award XP atomically with the mastery update (same db lock)
+            let xp_amount = (10.0 + score * 30.0) as i64;
+            let xp_amount = xp_amount.clamp(1, 50);
+            let current_xp = db::settings::get_setting(&conn, "total_xp")
+                .ok()
+                .flatten()
+                .and_then(|v| v.parse::<i64>().ok())
+                .unwrap_or(0);
+            let _ = db::settings::set_setting(&conn, "total_xp", &(current_xp + xp_amount).to_string());
+            let _ = db::xp_events::insert_xp_event(
+                &conn, xp_amount, "project_submission",
+                &format!("Project for {}", concept.title),
+            );
+        }
+    }
+
     Ok(ProjectInfo {
         id: sub_id,
         concept_id: submission.concept_id,
@@ -151,6 +213,32 @@ pub async fn submit_project(
         feedback: Some(feedback),
         submitted_at: now,
     })
+}
+
+/// Extract an overall score (0.0–1.0) from the AI project feedback.
+/// Looks for an `overall_score` field in JSON, falls back to 0.5 for reviewed work.
+fn parse_project_score(feedback: &str) -> f64 {
+    #[derive(Deserialize)]
+    struct FeedbackScore {
+        #[serde(default, alias = "overall_score")]
+        overall_score: Option<f64>,
+        #[serde(default)]
+        score: Option<f64>,
+    }
+
+    let json_str = feedback.trim()
+        .strip_prefix("```json").or_else(|| feedback.trim().strip_prefix("```"))
+        .unwrap_or(feedback.trim())
+        .strip_suffix("```").unwrap_or(feedback.trim()).trim();
+
+    if let Ok(parsed) = serde_json::from_str::<FeedbackScore>(json_str) {
+        if let Some(s) = parsed.overall_score.or(parsed.score) {
+            return s.clamp(0.0, 1.0);
+        }
+    }
+
+    // If we can't parse a score, give default credit for submitting work
+    0.5
 }
 
 fn build_file_content_block(
