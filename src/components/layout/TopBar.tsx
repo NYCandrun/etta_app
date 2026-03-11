@@ -20,7 +20,7 @@ const ROUTE_TITLES: Record<string, string> = {
 export function TopBar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { xp, streak, level } = useGamification();
+  const { xp, streak, level, recentXpEvents } = useGamification();
   const { dailyGoal } = useSettings();
   const { currentConcept, startLearningPath } = useSession();
   const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
@@ -77,7 +77,12 @@ export function TopBar() {
     }
   };
 
-  const dailyProgress = streak.todayCompleted ? 1 : 0.4;
+  // Estimate daily progress from today's XP events (~5 XP per minute)
+  const today = new Date().toISOString().slice(0, 10);
+  const todayXP = recentXpEvents
+    .filter((e) => e.timestamp.startsWith(today))
+    .reduce((sum, e) => sum + e.amount, 0);
+  const dailyProgress = dailyGoal > 0 ? Math.min(1, Math.round(todayXP / 5) / dailyGoal) : 0;
   const circumference = 2 * Math.PI * 10;
   const dashOffset = circumference * (1 - dailyProgress);
 

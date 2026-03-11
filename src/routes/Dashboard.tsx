@@ -15,7 +15,7 @@ import * as ipc from "@/lib/ipc";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { xp, level, streak } = useGamification();
+  const { xp, level, streak, recentXpEvents } = useGamification();
   const { dailyGoal } = useSettings();
   const { startSession, startLearningPath, sessionConcepts } = useSession();
   const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
@@ -55,8 +55,13 @@ export default function Dashboard() {
   // Build learning paths from curriculum
   const learningPaths = curriculum ? buildLearningPaths(curriculum) : [];
 
-  const minutesCompleted = streak.todayCompleted ? dailyGoal : Math.round(dailyGoal * 0.4);
-  const dailyProgress = minutesCompleted / dailyGoal;
+  // Estimate minutes from today's XP events (~5 XP per minute of study)
+  const today = new Date().toISOString().slice(0, 10);
+  const todayXP = recentXpEvents
+    .filter((e) => e.timestamp.startsWith(today))
+    .reduce((sum, e) => sum + e.amount, 0);
+  const minutesCompleted = Math.min(dailyGoal, Math.round(todayXP / 5));
+  const dailyProgress = dailyGoal > 0 ? minutesCompleted / dailyGoal : 0;
 
   return (
     <motion.div
