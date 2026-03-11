@@ -26,9 +26,10 @@ export function FreeResponse({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Scale the text area based on question complexity
+  // Scale the text area based on question complexity — always large enough for
+  // a mid-sized paragraph so the learner never feels cramped.
   const isSimple = question.difficulty <= 2;
-  const rows = isSimple ? 3 : question.difficulty >= 4 ? 8 : 6;
+  const rows = isSimple ? 6 : question.difficulty >= 4 ? 10 : 8;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -80,103 +81,45 @@ export function FreeResponse({
         <RichText text={question.prompt} />
       </div>
 
-      {/* Text area — sized to question complexity */}
-      <textarea
-        ref={textareaRef}
-        value={text}
-        onChange={(e) => setText(e.target.value.slice(0, MAX_TEXT_LENGTH))}
-        maxLength={MAX_TEXT_LENGTH}
-        disabled={submitted}
-        placeholder={
-          isSimple
-            ? "Type your answer (e.g. 'the answer is the square root of two')..."
-            : "Show your reasoning step by step. You can type plain text or use the math keyboard below..."
-        }
-        rows={rows}
-        className={`input w-full resize-y text-sm ${isSimple ? "" : "font-mono"}`}
-      />
-      {text.length > MAX_TEXT_LENGTH * 0.9 && (
-        <p className="text-xs text-warm-400">
-          {text.length}/{MAX_TEXT_LENGTH} characters
-        </p>
-      )}
-
-      {/* File upload section */}
-      <div className="rounded-xl border border-dashed border-warm-300 p-4 dark:border-warm-600">
-        <p className="mb-2 text-xs font-medium text-warm-500 dark:text-warm-400">
-          {isSimple
-            ? "Attach a file (optional)"
-            : "Upload your work — photo of handwritten solution, diagram, or file"}
-        </p>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={submitted}
-            className="btn-secondary text-xs"
-          >
-            <svg
-              className="mr-1.5 inline h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-              />
-            </svg>
-            {uploadedFiles.length > 0 ? "Add more files" : "Upload file"}
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.md,.txt"
-            multiple
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </div>
-        {uploadedFiles.length > 0 && (
-          <div className="mt-2 space-y-2">
-            {uploadedFiles.map((file, i) => (
-              <div key={`${file.name}-${i}`} className="flex items-center gap-2">
-                <span className="max-w-[200px] truncate text-xs text-warm-600 dark:text-warm-400">
-                  {file.name}
-                </span>
-                {!submitted && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveFile(i)}
-                    className="text-warm-400 hover:text-danger-500"
-                    aria-label={`Remove ${file.name}`}
-                  >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                )}
-                {file.type.startsWith("image/") && (
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview: ${file.name}`}
-                    className="ml-2 max-h-24 rounded-lg border border-warm-200 dark:border-warm-700"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Hint */}
+      {/* Hint — shown above textarea so user reads it before answering */}
       {question.hint && !submitted && (
         <p className="text-xs text-warm-400 dark:text-warm-500">
           Hint: <RichText text={question.hint} />
         </p>
       )}
+
+      {/* Response area — textarea + math keyboard grouped together */}
+      <div className="space-y-2">
+        <textarea
+          ref={textareaRef}
+          value={text}
+          onChange={(e) => setText(e.target.value.slice(0, MAX_TEXT_LENGTH))}
+          maxLength={MAX_TEXT_LENGTH}
+          disabled={submitted}
+          placeholder={
+            isSimple
+              ? "Type your answer..."
+              : "Show your reasoning step by step. You can type plain text or use the math keyboard below..."
+          }
+          rows={rows}
+          className={`input w-full resize-y text-sm leading-relaxed ${isSimple ? "" : "font-mono"}`}
+          style={{ minHeight: isSimple ? "8rem" : "12rem" }}
+        />
+
+        {/* Math keyboard — directly under textarea for easy insertion */}
+        {!submitted && (
+          <MathKeyboard
+            onInsert={handleInsertSymbol}
+            disabled={submitted}
+          />
+        )}
+
+        {text.length > MAX_TEXT_LENGTH * 0.9 && (
+          <p className="text-xs text-warm-400">
+            {text.length}/{MAX_TEXT_LENGTH} characters
+          </p>
+        )}
+      </div>
 
       {/* Submit */}
       {!submitted && (
@@ -191,13 +134,88 @@ export function FreeResponse({
         </button>
       )}
 
-      {/* Math symbol keyboard — below submit button */}
-      {!submitted && (
-        <MathKeyboard
-          onInsert={handleInsertSymbol}
-          disabled={submitted}
-        />
-      )}
+      {/* File upload — compact, below submit so it doesn't dominate the response area */}
+      <details className="group rounded-xl border border-dashed border-warm-300 dark:border-warm-600">
+        <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-xs font-medium text-warm-500 dark:text-warm-400">
+          <svg
+            className="h-4 w-4 shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={1.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+            />
+          </svg>
+          {uploadedFiles.length > 0
+            ? `${uploadedFiles.length} file${uploadedFiles.length > 1 ? "s" : ""} attached`
+            : isSimple
+              ? "Attach a file (optional)"
+              : "Upload handwritten work, diagram, or file (optional)"}
+          <svg
+            className="ml-auto h-3 w-3 transition-transform group-open:rotate-180"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </summary>
+        <div className="px-4 pb-4">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={submitted}
+              className="btn-secondary text-xs"
+            >
+              {uploadedFiles.length > 0 ? "Add more files" : "Choose file"}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.md,.txt"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
+          {uploadedFiles.length > 0 && (
+            <div className="mt-2 space-y-2">
+              {uploadedFiles.map((file, i) => (
+                <div key={`${file.name}-${i}`} className="flex items-center gap-2">
+                  <span className="max-w-[200px] truncate text-xs text-warm-600 dark:text-warm-400">
+                    {file.name}
+                  </span>
+                  {!submitted && (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFile(i)}
+                      className="text-warm-400 hover:text-danger-500"
+                      aria-label={`Remove ${file.name}`}
+                    >
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                  {file.type.startsWith("image/") && (
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview: ${file.name}`}
+                      className="ml-2 max-h-24 rounded-lg border border-warm-200 dark:border-warm-700"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </details>
     </div>
   );
 }
