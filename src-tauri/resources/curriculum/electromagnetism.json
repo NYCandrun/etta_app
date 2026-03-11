@@ -1,0 +1,444 @@
+{
+  "domain": "electromagnetism",
+  "display_name": "Electromagnetism",
+  "phase": 3,
+  "description": "The physics of electric and magnetic fields and their interactions with matter. Covers electrostatics, magnetostatics, electromagnetic induction, Maxwell's equations, and electromagnetic waves.",
+  "prerequisites": ["multivariable_calculus", "differential_equations", "linear_algebra"],
+  "modules": [
+    {
+      "id": "em_m01",
+      "title": "Electrostatics: Charges and Fields",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "em_001",
+          "title": "Coulomb's Law and the Electric Field",
+          "prerequisites": ["mvc_002", "mech_005"],
+          "learning_objectives": [
+            "State Coulomb's law and compute the force between point charges",
+            "Define the electric field E as force per unit charge and compute it for point charge configurations",
+            "Apply the principle of superposition to find E for discrete charge distributions"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_002",
+          "title": "Continuous Charge Distributions",
+          "prerequisites": ["em_001", "mvc_016"],
+          "learning_objectives": [
+            "Compute the electric field from continuous line, surface, and volume charge distributions using integration",
+            "Set up and evaluate integrals for E from symmetric charge distributions (ring, disk, rod)",
+            "Apply symmetry arguments to simplify electric field calculations"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_003",
+          "title": "Gauss's Law",
+          "prerequisites": ["em_002", "mvc_032"],
+          "learning_objectives": [
+            "State Gauss's law in integral form: ∮ E·dA = Q_enc/ε₀",
+            "Apply Gauss's law to calculate electric fields for systems with high symmetry (sphere, cylinder, plane)",
+            "Relate Gauss's law to the divergence theorem and state the differential form ∇·E = ρ/ε₀"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_004",
+          "title": "Electric Potential",
+          "prerequisites": ["em_003", "mvc_026"],
+          "learning_objectives": [
+            "Define electric potential V as the line integral of E and compute V for point charges and continuous distributions",
+            "Relate E to V via E = −∇V",
+            "Calculate potential differences and work done moving charges in electric fields"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "em_m02",
+      "title": "Electrostatics: Energy and Conductors",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "em_005",
+          "title": "Electrostatic Energy",
+          "prerequisites": ["em_004"],
+          "learning_objectives": [
+            "Compute the energy stored in a charge configuration using U = ½ Σ qᵢVᵢ",
+            "Derive the energy density of the electric field: u = ½ε₀E²",
+            "Calculate the total electrostatic energy by integrating the energy density"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_006",
+          "title": "Conductors in Electrostatic Equilibrium",
+          "prerequisites": ["em_003", "em_004"],
+          "learning_objectives": [
+            "Explain why E = 0 inside a conductor and charge resides on the surface",
+            "Determine surface charge distributions on conductors using boundary conditions",
+            "Analyze the method of images for a point charge near a grounded conducting plane"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_007",
+          "title": "Capacitance and Dielectrics",
+          "prerequisites": ["em_005", "em_006"],
+          "learning_objectives": [
+            "Define capacitance C = Q/V and calculate it for parallel plate, cylindrical, and spherical capacitors",
+            "Calculate the energy stored in a capacitor: U = ½CV²",
+            "Analyze the effect of dielectric materials on capacitance and field using ε = κε₀"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_008",
+          "title": "Laplace's and Poisson's Equations",
+          "prerequisites": ["em_004", "mvc_010"],
+          "learning_objectives": [
+            "Derive Poisson's equation ∇²V = −ρ/ε₀ and Laplace's equation ∇²V = 0",
+            "Solve Laplace's equation in Cartesian and spherical coordinates for simple boundary conditions",
+            "Apply uniqueness theorems to electrostatic boundary value problems"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "em_m03",
+      "title": "Electric Currents and DC Circuits",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "em_009",
+          "title": "Current, Resistance, and Ohm's Law",
+          "prerequisites": ["em_004"],
+          "learning_objectives": [
+            "Define current density J and relate it to charge carrier drift velocity",
+            "State Ohm's law in microscopic form J = σE and macroscopic form V = IR",
+            "Calculate resistance from resistivity and geometry"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_010",
+          "title": "DC Circuit Analysis",
+          "prerequisites": ["em_009", "alg_026"],
+          "learning_objectives": [
+            "Apply Kirchhoff's junction and loop rules to analyze multi-loop circuits",
+            "Analyze series and parallel combinations of resistors and capacitors",
+            "Solve RC circuit transient problems using first-order ODEs"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "em_m04",
+      "title": "Magnetostatics",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "em_011",
+          "title": "Magnetic Force and the Lorentz Force Law",
+          "prerequisites": ["em_001", "mvc_003", "mech_005"],
+          "learning_objectives": [
+            "State the Lorentz force law F = q(E + v × B) and compute magnetic forces on moving charges",
+            "Analyze the motion of charged particles in uniform magnetic fields (cyclotron motion)",
+            "Compute the force on a current-carrying wire in a magnetic field"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_012",
+          "title": "Sources of Magnetic Fields: Biot-Savart Law",
+          "prerequisites": ["em_011", "mvc_025"],
+          "learning_objectives": [
+            "State the Biot-Savart law dB = (μ₀/4π)(Idl × r̂)/r²",
+            "Compute the magnetic field from a straight wire, a circular loop, and a solenoid using Biot-Savart",
+            "Apply superposition to find B from combinations of current-carrying elements"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_013",
+          "title": "Ampere's Law",
+          "prerequisites": ["em_012", "mvc_031"],
+          "learning_objectives": [
+            "State Ampere's law in integral form: ∮ B·dl = μ₀I_enc",
+            "Apply Ampere's law to compute B for systems with high symmetry (solenoid, toroid, coaxial cable)",
+            "State the differential form ∇ × B = μ₀J and relate it to Stokes' theorem"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_014",
+          "title": "Magnetic Dipoles and Magnetization",
+          "prerequisites": ["em_013"],
+          "learning_objectives": [
+            "Define the magnetic dipole moment m = IA for a current loop",
+            "Compute torque and potential energy of a magnetic dipole in an external field",
+            "Classify magnetic materials as diamagnetic, paramagnetic, or ferromagnetic"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "em_m05",
+      "title": "Electromagnetic Induction",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "em_015",
+          "title": "Faraday's Law of Induction",
+          "prerequisites": ["em_013", "mvc_030"],
+          "learning_objectives": [
+            "State Faraday's law: EMF = −dΦ_B/dt and compute magnetic flux through surfaces",
+            "Apply Faraday's law to calculate induced EMF in loops and coils",
+            "Apply Lenz's law to determine the direction of induced current"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_016",
+          "title": "Inductance and RL Circuits",
+          "prerequisites": ["em_015", "diffeq_005"],
+          "learning_objectives": [
+            "Define self-inductance L and compute it for solenoids and toroids",
+            "Define mutual inductance and compute it for simple coupled circuits",
+            "Solve RL circuit transient problems and compute energy stored in an inductor: U = ½LI²"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_017",
+          "title": "Motional EMF and Eddy Currents",
+          "prerequisites": ["em_015"],
+          "learning_objectives": [
+            "Compute motional EMF from F = qv × B for a conductor moving through a magnetic field",
+            "Analyze generators and alternators using Faraday's law",
+            "Explain eddy currents and their role in braking and heating"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "em_m06",
+      "title": "AC Circuits",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "em_018",
+          "title": "AC Sources, Phasors, and Impedance",
+          "prerequisites": ["em_016", "em_010", "trig_012"],
+          "learning_objectives": [
+            "Represent AC voltages and currents as phasors (complex exponentials)",
+            "Define impedance Z for resistors, capacitors, and inductors",
+            "Analyze series and parallel RLC circuits using complex impedance"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_019",
+          "title": "Power in AC Circuits and Resonance",
+          "prerequisites": ["em_018", "diffeq_016"],
+          "learning_objectives": [
+            "Calculate average power, reactive power, and power factor in AC circuits",
+            "Analyze series and parallel RLC resonance: resonant frequency, bandwidth, quality factor",
+            "Design filters (low-pass, high-pass, band-pass) using RLC combinations"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "em_m07",
+      "title": "Maxwell's Equations",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "em_020",
+          "title": "Displacement Current and Maxwell's Correction",
+          "prerequisites": ["em_013", "em_015"],
+          "learning_objectives": [
+            "Identify the inconsistency in Ampere's law for time-varying fields",
+            "Derive Maxwell's displacement current term J_d = ε₀ ∂E/∂t",
+            "Write the complete Ampere-Maxwell law: ∇ × B = μ₀J + μ₀ε₀ ∂E/∂t"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_021",
+          "title": "Maxwell's Equations in Differential and Integral Form",
+          "prerequisites": ["em_020", "em_003"],
+          "learning_objectives": [
+            "State all four Maxwell's equations in both differential and integral form",
+            "Identify the physical content and experimental basis of each equation",
+            "Apply boundary conditions for E and B at interfaces between media"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_022",
+          "title": "The Electromagnetic Wave Equation",
+          "prerequisites": ["em_021", "diffeq_011"],
+          "learning_objectives": [
+            "Derive the wave equation for E and B from Maxwell's equations in free space",
+            "Identify the speed of electromagnetic waves as c = 1/√(μ₀ε₀)",
+            "Write plane wave solutions and identify wavelength, frequency, and polarization"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "em_m08",
+      "title": "Electromagnetic Waves",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "em_023",
+          "title": "Properties of Electromagnetic Waves",
+          "prerequisites": ["em_022"],
+          "learning_objectives": [
+            "Show that E and B in a plane wave are perpendicular to each other and to the propagation direction",
+            "Relate E and B amplitudes via E₀ = cB₀",
+            "Describe the electromagnetic spectrum and identify regions by wavelength and frequency"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_024",
+          "title": "Energy and Momentum in Electromagnetic Waves",
+          "prerequisites": ["em_023", "em_005"],
+          "learning_objectives": [
+            "Derive the Poynting vector S = (1/μ₀)(E × B) and interpret it as energy flux",
+            "Compute the intensity of an electromagnetic wave as the time-averaged Poynting vector",
+            "Calculate radiation pressure and the momentum carried by electromagnetic waves"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_025",
+          "title": "Polarization",
+          "prerequisites": ["em_023", "linalg_002"],
+          "learning_objectives": [
+            "Describe linear, circular, and elliptical polarization of electromagnetic waves",
+            "Apply Malus's law to compute intensity through polarizing filters",
+            "Analyze polarization using Jones vectors and Jones matrices"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "em_m09",
+      "title": "Electromagnetic Waves in Matter",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "em_026",
+          "title": "Reflection and Refraction",
+          "prerequisites": ["em_023"],
+          "learning_objectives": [
+            "Derive the laws of reflection and refraction (Snell's law) from boundary conditions on E and B",
+            "Derive the Fresnel equations for reflection and transmission amplitudes",
+            "Compute reflectance and transmittance at dielectric interfaces"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_027",
+          "title": "Dispersion and Absorption",
+          "prerequisites": ["em_026", "mech_021"],
+          "learning_objectives": [
+            "Model the frequency-dependent dielectric constant using the Lorentz oscillator model",
+            "Distinguish between phase velocity and group velocity in dispersive media",
+            "Analyze anomalous dispersion and absorption near resonance frequencies"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "em_m10",
+      "title": "Electromagnetic Radiation",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "em_028",
+          "title": "Retarded Potentials",
+          "prerequisites": ["em_004", "em_021"],
+          "learning_objectives": [
+            "Define the retarded potentials V(r,t) and A(r,t) accounting for the finite speed of light",
+            "Explain the physical significance of retarded time t_r = t − |r−r'|/c",
+            "Compute retarded potentials for simple time-varying source configurations"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "em_029",
+          "title": "Radiation from Accelerating Charges",
+          "prerequisites": ["em_028"],
+          "learning_objectives": [
+            "Derive the Larmor formula for radiated power from an accelerating point charge",
+            "Describe the radiation pattern of an oscillating electric dipole",
+            "Compute radiated power and radiation resistance for a short dipole antenna"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "em_030",
+          "title": "Radiation Reaction and the Abraham-Lorentz Force",
+          "prerequisites": ["em_029"],
+          "learning_objectives": [
+            "Derive the Abraham-Lorentz formula for radiation reaction force",
+            "Identify the problems of runaway solutions and preacceleration",
+            "Discuss the limitations of classical electrodynamics for radiating charges"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "em_proj_01",
+      "title": "Designing an LC Band-Pass Filter",
+      "description": "Design, analyze, and simulate a band-pass filter for a target frequency range. Compute the transfer function, plot the frequency response, and determine the quality factor and bandwidth.",
+      "required_concepts": ["em_018", "em_019"],
+      "learning_objectives": [
+        "Apply complex impedance analysis to a multi-component circuit",
+        "Derive and plot the frequency response (Bode plot) of a filter",
+        "Relate quality factor to bandwidth and component values"
+      ]
+    },
+    {
+      "id": "em_proj_02",
+      "title": "Deriving the Radiation Pattern of a Half-Wave Antenna",
+      "description": "Compute the radiation pattern of a half-wave dipole antenna by integrating contributions from each infinitesimal current element using retarded potentials.",
+      "required_concepts": ["em_029", "em_012"],
+      "learning_objectives": [
+        "Set up the retarded potential integral for a current distribution",
+        "Evaluate the far-field approximation to obtain the radiation pattern",
+        "Plot the radiation pattern and compute the directivity"
+      ]
+    },
+    {
+      "id": "em_proj_03",
+      "title": "Verifying Maxwell's Equations for a Charging Capacitor",
+      "description": "Analyze a parallel-plate capacitor being charged by a current. Show that the displacement current between the plates equals the conduction current in the wire, and verify all four Maxwell's equations for this system.",
+      "required_concepts": ["em_020", "em_021", "em_007"],
+      "learning_objectives": [
+        "Compute the time-varying electric field between capacitor plates",
+        "Calculate the displacement current and verify it equals the conduction current",
+        "Apply Ampere-Maxwell law to compute the magnetic field between the plates"
+      ]
+    }
+  ]
+}

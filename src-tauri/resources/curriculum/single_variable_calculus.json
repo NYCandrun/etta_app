@@ -1,0 +1,703 @@
+{
+  "domain": "single_variable_calculus",
+  "display_name": "Single-Variable Calculus",
+  "phase": 2,
+  "description": "The mathematics of change. Covers limits, derivatives, integrals, and their applications — from rates of change and optimization to area, volume, and the Fundamental Theorem of Calculus.",
+  "prerequisites": ["precalculus"],
+  "modules": [
+    {
+      "id": "calc1_m01",
+      "title": "Limits and Continuity",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "calc1_001",
+          "title": "Formal Definition of a Limit",
+          "prerequisites": ["precalc_022", "precalc_023"],
+          "learning_objectives": [
+            "State the epsilon-delta definition of a limit",
+            "Construct epsilon-delta proofs for linear and simple polynomial functions",
+            "Explain why the formal definition is needed beyond intuitive limit evaluation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_002",
+          "title": "Limit Laws and Techniques",
+          "prerequisites": ["calc1_001"],
+          "learning_objectives": [
+            "Apply limit laws to evaluate limits of combined functions",
+            "Evaluate limits involving absolute value and piecewise functions",
+            "Apply the Squeeze Theorem to evaluate limits"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_003",
+          "title": "Continuity and the Intermediate Value Theorem",
+          "prerequisites": ["calc1_002", "precalc_025"],
+          "learning_objectives": [
+            "Classify discontinuities as removable, jump, or infinite",
+            "Determine continuity of composite and piecewise functions",
+            "Apply the Intermediate Value Theorem to guarantee existence of roots"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_004",
+          "title": "Limits Involving Infinity",
+          "prerequisites": ["calc1_002", "precalc_024"],
+          "learning_objectives": [
+            "Evaluate limits as x approaches infinity for rational, exponential, and logarithmic functions",
+            "Identify vertical and horizontal asymptotes using limits",
+            "Evaluate limits of indeterminate forms 0/0 and ∞/∞ (preview of L'Hopital's Rule)"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m02",
+      "title": "The Derivative",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "calc1_005",
+          "title": "Definition of the Derivative",
+          "prerequisites": ["calc1_003", "precalc_003"],
+          "learning_objectives": [
+            "Define the derivative as the limit of the difference quotient",
+            "Compute derivatives from the limit definition for polynomial and simple radical functions",
+            "Interpret the derivative as the instantaneous rate of change and the slope of the tangent line"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_006",
+          "title": "Differentiability and Continuity",
+          "prerequisites": ["calc1_005"],
+          "learning_objectives": [
+            "Determine whether a function is differentiable at a point",
+            "Explain why differentiability implies continuity but not the converse",
+            "Identify points where a function fails to be differentiable (corners, cusps, vertical tangents)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_007",
+          "title": "Basic Differentiation Rules",
+          "prerequisites": ["calc1_005"],
+          "learning_objectives": [
+            "Apply the power rule, constant rule, and constant multiple rule",
+            "Differentiate sums and differences of functions",
+            "Differentiate polynomial and simple radical functions efficiently"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_008",
+          "title": "Rates of Change in Context",
+          "prerequisites": ["calc1_007"],
+          "learning_objectives": [
+            "Interpret the derivative in applied contexts (velocity, marginal cost, growth rate)",
+            "Distinguish between average and instantaneous rates of change",
+            "Use units to verify and interpret derivative calculations"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "calc1_m03",
+      "title": "Differentiation Rules",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "calc1_009",
+          "title": "Product and Quotient Rules",
+          "prerequisites": ["calc1_007"],
+          "learning_objectives": [
+            "Derive and apply the product rule for differentiation",
+            "Derive and apply the quotient rule for differentiation",
+            "Differentiate functions requiring both product and quotient rules"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_010",
+          "title": "Derivatives of Trigonometric Functions",
+          "prerequisites": ["calc1_009", "trig_015"],
+          "learning_objectives": [
+            "Prove that lim(sin x / x) = 1 as x → 0 using the Squeeze Theorem",
+            "Differentiate all six trigonometric functions",
+            "Apply differentiation rules to expressions involving trigonometric functions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_011",
+          "title": "The Chain Rule",
+          "prerequisites": ["calc1_009", "alg_054"],
+          "learning_objectives": [
+            "State and apply the chain rule for composite functions",
+            "Differentiate nested compositions requiring multiple applications of the chain rule",
+            "Combine the chain rule with product, quotient, and trigonometric differentiation rules"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_012",
+          "title": "Implicit Differentiation",
+          "prerequisites": ["calc1_011"],
+          "learning_objectives": [
+            "Differentiate implicitly defined relations with respect to x",
+            "Find the slope of the tangent line to an implicitly defined curve at a given point",
+            "Apply implicit differentiation to equations involving trigonometric and exponential functions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_013",
+          "title": "Derivatives of Inverse Functions",
+          "prerequisites": ["calc1_012", "alg_055"],
+          "learning_objectives": [
+            "Derive the formula for the derivative of an inverse function",
+            "Differentiate inverse trigonometric functions (arcsin, arccos, arctan)",
+            "Apply these derivatives in combination with other differentiation rules"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m04",
+      "title": "Exponential and Logarithmic Derivatives",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "calc1_014",
+          "title": "Derivatives of Exponential Functions",
+          "prerequisites": ["calc1_011", "precalc_010"],
+          "learning_objectives": [
+            "Prove that d/dx[eˣ] = eˣ from the limit definition",
+            "Differentiate functions of the form aˣ and e^{g(x)} using the chain rule",
+            "Apply exponential derivatives to growth and decay models"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_015",
+          "title": "Derivatives of Logarithmic Functions",
+          "prerequisites": ["calc1_014", "precalc_012"],
+          "learning_objectives": [
+            "Differentiate ln x and log_a x",
+            "Apply logarithmic differentiation to products, quotients, and powers",
+            "Differentiate functions of the form [f(x)]^{g(x)} using logarithmic differentiation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m05",
+      "title": "Applications of the Derivative I",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "calc1_016",
+          "title": "Related Rates",
+          "prerequisites": ["calc1_011", "calc1_012"],
+          "learning_objectives": [
+            "Set up related rates problems by identifying relationships between varying quantities",
+            "Apply implicit differentiation with respect to time to relate rates",
+            "Solve classic related rates problems (expanding circles, ladder, conical tank)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_017",
+          "title": "Linear Approximation and Differentials",
+          "prerequisites": ["calc1_007"],
+          "learning_objectives": [
+            "Compute the linearization of a function at a point",
+            "Use linear approximation to estimate function values near a known point",
+            "Define differentials dx and dy and use them to estimate error propagation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_018",
+          "title": "L'Hopital's Rule",
+          "prerequisites": ["calc1_015", "calc1_004"],
+          "learning_objectives": [
+            "Apply L'Hopital's Rule to indeterminate forms 0/0 and ∞/∞",
+            "Convert indeterminate forms 0·∞, ∞ − ∞, 0⁰, 1^∞, ∞⁰ to apply L'Hopital's Rule",
+            "Recognize when L'Hopital's Rule does not apply or leads to circular reasoning"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m06",
+      "title": "Applications of the Derivative II",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "calc1_019",
+          "title": "Extreme Values and Critical Points",
+          "prerequisites": ["calc1_007", "calc1_006"],
+          "learning_objectives": [
+            "State and apply the Extreme Value Theorem",
+            "Find critical points by setting the derivative equal to zero or identifying where it is undefined",
+            "Find absolute extrema on a closed interval using the Candidates Test"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_020",
+          "title": "The Mean Value Theorem",
+          "prerequisites": ["calc1_019"],
+          "learning_objectives": [
+            "State the Mean Value Theorem and its hypothesis",
+            "Find the value c guaranteed by the Mean Value Theorem",
+            "Apply Rolle's Theorem as a special case of the Mean Value Theorem"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_021",
+          "title": "First and Second Derivative Tests",
+          "prerequisites": ["calc1_019"],
+          "learning_objectives": [
+            "Apply the first derivative test to classify critical points as local maxima, minima, or neither",
+            "Determine intervals of increase and decrease using the first derivative",
+            "Apply the second derivative test to classify critical points and determine concavity"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_022",
+          "title": "Curve Sketching",
+          "prerequisites": ["calc1_021", "calc1_004"],
+          "learning_objectives": [
+            "Sketch the graph of a function using intercepts, asymptotes, intervals of increase/decrease, concavity, and inflection points",
+            "Identify and label all key features on a curve sketch",
+            "Relate the graphs of f, f', and f'' to each other"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_023",
+          "title": "Optimization Problems",
+          "prerequisites": ["calc1_021"],
+          "learning_objectives": [
+            "Set up an optimization problem by expressing the objective function in terms of one variable",
+            "Apply the closed interval method or first/second derivative test to find optimal values",
+            "Solve classic optimization problems (maximum area, minimum distance, minimum cost)"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "calc1_m07",
+      "title": "Antiderivatives and the Definite Integral",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "calc1_024",
+          "title": "Antiderivatives",
+          "prerequisites": ["calc1_007", "calc1_010"],
+          "learning_objectives": [
+            "Find general antiderivatives of polynomial, trigonometric, and exponential functions",
+            "Apply initial conditions to find particular antiderivatives",
+            "Relate antiderivatives to indefinite integrals and the +C convention"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_025",
+          "title": "Area Under a Curve and Riemann Sums",
+          "prerequisites": ["calc1_024", "precalc_015"],
+          "learning_objectives": [
+            "Approximate area under a curve using left, right, and midpoint Riemann sums",
+            "Express the exact area as the limit of a Riemann sum as n → ∞",
+            "Interpret sigma notation in the context of Riemann sums"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_026",
+          "title": "The Definite Integral",
+          "prerequisites": ["calc1_025"],
+          "learning_objectives": [
+            "Define the definite integral as the limit of Riemann sums",
+            "Apply properties of definite integrals (linearity, additivity, order)",
+            "Evaluate definite integrals using geometry when the integrand has a simple shape"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m08",
+      "title": "The Fundamental Theorem of Calculus",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "calc1_027",
+          "title": "FTC Part 1: Derivatives of Integrals",
+          "prerequisites": ["calc1_026", "calc1_011"],
+          "learning_objectives": [
+            "State the Fundamental Theorem of Calculus Part 1",
+            "Differentiate integral functions of the form F(x) = ∫[a to x] f(t) dt",
+            "Apply FTC Part 1 with variable upper limits requiring the chain rule"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_028",
+          "title": "FTC Part 2: Evaluation of Definite Integrals",
+          "prerequisites": ["calc1_027"],
+          "learning_objectives": [
+            "State the Fundamental Theorem of Calculus Part 2",
+            "Evaluate definite integrals using antiderivatives",
+            "Compute net area and total area using definite integrals"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_029",
+          "title": "Net Change and the Integral",
+          "prerequisites": ["calc1_028"],
+          "learning_objectives": [
+            "Interpret the definite integral as net change (displacement, total growth, accumulated quantity)",
+            "Distinguish between displacement and total distance traveled",
+            "Apply the net change theorem to real-world rate functions"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m09",
+      "title": "Integration Techniques I",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "calc1_030",
+          "title": "U-Substitution",
+          "prerequisites": ["calc1_028", "calc1_011"],
+          "learning_objectives": [
+            "Apply u-substitution to evaluate indefinite and definite integrals",
+            "Choose an effective substitution by identifying the inner function of a composition",
+            "Adjust limits of integration when applying substitution to definite integrals"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_031",
+          "title": "Integration by Parts",
+          "prerequisites": ["calc1_030"],
+          "learning_objectives": [
+            "Derive integration by parts from the product rule",
+            "Apply integration by parts using the LIATE guideline for choosing u and dv",
+            "Handle repeated integration by parts and tabular integration"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_032",
+          "title": "Trigonometric Integrals",
+          "prerequisites": ["calc1_030", "trig_018"],
+          "learning_objectives": [
+            "Evaluate integrals of products of sine and cosine using reduction strategies",
+            "Evaluate integrals involving powers of tangent and secant",
+            "Apply half-angle and power-reducing identities to integration"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_033",
+          "title": "Trigonometric Substitution",
+          "prerequisites": ["calc1_032", "trig_015"],
+          "learning_objectives": [
+            "Identify when to use x = a sin θ, x = a tan θ, or x = a sec θ substitutions",
+            "Evaluate integrals involving √(a² − x²), √(a² + x²), and √(x² − a²)",
+            "Convert back to the original variable using right-triangle diagrams"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "calc1_m10",
+      "title": "Integration Techniques II",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "calc1_034",
+          "title": "Partial Fraction Decomposition",
+          "prerequisites": ["calc1_030", "alg_039"],
+          "learning_objectives": [
+            "Decompose a proper rational function into partial fractions with linear and irreducible quadratic factors",
+            "Handle repeated factors in partial fraction decomposition",
+            "Integrate rational functions using partial fractions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_035",
+          "title": "Improper Integrals",
+          "prerequisites": ["calc1_028", "calc1_004"],
+          "learning_objectives": [
+            "Evaluate improper integrals with infinite limits of integration",
+            "Evaluate improper integrals with integrand discontinuities",
+            "Determine whether an improper integral converges or diverges using direct evaluation and comparison"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "calc1_036",
+          "title": "Numerical Integration",
+          "prerequisites": ["calc1_028"],
+          "learning_objectives": [
+            "Approximate definite integrals using the Trapezoidal Rule",
+            "Approximate definite integrals using Simpson's Rule",
+            "Estimate the error bound for numerical integration methods"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m11",
+      "title": "Applications of Integration I",
+      "order": 11,
+      "concepts": [
+        {
+          "id": "calc1_037",
+          "title": "Area Between Curves",
+          "prerequisites": ["calc1_028"],
+          "learning_objectives": [
+            "Set up and evaluate integrals for the area between two curves",
+            "Determine the appropriate variable of integration (dx or dy) for area problems",
+            "Handle regions requiring multiple integrals due to crossing curves"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "calc1_038",
+          "title": "Volumes by Disks and Washers",
+          "prerequisites": ["calc1_037"],
+          "learning_objectives": [
+            "Derive and apply the disk method for volumes of revolution about the x-axis and y-axis",
+            "Derive and apply the washer method when a region is revolved about an axis",
+            "Set up volume integrals for revolution about lines other than the coordinate axes"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_039",
+          "title": "Volumes by Cylindrical Shells",
+          "prerequisites": ["calc1_038"],
+          "learning_objectives": [
+            "Derive and apply the shell method for volumes of revolution",
+            "Choose between disk/washer and shell methods based on the geometry of the region",
+            "Set up shell integrals for revolution about vertical and horizontal axes"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_040",
+          "title": "Volumes by Cross-Sectional Area",
+          "prerequisites": ["calc1_038"],
+          "learning_objectives": [
+            "Compute volumes of solids with known cross-sectional shapes (squares, triangles, semicircles)",
+            "Set up the integral for volume as the integral of cross-sectional area",
+            "Visualize three-dimensional solids from two-dimensional cross-section descriptions"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "calc1_m12",
+      "title": "Applications of Integration II",
+      "order": 12,
+      "concepts": [
+        {
+          "id": "calc1_041",
+          "title": "Arc Length",
+          "prerequisites": ["calc1_028", "calc1_011"],
+          "learning_objectives": [
+            "Derive the arc length formula from the distance formula and limits",
+            "Compute arc length of a curve y = f(x) over an interval",
+            "Set up arc length integrals for parametrically defined curves"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_042",
+          "title": "Surface Area of Revolution",
+          "prerequisites": ["calc1_041"],
+          "learning_objectives": [
+            "Derive the formula for surface area of a solid of revolution",
+            "Compute the surface area generated by revolving a curve about the x-axis or y-axis",
+            "Evaluate or set up surface area integrals for given curves"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "calc1_043",
+          "title": "Work and Fluid Force",
+          "prerequisites": ["calc1_028"],
+          "learning_objectives": [
+            "Calculate work done by a variable force as a definite integral",
+            "Solve spring, pumping, and lifting problems using integration",
+            "Calculate fluid pressure and fluid force on a submerged surface"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_044",
+          "title": "Center of Mass and Moments",
+          "prerequisites": ["calc1_037"],
+          "learning_objectives": [
+            "Compute the centroid of a planar region using integration",
+            "Apply the moment formulas Mx and My for a lamina of uniform density",
+            "Apply Pappus' theorem to find volumes and surface areas of revolution"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "calc1_m13",
+      "title": "Infinite Sequences and Series",
+      "order": 13,
+      "concepts": [
+        {
+          "id": "calc1_045",
+          "title": "Sequences and Their Limits",
+          "prerequisites": ["calc1_004", "precalc_016"],
+          "learning_objectives": [
+            "Determine convergence or divergence of a sequence from its formula",
+            "Apply the Monotone Convergence Theorem for bounded monotonic sequences",
+            "Compute limits of sequences using algebraic techniques and L'Hopital's Rule"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_046",
+          "title": "Infinite Series and Convergence Tests",
+          "prerequisites": ["calc1_045", "calc1_035"],
+          "learning_objectives": [
+            "Define partial sums and determine convergence of a series from its partial sum sequence",
+            "Apply the divergence test, integral test, and p-series test",
+            "Apply the comparison test and limit comparison test"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_047",
+          "title": "Alternating Series and Absolute Convergence",
+          "prerequisites": ["calc1_046"],
+          "learning_objectives": [
+            "Apply the alternating series test and estimate the remainder",
+            "Distinguish between absolute and conditional convergence",
+            "Apply the ratio test and root test for absolute convergence"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "calc1_m14",
+      "title": "Power Series and Taylor Series",
+      "order": 14,
+      "concepts": [
+        {
+          "id": "calc1_048",
+          "title": "Power Series and Radius of Convergence",
+          "prerequisites": ["calc1_047"],
+          "learning_objectives": [
+            "Define a power series centered at a point",
+            "Determine the radius and interval of convergence using the ratio or root test",
+            "Check convergence at the endpoints of the interval"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_049",
+          "title": "Taylor and Maclaurin Series",
+          "prerequisites": ["calc1_048"],
+          "learning_objectives": [
+            "Derive the Taylor series of a function centered at a given point",
+            "Write Maclaurin series for eˣ, sin x, cos x, and 1/(1−x)",
+            "Use known series to derive new series by substitution, differentiation, or integration"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "calc1_050",
+          "title": "Taylor Polynomials and Remainder Estimation",
+          "prerequisites": ["calc1_049"],
+          "learning_objectives": [
+            "Approximate a function with its nth-degree Taylor polynomial",
+            "Apply Taylor's inequality (Lagrange remainder) to bound the error of approximation",
+            "Determine how many terms are needed for a desired accuracy"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "calc1_051",
+          "title": "Applications of Power Series",
+          "prerequisites": ["calc1_050"],
+          "learning_objectives": [
+            "Use power series to evaluate integrals that have no closed-form antiderivative",
+            "Use power series to solve limits and differential equations",
+            "Represent special functions (Bessel functions preview) as power series"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "calc1_proj_01",
+      "title": "The Brachistochrone Problem",
+      "description": "Investigate the curve of fastest descent between two points. Set up the time integral using arc length and energy conservation, then compare the cycloid solution to straight-line and circular arc paths numerically.",
+      "required_concepts": ["calc1_041", "calc1_023"],
+      "learning_objectives": [
+        "Formulate a physical optimization problem as a calculus problem",
+        "Set up and evaluate arc length and time-of-travel integrals",
+        "Compare numerical results from different curve choices"
+      ]
+    },
+    {
+      "id": "calc1_proj_02",
+      "title": "Building a Numerical Integrator",
+      "description": "Implement the trapezoidal rule, Simpson's rule, and Riemann sums from scratch. Test on functions with known antiderivatives and analyze convergence rates.",
+      "required_concepts": ["calc1_025", "calc1_036"],
+      "learning_objectives": [
+        "Translate mathematical formulas into algorithmic procedures",
+        "Measure and compare the convergence rate of different integration methods",
+        "Analyze error behavior as the number of subintervals increases"
+      ]
+    },
+    {
+      "id": "calc1_proj_03",
+      "title": "Computing π with Infinite Series",
+      "description": "Explore three different series representations of π (Leibniz, Nilakantha, Machin's formula). Prove convergence, compute partial sums, and compare convergence rates.",
+      "required_concepts": ["calc1_047", "calc1_049", "calc1_050"],
+      "learning_objectives": [
+        "Derive series representations of π from Taylor series of arctan",
+        "Compare convergence rates of different series for the same value",
+        "Apply remainder estimates to determine terms needed for a desired precision"
+      ]
+    }
+  ]
+}

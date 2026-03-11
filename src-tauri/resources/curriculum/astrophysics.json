@@ -1,0 +1,670 @@
+{
+  "domain": "astrophysics",
+  "display_name": "Astrophysics",
+  "phase": 4,
+  "description": "The physics of the universe. Covers stellar structure and evolution, compact objects, galaxies, cosmology, and the application of all prior physics and mathematics to understanding celestial phenomena.",
+  "prerequisites": ["classical_mechanics", "electromagnetism", "thermodynamics", "quantum_mechanics"],
+  "modules": [
+    {
+      "id": "astro_m01",
+      "title": "Observational Foundations",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "astro_001",
+          "title": "The Celestial Sphere and Coordinate Systems",
+          "prerequisites": ["trig_025", "mvc_001"],
+          "learning_objectives": [
+            "Describe the equatorial and ecliptic coordinate systems for locating celestial objects",
+            "Convert between coordinate systems using spherical trigonometry",
+            "Explain sidereal time, hour angle, and the relation between observer location and visible sky"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astro_002",
+          "title": "The Magnitude System and Electromagnetic Spectrum",
+          "prerequisites": ["astro_001", "em_023", "precalc_012"],
+          "learning_objectives": [
+            "Define apparent and absolute magnitude and convert between them using the distance modulus",
+            "Relate magnitude differences to flux ratios using Pogson's equation",
+            "Describe the electromagnetic windows of the atmosphere and the rationale for multi-wavelength astronomy"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astro_003",
+          "title": "Distance Measurement: The Cosmic Distance Ladder",
+          "prerequisites": ["astro_002", "trig_006"],
+          "learning_objectives": [
+            "Explain parallax and compute stellar distances from parallax angles",
+            "Describe standard candles (Cepheids, Type Ia supernovae) and their role in the distance ladder",
+            "Apply the distance modulus m − M = 5 log(d/10 pc) to compute distances"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_004",
+          "title": "Telescopes and Detectors",
+          "prerequisites": ["astro_002", "em_026"],
+          "learning_objectives": [
+            "Describe the principles of reflecting and refracting telescopes and their resolving power",
+            "Explain the operation of CCD detectors and their quantum efficiency",
+            "Discuss the principles of radio, infrared, and X-ray astronomy instrumentation"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "astro_m02",
+      "title": "Radiation and Spectra",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "astro_005",
+          "title": "Blackbody Radiation in Astrophysics",
+          "prerequisites": ["thermo_020", "em_024"],
+          "learning_objectives": [
+            "Apply the Planck function, Wien's law, and Stefan-Boltzmann law to stellar radiation",
+            "Estimate stellar surface temperatures from peak wavelength or color indices",
+            "Compute stellar luminosity from surface temperature and radius: L = 4πR²σT⁴"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astro_006",
+          "title": "Atomic Spectra and Spectral Line Formation",
+          "prerequisites": ["qm_017", "qm_029"],
+          "learning_objectives": [
+            "Explain the formation of absorption and emission lines from atomic energy transitions",
+            "Apply selection rules to determine which transitions produce spectral lines",
+            "Describe line broadening mechanisms: natural, thermal (Doppler), and pressure broadening"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_007",
+          "title": "Spectral Classification and the HR Diagram",
+          "prerequisites": ["astro_005", "astro_006"],
+          "learning_objectives": [
+            "Classify stars by spectral type (O, B, A, F, G, K, M) and luminosity class",
+            "Explain the physical basis for the spectral sequence in terms of temperature and ionization",
+            "Plot and interpret the Hertzsprung-Russell diagram, identifying the main sequence, giants, and white dwarfs"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_008",
+          "title": "The Doppler Effect and Radial Velocities",
+          "prerequisites": ["astro_006", "mech_036"],
+          "learning_objectives": [
+            "Apply the Doppler formula (classical and relativistic) to compute radial velocities from spectral line shifts",
+            "Describe how radial velocity measurements reveal binary stars and exoplanets",
+            "Explain the cosmological redshift and its distinction from the kinematic Doppler shift"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "astro_m03",
+      "title": "Binary Stars and Stellar Masses",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "astro_009",
+          "title": "Visual and Spectroscopic Binary Systems",
+          "prerequisites": ["mech_025", "astro_008"],
+          "learning_objectives": [
+            "Classify binary systems as visual, spectroscopic, eclipsing, or astrometric",
+            "Apply Kepler's third law to determine total mass from orbital period and semi-major axis",
+            "Extract individual masses from radial velocity curves of double-lined spectroscopic binaries"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_010",
+          "title": "Eclipsing Binaries and Stellar Radii",
+          "prerequisites": ["astro_009"],
+          "learning_objectives": [
+            "Determine stellar radii from the timing of eclipses in eclipsing binary light curves",
+            "Compute the surface temperature ratio from the depth of primary and secondary eclipses",
+            "Discuss the mass-luminosity relation for main sequence stars"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_011",
+          "title": "Mass Transfer and Interacting Binaries",
+          "prerequisites": ["astro_010", "mech_031"],
+          "learning_objectives": [
+            "Describe Roche lobe geometry and the conditions for mass transfer in close binaries",
+            "Classify mass transfer types (wind accretion, Roche lobe overflow)",
+            "Explain the role of mass transfer in novae, X-ray binaries, and Type Ia supernovae"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m04",
+      "title": "Stellar Structure",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "astro_012",
+          "title": "Hydrostatic Equilibrium",
+          "prerequisites": ["mech_005", "mvc_012", "calc1_005"],
+          "learning_objectives": [
+            "Derive the equation of hydrostatic equilibrium dP/dr = −ρg from force balance",
+            "Estimate central pressure and temperature using the virial theorem",
+            "Explain the interplay between gravity and pressure that determines stellar structure"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_013",
+          "title": "Energy Transport: Radiation and Convection",
+          "prerequisites": ["astro_012", "em_024", "thermo_015"],
+          "learning_objectives": [
+            "Derive the radiative transport equation in terms of opacity and temperature gradient",
+            "State the Schwarzschild criterion for convective instability",
+            "Describe the structure of convective and radiative zones in low-mass and high-mass stars"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_014",
+          "title": "Nuclear Energy Generation",
+          "prerequisites": ["astro_012", "mech_038", "qm_010"],
+          "learning_objectives": [
+            "Explain the mass-energy equivalence E = mc² as the source of stellar energy",
+            "Describe the proton-proton chain and CNO cycle for hydrogen fusion",
+            "Calculate energy release per reaction using nuclear binding energies and mass defect"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_015",
+          "title": "The Equations of Stellar Structure",
+          "prerequisites": ["astro_013", "astro_014", "diffeq_004"],
+          "learning_objectives": [
+            "State the four equations of stellar structure: mass conservation, hydrostatic equilibrium, energy transport, and energy generation",
+            "Describe the boundary conditions at the center and surface of a star",
+            "Explain how stellar models are constructed numerically from these equations"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m05",
+      "title": "Stellar Evolution",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "astro_016",
+          "title": "Star Formation",
+          "prerequisites": ["astro_012", "thermo_005"],
+          "learning_objectives": [
+            "Derive the Jeans mass and Jeans length for gravitational collapse of a gas cloud",
+            "Describe the stages of protostellar collapse from molecular cloud to T Tauri star",
+            "Explain the role of angular momentum conservation and magnetic fields in star formation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_017",
+          "title": "Main Sequence Evolution",
+          "prerequisites": ["astro_015", "astro_007"],
+          "learning_objectives": [
+            "Explain the main sequence as the locus of hydrogen-burning stars in the HR diagram",
+            "Relate main sequence lifetime to stellar mass: t_MS ∝ M/L ∝ M^{−2.5}",
+            "Describe the evolution of chemical composition and structure during main sequence burning"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_018",
+          "title": "Post-Main-Sequence Evolution of Low- and Intermediate-Mass Stars",
+          "prerequisites": ["astro_017"],
+          "learning_objectives": [
+            "Describe the subgiant, red giant, horizontal branch, and asymptotic giant branch phases",
+            "Explain the helium flash and subsequent helium burning (triple-alpha process)",
+            "Describe planetary nebula ejection and white dwarf formation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_019",
+          "title": "Massive Star Evolution and Supernovae",
+          "prerequisites": ["astro_017", "thermo_021"],
+          "learning_objectives": [
+            "Describe successive nuclear burning stages (H, He, C, Ne, O, Si) in massive stars",
+            "Explain the iron core collapse mechanism for core-collapse supernovae",
+            "Describe the role of neutrinos in core-collapse supernovae and the formation of neutron stars"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m06",
+      "title": "Compact Objects: White Dwarfs and Neutron Stars",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "astro_020",
+          "title": "White Dwarfs and Electron Degeneracy",
+          "prerequisites": ["astro_018", "thermo_021"],
+          "learning_objectives": [
+            "Explain electron degeneracy pressure as the support mechanism for white dwarfs",
+            "Derive the mass-radius relation for white dwarfs using the Fermi gas model",
+            "State the Chandrasekhar limit (~1.4 M☉) and its derivation from relativistic degeneracy"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_021",
+          "title": "Neutron Stars and Pulsars",
+          "prerequisites": ["astro_019", "astro_020"],
+          "learning_objectives": [
+            "Describe the internal structure of a neutron star (crust, neutron superfluid, core)",
+            "Explain the pulsar mechanism as a rotating magnetic dipole emitting beamed radiation",
+            "Apply conservation of angular momentum and magnetic flux to predict neutron star properties"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_022",
+          "title": "Black Holes: Classical Theory",
+          "prerequisites": ["astro_021", "mech_039"],
+          "learning_objectives": [
+            "Derive the Schwarzschild radius R_s = 2GM/c² from escape velocity arguments",
+            "Describe the spacetime geometry around a non-rotating black hole (Schwarzschild metric)",
+            "Explain the event horizon, gravitational redshift, and time dilation near a black hole"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_023",
+          "title": "Accretion and High-Energy Astrophysics",
+          "prerequisites": ["astro_022", "astro_011"],
+          "learning_objectives": [
+            "Derive the Eddington luminosity as the maximum luminosity supported by radiation pressure",
+            "Describe accretion disk structure and the conversion of gravitational energy to radiation",
+            "Explain the observational signatures of X-ray binaries and active galactic nuclei"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m07",
+      "title": "The Interstellar Medium",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "astro_024",
+          "title": "Interstellar Gas and Dust",
+          "prerequisites": ["astro_006", "thermo_002"],
+          "learning_objectives": [
+            "Describe the phases of the interstellar medium (molecular, cold neutral, warm, hot)",
+            "Explain interstellar extinction and reddening due to dust",
+            "Compute column density from 21-cm hydrogen line observations"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_025",
+          "title": "HII Regions and Ionization Equilibrium",
+          "prerequisites": ["astro_024", "qm_028"],
+          "learning_objectives": [
+            "Derive the Stromgren radius from the balance between ionization and recombination rates",
+            "Describe the emission spectrum of HII regions and forbidden line transitions",
+            "Estimate the temperature and density of nebulae from emission line ratios"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m08",
+      "title": "The Milky Way Galaxy",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "astro_026",
+          "title": "Structure and Kinematics of the Milky Way",
+          "prerequisites": ["astro_003", "mech_025"],
+          "learning_objectives": [
+            "Describe the components of the Milky Way: disk, bulge, halo, and spiral arms",
+            "Analyze the rotation curve of the galaxy and derive enclosed mass from V(R)",
+            "Explain differential rotation and Oort's constants"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_027",
+          "title": "Dark Matter Evidence from Galactic Rotation Curves",
+          "prerequisites": ["astro_026"],
+          "learning_objectives": [
+            "Compare observed flat rotation curves to the Keplerian prediction for visible mass",
+            "Estimate the mass of the dark matter halo from rotation curve fitting",
+            "Discuss additional evidence for dark matter (gravitational lensing, CMB, large-scale structure)"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "astro_m09",
+      "title": "Galaxies",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "astro_028",
+          "title": "Galaxy Morphology and Classification",
+          "prerequisites": ["astro_026"],
+          "learning_objectives": [
+            "Describe the Hubble sequence (elliptical, spiral, lenticular, irregular galaxies)",
+            "Relate galaxy morphology to star formation rate, gas content, and dynamics",
+            "Explain the surface brightness profiles: de Vaucouleurs law for ellipticals, exponential disk for spirals"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astro_029",
+          "title": "Active Galactic Nuclei and Quasars",
+          "prerequisites": ["astro_023", "astro_028"],
+          "learning_objectives": [
+            "Describe the unified model of active galactic nuclei (Seyferts, quasars, blazars)",
+            "Explain how supermassive black hole accretion powers AGN luminosity",
+            "Discuss the Eddington limit, jet formation, and feedback effects on the host galaxy"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_030",
+          "title": "Galaxy Evolution and Mergers",
+          "prerequisites": ["astro_028", "astro_027"],
+          "learning_objectives": [
+            "Describe hierarchical structure formation in the ΛCDM framework",
+            "Explain the role of galaxy mergers in morphological transformation",
+            "Discuss the evolution of the galaxy luminosity function and star formation rate density over cosmic time"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m10",
+      "title": "General Relativity for Astrophysics",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "astro_031",
+          "title": "The Equivalence Principle and Curved Spacetime",
+          "prerequisites": ["mech_039", "mvc_007"],
+          "learning_objectives": [
+            "State the weak and strong equivalence principles",
+            "Describe spacetime as a curved manifold and geodesics as free-fall trajectories",
+            "Interpret the metric tensor as encoding distances and time intervals in curved spacetime"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_032",
+          "title": "Einstein's Field Equations and the Schwarzschild Solution",
+          "prerequisites": ["astro_031", "linalg_003"],
+          "learning_objectives": [
+            "State Einstein's field equations G_μν = (8πG/c⁴)T_μν conceptually",
+            "Describe the Schwarzschild metric as the vacuum solution for a spherical mass",
+            "Derive the classical tests of GR: perihelion precession, light deflection, gravitational redshift"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_033",
+          "title": "Gravitational Waves",
+          "prerequisites": ["astro_032", "em_022"],
+          "learning_objectives": [
+            "Describe gravitational waves as ripples in spacetime propagating at the speed of light",
+            "Derive the quadrupole formula for gravitational wave emission (order of magnitude)",
+            "Explain the LIGO detection of binary black hole and neutron star mergers"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m11",
+      "title": "Cosmology: The Expanding Universe",
+      "order": 11,
+      "concepts": [
+        {
+          "id": "astro_034",
+          "title": "The Cosmological Principle and the FRW Metric",
+          "prerequisites": ["astro_031", "astro_008"],
+          "learning_objectives": [
+            "State the cosmological principle (homogeneity and isotropy on large scales)",
+            "Write the Friedmann-Robertson-Walker metric and identify the scale factor a(t)",
+            "Relate the cosmological redshift to the scale factor: 1 + z = a(t₀)/a(t_emit)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_035",
+          "title": "The Friedmann Equations",
+          "prerequisites": ["astro_034", "astro_032"],
+          "learning_objectives": [
+            "Derive the Friedmann equations from Einstein's field equations for a homogeneous universe",
+            "Define the critical density, density parameter Ω, and the deceleration parameter",
+            "Solve the Friedmann equations for matter-dominated, radiation-dominated, and dark-energy-dominated universes"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_036",
+          "title": "Hubble's Law and the Age of the Universe",
+          "prerequisites": ["astro_035", "astro_003"],
+          "learning_objectives": [
+            "State Hubble's law v = H₀d and describe measurements of the Hubble constant",
+            "Calculate lookback time and the age of the universe for different cosmological models",
+            "Describe the observational evidence for the expansion of the universe"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_037",
+          "title": "Dark Energy and the Accelerating Universe",
+          "prerequisites": ["astro_036"],
+          "learning_objectives": [
+            "Describe the Type Ia supernova evidence for accelerating cosmic expansion",
+            "Introduce the cosmological constant Λ as a dark energy candidate and its equation of state w = −1",
+            "Discuss the ΛCDM model as the concordance cosmology and its parameters"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m12",
+      "title": "The Early Universe",
+      "order": 12,
+      "concepts": [
+        {
+          "id": "astro_038",
+          "title": "The Hot Big Bang and the Cosmic Microwave Background",
+          "prerequisites": ["astro_035", "thermo_020"],
+          "learning_objectives": [
+            "Describe the thermal history of the universe from the Planck epoch to recombination",
+            "Explain recombination, decoupling, and the origin of the cosmic microwave background (CMB)",
+            "Interpret the CMB blackbody spectrum and its temperature T = 2.725 K"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_039",
+          "title": "Big Bang Nucleosynthesis",
+          "prerequisites": ["astro_038", "astro_014"],
+          "learning_objectives": [
+            "Describe the synthesis of light elements (H, He, Li) in the first few minutes after the Big Bang",
+            "Relate the predicted helium mass fraction (~25%) to the baryon-to-photon ratio",
+            "Compare BBN predictions to observed primordial abundances as a test of cosmology"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_040",
+          "title": "Inflation",
+          "prerequisites": ["astro_038", "astro_035"],
+          "learning_objectives": [
+            "Describe the horizon, flatness, and monopole problems of standard Big Bang cosmology",
+            "Explain how a period of exponential expansion (inflation) resolves these problems",
+            "Describe how quantum fluctuations during inflation seed the large-scale structure of the universe"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m13",
+      "title": "CMB Anisotropies and Structure Formation",
+      "order": 13,
+      "concepts": [
+        {
+          "id": "astro_041",
+          "title": "CMB Anisotropies and the Power Spectrum",
+          "prerequisites": ["astro_038", "astro_040", "linalg_027"],
+          "learning_objectives": [
+            "Describe the angular power spectrum of CMB temperature fluctuations",
+            "Explain the physical origin of acoustic peaks from baryon-photon oscillations",
+            "Extract cosmological parameters (Ω_m, Ω_b, Ω_Λ, H₀) from the CMB power spectrum"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_042",
+          "title": "Large-Scale Structure and the Matter Power Spectrum",
+          "prerequisites": ["astro_041", "astro_030"],
+          "learning_objectives": [
+            "Describe the growth of density perturbations from the Jeans instability in an expanding universe",
+            "Define the matter power spectrum P(k) and relate it to galaxy survey observations",
+            "Explain baryon acoustic oscillations (BAO) as a standard ruler for cosmological distances"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_043",
+          "title": "Gravitational Lensing",
+          "prerequisites": ["astro_032", "astro_042"],
+          "learning_objectives": [
+            "Derive the gravitational lens equation and the Einstein ring radius",
+            "Distinguish between strong lensing, weak lensing, and microlensing",
+            "Describe how weak lensing surveys map the distribution of dark matter"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astro_m14",
+      "title": "Frontiers of Astrophysics",
+      "order": 14,
+      "concepts": [
+        {
+          "id": "astro_044",
+          "title": "Exoplanets: Detection and Characterization",
+          "prerequisites": ["astro_009", "astro_008"],
+          "learning_objectives": [
+            "Describe the radial velocity and transit methods for exoplanet detection",
+            "Compute planet mass and radius from radial velocity and transit observations",
+            "Discuss the habitable zone and atmospheric characterization via transmission spectroscopy"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astro_045",
+          "title": "Multi-Messenger Astronomy",
+          "prerequisites": ["astro_033", "astro_021"],
+          "learning_objectives": [
+            "Describe the complementary information from gravitational waves, electromagnetic radiation, neutrinos, and cosmic rays",
+            "Explain the GW170817 neutron star merger as a landmark multi-messenger event",
+            "Discuss how multi-messenger observations constrain the neutron star equation of state and the origin of heavy elements"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_046",
+          "title": "Dark Matter Candidates and Detection",
+          "prerequisites": ["astro_027", "qm_010"],
+          "learning_objectives": [
+            "Classify dark matter candidates (WIMPs, axions, sterile neutrinos, primordial black holes)",
+            "Describe direct detection experiments and their sensitivity to WIMP-nucleon interactions",
+            "Discuss indirect detection through annihilation products and collider searches"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astro_047",
+          "title": "Open Problems: Dark Energy, Quantum Gravity, and the Multiverse",
+          "prerequisites": ["astro_037", "astro_040"],
+          "learning_objectives": [
+            "Discuss the cosmological constant problem and the discrepancy with quantum field theory predictions",
+            "Describe the hierarchy of approaches to quantum gravity (string theory, loop quantum gravity)",
+            "Outline the observational tests that could distinguish between dark energy models"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "astro_proj_01",
+      "title": "Building an HR Diagram from Stellar Data",
+      "description": "Using a catalog of stellar observations (magnitudes, colors, parallaxes), construct an HR diagram. Identify the main sequence, giant branch, and white dwarf sequence. Estimate ages of open clusters by isochrone fitting.",
+      "required_concepts": ["astro_007", "astro_005", "astro_003"],
+      "learning_objectives": [
+        "Convert apparent magnitudes and colors to absolute magnitudes and temperatures",
+        "Plot and interpret an observational HR diagram",
+        "Estimate cluster age by fitting theoretical isochrones to the main sequence turnoff"
+      ]
+    },
+    {
+      "id": "astro_proj_02",
+      "title": "Modeling Stellar Structure with the Lane-Emden Equation",
+      "description": "Solve the Lane-Emden equation numerically for polytropic stellar models. Compare density, pressure, and temperature profiles for different polytropic indices and relate them to physical stellar models.",
+      "required_concepts": ["astro_015", "astro_012", "diffeq_004"],
+      "learning_objectives": [
+        "Derive the Lane-Emden equation from the equations of hydrostatic equilibrium and a polytropic equation of state",
+        "Solve the Lane-Emden equation numerically for n = 0, 1, 1.5, 3, and 5",
+        "Relate polytropic models to real stellar structures (white dwarfs, convective stars)"
+      ]
+    },
+    {
+      "id": "astro_proj_03",
+      "title": "Measuring the Hubble Constant from Simulated Supernova Data",
+      "description": "Given simulated Type Ia supernova apparent magnitude and redshift data, fit a cosmological model to determine the Hubble constant and the matter/dark energy density parameters. Construct a Hubble diagram and analyze residuals.",
+      "required_concepts": ["astro_036", "astro_037", "astro_003"],
+      "learning_objectives": [
+        "Construct a Hubble diagram (redshift vs. distance modulus) from supernova data",
+        "Fit cosmological parameters (H₀, Ω_m, Ω_Λ) using chi-squared minimization",
+        "Analyze residuals to assess evidence for an accelerating universe"
+      ]
+    },
+    {
+      "id": "astro_proj_04",
+      "title": "Extracting Cosmological Parameters from the CMB Power Spectrum",
+      "description": "Analyze a simplified CMB angular power spectrum. Identify the positions and heights of acoustic peaks and use them to estimate the baryon density, matter density, and spatial curvature of the universe.",
+      "required_concepts": ["astro_041", "astro_035"],
+      "learning_objectives": [
+        "Relate acoustic peak positions to the sound horizon and angular diameter distance",
+        "Estimate Ω_b from the ratio of odd to even peak heights",
+        "Estimate Ω_total from the position of the first peak and discuss spatial curvature"
+      ]
+    }
+  ]
+}

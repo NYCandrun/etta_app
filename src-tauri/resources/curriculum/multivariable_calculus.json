@@ -1,0 +1,477 @@
+{
+  "domain": "multivariable_calculus",
+  "display_name": "Multivariable Calculus",
+  "phase": 2,
+  "description": "Extension of calculus to functions of several variables. Covers partial derivatives, multiple integrals, vector calculus, and the fundamental theorems of Green, Stokes, and the Divergence Theorem.",
+  "prerequisites": ["single_variable_calculus"],
+  "modules": [
+    {
+      "id": "mvc_m01",
+      "title": "Vectors and the Geometry of Space",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "mvc_001",
+          "title": "Three-Dimensional Coordinate Systems",
+          "prerequisites": ["alg_019", "trig_026"],
+          "learning_objectives": [
+            "Plot points and describe regions in three-dimensional Cartesian coordinates",
+            "Compute distances between points in R³",
+            "Write equations of spheres and identify their center and radius"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_002",
+          "title": "Vectors in Three Dimensions",
+          "prerequisites": ["mvc_001", "trig_026"],
+          "learning_objectives": [
+            "Represent vectors in R³ in component form and perform vector arithmetic",
+            "Compute the magnitude and unit vector in the direction of a given vector",
+            "Express vectors in terms of the standard basis vectors i, j, k"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_003",
+          "title": "The Cross Product",
+          "prerequisites": ["mvc_002", "trig_027"],
+          "learning_objectives": [
+            "Compute the cross product of two vectors using the determinant formula",
+            "Interpret the cross product geometrically as area and direction (right-hand rule)",
+            "Apply the cross product to find the area of a parallelogram and a triangle in R³"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_004",
+          "title": "Lines and Planes in Space",
+          "prerequisites": ["mvc_003"],
+          "learning_objectives": [
+            "Write parametric and symmetric equations of a line in R³",
+            "Write the equation of a plane given a point and a normal vector",
+            "Compute the distance from a point to a plane and the angle between two planes"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mvc_m02",
+      "title": "Vector-Valued Functions",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "mvc_005",
+          "title": "Space Curves and Parametric Equations",
+          "prerequisites": ["mvc_004", "calc1_041"],
+          "learning_objectives": [
+            "Define and graph vector-valued functions r(t) = ⟨x(t), y(t), z(t)⟩",
+            "Compute limits and determine continuity of vector-valued functions",
+            "Parameterize common space curves (helix, circle in R³)"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_006",
+          "title": "Derivatives and Integrals of Vector Functions",
+          "prerequisites": ["mvc_005"],
+          "learning_objectives": [
+            "Differentiate vector-valued functions component-wise",
+            "Interpret r'(t) as the tangent vector and compute the unit tangent vector",
+            "Integrate vector-valued functions to find position from velocity"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_007",
+          "title": "Arc Length and Curvature",
+          "prerequisites": ["mvc_006"],
+          "learning_objectives": [
+            "Compute arc length of a space curve using integration",
+            "Define and compute the curvature κ of a space curve",
+            "Find the unit normal and binormal vectors (TNB frame)"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mvc_m03",
+      "title": "Partial Derivatives",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "mvc_008",
+          "title": "Functions of Several Variables",
+          "prerequisites": ["alg_053", "mvc_001"],
+          "learning_objectives": [
+            "Evaluate functions of two and three variables and determine their domains",
+            "Sketch level curves for functions of two variables",
+            "Describe level surfaces for functions of three variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_009",
+          "title": "Limits and Continuity in Several Variables",
+          "prerequisites": ["mvc_008", "calc1_003"],
+          "learning_objectives": [
+            "Evaluate limits of multivariable functions along different paths",
+            "Prove a limit does not exist by finding two paths with different limits",
+            "Apply the Squeeze Theorem in multiple variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_010",
+          "title": "Partial Derivatives",
+          "prerequisites": ["mvc_009", "calc1_007"],
+          "learning_objectives": [
+            "Compute partial derivatives by treating other variables as constants",
+            "Compute second-order and mixed partial derivatives",
+            "Apply Clairaut's theorem on equality of mixed partials"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_011",
+          "title": "The Chain Rule for Multivariable Functions",
+          "prerequisites": ["mvc_010", "calc1_011"],
+          "learning_objectives": [
+            "Apply the multivariable chain rule for functions of functions",
+            "Draw and use tree diagrams to organize chain rule computations",
+            "Compute implicit partial derivatives using the chain rule"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_012",
+          "title": "Directional Derivatives and the Gradient",
+          "prerequisites": ["mvc_011"],
+          "learning_objectives": [
+            "Compute the gradient vector ∇f for scalar-valued functions",
+            "Compute directional derivatives using the gradient and a unit direction vector",
+            "Interpret the gradient as the direction of steepest ascent and its magnitude as the maximum rate of change"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mvc_m04",
+      "title": "Applications of Partial Derivatives",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "mvc_013",
+          "title": "Tangent Planes and Linear Approximation",
+          "prerequisites": ["mvc_012"],
+          "learning_objectives": [
+            "Find the equation of the tangent plane to a surface at a point",
+            "Use the tangent plane for linear approximation of multivariable functions",
+            "Compute the total differential and estimate error in calculated quantities"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_014",
+          "title": "Extrema of Multivariable Functions",
+          "prerequisites": ["mvc_012"],
+          "learning_objectives": [
+            "Find critical points of functions of two variables",
+            "Apply the second derivative test (using the Hessian determinant) to classify critical points",
+            "Find absolute extrema on closed bounded regions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_015",
+          "title": "Lagrange Multipliers",
+          "prerequisites": ["mvc_014"],
+          "learning_objectives": [
+            "Set up and solve constrained optimization problems using Lagrange multipliers",
+            "Handle optimization with multiple constraints",
+            "Interpret the Lagrange multiplier λ as the rate of change of the optimum with respect to the constraint"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mvc_m05",
+      "title": "Multiple Integrals",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "mvc_016",
+          "title": "Double Integrals over Rectangular Regions",
+          "prerequisites": ["calc1_028", "mvc_008"],
+          "learning_objectives": [
+            "Evaluate double integrals as iterated integrals using Fubini's theorem",
+            "Interpret double integrals as volume under a surface",
+            "Apply Fubini's theorem to change the order of integration over rectangles"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_017",
+          "title": "Double Integrals over General Regions",
+          "prerequisites": ["mvc_016"],
+          "learning_objectives": [
+            "Set up iterated integrals over Type I and Type II regions",
+            "Change the order of integration by re-describing the region",
+            "Compute areas and volumes using double integrals"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_018",
+          "title": "Double Integrals in Polar Coordinates",
+          "prerequisites": ["mvc_017", "trig_025"],
+          "learning_objectives": [
+            "Convert double integrals from Cartesian to polar coordinates with the Jacobian r",
+            "Set up and evaluate double integrals in polar coordinates over appropriate regions",
+            "Recognize regions that are simpler to describe in polar coordinates"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_019",
+          "title": "Applications of Double Integrals",
+          "prerequisites": ["mvc_018"],
+          "learning_objectives": [
+            "Compute mass, center of mass, and moments of inertia of planar laminae with variable density",
+            "Compute surface area using double integrals",
+            "Apply double integrals to probability (joint density functions)"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mvc_m06",
+      "title": "Triple Integrals",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "mvc_020",
+          "title": "Triple Integrals in Cartesian Coordinates",
+          "prerequisites": ["mvc_017"],
+          "learning_objectives": [
+            "Set up and evaluate triple integrals as iterated integrals",
+            "Describe three-dimensional regions with appropriate integration limits",
+            "Compute volume and mass of solid regions using triple integrals"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_021",
+          "title": "Triple Integrals in Cylindrical Coordinates",
+          "prerequisites": ["mvc_020", "mvc_018"],
+          "learning_objectives": [
+            "Convert between Cartesian and cylindrical coordinates",
+            "Set up and evaluate triple integrals in cylindrical coordinates with Jacobian r",
+            "Identify solids best described in cylindrical coordinates"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_022",
+          "title": "Triple Integrals in Spherical Coordinates",
+          "prerequisites": ["mvc_021"],
+          "learning_objectives": [
+            "Convert between Cartesian and spherical coordinates",
+            "Set up and evaluate triple integrals in spherical coordinates with Jacobian ρ² sin φ",
+            "Identify solids best described in spherical coordinates (spheres, cones)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_023",
+          "title": "Change of Variables and the Jacobian",
+          "prerequisites": ["mvc_022"],
+          "learning_objectives": [
+            "Compute the Jacobian determinant for a general change of variables",
+            "Apply the change of variables formula for double and triple integrals",
+            "Design custom transformations to simplify integration regions"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mvc_m07",
+      "title": "Vector Fields",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "mvc_024",
+          "title": "Vector Fields",
+          "prerequisites": ["mvc_012"],
+          "learning_objectives": [
+            "Define and sketch two-dimensional and three-dimensional vector fields",
+            "Identify gradient vector fields (conservative fields)",
+            "Compute the divergence and curl of a vector field"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_025",
+          "title": "Line Integrals of Scalar and Vector Fields",
+          "prerequisites": ["mvc_024", "mvc_006"],
+          "learning_objectives": [
+            "Evaluate line integrals of scalar functions along parameterized curves",
+            "Evaluate line integrals of vector fields (work integrals) along parameterized curves",
+            "Interpret line integrals as work done by a force along a path"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_026",
+          "title": "Conservative Fields and Path Independence",
+          "prerequisites": ["mvc_025"],
+          "learning_objectives": [
+            "Determine whether a vector field is conservative by checking curl = 0",
+            "Find a potential function for a conservative vector field",
+            "Apply the Fundamental Theorem of Line Integrals"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mvc_m08",
+      "title": "Green's Theorem",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "mvc_027",
+          "title": "Green's Theorem",
+          "prerequisites": ["mvc_026", "mvc_017"],
+          "learning_objectives": [
+            "State Green's theorem relating a line integral to a double integral",
+            "Apply Green's theorem to evaluate line integrals by computing double integrals",
+            "Use Green's theorem to compute areas of regions bounded by curves"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_028",
+          "title": "Flux Form of Green's Theorem",
+          "prerequisites": ["mvc_027"],
+          "learning_objectives": [
+            "State and apply the flux form of Green's theorem",
+            "Compute the outward flux of a vector field across a closed curve",
+            "Relate the flux form to the divergence of the vector field"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mvc_m09",
+      "title": "Surface Integrals",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "mvc_029",
+          "title": "Parametric Surfaces",
+          "prerequisites": ["mvc_005", "mvc_008"],
+          "learning_objectives": [
+            "Parameterize surfaces in R³ using two parameters",
+            "Compute the tangent plane to a parametric surface",
+            "Compute the surface area element dS from a parameterization"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_030",
+          "title": "Surface Integrals of Scalar and Vector Fields",
+          "prerequisites": ["mvc_029", "mvc_024"],
+          "learning_objectives": [
+            "Evaluate surface integrals of scalar functions over parametric surfaces",
+            "Evaluate flux integrals of vector fields through oriented surfaces",
+            "Choose and apply the correct orientation (outward normal) for flux integrals"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mvc_m10",
+      "title": "Stokes' Theorem and the Divergence Theorem",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "mvc_031",
+          "title": "Stokes' Theorem",
+          "prerequisites": ["mvc_030", "mvc_027"],
+          "learning_objectives": [
+            "State Stokes' theorem relating a surface integral of curl to a line integral",
+            "Apply Stokes' theorem to convert between surface and line integrals",
+            "Verify Stokes' theorem by computing both sides for a given example"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mvc_032",
+          "title": "The Divergence Theorem",
+          "prerequisites": ["mvc_030", "mvc_020"],
+          "learning_objectives": [
+            "State the Divergence Theorem relating a surface flux integral to a triple integral of divergence",
+            "Apply the Divergence Theorem to evaluate flux integrals over closed surfaces",
+            "Interpret the Divergence Theorem physically as conservation of flow"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mvc_033",
+          "title": "Unifying the Fundamental Theorems",
+          "prerequisites": ["mvc_031", "mvc_032"],
+          "learning_objectives": [
+            "Identify Green's, Stokes', and the Divergence Theorem as instances of the generalized Stokes' theorem",
+            "Select the appropriate theorem for a given vector calculus problem",
+            "Interpret all three theorems as relating an integral over a boundary to an integral over the enclosed region"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "mvc_proj_01",
+      "title": "Optimizing a Satellite Ground Station Network",
+      "description": "Use Lagrange multipliers to optimize the placement of ground stations on an ellipsoidal Earth model subject to coverage constraints. Compute surface areas covered using surface integrals.",
+      "required_concepts": ["mvc_015", "mvc_030"],
+      "learning_objectives": [
+        "Formulate a constrained optimization problem on a curved surface",
+        "Apply Lagrange multipliers with multiple constraints",
+        "Compute surface integrals over portions of an ellipsoid"
+      ]
+    },
+    {
+      "id": "mvc_proj_02",
+      "title": "Verifying Maxwell's Equations in Integral Form",
+      "description": "Given specific electric and magnetic field configurations, verify Gauss's Law and Faraday's Law using the Divergence Theorem and Stokes' Theorem respectively.",
+      "required_concepts": ["mvc_031", "mvc_032", "mvc_024"],
+      "learning_objectives": [
+        "Compute divergence and curl of physical vector fields",
+        "Apply the Divergence Theorem to verify Gauss's Law for specific charge distributions",
+        "Apply Stokes' Theorem to verify Faraday's Law for specific field configurations"
+      ]
+    },
+    {
+      "id": "mvc_proj_03",
+      "title": "Center of Mass of a Variable-Density Solid",
+      "description": "Compute the center of mass of a solid with non-uniform density using triple integrals in multiple coordinate systems. Compare the efficiency of Cartesian, cylindrical, and spherical approaches.",
+      "required_concepts": ["mvc_020", "mvc_021", "mvc_022"],
+      "learning_objectives": [
+        "Set up mass and moment integrals for a three-dimensional solid",
+        "Select the most efficient coordinate system for a given geometry",
+        "Evaluate triple integrals in all three coordinate systems and verify consistency"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,353 @@
+{
+  "domain": "thermodynamics",
+  "display_name": "Thermodynamics and Statistical Mechanics",
+  "phase": 3,
+  "description": "The physics of heat, temperature, energy, and entropy. Covers the laws of thermodynamics, thermodynamic potentials, kinetic theory, and an introduction to statistical mechanics.",
+  "prerequisites": ["multivariable_calculus", "differential_equations", "linear_algebra"],
+  "modules": [
+    {
+      "id": "thermo_m01",
+      "title": "Temperature and the Zeroth Law",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "thermo_001",
+          "title": "Thermal Equilibrium and the Zeroth Law",
+          "prerequisites": ["mvc_010"],
+          "learning_objectives": [
+            "State the zeroth law of thermodynamics and define thermal equilibrium",
+            "Define temperature operationally via the zeroth law",
+            "Convert between Celsius, Fahrenheit, and Kelvin temperature scales"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thermo_002",
+          "title": "Equations of State",
+          "prerequisites": ["thermo_001", "alg_012"],
+          "learning_objectives": [
+            "State the ideal gas law PV = nRT and identify its assumptions",
+            "Apply the van der Waals equation as a model for real gases",
+            "Plot and interpret P-V, P-T, and V-T diagrams for ideal and real gases"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thermo_003",
+          "title": "Thermal Expansion and Calorimetry",
+          "prerequisites": ["thermo_001"],
+          "learning_objectives": [
+            "Calculate linear and volumetric thermal expansion",
+            "Define specific heat capacity and latent heat",
+            "Solve calorimetry problems using conservation of energy"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "thermo_m02",
+      "title": "The First Law of Thermodynamics",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "thermo_004",
+          "title": "Work, Heat, and Internal Energy",
+          "prerequisites": ["thermo_002", "calc1_028"],
+          "learning_objectives": [
+            "Define thermodynamic work as W = ∫P dV and compute it for quasi-static processes",
+            "Distinguish between heat and work as path-dependent energy transfers",
+            "State the first law of thermodynamics: ΔU = Q − W"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thermo_005",
+          "title": "Thermodynamic Processes for Ideal Gases",
+          "prerequisites": ["thermo_004"],
+          "learning_objectives": [
+            "Analyze isothermal, isobaric, isochoric, and adiabatic processes for ideal gases",
+            "Derive the adiabatic relation PVᵞ = constant from the first law",
+            "Compute Q, W, and ΔU for each type of process"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_006",
+          "title": "Heat Capacity and Equipartition",
+          "prerequisites": ["thermo_005"],
+          "learning_objectives": [
+            "Derive Cᵥ and Cₚ for an ideal gas and show Cₚ − Cᵥ = nR",
+            "Apply the equipartition theorem to predict heat capacities from degrees of freedom",
+            "Explain the failure of classical equipartition at low temperatures (qualitative quantum preview)"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "thermo_m03",
+      "title": "The Second Law and Entropy",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "thermo_007",
+          "title": "Heat Engines, Refrigerators, and the Second Law",
+          "prerequisites": ["thermo_005"],
+          "learning_objectives": [
+            "State the Kelvin-Planck and Clausius formulations of the second law",
+            "Define and compute the efficiency of a heat engine and the coefficient of performance of a refrigerator",
+            "Prove that no engine operating between two reservoirs can exceed Carnot efficiency"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_008",
+          "title": "The Carnot Cycle",
+          "prerequisites": ["thermo_007"],
+          "learning_objectives": [
+            "Describe the four steps of the Carnot cycle on a P-V diagram",
+            "Derive the Carnot efficiency η = 1 − Tᶜ/Tₕ",
+            "Explain the significance of the Carnot cycle as the most efficient cycle between two temperatures"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_009",
+          "title": "Entropy",
+          "prerequisites": ["thermo_008", "calc1_028"],
+          "learning_objectives": [
+            "Define entropy via the Clausius inequality: dS ≥ δQ/T",
+            "Compute entropy changes for reversible and irreversible processes",
+            "State the entropy form of the second law: ΔS_universe ≥ 0"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_010",
+          "title": "Entropy of an Ideal Gas and the T-S Diagram",
+          "prerequisites": ["thermo_009"],
+          "learning_objectives": [
+            "Derive the entropy of an ideal gas as a function of T and V (or T and P)",
+            "Plot thermodynamic cycles on T-S diagrams and interpret enclosed area as net heat",
+            "Compute entropy changes for mixing, free expansion, and phase transitions"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "thermo_m04",
+      "title": "Thermodynamic Potentials",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "thermo_011",
+          "title": "Enthalpy, Helmholtz, and Gibbs Free Energy",
+          "prerequisites": ["thermo_009", "mvc_010"],
+          "learning_objectives": [
+            "Define enthalpy H = U + PV, Helmholtz free energy F = U − TS, and Gibbs free energy G = H − TS",
+            "Identify the natural variables for each potential (U: S,V; H: S,P; F: T,V; G: T,P)",
+            "Determine the appropriate potential for a given set of constraints"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_012",
+          "title": "Maxwell Relations",
+          "prerequisites": ["thermo_011"],
+          "learning_objectives": [
+            "Derive the four Maxwell relations from the thermodynamic potentials",
+            "Use Maxwell relations to express difficult-to-measure quantities in terms of measurable ones",
+            "Apply Maxwell relations to derive relationships between Cₚ, Cᵥ, and the equation of state"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thermo_013",
+          "title": "Phase Transitions and the Clausius-Clapeyron Equation",
+          "prerequisites": ["thermo_011"],
+          "learning_objectives": [
+            "Describe first-order and continuous (second-order) phase transitions",
+            "Derive and apply the Clausius-Clapeyron equation dP/dT = L/(TΔV)",
+            "Interpret phase diagrams and identify triple points and critical points"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "thermo_m05",
+      "title": "Kinetic Theory of Gases",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "thermo_014",
+          "title": "Molecular Speed Distributions",
+          "prerequisites": ["thermo_002", "mvc_022"],
+          "learning_objectives": [
+            "Derive the Maxwell-Boltzmann speed distribution from probability arguments",
+            "Compute the most probable speed, mean speed, and root-mean-square speed",
+            "Relate the macroscopic pressure and temperature to molecular kinetic energy"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_015",
+          "title": "Mean Free Path and Transport Phenomena",
+          "prerequisites": ["thermo_014"],
+          "learning_objectives": [
+            "Derive the mean free path λ = 1/(nσ√2) from molecular collision cross-sections",
+            "Relate mean free path to viscosity, thermal conductivity, and diffusion coefficients",
+            "Apply kinetic theory to explain macroscopic transport phenomena"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "thermo_m06",
+      "title": "Introduction to Statistical Mechanics",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "thermo_016",
+          "title": "Microstates, Macrostates, and the Boltzmann Entropy",
+          "prerequisites": ["thermo_009", "precalc_017"],
+          "learning_objectives": [
+            "Define microstates and macrostates for a thermodynamic system",
+            "State the Boltzmann entropy formula S = k_B ln Ω",
+            "Calculate the number of microstates for simple systems (two-state, Einstein solid)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_017",
+          "title": "The Canonical Ensemble and Partition Function",
+          "prerequisites": ["thermo_016", "calc1_035"],
+          "learning_objectives": [
+            "Define the canonical ensemble for a system in thermal contact with a reservoir",
+            "Define and compute the partition function Z = Σ e^{−Eᵢ/k_BT}",
+            "Derive thermodynamic quantities (U, S, F) from the partition function"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thermo_018",
+          "title": "Applications of the Partition Function",
+          "prerequisites": ["thermo_017"],
+          "learning_objectives": [
+            "Compute the partition function and thermodynamic properties of the ideal gas",
+            "Analyze the two-state paramagnet using the partition function",
+            "Derive the Planck distribution for blackbody radiation from the partition function (preview)"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "thermo_m07",
+      "title": "Quantum Statistics",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "thermo_019",
+          "title": "Identical Particles and Quantum Statistics",
+          "prerequisites": ["thermo_017"],
+          "learning_objectives": [
+            "Distinguish between bosons and fermions based on spin and symmetry requirements",
+            "Derive the Bose-Einstein and Fermi-Dirac distribution functions",
+            "Recover the classical Maxwell-Boltzmann distribution as a high-temperature limit"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thermo_020",
+          "title": "Blackbody Radiation and the Planck Distribution",
+          "prerequisites": ["thermo_019"],
+          "learning_objectives": [
+            "Derive the Planck spectral energy density from Bose-Einstein statistics for photons",
+            "Derive the Stefan-Boltzmann law and Wien's displacement law from the Planck distribution",
+            "Explain how Planck's distribution resolves the ultraviolet catastrophe"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thermo_021",
+          "title": "The Fermi Gas and Degenerate Matter",
+          "prerequisites": ["thermo_019"],
+          "learning_objectives": [
+            "Define the Fermi energy and Fermi temperature for a free electron gas",
+            "Compute the density of states and total energy of a degenerate Fermi gas at T = 0",
+            "Apply Fermi gas theory to electrons in metals and degenerate stellar matter (white dwarfs)"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "thermo_m08",
+      "title": "The Third Law and Low-Temperature Physics",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "thermo_022",
+          "title": "The Third Law of Thermodynamics",
+          "prerequisites": ["thermo_009"],
+          "learning_objectives": [
+            "State the Nernst form and the Planck form of the third law",
+            "Explain the unattainability of absolute zero",
+            "Apply the third law to determine absolute entropies of substances"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thermo_023",
+          "title": "Bose-Einstein Condensation",
+          "prerequisites": ["thermo_019"],
+          "learning_objectives": [
+            "Derive the critical temperature for Bose-Einstein condensation in an ideal gas",
+            "Describe the macroscopic occupation of the ground state below T_c",
+            "Discuss experimental realizations of BEC in dilute atomic gases"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "thermo_proj_01",
+      "title": "Analyzing a Real Engine Cycle",
+      "description": "Model the Otto cycle (gasoline engine) and the Diesel cycle as sequences of thermodynamic processes. Compute efficiency as a function of compression ratio and compare to Carnot efficiency.",
+      "required_concepts": ["thermo_005", "thermo_008", "thermo_010"],
+      "learning_objectives": [
+        "Model each step of a real engine cycle as an ideal thermodynamic process",
+        "Compute work, heat, and efficiency for the full cycle",
+        "Compare real engine efficiency to the Carnot limit and explain the discrepancy"
+      ]
+    },
+    {
+      "id": "thermo_proj_02",
+      "title": "Monte Carlo Simulation of the Ising Model",
+      "description": "Simulate a 2D Ising model using the Metropolis algorithm. Measure magnetization and energy as functions of temperature and observe the phase transition near the critical temperature.",
+      "required_concepts": ["thermo_016", "thermo_017"],
+      "learning_objectives": [
+        "Implement the Metropolis algorithm for statistical sampling",
+        "Measure thermodynamic observables from simulation data",
+        "Identify the critical temperature and characterize the phase transition"
+      ]
+    },
+    {
+      "id": "thermo_proj_03",
+      "title": "Deriving the Stefan-Boltzmann Law from Planck's Distribution",
+      "description": "Starting from the Planck spectral energy density, integrate over all frequencies to derive the Stefan-Boltzmann law. Compute the Stefan-Boltzmann constant in terms of fundamental constants.",
+      "required_concepts": ["thermo_020", "calc1_035"],
+      "learning_objectives": [
+        "Set up and evaluate the integral of the Planck distribution over all frequencies",
+        "Evaluate the integral using standard results for ∫x³/(eˣ−1) dx",
+        "Express the Stefan-Boltzmann constant in terms of k_B, ℏ, and c"
+      ]
+    }
+  ]
+}

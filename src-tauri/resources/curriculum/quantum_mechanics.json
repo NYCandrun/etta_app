@@ -1,0 +1,466 @@
+{
+  "domain": "quantum_mechanics",
+  "display_name": "Quantum Mechanics",
+  "phase": 3,
+  "description": "The physics of the very small. Covers wave-particle duality, the Schrodinger equation, quantum states in Hilbert space, angular momentum, spin, identical particles, and perturbation theory.",
+  "prerequisites": ["multivariable_calculus", "differential_equations", "linear_algebra"],
+  "modules": [
+    {
+      "id": "qm_m01",
+      "title": "Foundations of Quantum Mechanics",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "qm_001",
+          "title": "The Failures of Classical Physics",
+          "prerequisites": ["em_024", "thermo_020"],
+          "learning_objectives": [
+            "Describe the ultraviolet catastrophe and how Planck's quantization hypothesis resolves it",
+            "Explain the photoelectric effect and Einstein's photon hypothesis",
+            "Describe the Compton effect and its evidence for particle-like behavior of light"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_002",
+          "title": "Wave-Particle Duality and the de Broglie Hypothesis",
+          "prerequisites": ["qm_001", "em_023"],
+          "learning_objectives": [
+            "State the de Broglie relation λ = h/p and compute the wavelength of matter waves",
+            "Describe the Davisson-Germer experiment as evidence for electron diffraction",
+            "Explain the double-slit experiment and its implications for quantum superposition"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_003",
+          "title": "The Heisenberg Uncertainty Principle",
+          "prerequisites": ["qm_002"],
+          "learning_objectives": [
+            "State the position-momentum uncertainty relation Δx Δp ≥ ℏ/2",
+            "State the energy-time uncertainty relation ΔE Δt ≥ ℏ/2",
+            "Apply uncertainty relations to estimate ground-state energies and explain the stability of atoms"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "qm_m02",
+      "title": "The Schrodinger Equation",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "qm_004",
+          "title": "The Time-Dependent Schrodinger Equation",
+          "prerequisites": ["qm_003", "diffeq_011", "mvc_010"],
+          "learning_objectives": [
+            "State the time-dependent Schrodinger equation iℏ ∂ψ/∂t = Ĥψ",
+            "Interpret the wave function ψ(x,t) and the probability density |ψ|²",
+            "Apply the normalization condition ∫|ψ|² dx = 1"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_005",
+          "title": "Separation of Variables and Stationary States",
+          "prerequisites": ["qm_004"],
+          "learning_objectives": [
+            "Separate the time-dependent Schrodinger equation into time-independent and time parts",
+            "State the time-independent Schrodinger equation Ĥψ = Eψ as an eigenvalue problem",
+            "Express the general solution as a superposition of stationary states"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_006",
+          "title": "Probability Current and Conservation",
+          "prerequisites": ["qm_004"],
+          "learning_objectives": [
+            "Derive the probability current density j = (ℏ/2mi)(ψ*∇ψ − ψ∇ψ*)",
+            "State the continuity equation ∂ρ/∂t + ∇·j = 0 for quantum probability",
+            "Apply boundary conditions requiring continuity of ψ and dψ/dx"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "qm_m03",
+      "title": "One-Dimensional Potentials",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "qm_007",
+          "title": "The Infinite Square Well",
+          "prerequisites": ["qm_005"],
+          "learning_objectives": [
+            "Solve the time-independent Schrodinger equation for the infinite square well",
+            "Derive the quantized energy levels Eₙ = n²π²ℏ²/(2mL²)",
+            "Normalize the wave functions and verify their orthogonality"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_008",
+          "title": "The Quantum Harmonic Oscillator",
+          "prerequisites": ["qm_007", "diffeq_025"],
+          "learning_objectives": [
+            "Solve the harmonic oscillator Schrodinger equation using power series (Hermite polynomials)",
+            "Derive the energy spectrum Eₙ = (n + ½)ℏω and discuss the zero-point energy",
+            "Sketch the wave functions and probability densities and compare with classical turning points"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_009",
+          "title": "Free Particle and Wave Packets",
+          "prerequisites": ["qm_005", "calc1_048"],
+          "learning_objectives": [
+            "Solve the free-particle Schrodinger equation and express solutions as plane waves",
+            "Construct wave packets from superpositions of plane waves using Fourier transforms",
+            "Compute and interpret group velocity and phase velocity of a wave packet"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_010",
+          "title": "Potential Barriers and Quantum Tunneling",
+          "prerequisites": ["qm_006", "qm_007"],
+          "learning_objectives": [
+            "Solve the Schrodinger equation for a finite potential step and barrier",
+            "Compute transmission and reflection coefficients",
+            "Explain quantum tunneling and apply it to alpha decay and scanning tunneling microscopy"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "qm_m04",
+      "title": "Formalism of Quantum Mechanics",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "qm_011",
+          "title": "Hilbert Space and Dirac Notation",
+          "prerequisites": ["qm_005", "linalg_008", "linalg_019"],
+          "learning_objectives": [
+            "Represent quantum states as vectors in Hilbert space using Dirac bra-ket notation",
+            "Compute inner products ⟨φ|ψ⟩ and expand states in orthonormal bases",
+            "Express the completeness relation and resolution of the identity"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_012",
+          "title": "Observables and Hermitian Operators",
+          "prerequisites": ["qm_011", "linalg_022"],
+          "learning_objectives": [
+            "Represent physical observables as Hermitian operators",
+            "Prove that eigenvalues of Hermitian operators are real and eigenstates are orthogonal",
+            "Compute expectation values ⟨A⟩ = ⟨ψ|Â|ψ⟩ and standard deviations"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_013",
+          "title": "The Generalized Uncertainty Principle",
+          "prerequisites": ["qm_012"],
+          "learning_objectives": [
+            "Derive the generalized uncertainty relation ΔA ΔB ≥ ½|⟨[Â,B̂]⟩|",
+            "Compute commutators of common operators (x̂, p̂, L̂, Ĥ)",
+            "Identify compatible observables (commuting operators) and their simultaneous eigenstates"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_014",
+          "title": "Time Evolution and the Schrodinger vs Heisenberg Pictures",
+          "prerequisites": ["qm_012"],
+          "learning_objectives": [
+            "Express time evolution using the unitary operator U(t) = e^{−iĤt/ℏ}",
+            "State Ehrenfest's theorem relating quantum expectation values to classical equations of motion",
+            "Distinguish between the Schrodinger picture and the Heisenberg picture of time evolution"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "qm_m05",
+      "title": "Quantum Mechanics in Three Dimensions",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "qm_015",
+          "title": "The 3D Schrodinger Equation and Separation in Spherical Coordinates",
+          "prerequisites": ["qm_005", "mvc_022"],
+          "learning_objectives": [
+            "Write the time-independent Schrodinger equation in spherical coordinates",
+            "Separate the equation into radial and angular parts",
+            "Identify the angular solutions as spherical harmonics Yₗᵐ(θ,φ)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_016",
+          "title": "Angular Momentum in Quantum Mechanics",
+          "prerequisites": ["qm_015", "qm_013", "mech_018"],
+          "learning_objectives": [
+            "Derive the commutation relations for angular momentum operators [L̂ᵢ, L̂ⱼ] = iℏε_ijk L̂ₖ",
+            "Solve the eigenvalue problem for L̂² and L̂_z using ladder operators",
+            "Identify the quantum numbers l and m and their allowed values"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_017",
+          "title": "The Hydrogen Atom",
+          "prerequisites": ["qm_015", "qm_016", "diffeq_026"],
+          "learning_objectives": [
+            "Solve the radial equation for the Coulomb potential to find hydrogen energy levels Eₙ = −13.6/n² eV",
+            "Identify the quantum numbers n, l, m and their relationship to orbitals",
+            "Sketch radial wave functions and probability distributions for low-n states"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "qm_m06",
+      "title": "Spin and Addition of Angular Momentum",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "qm_018",
+          "title": "Spin-½ and the Pauli Matrices",
+          "prerequisites": ["qm_016", "linalg_003"],
+          "learning_objectives": [
+            "Introduce spin as an intrinsic angular momentum with no classical analog",
+            "Represent spin-½ states as two-component spinors and spin operators as Pauli matrices",
+            "Compute expectation values and probabilities for spin measurements along arbitrary axes"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_019",
+          "title": "Addition of Angular Momentum",
+          "prerequisites": ["qm_018"],
+          "learning_objectives": [
+            "Add two angular momenta using Clebsch-Gordan coefficients",
+            "Determine the allowed values of total angular momentum quantum numbers",
+            "Apply angular momentum addition to spin-orbit coupling in hydrogen"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_020",
+          "title": "The Stern-Gerlach Experiment and Measurement",
+          "prerequisites": ["qm_018"],
+          "learning_objectives": [
+            "Describe the Stern-Gerlach experiment and its demonstration of spin quantization",
+            "Analyze sequential Stern-Gerlach measurements and state collapse",
+            "Discuss the measurement problem and the projection postulate"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "qm_m07",
+      "title": "Identical Particles",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "qm_021",
+          "title": "Symmetry of Multi-Particle Wave Functions",
+          "prerequisites": ["qm_018", "thermo_019"],
+          "learning_objectives": [
+            "Construct symmetric (bosonic) and antisymmetric (fermionic) multi-particle wave functions",
+            "Write the two-particle wave function as a Slater determinant for fermions",
+            "Explain exchange degeneracy and its resolution by symmetrization"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_022",
+          "title": "The Pauli Exclusion Principle and the Periodic Table",
+          "prerequisites": ["qm_021", "qm_017"],
+          "learning_objectives": [
+            "State the Pauli exclusion principle for fermions",
+            "Apply the aufbau principle and Hund's rules to determine electron configurations",
+            "Explain the structure of the periodic table using quantum numbers and the exclusion principle"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_023",
+          "title": "Exchange Forces and the Helium Atom",
+          "prerequisites": ["qm_022"],
+          "learning_objectives": [
+            "Describe the exchange interaction and its effect on the energy of multi-electron states",
+            "Analyze the ground state and first excited states of helium (singlet and triplet)",
+            "Apply variational methods to estimate the ground-state energy of helium"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "qm_m08",
+      "title": "Time-Independent Perturbation Theory",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "qm_024",
+          "title": "Non-Degenerate Perturbation Theory",
+          "prerequisites": ["qm_012", "qm_017"],
+          "learning_objectives": [
+            "Derive first-order corrections to energy E_n^(1) = ⟨n⁰|Ĥ'|n⁰⟩ and the wave function",
+            "Compute second-order energy corrections using summation over unperturbed states",
+            "Apply perturbation theory to the ground state of helium (first-order energy correction)"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_025",
+          "title": "Degenerate Perturbation Theory",
+          "prerequisites": ["qm_024", "linalg_016"],
+          "learning_objectives": [
+            "Identify when degenerate perturbation theory is necessary",
+            "Diagonalize the perturbation matrix within the degenerate subspace",
+            "Apply degenerate perturbation theory to the Stark effect in hydrogen"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_026",
+          "title": "Fine Structure of Hydrogen",
+          "prerequisites": ["qm_025", "qm_019", "mech_038"],
+          "learning_objectives": [
+            "Calculate the relativistic kinetic energy correction to hydrogen energy levels",
+            "Calculate the spin-orbit coupling correction using degenerate perturbation theory",
+            "Derive the fine structure formula and compare energy level splittings to spectral data"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "qm_m09",
+      "title": "Time-Dependent Perturbation Theory and Transitions",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "qm_027",
+          "title": "Time-Dependent Perturbation Theory",
+          "prerequisites": ["qm_014", "qm_024"],
+          "learning_objectives": [
+            "Derive the transition amplitude to first order for a time-dependent perturbation",
+            "Apply the result to sudden and adiabatic perturbations",
+            "Compute transition probabilities for sinusoidal perturbations"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_028",
+          "title": "Fermi's Golden Rule",
+          "prerequisites": ["qm_027"],
+          "learning_objectives": [
+            "Derive Fermi's Golden Rule for the transition rate to a continuum of final states",
+            "Apply Fermi's Golden Rule to calculate photoelectric effect transition rates",
+            "Identify the role of the density of states in determining transition rates"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_029",
+          "title": "Selection Rules and Spontaneous Emission",
+          "prerequisites": ["qm_028", "qm_016"],
+          "learning_objectives": [
+            "Derive electric dipole selection rules Δl = ±1, Δm = 0, ±1 from matrix elements",
+            "Apply Einstein's A and B coefficients to relate spontaneous and stimulated emission",
+            "Compute spontaneous emission rates for hydrogen transitions"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "qm_m10",
+      "title": "Entanglement and Quantum Information",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "qm_030",
+          "title": "Quantum Entanglement and Bell's Theorem",
+          "prerequisites": ["qm_018", "qm_021"],
+          "learning_objectives": [
+            "Define entangled states and distinguish them from product states",
+            "Derive the Bell (CHSH) inequality from local hidden variable assumptions",
+            "Explain how quantum mechanics violates Bell's inequality and the implications for locality"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_031",
+          "title": "Density Matrices and Mixed States",
+          "prerequisites": ["qm_030", "linalg_003"],
+          "learning_objectives": [
+            "Define the density matrix ρ = Σ pᵢ |ψᵢ⟩⟨ψᵢ| for pure and mixed states",
+            "Compute expectation values and time evolution using the density matrix",
+            "Perform partial traces to describe subsystems of entangled states"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_032",
+          "title": "Qubits and Quantum Gates",
+          "prerequisites": ["qm_031", "linalg_014"],
+          "learning_objectives": [
+            "Represent qubit states on the Bloch sphere",
+            "Define and apply common quantum gates (Hadamard, CNOT, Pauli, phase)",
+            "Analyze simple quantum circuits and compute output states"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "qm_proj_01",
+      "title": "Numerical Solution of the 1D Schrodinger Equation",
+      "description": "Implement a numerical solver for the time-independent Schrodinger equation in arbitrary 1D potentials. Compute energy eigenvalues and wave functions for the harmonic oscillator, finite well, and double well, and verify against analytic results.",
+      "required_concepts": ["qm_007", "qm_008", "qm_010"],
+      "learning_objectives": [
+        "Discretize the Schrodinger equation and solve the resulting matrix eigenvalue problem",
+        "Validate numerical results against known analytic solutions",
+        "Explore the behavior of wave functions in novel potential shapes"
+      ]
+    },
+    {
+      "id": "qm_proj_02",
+      "title": "Computing the Hydrogen Spectrum with Perturbation Theory",
+      "description": "Calculate the fine structure corrections to hydrogen energy levels using perturbation theory. Compute the Lamb shift qualitatively, and compare theoretical predictions to observed spectral lines.",
+      "required_concepts": ["qm_017", "qm_026", "qm_029"],
+      "learning_objectives": [
+        "Apply both non-degenerate and degenerate perturbation theory to a physical system",
+        "Compute relativistic and spin-orbit corrections and compare magnitudes",
+        "Match theoretical predictions to experimental spectral data"
+      ]
+    },
+    {
+      "id": "qm_proj_03",
+      "title": "Quantum Teleportation Protocol",
+      "description": "Work through the quantum teleportation protocol step by step using Dirac notation. Verify that an arbitrary qubit state is faithfully transmitted using entanglement and classical communication.",
+      "required_concepts": ["qm_030", "qm_032"],
+      "learning_objectives": [
+        "Trace through a multi-qubit quantum circuit using bra-ket algebra",
+        "Apply quantum gates and measurements to entangled states",
+        "Verify that the output state matches the input state after classical correction"
+      ]
+    }
+  ]
+}

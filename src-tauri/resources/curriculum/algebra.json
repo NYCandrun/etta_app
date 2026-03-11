@@ -1,0 +1,755 @@
+{
+  "domain": "algebra",
+  "display_name": "Algebra",
+  "phase": 1,
+  "description": "Foundation of mathematical reasoning. Covers the real number system, variables, equations, inequalities, polynomials, rational and radical expressions, quadratics, and an introduction to functions.",
+  "prerequisites": [],
+  "modules": [
+    {
+      "id": "alg_m01",
+      "title": "Numbers and Operations",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "alg_001",
+          "title": "Real Number System",
+          "prerequisites": [],
+          "learning_objectives": [
+            "Classify numbers as natural, whole, integer, rational, or irrational",
+            "Place real numbers on a number line",
+            "Identify the properties of real numbers: commutative, associative, distributive, identity, and inverse"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_002",
+          "title": "Order of Operations",
+          "prerequisites": ["alg_001"],
+          "learning_objectives": [
+            "Evaluate numerical expressions using the standard order of operations (PEMDAS)",
+            "Simplify expressions containing nested grouping symbols",
+            "Identify and correct common order-of-operations errors"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_003",
+          "title": "Absolute Value and Distance",
+          "prerequisites": ["alg_001"],
+          "learning_objectives": [
+            "Compute the absolute value of any real number",
+            "Interpret absolute value as distance from zero on the number line",
+            "Calculate the distance between two points on a number line using absolute value"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_004",
+          "title": "Properties of Integer Exponents",
+          "prerequisites": ["alg_002"],
+          "learning_objectives": [
+            "Evaluate expressions with positive, negative, and zero exponents",
+            "Apply the product rule, quotient rule, and power rule for integer exponents",
+            "Convert between standard notation and scientific notation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_005",
+          "title": "Operations with Signed Numbers",
+          "prerequisites": ["alg_001", "alg_003"],
+          "learning_objectives": [
+            "Add, subtract, multiply, and divide positive and negative rational numbers",
+            "Apply the rules of signs in multi-step calculations",
+            "Evaluate expressions involving combinations of signed-number operations"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "alg_m02",
+      "title": "Variables and Expressions",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "alg_006",
+          "title": "Variables and Algebraic Expressions",
+          "prerequisites": ["alg_002", "alg_005"],
+          "learning_objectives": [
+            "Translate verbal phrases into algebraic expressions",
+            "Evaluate algebraic expressions by substituting given values for variables",
+            "Distinguish between expressions, equations, and identities"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_007",
+          "title": "Combining Like Terms",
+          "prerequisites": ["alg_006"],
+          "learning_objectives": [
+            "Identify like terms in an algebraic expression",
+            "Simplify expressions by combining like terms",
+            "Rearrange and group terms to simplify multi-variable expressions"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_008",
+          "title": "Distributive Property",
+          "prerequisites": ["alg_007"],
+          "learning_objectives": [
+            "Apply the distributive property to expand expressions",
+            "Combine distribution with like-term collection to simplify expressions",
+            "Extend the distributive property to expressions with multiple grouping levels"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_009",
+          "title": "Evaluating and Simplifying Formulas",
+          "prerequisites": ["alg_008"],
+          "learning_objectives": [
+            "Evaluate common formulas (area, perimeter, temperature conversion) for given inputs",
+            "Rearrange simple formulas to solve for a specified variable",
+            "Identify domain restrictions on formulas involving division or square roots"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "alg_m03",
+      "title": "Linear Equations",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "alg_010",
+          "title": "Solving One-Variable Linear Equations",
+          "prerequisites": ["alg_008"],
+          "learning_objectives": [
+            "Solve linear equations using inverse operations",
+            "Solve equations that require distribution and combining like terms",
+            "Verify solutions by substituting back into the original equation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_011",
+          "title": "Equations with Fractions and Decimals",
+          "prerequisites": ["alg_010"],
+          "learning_objectives": [
+            "Clear fractions from an equation by multiplying by the least common denominator",
+            "Solve equations containing decimal coefficients",
+            "Determine whether an equation is conditional, an identity, or a contradiction"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_012",
+          "title": "Literal Equations and Formulas",
+          "prerequisites": ["alg_010"],
+          "learning_objectives": [
+            "Solve a literal equation for a specified variable",
+            "Rearrange physics and geometry formulas to isolate any variable",
+            "Apply formula rearrangement to unit-conversion and rate problems"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_013",
+          "title": "Linear Word Problems",
+          "prerequisites": ["alg_011", "alg_012"],
+          "learning_objectives": [
+            "Define a variable and set up a linear equation from a word problem",
+            "Solve mixture, rate, and consecutive-integer problems",
+            "Interpret and validate the solution in the original problem context"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_014",
+          "title": "Proportions and Variation",
+          "prerequisites": ["alg_011"],
+          "learning_objectives": [
+            "Solve proportions using cross-multiplication",
+            "Model and solve direct-variation and inverse-variation problems",
+            "Apply proportional reasoning to scale and similar-figure problems"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "alg_m04",
+      "title": "Inequalities",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "alg_015",
+          "title": "Solving Linear Inequalities",
+          "prerequisites": ["alg_010"],
+          "learning_objectives": [
+            "Solve one-variable linear inequalities, reversing the sign when multiplying or dividing by a negative",
+            "Express solutions in interval notation and graph them on a number line",
+            "Translate inequality word problems into mathematical statements and solve them"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_016",
+          "title": "Compound Inequalities",
+          "prerequisites": ["alg_015"],
+          "learning_objectives": [
+            "Solve compound inequalities joined by AND (intersection)",
+            "Solve compound inequalities joined by OR (union)",
+            "Graph compound inequality solution sets and express them in interval notation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_017",
+          "title": "Absolute Value Equations",
+          "prerequisites": ["alg_003", "alg_010"],
+          "learning_objectives": [
+            "Solve equations of the form |ax + b| = c by splitting into two cases",
+            "Identify absolute value equations that have no solution",
+            "Solve absolute value equations with expressions on both sides"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_018",
+          "title": "Absolute Value Inequalities",
+          "prerequisites": ["alg_016", "alg_017"],
+          "learning_objectives": [
+            "Solve |ax + b| < c as a compound AND inequality",
+            "Solve |ax + b| > c as a compound OR inequality",
+            "Graph solutions and express them in interval notation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "alg_m05",
+      "title": "Graphing Linear Functions",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "alg_019",
+          "title": "The Coordinate Plane",
+          "prerequisites": ["alg_001"],
+          "learning_objectives": [
+            "Plot and identify ordered pairs in all four quadrants",
+            "Calculate the distance between two points using the distance formula",
+            "Find the midpoint of a line segment given its endpoints"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_020",
+          "title": "Slope of a Line",
+          "prerequisites": ["alg_005", "alg_019"],
+          "learning_objectives": [
+            "Calculate slope from two points using the slope formula",
+            "Interpret slope as a rate of change in applied contexts",
+            "Classify lines as having positive, negative, zero, or undefined slope"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_021",
+          "title": "Slope-Intercept Form",
+          "prerequisites": ["alg_010", "alg_020"],
+          "learning_objectives": [
+            "Write a linear equation in slope-intercept form y = mx + b",
+            "Graph a line given its slope and y-intercept",
+            "Convert a linear equation from standard form to slope-intercept form"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_022",
+          "title": "Point-Slope and Standard Forms",
+          "prerequisites": ["alg_021"],
+          "learning_objectives": [
+            "Write a linear equation in point-slope form given a point and a slope",
+            "Convert between slope-intercept, point-slope, and standard form",
+            "Write the equation of a line passing through two given points"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_023",
+          "title": "Parallel and Perpendicular Lines",
+          "prerequisites": ["alg_022"],
+          "learning_objectives": [
+            "Determine whether two lines are parallel, perpendicular, or neither from their slopes",
+            "Write the equation of a line parallel to a given line through a given point",
+            "Write the equation of a line perpendicular to a given line through a given point"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "alg_m06",
+      "title": "Systems of Equations",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "alg_024",
+          "title": "Solving Systems by Graphing",
+          "prerequisites": ["alg_021"],
+          "learning_objectives": [
+            "Graph two linear equations on the same coordinate plane and identify the intersection point",
+            "Classify a system as having one solution, no solution, or infinitely many solutions from its graph",
+            "Estimate solutions of systems from graphs and verify algebraically"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_025",
+          "title": "Solving Systems by Substitution",
+          "prerequisites": ["alg_010", "alg_024"],
+          "learning_objectives": [
+            "Solve a system of two linear equations using the substitution method",
+            "Choose the most efficient variable to isolate for substitution",
+            "Identify inconsistent and dependent systems algebraically"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_026",
+          "title": "Solving Systems by Elimination",
+          "prerequisites": ["alg_025"],
+          "learning_objectives": [
+            "Solve a system of two linear equations using the addition/elimination method",
+            "Multiply one or both equations to create opposite coefficients before adding",
+            "Select substitution or elimination based on the structure of the system"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_027",
+          "title": "Applications of Systems",
+          "prerequisites": ["alg_026"],
+          "learning_objectives": [
+            "Set up and solve mixture, rate-time, and break-even problems as systems",
+            "Model real-world scenarios with two variables and two constraints",
+            "Interpret the solution of a system in the context of the application"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_028",
+          "title": "Systems of Linear Inequalities",
+          "prerequisites": ["alg_015", "alg_024"],
+          "learning_objectives": [
+            "Graph a linear inequality in two variables and shade the solution region",
+            "Graph a system of linear inequalities and identify the feasible region",
+            "Determine whether a given point lies in the solution set of a system of inequalities"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "alg_m07",
+      "title": "Exponents and Polynomials",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "alg_029",
+          "title": "Rules of Exponents",
+          "prerequisites": ["alg_004", "alg_008"],
+          "learning_objectives": [
+            "Apply product, quotient, power-of-a-power, and power-of-a-product rules",
+            "Simplify expressions with negative and zero exponents",
+            "Combine multiple exponent rules in a single expression"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_030",
+          "title": "Introduction to Polynomials",
+          "prerequisites": ["alg_007", "alg_029"],
+          "learning_objectives": [
+            "Identify monomials, binomials, and trinomials and state their degree",
+            "Write polynomials in standard form (descending order of degree)",
+            "Evaluate polynomials for given values of the variable"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_031",
+          "title": "Adding and Subtracting Polynomials",
+          "prerequisites": ["alg_030"],
+          "learning_objectives": [
+            "Add polynomials by combining like terms",
+            "Subtract polynomials by distributing the negative sign and combining like terms",
+            "Simplify polynomial expressions involving multiple additions and subtractions"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_032",
+          "title": "Multiplying Polynomials",
+          "prerequisites": ["alg_031"],
+          "learning_objectives": [
+            "Multiply a monomial by a polynomial",
+            "Multiply two binomials using the FOIL method or distribution",
+            "Multiply any two polynomials using the distributive property"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_033",
+          "title": "Special Products",
+          "prerequisites": ["alg_032"],
+          "learning_objectives": [
+            "Expand the square of a binomial: (a + b)² and (a − b)²",
+            "Expand the product of conjugates: (a + b)(a − b) = a² − b²",
+            "Recognize and apply special product patterns to simplify computation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "alg_m08",
+      "title": "Factoring",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "alg_034",
+          "title": "Greatest Common Factor and Factoring by Grouping",
+          "prerequisites": ["alg_032"],
+          "learning_objectives": [
+            "Identify and factor out the greatest common factor (GCF) from a polynomial",
+            "Factor a four-term polynomial by grouping",
+            "Recognize when a polynomial is prime (cannot be factored)"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_035",
+          "title": "Factoring Trinomials (Leading Coefficient 1)",
+          "prerequisites": ["alg_034"],
+          "learning_objectives": [
+            "Factor trinomials of the form x² + bx + c by finding two integers whose product is c and sum is b",
+            "Factor trinomials that require extraction of a GCF before factoring",
+            "Determine when a trinomial with leading coefficient 1 is not factorable over the integers"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_036",
+          "title": "Factoring Trinomials (Leading Coefficient ≠ 1)",
+          "prerequisites": ["alg_035"],
+          "learning_objectives": [
+            "Factor trinomials of the form ax² + bx + c using the ac-method or trial and error",
+            "Apply grouping after splitting the middle term in the ac-method",
+            "Combine GCF extraction with advanced trinomial factoring"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_037",
+          "title": "Factoring Special Forms",
+          "prerequisites": ["alg_033", "alg_034"],
+          "learning_objectives": [
+            "Factor a difference of two squares: a² − b² = (a + b)(a − b)",
+            "Factor a perfect square trinomial: a² ± 2ab + b² = (a ± b)²",
+            "Factor sums and differences of cubes: a³ ± b³"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_038",
+          "title": "General Factoring Strategy",
+          "prerequisites": ["alg_036", "alg_037"],
+          "learning_objectives": [
+            "Apply a systematic factoring strategy: GCF first, then recognize the form",
+            "Factor polynomials that require multiple factoring techniques in sequence",
+            "Verify factoring results by multiplication"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "alg_m09",
+      "title": "Rational Expressions",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "alg_039",
+          "title": "Simplifying Rational Expressions",
+          "prerequisites": ["alg_038"],
+          "learning_objectives": [
+            "Identify values of the variable that make a rational expression undefined",
+            "Simplify rational expressions by factoring and cancelling common factors",
+            "Distinguish between legitimate cancellation and common errors"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_040",
+          "title": "Multiplying and Dividing Rational Expressions",
+          "prerequisites": ["alg_039"],
+          "learning_objectives": [
+            "Multiply rational expressions by factoring, cancelling, and then multiplying",
+            "Divide rational expressions by multiplying by the reciprocal",
+            "Simplify complex fractions involving polynomial expressions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_041",
+          "title": "Adding and Subtracting Rational Expressions",
+          "prerequisites": ["alg_040"],
+          "learning_objectives": [
+            "Find the least common denominator (LCD) of two rational expressions",
+            "Add and subtract rational expressions with unlike denominators",
+            "Simplify the result of addition or subtraction by factoring"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_042",
+          "title": "Solving Rational Equations",
+          "prerequisites": ["alg_041"],
+          "learning_objectives": [
+            "Solve equations containing rational expressions by multiplying through by the LCD",
+            "Identify and exclude extraneous solutions",
+            "Solve applied problems involving rates, work, and proportions"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "alg_m10",
+      "title": "Radicals",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "alg_043",
+          "title": "Simplifying Radical Expressions",
+          "prerequisites": ["alg_029"],
+          "learning_objectives": [
+            "Simplify square roots by factoring out perfect-square factors",
+            "Simplify nth roots using the product and quotient rules for radicals",
+            "Convert between radical notation and rational exponent notation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_044",
+          "title": "Operations with Radicals",
+          "prerequisites": ["alg_043"],
+          "learning_objectives": [
+            "Add and subtract like radical expressions",
+            "Multiply radical expressions, including binomials containing radicals",
+            "Simplify products and sums of radicals into simplest radical form"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_045",
+          "title": "Rationalizing Denominators",
+          "prerequisites": ["alg_044"],
+          "learning_objectives": [
+            "Rationalize a denominator containing a single radical term",
+            "Rationalize a denominator containing a binomial with radicals using conjugates",
+            "Simplify expressions after rationalization"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_046",
+          "title": "Solving Radical Equations",
+          "prerequisites": ["alg_045"],
+          "learning_objectives": [
+            "Solve equations containing one or two radical terms by isolating and squaring",
+            "Identify and reject extraneous solutions introduced by squaring",
+            "Solve radical equations involving rational exponents"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "alg_m11",
+      "title": "Quadratic Equations",
+      "order": 11,
+      "concepts": [
+        {
+          "id": "alg_047",
+          "title": "Solving Quadratics by Factoring",
+          "prerequisites": ["alg_038"],
+          "learning_objectives": [
+            "Apply the zero-product property to solve factored quadratic equations",
+            "Factor and solve quadratic equations of the form ax² + bx + c = 0",
+            "Solve equations reducible to quadratic form by factoring"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_048",
+          "title": "Completing the Square",
+          "prerequisites": ["alg_033", "alg_047"],
+          "learning_objectives": [
+            "Transform a quadratic expression into the form (x + p)² + q",
+            "Solve quadratic equations by completing the square",
+            "Derive the vertex of a parabola by completing the square"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_049",
+          "title": "The Quadratic Formula",
+          "prerequisites": ["alg_043", "alg_048"],
+          "learning_objectives": [
+            "Apply the quadratic formula to solve any quadratic equation",
+            "Use the discriminant to determine the number and type of solutions",
+            "Select the most efficient method for solving a given quadratic equation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_050",
+          "title": "Graphing Quadratic Functions",
+          "prerequisites": ["alg_048", "alg_049"],
+          "learning_objectives": [
+            "Identify the vertex, axis of symmetry, and direction of opening of a parabola",
+            "Graph a quadratic function using its vertex and intercepts",
+            "Convert between standard form and vertex form of a quadratic function"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_051",
+          "title": "Applications of Quadratics",
+          "prerequisites": ["alg_050"],
+          "learning_objectives": [
+            "Model projectile motion and area optimization problems with quadratic equations",
+            "Determine maximum or minimum values using the vertex",
+            "Interpret quadratic solutions in real-world contexts"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "alg_m12",
+      "title": "Functions",
+      "order": 12,
+      "concepts": [
+        {
+          "id": "alg_052",
+          "title": "Function Notation and Evaluation",
+          "prerequisites": ["alg_006", "alg_021"],
+          "learning_objectives": [
+            "Determine whether a relation is a function using the vertical line test",
+            "Evaluate functions using function notation f(x)",
+            "Interpret function notation in applied contexts"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_053",
+          "title": "Domain and Range",
+          "prerequisites": ["alg_052"],
+          "learning_objectives": [
+            "Determine the domain and range of a function from its equation",
+            "Identify domain restrictions from denominators and even roots",
+            "Express domain and range in interval notation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_054",
+          "title": "Function Operations and Composition",
+          "prerequisites": ["alg_053"],
+          "learning_objectives": [
+            "Compute the sum, difference, product, and quotient of two functions",
+            "Evaluate and simplify the composition of two functions (f ∘ g)(x)",
+            "Determine the domain of a composite function"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_055",
+          "title": "Inverse Functions",
+          "prerequisites": ["alg_054"],
+          "learning_objectives": [
+            "Determine whether a function is one-to-one using the horizontal line test",
+            "Find the inverse of a one-to-one function algebraically",
+            "Verify that two functions are inverses by showing f(f⁻¹(x)) = x and f⁻¹(f(x)) = x"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_056",
+          "title": "Transformations of Functions",
+          "prerequisites": ["alg_053"],
+          "learning_objectives": [
+            "Identify and apply vertical and horizontal shifts to function graphs",
+            "Identify and apply reflections across the x-axis and y-axis",
+            "Identify and apply vertical and horizontal stretches and compressions"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "alg_proj_01",
+      "title": "Derive the Quadratic Formula",
+      "description": "Starting from the general quadratic equation ax² + bx + c = 0, derive the quadratic formula by completing the square. Explain each step and justify why the discriminant determines the nature of the solutions.",
+      "required_concepts": ["alg_045", "alg_048", "alg_049"],
+      "learning_objectives": [
+        "Apply the completing the square technique to a general quadratic",
+        "Construct a step-by-step algebraic derivation",
+        "Explain the role of the discriminant in determining solution types"
+      ]
+    },
+    {
+      "id": "alg_proj_02",
+      "title": "Break-Even Analysis for a Small Business",
+      "description": "Model a small business scenario with revenue and cost as linear functions. Find the break-even point using a system of equations, then extend the model with a quadratic revenue curve and analyze profit maximization.",
+      "required_concepts": ["alg_021", "alg_026", "alg_051"],
+      "learning_objectives": [
+        "Set up linear cost and revenue functions from a word problem",
+        "Solve a system of equations to find the break-even point",
+        "Use quadratic optimization to determine maximum profit"
+      ]
+    },
+    {
+      "id": "alg_proj_03",
+      "title": "Cryptography with Function Composition",
+      "description": "Design a simple substitution cipher using function composition. Create an encoding function and its inverse decoding function, then prove they are true inverses.",
+      "required_concepts": ["alg_054", "alg_055"],
+      "learning_objectives": [
+        "Model a real-world encoding process as a function",
+        "Compose functions to build multi-step transformations",
+        "Derive and verify an inverse function"
+      ]
+    },
+    {
+      "id": "alg_proj_04",
+      "title": "Projectile Motion Investigation",
+      "description": "Analyze the trajectory of a launched projectile. Derive the height function from given initial conditions, find maximum height, time of flight, and range. Present results with graphs and interpretations.",
+      "required_concepts": ["alg_050", "alg_051", "alg_019"],
+      "learning_objectives": [
+        "Model a physical scenario with a quadratic function",
+        "Calculate vertex coordinates and interpret them as max height and optimal time",
+        "Graph the trajectory and annotate key features"
+      ]
+    }
+  ]
+}
