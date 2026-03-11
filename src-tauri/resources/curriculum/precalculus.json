@@ -1,0 +1,361 @@
+{
+  "domain": "precalculus",
+  "display_name": "Pre-Calculus",
+  "phase": 1,
+  "description": "Bridge between algebra/trigonometry and calculus. Covers advanced function analysis, polynomial and rational functions, exponential and logarithmic functions, sequences, series, and limits.",
+  "prerequisites": ["algebra", "trigonometry"],
+  "modules": [
+    {
+      "id": "precalc_m01",
+      "title": "Advanced Function Analysis",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "precalc_001",
+          "title": "Piecewise and Step Functions",
+          "prerequisites": ["alg_052", "alg_053"],
+          "learning_objectives": [
+            "Evaluate and graph piecewise-defined functions",
+            "Determine continuity at the boundary points of a piecewise function",
+            "Model real-world scenarios using piecewise functions (tax brackets, shipping rates)"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "precalc_002",
+          "title": "Symmetry, End Behavior, and Leading-Term Analysis",
+          "prerequisites": ["alg_056", "alg_030"],
+          "learning_objectives": [
+            "Determine whether a function is even, odd, or neither algebraically and graphically",
+            "Describe the end behavior of a polynomial function using leading-term analysis",
+            "Use arrow notation to express end behavior formally"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "precalc_003",
+          "title": "Rates of Change and the Difference Quotient",
+          "prerequisites": ["alg_054", "alg_020"],
+          "learning_objectives": [
+            "Calculate the average rate of change of a function over an interval",
+            "Compute and simplify the difference quotient [f(x+h) − f(x)] / h",
+            "Interpret the difference quotient as a precursor to the derivative"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_004",
+          "title": "Combining Transformations and Building Functions",
+          "prerequisites": ["alg_056", "alg_054"],
+          "learning_objectives": [
+            "Apply sequences of transformations to any parent function",
+            "Build complex functions from simpler ones using arithmetic and composition",
+            "Determine the domain of the resulting combined function"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "precalc_m02",
+      "title": "Polynomial and Rational Functions",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "precalc_005",
+          "title": "Graphs of Polynomial Functions",
+          "prerequisites": ["precalc_002", "alg_050"],
+          "learning_objectives": [
+            "Sketch the graph of a polynomial using zeros, multiplicity, and end behavior",
+            "Determine the maximum number of turning points from the degree",
+            "Identify the effect of multiplicity on the graph at each zero"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "precalc_006",
+          "title": "Polynomial Division and the Remainder Theorem",
+          "prerequisites": ["alg_032", "precalc_005"],
+          "learning_objectives": [
+            "Divide polynomials using long division and synthetic division",
+            "Apply the Remainder Theorem to evaluate polynomials efficiently",
+            "Apply the Factor Theorem to determine whether a linear expression is a factor"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_007",
+          "title": "Zeros of Polynomial Functions",
+          "prerequisites": ["precalc_006", "alg_049"],
+          "learning_objectives": [
+            "Apply the Rational Zero Theorem to list possible rational zeros",
+            "Use Descartes' Rule of Signs to predict the number of positive and negative real zeros",
+            "Find all zeros of a polynomial using a combination of theorems and synthetic division"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_008",
+          "title": "Rational Functions and Asymptotes",
+          "prerequisites": ["alg_039", "precalc_005"],
+          "learning_objectives": [
+            "Identify vertical, horizontal, and oblique asymptotes of a rational function",
+            "Determine holes (removable discontinuities) in rational functions",
+            "Graph rational functions using intercepts, asymptotes, and sign analysis"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_009",
+          "title": "Polynomial and Rational Inequalities",
+          "prerequisites": ["precalc_007", "precalc_008", "alg_015"],
+          "learning_objectives": [
+            "Solve polynomial inequalities using sign charts and test points",
+            "Solve rational inequalities by finding critical values and testing intervals",
+            "Express solutions in interval notation and interpret them graphically"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "precalc_m03",
+      "title": "Exponential and Logarithmic Functions",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "precalc_010",
+          "title": "Exponential Functions and Their Graphs",
+          "prerequisites": ["alg_029", "alg_056"],
+          "learning_objectives": [
+            "Graph exponential functions of the form f(x) = a·bˣ and identify key features",
+            "Distinguish between exponential growth and decay based on the base",
+            "Apply transformations to exponential parent functions"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "precalc_011",
+          "title": "Logarithmic Functions and Their Graphs",
+          "prerequisites": ["precalc_010", "alg_055"],
+          "learning_objectives": [
+            "Define a logarithm as the inverse of an exponential function",
+            "Evaluate logarithms and convert between logarithmic and exponential forms",
+            "Graph logarithmic functions and identify domain, range, and asymptotes"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "precalc_012",
+          "title": "Properties of Logarithms",
+          "prerequisites": ["precalc_011"],
+          "learning_objectives": [
+            "Apply the product, quotient, and power rules of logarithms",
+            "Expand and condense logarithmic expressions",
+            "Apply the change-of-base formula to evaluate logarithms with any base"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_013",
+          "title": "Exponential and Logarithmic Equations",
+          "prerequisites": ["precalc_012"],
+          "learning_objectives": [
+            "Solve exponential equations by taking logarithms of both sides",
+            "Solve logarithmic equations by converting to exponential form",
+            "Check for and exclude extraneous solutions in logarithmic equations"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_014",
+          "title": "Exponential Growth and Decay Models",
+          "prerequisites": ["precalc_013"],
+          "learning_objectives": [
+            "Model population growth, radioactive decay, and compound interest with exponential functions",
+            "Solve for time, rate, or initial amount in exponential models",
+            "Compare continuous growth (Pert) with discrete compounding models"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "precalc_m04",
+      "title": "Sequences and Series",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "precalc_015",
+          "title": "Arithmetic Sequences and Series",
+          "prerequisites": ["alg_010", "alg_052"],
+          "learning_objectives": [
+            "Identify an arithmetic sequence and find its common difference",
+            "Write the explicit and recursive formulas for an arithmetic sequence",
+            "Compute the sum of the first n terms of an arithmetic series"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "precalc_016",
+          "title": "Geometric Sequences and Series",
+          "prerequisites": ["precalc_015", "alg_029"],
+          "learning_objectives": [
+            "Identify a geometric sequence and find its common ratio",
+            "Write explicit and recursive formulas for a geometric sequence",
+            "Compute finite geometric sums and determine convergence of infinite geometric series"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_017",
+          "title": "The Binomial Theorem",
+          "prerequisites": ["precalc_016", "alg_033"],
+          "learning_objectives": [
+            "Compute binomial coefficients using factorials and Pascal's triangle",
+            "Expand (a + b)ⁿ using the Binomial Theorem",
+            "Find a specific term in a binomial expansion without full expansion"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "precalc_m05",
+      "title": "Conic Sections",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "precalc_018",
+          "title": "Parabolas",
+          "prerequisites": ["alg_050", "alg_048"],
+          "learning_objectives": [
+            "Write the equation of a parabola with a vertical or horizontal axis of symmetry",
+            "Identify the vertex, focus, and directrix from the equation",
+            "Convert between standard and general forms of a parabola equation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_019",
+          "title": "Ellipses",
+          "prerequisites": ["precalc_018", "alg_019"],
+          "learning_objectives": [
+            "Write the standard form equation of an ellipse centered at the origin or (h, k)",
+            "Identify the center, vertices, co-vertices, and foci of an ellipse",
+            "Graph an ellipse and determine its eccentricity"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_020",
+          "title": "Hyperbolas",
+          "prerequisites": ["precalc_019"],
+          "learning_objectives": [
+            "Write the standard form equation of a hyperbola centered at the origin or (h, k)",
+            "Identify the center, vertices, foci, and asymptotes of a hyperbola",
+            "Graph a hyperbola and distinguish it from an ellipse"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_021",
+          "title": "General Conic Sections and Classification",
+          "prerequisites": ["precalc_020"],
+          "learning_objectives": [
+            "Classify a conic section from the general second-degree equation Ax² + Bxy + Cy² + Dx + Ey + F = 0",
+            "Complete the square to convert general form to standard form",
+            "Identify degenerate conics"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "precalc_m06",
+      "title": "Introduction to Limits",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "precalc_022",
+          "title": "Intuitive Understanding of Limits",
+          "prerequisites": ["precalc_003", "precalc_008"],
+          "learning_objectives": [
+            "Estimate the limit of a function from a table of values and from a graph",
+            "Distinguish between the limit of a function at a point and the function's value at that point",
+            "Identify one-sided limits and determine when a two-sided limit does not exist"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "precalc_023",
+          "title": "Computing Limits Algebraically",
+          "prerequisites": ["precalc_022", "alg_039"],
+          "learning_objectives": [
+            "Evaluate limits using direct substitution",
+            "Resolve 0/0 indeterminate forms by factoring, rationalizing, or simplifying",
+            "Apply the limit laws (sum, product, quotient, power) to evaluate limits"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_024",
+          "title": "Limits at Infinity",
+          "prerequisites": ["precalc_023", "precalc_008"],
+          "learning_objectives": [
+            "Evaluate limits of rational functions as x → ±∞ by comparing degrees",
+            "Determine horizontal asymptotes from limits at infinity",
+            "Evaluate limits at infinity for functions involving radicals"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "precalc_025",
+          "title": "Continuity",
+          "prerequisites": ["precalc_023", "precalc_001"],
+          "learning_objectives": [
+            "State the three conditions for continuity at a point",
+            "Determine intervals on which a function is continuous",
+            "Apply the Intermediate Value Theorem to show the existence of zeros"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "precalc_proj_01",
+      "title": "Modeling Epidemics with Exponential and Logistic Growth",
+      "description": "Compare exponential and logistic models for the spread of an infectious disease. Fit both models to simulated data, analyze their predictions, and discuss when each model is appropriate.",
+      "required_concepts": ["precalc_014", "precalc_008"],
+      "learning_objectives": [
+        "Build exponential and rational function models from data",
+        "Compare model predictions to identify strengths and limitations",
+        "Interpret horizontal asymptotes as carrying capacity in a logistic model"
+      ]
+    },
+    {
+      "id": "precalc_proj_02",
+      "title": "Conic Sections in Orbital Mechanics",
+      "description": "Explore how the eccentricity of a conic section determines the shape of a planetary orbit. Plot elliptical and hyperbolic paths and relate their parameters to orbital energy.",
+      "required_concepts": ["precalc_019", "precalc_020", "precalc_021"],
+      "learning_objectives": [
+        "Classify orbits by eccentricity (circular, elliptical, parabolic, hyperbolic)",
+        "Relate geometric parameters of conics to physical properties of orbits",
+        "Graph conic sections with specified eccentricities and foci"
+      ]
+    },
+    {
+      "id": "precalc_proj_03",
+      "title": "Infinite Series Paradoxes: Zeno to Fractals",
+      "description": "Investigate Zeno's paradox, the Koch snowflake, and Sierpinski triangle using geometric series. Prove convergence or divergence and compute exact values for perimeter and area.",
+      "required_concepts": ["precalc_016", "precalc_017"],
+      "learning_objectives": [
+        "Apply infinite geometric series to classical paradoxes",
+        "Calculate perimeters and areas of fractal constructions at the nth iteration",
+        "Determine whether the infinite construction converges to a finite value"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,557 @@
+{
+  "domain": "classical_mechanics",
+  "display_name": "Classical Mechanics",
+  "phase": 3,
+  "description": "The physics of motion and forces. Covers Newtonian mechanics, energy, momentum, rotational dynamics, oscillations, gravitation, and the Lagrangian and Hamiltonian formulations.",
+  "prerequisites": ["multivariable_calculus", "differential_equations", "linear_algebra"],
+  "modules": [
+    {
+      "id": "mech_m01",
+      "title": "Kinematics in One and Two Dimensions",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "mech_001",
+          "title": "Position, Velocity, and Acceleration",
+          "prerequisites": ["calc1_005", "calc1_008"],
+          "learning_objectives": [
+            "Define position, displacement, velocity, and acceleration as derivatives of position with respect to time",
+            "Derive kinematic equations for constant acceleration from integration",
+            "Interpret position-time, velocity-time, and acceleration-time graphs"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_002",
+          "title": "Projectile Motion",
+          "prerequisites": ["mech_001", "trig_006"],
+          "learning_objectives": [
+            "Decompose projectile motion into independent horizontal and vertical components",
+            "Derive equations for range, maximum height, and time of flight",
+            "Solve projectile problems with non-zero launch height and angled surfaces"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_003",
+          "title": "Relative Motion and Reference Frames",
+          "prerequisites": ["mech_001", "trig_026"],
+          "learning_objectives": [
+            "Apply Galilean velocity addition for objects in different reference frames",
+            "Solve problems involving relative velocity in one and two dimensions",
+            "Distinguish between inertial and non-inertial reference frames"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_004",
+          "title": "Curvilinear Motion and Polar Coordinates",
+          "prerequisites": ["mech_002", "mvc_007"],
+          "learning_objectives": [
+            "Express velocity and acceleration in polar coordinates (radial and tangential components)",
+            "Analyze circular motion using angular velocity and centripetal acceleration",
+            "Derive the acceleration vector in polar coordinates: a = (r̈ − rθ̇²)r̂ + (rθ̈ + 2ṙθ̇)θ̂"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mech_m02",
+      "title": "Newton's Laws of Motion",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "mech_005",
+          "title": "Newton's Three Laws",
+          "prerequisites": ["mech_001"],
+          "learning_objectives": [
+            "State Newton's three laws of motion and identify the physical content of each",
+            "Distinguish between mass and weight and between contact and field forces",
+            "Draw free-body diagrams for systems of interacting objects"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_006",
+          "title": "Applications of Newton's Second Law",
+          "prerequisites": ["mech_005", "alg_026"],
+          "learning_objectives": [
+            "Apply F = ma to solve problems involving friction, normal forces, and tension",
+            "Analyze systems with multiple objects connected by strings or in contact",
+            "Solve inclined plane problems with and without friction"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_007",
+          "title": "Circular Motion and Centripetal Force",
+          "prerequisites": ["mech_004", "mech_006"],
+          "learning_objectives": [
+            "Apply Newton's second law to uniform circular motion problems",
+            "Analyze banked curves, vertical loops, and conical pendulums",
+            "Distinguish between centripetal acceleration and centrifugal effects in rotating frames"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_008",
+          "title": "Drag Forces and Velocity-Dependent Forces",
+          "prerequisites": ["mech_006", "diffeq_004"],
+          "learning_objectives": [
+            "Model linear and quadratic drag forces and solve the resulting ODEs",
+            "Derive terminal velocity from the force balance condition",
+            "Analyze motion with drag in both horizontal and vertical contexts"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mech_m03",
+      "title": "Work, Energy, and Conservation Laws",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "mech_009",
+          "title": "Work and Kinetic Energy",
+          "prerequisites": ["mech_006", "calc1_028", "trig_027"],
+          "learning_objectives": [
+            "Define work as a line integral W = ∫F·dr for a variable force",
+            "Derive and apply the work-energy theorem: W_net = ΔKE",
+            "Calculate work done by gravity, spring forces, and friction"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_010",
+          "title": "Potential Energy and Conservative Forces",
+          "prerequisites": ["mech_009", "mvc_026"],
+          "learning_objectives": [
+            "Define potential energy for conservative forces and derive U from F = −∇U",
+            "Verify that a force is conservative using the curl test",
+            "Construct energy diagrams and identify equilibrium points from U(x)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_011",
+          "title": "Conservation of Energy",
+          "prerequisites": ["mech_010"],
+          "learning_objectives": [
+            "Apply conservation of mechanical energy to closed systems",
+            "Incorporate non-conservative forces (friction, drag) using the work-energy theorem",
+            "Solve problems combining gravitational and elastic potential energy"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mech_m04",
+      "title": "Momentum and Collisions",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "mech_012",
+          "title": "Linear Momentum and Impulse",
+          "prerequisites": ["mech_005", "calc1_028"],
+          "learning_objectives": [
+            "Define linear momentum and state Newton's second law as F = dp/dt",
+            "Compute impulse as J = ∫F dt and apply the impulse-momentum theorem",
+            "Analyze force-time graphs to determine impulse"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_013",
+          "title": "Conservation of Momentum and Collisions",
+          "prerequisites": ["mech_012", "mech_011"],
+          "learning_objectives": [
+            "Apply conservation of momentum to isolated systems",
+            "Analyze elastic and perfectly inelastic collisions in one and two dimensions",
+            "Use conservation of energy in conjunction with momentum for elastic collisions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_014",
+          "title": "Center of Mass and Rocket Propulsion",
+          "prerequisites": ["mech_013", "calc1_044"],
+          "learning_objectives": [
+            "Calculate the center of mass of discrete and continuous mass distributions",
+            "Apply Newton's second law to the center of mass of a system",
+            "Derive the Tsiolkovsky rocket equation from conservation of momentum"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mech_m05",
+      "title": "Rotational Kinematics and Dynamics",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "mech_015",
+          "title": "Rotational Kinematics",
+          "prerequisites": ["mech_004", "trig_002"],
+          "learning_objectives": [
+            "Define angular displacement, angular velocity, and angular acceleration",
+            "Derive rotational kinematic equations analogous to linear kinematics",
+            "Relate angular and linear quantities (v = rω, a_t = rα)"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_016",
+          "title": "Moment of Inertia",
+          "prerequisites": ["mech_015", "mvc_020"],
+          "learning_objectives": [
+            "Calculate moment of inertia for discrete and continuous mass distributions using integration",
+            "Apply the parallel-axis theorem to find moment of inertia about shifted axes",
+            "Compute moments of inertia for standard shapes (rod, disk, sphere, cylinder)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_017",
+          "title": "Torque and Rotational Dynamics",
+          "prerequisites": ["mech_016", "mvc_003"],
+          "learning_objectives": [
+            "Define torque as τ = r × F and apply Newton's second law for rotation τ = Iα",
+            "Analyze rolling motion (rolling without slipping) combining translation and rotation",
+            "Solve problems involving pulleys, wheels, and gears with rotational inertia"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_018",
+          "title": "Angular Momentum and Its Conservation",
+          "prerequisites": ["mech_017", "mech_012"],
+          "learning_objectives": [
+            "Define angular momentum L = r × p for a particle and L = Iω for rigid bodies",
+            "Apply conservation of angular momentum to collisions and variable-inertia systems",
+            "Analyze precession qualitatively using the torque-angular momentum relation τ = dL/dt"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mech_m06",
+      "title": "Oscillations",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "mech_019",
+          "title": "Simple Harmonic Motion",
+          "prerequisites": ["mech_011", "diffeq_011"],
+          "learning_objectives": [
+            "Derive the SHM equation ẍ + ω²x = 0 from Hooke's law and solve it",
+            "Identify amplitude, frequency, period, and phase of SHM",
+            "Analyze energy oscillation between kinetic and potential in SHM"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_020",
+          "title": "Damped Oscillations",
+          "prerequisites": ["mech_019", "diffeq_015"],
+          "learning_objectives": [
+            "Derive and solve the damped oscillator equation ẍ + 2γẋ + ω₀²x = 0",
+            "Classify motion as underdamped, critically damped, or overdamped",
+            "Calculate the quality factor Q and relate it to energy dissipation rate"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_021",
+          "title": "Forced Oscillations and Resonance",
+          "prerequisites": ["mech_020", "diffeq_016"],
+          "learning_objectives": [
+            "Solve the forced oscillator equation with sinusoidal driving",
+            "Derive the steady-state amplitude and phase as functions of driving frequency",
+            "Analyze resonance curves and the effect of damping on resonance peak width"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mech_022",
+          "title": "Coupled Oscillations and Normal Modes",
+          "prerequisites": ["mech_019", "linalg_015"],
+          "learning_objectives": [
+            "Set up the equations of motion for coupled oscillators as a matrix eigenvalue problem",
+            "Find normal mode frequencies and mode shapes from the eigenvalues and eigenvectors",
+            "Express general motion as a superposition of normal modes"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mech_m07",
+      "title": "Gravitation",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "mech_023",
+          "title": "Newton's Law of Universal Gravitation",
+          "prerequisites": ["mech_006"],
+          "learning_objectives": [
+            "State Newton's law of gravitation and compute gravitational force between two masses",
+            "Derive gravitational acceleration g at the surface and at altitude",
+            "Apply the shell theorem for spherically symmetric mass distributions"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mech_024",
+          "title": "Gravitational Potential Energy and Orbits",
+          "prerequisites": ["mech_023", "mech_010"],
+          "learning_objectives": [
+            "Derive gravitational potential energy U = −GMm/r from the force law",
+            "Calculate escape velocity from energy conservation",
+            "Apply energy and angular momentum conservation to classify orbits (bound vs unbound)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_025",
+          "title": "Kepler's Laws and Orbital Mechanics",
+          "prerequisites": ["mech_024", "mech_018"],
+          "learning_objectives": [
+            "Derive Kepler's three laws from Newton's law of gravitation and angular momentum conservation",
+            "Relate orbital parameters (semi-major axis, eccentricity, period) to energy and angular momentum",
+            "Calculate orbital transfers (Hohmann transfer) using energy conservation"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mech_m08",
+      "title": "Non-Inertial Frames and Fictitious Forces",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "mech_026",
+          "title": "Accelerating and Rotating Reference Frames",
+          "prerequisites": ["mech_003", "mech_007"],
+          "learning_objectives": [
+            "Derive the transformation of acceleration between inertial and non-inertial frames",
+            "Identify and compute centrifugal and Coriolis fictitious forces in a rotating frame",
+            "Apply effective gravity in a rotating frame (e.g., variation of g with latitude)"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mech_027",
+          "title": "Applications of Non-Inertial Frames",
+          "prerequisites": ["mech_026"],
+          "learning_objectives": [
+            "Analyze the Foucault pendulum as evidence of Earth's rotation",
+            "Explain weather patterns (cyclones, trade winds) using the Coriolis effect",
+            "Solve projectile problems on a rotating Earth with Coriolis corrections"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mech_m09",
+      "title": "Rigid Body Dynamics",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "mech_028",
+          "title": "The Inertia Tensor",
+          "prerequisites": ["mech_016", "linalg_003", "linalg_015"],
+          "learning_objectives": [
+            "Define the inertia tensor as a 3×3 symmetric matrix",
+            "Calculate components of the inertia tensor for continuous and discrete mass distributions",
+            "Find principal axes and principal moments of inertia by diagonalizing the inertia tensor"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mech_029",
+          "title": "Euler's Equations of Rigid Body Motion",
+          "prerequisites": ["mech_028", "mech_018"],
+          "learning_objectives": [
+            "Derive Euler's equations for torque-free rotation in the body frame",
+            "Analyze stable and unstable rotation about principal axes (tennis racket theorem)",
+            "Solve Euler's equations for symmetric and asymmetric tops"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mech_m10",
+      "title": "Lagrangian Mechanics",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "mech_030",
+          "title": "Generalized Coordinates and Constraints",
+          "prerequisites": ["mech_006", "mvc_015"],
+          "learning_objectives": [
+            "Identify degrees of freedom and choose generalized coordinates for constrained systems",
+            "Distinguish between holonomic and non-holonomic constraints",
+            "Express kinetic and potential energy in terms of generalized coordinates"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_031",
+          "title": "The Euler-Lagrange Equations",
+          "prerequisites": ["mech_030", "mvc_012"],
+          "learning_objectives": [
+            "Define the Lagrangian L = T − U and derive the Euler-Lagrange equations from Hamilton's principle",
+            "Apply the Euler-Lagrange equations to mechanical systems (pendulum, bead on wire, Atwood machine)",
+            "Identify cyclic coordinates and their associated conserved quantities"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_032",
+          "title": "Symmetries and Conservation Laws (Noether's Theorem)",
+          "prerequisites": ["mech_031"],
+          "learning_objectives": [
+            "State Noether's theorem relating continuous symmetries to conservation laws",
+            "Derive conservation of energy from time-translation symmetry",
+            "Derive conservation of linear and angular momentum from spatial symmetries"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mech_m11",
+      "title": "Hamiltonian Mechanics",
+      "order": 11,
+      "concepts": [
+        {
+          "id": "mech_033",
+          "title": "The Hamiltonian and Hamilton's Equations",
+          "prerequisites": ["mech_031"],
+          "learning_objectives": [
+            "Define the Hamiltonian via the Legendre transform H = Σ pᵢq̇ᵢ − L",
+            "Derive Hamilton's canonical equations: q̇ᵢ = ∂H/∂pᵢ, ṗᵢ = −∂H/∂qᵢ",
+            "Apply Hamilton's equations to solve simple mechanical systems"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mech_034",
+          "title": "Phase Space and Liouville's Theorem",
+          "prerequisites": ["mech_033"],
+          "learning_objectives": [
+            "Represent the state of a system as a point in phase space (q, p)",
+            "Draw and interpret phase space trajectories for simple systems (SHM, pendulum)",
+            "State Liouville's theorem on the incompressibility of phase space flow"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mech_035",
+          "title": "Poisson Brackets",
+          "prerequisites": ["mech_034"],
+          "learning_objectives": [
+            "Define the Poisson bracket {f, g} and compute it for dynamical variables",
+            "Express Hamilton's equations using Poisson brackets: ḟ = {f, H}",
+            "Identify constants of motion from vanishing Poisson brackets with the Hamiltonian"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mech_m12",
+      "title": "Special Relativity",
+      "order": 12,
+      "concepts": [
+        {
+          "id": "mech_036",
+          "title": "Postulates and Lorentz Transformations",
+          "prerequisites": ["mech_003", "linalg_003"],
+          "learning_objectives": [
+            "State Einstein's two postulates of special relativity",
+            "Derive the Lorentz transformation equations from the postulates",
+            "Apply Lorentz transformations to relate space and time coordinates between inertial frames"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_037",
+          "title": "Time Dilation, Length Contraction, and Simultaneity",
+          "prerequisites": ["mech_036"],
+          "learning_objectives": [
+            "Derive and apply the time dilation formula Δt = γΔt₀",
+            "Derive and apply the length contraction formula L = L₀/γ",
+            "Explain and compute the relativity of simultaneity"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mech_038",
+          "title": "Relativistic Momentum and Energy",
+          "prerequisites": ["mech_037", "mech_012"],
+          "learning_objectives": [
+            "Define relativistic momentum p = γmv and relativistic kinetic energy",
+            "Derive and apply the energy-momentum relation E² = (pc)² + (mc²)²",
+            "Solve collision and decay problems using relativistic conservation laws"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mech_039",
+          "title": "Four-Vectors and Spacetime",
+          "prerequisites": ["mech_038", "linalg_012"],
+          "learning_objectives": [
+            "Define the spacetime interval and classify events as timelike, spacelike, or lightlike",
+            "Construct four-vectors (position, momentum, force) and compute Lorentz-invariant quantities",
+            "Apply four-momentum conservation to relativistic collision problems"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "mech_proj_01",
+      "title": "Simulating the Three-Body Problem",
+      "description": "Numerically integrate the equations of motion for three gravitationally interacting bodies. Explore different initial conditions and identify chaotic behavior, stable configurations, and Lagrange points.",
+      "required_concepts": ["mech_023", "mech_031", "diffeq_010"],
+      "learning_objectives": [
+        "Set up the coupled ODEs for N gravitating bodies",
+        "Implement a numerical integrator (e.g., Runge-Kutta) and analyze energy conservation",
+        "Identify sensitivity to initial conditions as a signature of chaos"
+      ]
+    },
+    {
+      "id": "mech_proj_02",
+      "title": "Analyzing a Gyroscope with Lagrangian Mechanics",
+      "description": "Derive the equations of motion for a symmetric spinning top using Euler angles and the Lagrangian. Analyze precession, nutation, and the sleeping top condition.",
+      "required_concepts": ["mech_029", "mech_031", "mech_032"],
+      "learning_objectives": [
+        "Define and apply Euler angles as generalized coordinates for a rigid body",
+        "Derive equations of motion from the Lagrangian with cyclic coordinates",
+        "Analyze the qualitative behavior of gyroscopic precession and nutation"
+      ]
+    },
+    {
+      "id": "mech_proj_03",
+      "title": "Relativistic Particle Collider Analysis",
+      "description": "Analyze particle collision data using relativistic kinematics. Compute center-of-mass energies, threshold energies for particle production, and apply four-momentum conservation to reconstruct invariant masses.",
+      "required_concepts": ["mech_038", "mech_039"],
+      "learning_objectives": [
+        "Transform between lab and center-of-mass frames using Lorentz boosts",
+        "Compute threshold energies for particle creation reactions",
+        "Reconstruct invariant mass from decay product momenta"
+      ]
+    }
+  ]
+}

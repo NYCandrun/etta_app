@@ -1,0 +1,444 @@
+{
+  "domain": "linear_algebra",
+  "display_name": "Linear Algebra",
+  "phase": 2,
+  "description": "Study of vector spaces, linear transformations, matrices, and their applications. Covers systems of linear equations, determinants, eigenvalues, orthogonality, and diagonalization.",
+  "prerequisites": ["single_variable_calculus"],
+  "modules": [
+    {
+      "id": "linalg_m01",
+      "title": "Systems of Linear Equations and Matrices",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "linalg_001",
+          "title": "Systems of Linear Equations and Augmented Matrices",
+          "prerequisites": ["alg_026"],
+          "learning_objectives": [
+            "Represent a system of linear equations as an augmented matrix",
+            "Perform elementary row operations on an augmented matrix",
+            "Classify systems as consistent (unique or infinite solutions) or inconsistent"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "linalg_002",
+          "title": "Row Echelon Form and Gaussian Elimination",
+          "prerequisites": ["linalg_001"],
+          "learning_objectives": [
+            "Reduce an augmented matrix to row echelon form (REF) using Gaussian elimination",
+            "Reduce to reduced row echelon form (RREF) using Gauss-Jordan elimination",
+            "Identify pivot positions, free variables, and express solutions parametrically"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "linalg_003",
+          "title": "Matrix Operations",
+          "prerequisites": ["linalg_002"],
+          "learning_objectives": [
+            "Perform matrix addition, scalar multiplication, and matrix multiplication",
+            "Compute the transpose of a matrix and identify symmetric matrices",
+            "Verify that matrix multiplication is associative but not commutative"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "linalg_004",
+          "title": "Matrix Inverses",
+          "prerequisites": ["linalg_003"],
+          "learning_objectives": [
+            "Determine whether a square matrix is invertible",
+            "Compute the inverse of a matrix using row reduction of [A | I]",
+            "Solve linear systems Ax = b by computing x = A⁻¹b when A is invertible"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "linalg_m02",
+      "title": "Determinants",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "linalg_005",
+          "title": "Determinants and Their Properties",
+          "prerequisites": ["linalg_003"],
+          "learning_objectives": [
+            "Compute determinants of 2×2 and 3×3 matrices using cofactor expansion",
+            "Apply properties of determinants (row operations, transpose, product rule)",
+            "Use the determinant to test invertibility of a matrix"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "linalg_006",
+          "title": "Cramer's Rule and the Adjugate",
+          "prerequisites": ["linalg_005", "linalg_004"],
+          "learning_objectives": [
+            "Apply Cramer's Rule to solve n×n systems with a unique solution",
+            "Compute the adjugate (classical adjoint) of a matrix",
+            "Express the inverse of a matrix as A⁻¹ = (1/det A) adj A"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_007",
+          "title": "Geometric Interpretation of the Determinant",
+          "prerequisites": ["linalg_005"],
+          "learning_objectives": [
+            "Interpret the absolute value of the determinant as the scaling factor for area (2D) or volume (3D)",
+            "Relate the sign of the determinant to orientation preservation or reversal",
+            "Use determinants to compute the area of a parallelogram and the volume of a parallelepiped"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "linalg_m03",
+      "title": "Vector Spaces",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "linalg_008",
+          "title": "Vector Spaces and Subspaces",
+          "prerequisites": ["linalg_003", "mvc_002"],
+          "learning_objectives": [
+            "State the axioms of a vector space",
+            "Verify whether a given set with operations is a vector space",
+            "Determine whether a subset of a vector space is a subspace"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_009",
+          "title": "Linear Independence, Span, and Basis",
+          "prerequisites": ["linalg_008"],
+          "learning_objectives": [
+            "Determine whether a set of vectors is linearly independent",
+            "Determine whether a vector is in the span of a given set",
+            "Find a basis for a vector space or subspace"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_010",
+          "title": "Dimension and the Rank-Nullity Theorem",
+          "prerequisites": ["linalg_009", "linalg_002"],
+          "learning_objectives": [
+            "Determine the dimension of a vector space from a basis",
+            "Compute the rank (dimension of column space) and nullity (dimension of null space) of a matrix",
+            "Apply the Rank-Nullity Theorem: rank(A) + nullity(A) = n"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_011",
+          "title": "Column Space, Null Space, and Row Space",
+          "prerequisites": ["linalg_010"],
+          "learning_objectives": [
+            "Find bases for the column space, null space, and row space of a matrix",
+            "Interpret the null space as the solution set of Ax = 0",
+            "Relate the column space to the range of possible outputs b in Ax = b"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "linalg_m04",
+      "title": "Linear Transformations",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "linalg_012",
+          "title": "Linear Transformations and Their Properties",
+          "prerequisites": ["linalg_008", "alg_054"],
+          "learning_objectives": [
+            "Define a linear transformation and verify linearity from the definition",
+            "Determine the image and kernel of a linear transformation",
+            "Compose linear transformations and relate composition to matrix multiplication"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_013",
+          "title": "Matrix Representation of Linear Transformations",
+          "prerequisites": ["linalg_012", "linalg_009"],
+          "learning_objectives": [
+            "Find the standard matrix of a linear transformation from Rⁿ to Rᵐ",
+            "Compute the matrix of a linear transformation with respect to given bases",
+            "Apply change-of-basis matrices to convert between representations"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_014",
+          "title": "Geometric Transformations in R² and R³",
+          "prerequisites": ["linalg_013"],
+          "learning_objectives": [
+            "Identify rotation, reflection, projection, and shear as linear transformations",
+            "Write the standard matrices for common geometric transformations",
+            "Compose geometric transformations and interpret the resulting matrix"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "linalg_m05",
+      "title": "Eigenvalues and Eigenvectors",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "linalg_015",
+          "title": "Eigenvalues and Eigenvectors",
+          "prerequisites": ["linalg_005", "linalg_011"],
+          "learning_objectives": [
+            "Find eigenvalues by solving the characteristic equation det(A − λI) = 0",
+            "Find eigenvectors corresponding to each eigenvalue by solving (A − λI)x = 0",
+            "Determine algebraic and geometric multiplicities of eigenvalues"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_016",
+          "title": "Diagonalization",
+          "prerequisites": ["linalg_015", "linalg_013"],
+          "learning_objectives": [
+            "Determine whether a matrix is diagonalizable",
+            "Diagonalize a matrix A = PDP⁻¹ where D is diagonal",
+            "Use diagonalization to compute powers of a matrix Aⁿ"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_017",
+          "title": "Complex Eigenvalues",
+          "prerequisites": ["linalg_015"],
+          "learning_objectives": [
+            "Find complex eigenvalues and eigenvectors of real matrices",
+            "Write real-valued general solutions from complex eigenvalue pairs",
+            "Interpret complex eigenvalues geometrically as rotation-scaling"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "linalg_018",
+          "title": "Applications of Eigenvalues",
+          "prerequisites": ["linalg_016"],
+          "learning_objectives": [
+            "Model discrete dynamical systems xₖ₊₁ = Axₖ and analyze long-term behavior",
+            "Apply eigenvalue analysis to Markov chains and find steady-state vectors",
+            "Use the Cayley-Hamilton theorem to express matrix polynomials"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "linalg_m06",
+      "title": "Orthogonality",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "linalg_019",
+          "title": "Inner Products and Orthogonality",
+          "prerequisites": ["linalg_008", "trig_027"],
+          "learning_objectives": [
+            "Define the standard inner product (dot product) in Rⁿ and general inner product spaces",
+            "Determine orthogonality and compute orthogonal complements",
+            "Decompose a vector into components parallel and perpendicular to a subspace"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_020",
+          "title": "The Gram-Schmidt Process",
+          "prerequisites": ["linalg_019", "linalg_009"],
+          "learning_objectives": [
+            "Apply the Gram-Schmidt process to produce an orthonormal basis from a given basis",
+            "Compute the QR factorization of a matrix using Gram-Schmidt",
+            "Solve least squares problems using QR factorization"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_021",
+          "title": "Orthogonal Projections and Least Squares",
+          "prerequisites": ["linalg_020"],
+          "learning_objectives": [
+            "Compute the orthogonal projection of a vector onto a subspace",
+            "Set up and solve least squares problems Ax ≈ b using the normal equations AᵀAx̂ = Aᵀb",
+            "Apply least squares to fit a line or polynomial to data"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "linalg_m07",
+      "title": "Symmetric Matrices and Quadratic Forms",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "linalg_022",
+          "title": "Symmetric Matrices and the Spectral Theorem",
+          "prerequisites": ["linalg_016", "linalg_019"],
+          "learning_objectives": [
+            "Prove that eigenvalues of a real symmetric matrix are real",
+            "Prove that eigenvectors of distinct eigenvalues of a symmetric matrix are orthogonal",
+            "Orthogonally diagonalize a symmetric matrix A = QDQᵀ"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_023",
+          "title": "Quadratic Forms and Definiteness",
+          "prerequisites": ["linalg_022"],
+          "learning_objectives": [
+            "Express a quadratic form Q(x) = xᵀAx and identify its associated symmetric matrix",
+            "Classify a quadratic form as positive definite, negative definite, or indefinite using eigenvalues",
+            "Apply Sylvester's criterion (leading principal minors) to test definiteness"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "linalg_m08",
+      "title": "Singular Value Decomposition",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "linalg_024",
+          "title": "The Singular Value Decomposition (SVD)",
+          "prerequisites": ["linalg_022", "linalg_013"],
+          "learning_objectives": [
+            "Compute the singular values and singular vectors of a matrix",
+            "Construct the full SVD factorization A = UΣVᵀ",
+            "Interpret the SVD geometrically as a rotation-scaling-rotation decomposition"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "linalg_025",
+          "title": "Applications of the SVD",
+          "prerequisites": ["linalg_024"],
+          "learning_objectives": [
+            "Apply the SVD to compute the pseudoinverse and solve least squares problems",
+            "Use low-rank SVD approximation for data compression (image compression, dimensionality reduction)",
+            "Compute the condition number of a matrix and assess numerical stability"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "linalg_m09",
+      "title": "Abstract Vector Spaces and Function Spaces",
+      "order": 9,
+      "concepts": [
+        {
+          "id": "linalg_026",
+          "title": "General Vector Spaces (Polynomials, Matrices, Functions)",
+          "prerequisites": ["linalg_008"],
+          "learning_objectives": [
+            "Verify that the space of polynomials of degree ≤ n is a vector space",
+            "Verify that the space of m×n matrices is a vector space",
+            "Find bases and dimensions for polynomial and matrix spaces"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_027",
+          "title": "Inner Product Spaces and Fourier Series Preview",
+          "prerequisites": ["linalg_026", "linalg_019", "trig_012"],
+          "learning_objectives": [
+            "Define inner products on function spaces (e.g., ⟨f,g⟩ = ∫ f(x)g(x) dx)",
+            "Verify orthogonality of trigonometric functions {sin(nx), cos(nx)} on [−π, π]",
+            "Compute Fourier coefficients as projections onto an orthogonal basis"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "linalg_m10",
+      "title": "Numerical Linear Algebra",
+      "order": 10,
+      "concepts": [
+        {
+          "id": "linalg_028",
+          "title": "LU Decomposition",
+          "prerequisites": ["linalg_002", "linalg_005"],
+          "learning_objectives": [
+            "Factor a matrix A = LU using Gaussian elimination without row swaps",
+            "Apply partial pivoting to obtain PA = LU when row swaps are needed",
+            "Solve systems efficiently using forward and back substitution with LU decomposition"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "linalg_029",
+          "title": "Iterative Methods for Linear Systems",
+          "prerequisites": ["linalg_028"],
+          "learning_objectives": [
+            "Apply Jacobi and Gauss-Seidel iterations to solve large linear systems",
+            "Determine convergence conditions for iterative methods",
+            "Compare direct and iterative methods in terms of efficiency and applicability"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "linalg_030",
+          "title": "Eigenvalue Algorithms",
+          "prerequisites": ["linalg_015", "linalg_029"],
+          "learning_objectives": [
+            "Apply the power method to find the dominant eigenvalue and eigenvector",
+            "Apply the inverse power method with shifts to find specific eigenvalues",
+            "Describe the QR algorithm for computing all eigenvalues of a matrix"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "linalg_proj_01",
+      "title": "Image Compression with the SVD",
+      "description": "Represent a grayscale image as a matrix, compute its SVD, and reconstruct the image using rank-k approximations for various values of k. Analyze the trade-off between compression ratio and image quality.",
+      "required_concepts": ["linalg_024", "linalg_025"],
+      "learning_objectives": [
+        "Compute the SVD of a large matrix and extract singular values",
+        "Reconstruct low-rank approximations and measure information retained",
+        "Quantify the compression ratio and quality trade-off"
+      ]
+    },
+    {
+      "id": "linalg_proj_02",
+      "title": "Google PageRank as a Markov Chain",
+      "description": "Model a small web graph as a Markov chain, construct the Google matrix, and compute the PageRank vector using eigenvalue methods (power iteration) and direct computation.",
+      "required_concepts": ["linalg_018", "linalg_030"],
+      "learning_objectives": [
+        "Construct a stochastic matrix from a directed graph",
+        "Apply the power method to find the dominant eigenvector",
+        "Interpret the steady-state vector as page importance rankings"
+      ]
+    },
+    {
+      "id": "linalg_proj_03",
+      "title": "Polynomial Curve Fitting with Least Squares",
+      "description": "Given a set of noisy data points, fit polynomials of varying degree using the least squares method. Analyze residuals and discuss overfitting vs. underfitting.",
+      "required_concepts": ["linalg_021", "linalg_020"],
+      "learning_objectives": [
+        "Set up the Vandermonde matrix for polynomial fitting",
+        "Solve the normal equations to find the least squares polynomial",
+        "Evaluate model quality using residual analysis"
+      ]
+    }
+  ]
+}

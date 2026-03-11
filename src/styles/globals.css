@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    transition-property: color, background-color, border-color, outline-color,
+      text-decoration-color, fill, stroke, opacity, box-shadow;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+      "SF Pro Text", system-ui, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  ::selection {
+    background-color: var(--color-primary-200);
+    color: var(--color-primary-900);
+  }
+
+  .dark ::selection {
+    background-color: var(--color-primary-800);
+    color: var(--color-primary-100);
+  }
+
+  /* Focus styles for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-warm-300);
+    border-radius: 3px;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: var(--color-warm-700);
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl bg-white p-5 shadow-card dark:bg-warm-900;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5
+           font-medium text-white shadow-soft
+           hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-primary-500
+           focus-visible:ring-offset-2 active:scale-[0.98]
+           disabled:cursor-not-allowed disabled:opacity-50
+           dark:bg-primary-500 dark:hover:bg-primary-600;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-warm-200 bg-white
+           px-4 py-2.5 font-medium text-warm-700 shadow-soft
+           hover:bg-warm-50 focus-visible:ring-2 focus-visible:ring-primary-500
+           focus-visible:ring-offset-2 active:scale-[0.98]
+           disabled:cursor-not-allowed disabled:opacity-50
+           dark:border-warm-700 dark:bg-warm-800 dark:text-warm-200
+           dark:hover:bg-warm-700;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2.5
+           font-medium text-warm-600 hover:bg-warm-100
+           focus-visible:ring-2 focus-visible:ring-primary-500
+           active:scale-[0.98]
+           dark:text-warm-400 dark:hover:bg-warm-800;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-warm-200 bg-white px-4 py-2.5
+           text-warm-900 placeholder:text-warm-400
+           focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200
+           dark:border-warm-700 dark:bg-warm-850 dark:text-warm-100
+           dark:placeholder:text-warm-600 dark:focus:border-primary-500
+           dark:focus:ring-primary-900;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-warm-600 dark:text-warm-400;
+  }
+
+  /* KaTeX display math centering */
+  .katex-display {
+    @apply my-4 overflow-x-auto;
+  }
+
+  .katex {
+    font-size: 1.05em;
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .transition-spring {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}

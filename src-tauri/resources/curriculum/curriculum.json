@@ -1,0 +1,1033 @@
+{
+  "concepts": [
+    {
+      "id": "alg_001",
+      "domain": "algebra",
+      "module": "Numbers and Operations",
+      "title": "Real Number System",
+      "prerequisites": []
+    },
+    {
+      "id": "alg_002",
+      "domain": "algebra",
+      "module": "Numbers and Operations",
+      "title": "Order of Operations",
+      "prerequisites": [
+        "alg_001"
+      ]
+    },
+    {
+      "id": "alg_003",
+      "domain": "algebra",
+      "module": "Numbers and Operations",
+      "title": "Absolute Value and Distance",
+      "prerequisites": [
+        "alg_001"
+      ]
+    },
+    {
+      "id": "alg_004",
+      "domain": "algebra",
+      "module": "Numbers and Operations",
+      "title": "Properties of Integer Exponents",
+      "prerequisites": [
+        "alg_002"
+      ]
+    },
+    {
+      "id": "alg_005",
+      "domain": "algebra",
+      "module": "Numbers and Operations",
+      "title": "Operations with Signed Numbers",
+      "prerequisites": [
+        "alg_001",
+        "alg_003"
+      ]
+    },
+    {
+      "id": "alg_006",
+      "domain": "algebra",
+      "module": "Variables and Expressions",
+      "title": "Variables and Algebraic Expressions",
+      "prerequisites": [
+        "alg_002",
+        "alg_005"
+      ]
+    },
+    {
+      "id": "alg_007",
+      "domain": "algebra",
+      "module": "Variables and Expressions",
+      "title": "Combining Like Terms",
+      "prerequisites": [
+        "alg_006"
+      ]
+    },
+    {
+      "id": "alg_008",
+      "domain": "algebra",
+      "module": "Variables and Expressions",
+      "title": "Distributive Property",
+      "prerequisites": [
+        "alg_007"
+      ]
+    },
+    {
+      "id": "alg_009",
+      "domain": "algebra",
+      "module": "Variables and Expressions",
+      "title": "Evaluating and Simplifying Formulas",
+      "prerequisites": [
+        "alg_008"
+      ]
+    },
+    {
+      "id": "alg_010",
+      "domain": "algebra",
+      "module": "Linear Equations",
+      "title": "Solving One-Variable Linear Equations",
+      "prerequisites": [
+        "alg_008"
+      ]
+    },
+    {
+      "id": "alg_011",
+      "domain": "algebra",
+      "module": "Linear Equations",
+      "title": "Equations with Fractions and Decimals",
+      "prerequisites": [
+        "alg_010"
+      ]
+    },
+    {
+      "id": "alg_012",
+      "domain": "algebra",
+      "module": "Linear Equations",
+      "title": "Literal Equations and Formulas",
+      "prerequisites": [
+        "alg_010"
+      ]
+    },
+    {
+      "id": "alg_013",
+      "domain": "algebra",
+      "module": "Linear Equations",
+      "title": "Linear Word Problems",
+      "prerequisites": [
+        "alg_011",
+        "alg_012"
+      ]
+    },
+    {
+      "id": "alg_014",
+      "domain": "algebra",
+      "module": "Linear Equations",
+      "title": "Proportions and Variation",
+      "prerequisites": [
+        "alg_011"
+      ]
+    },
+    {
+      "id": "alg_015",
+      "domain": "algebra",
+      "module": "Inequalities",
+      "title": "Solving Linear Inequalities",
+      "prerequisites": [
+        "alg_010"
+      ]
+    },
+    {
+      "id": "alg_016",
+      "domain": "algebra",
+      "module": "Inequalities",
+      "title": "Compound Inequalities",
+      "prerequisites": [
+        "alg_015"
+      ]
+    },
+    {
+      "id": "alg_017",
+      "domain": "algebra",
+      "module": "Inequalities",
+      "title": "Absolute Value Equations",
+      "prerequisites": [
+        "alg_003",
+        "alg_010"
+      ]
+    },
+    {
+      "id": "alg_018",
+      "domain": "algebra",
+      "module": "Inequalities",
+      "title": "Absolute Value Inequalities",
+      "prerequisites": [
+        "alg_016",
+        "alg_017"
+      ]
+    },
+    {
+      "id": "alg_019",
+      "domain": "algebra",
+      "module": "Graphing Linear Functions",
+      "title": "The Coordinate Plane",
+      "prerequisites": [
+        "alg_001"
+      ]
+    },
+    {
+      "id": "alg_020",
+      "domain": "algebra",
+      "module": "Graphing Linear Functions",
+      "title": "Slope of a Line",
+      "prerequisites": [
+        "alg_005",
+        "alg_019"
+      ]
+    },
+    {
+      "id": "alg_021",
+      "domain": "algebra",
+      "module": "Graphing Linear Functions",
+      "title": "Slope-Intercept Form",
+      "prerequisites": [
+        "alg_010",
+        "alg_020"
+      ]
+    },
+    {
+      "id": "alg_022",
+      "domain": "algebra",
+      "module": "Graphing Linear Functions",
+      "title": "Point-Slope and Standard Forms",
+      "prerequisites": [
+        "alg_021"
+      ]
+    },
+    {
+      "id": "alg_023",
+      "domain": "algebra",
+      "module": "Graphing Linear Functions",
+      "title": "Parallel and Perpendicular Lines",
+      "prerequisites": [
+        "alg_022"
+      ]
+    },
+    {
+      "id": "alg_024",
+      "domain": "algebra",
+      "module": "Systems of Equations",
+      "title": "Solving Systems by Graphing",
+      "prerequisites": [
+        "alg_021"
+      ]
+    },
+    {
+      "id": "alg_025",
+      "domain": "algebra",
+      "module": "Systems of Equations",
+      "title": "Solving Systems by Substitution",
+      "prerequisites": [
+        "alg_010",
+        "alg_024"
+      ]
+    },
+    {
+      "id": "alg_026",
+      "domain": "algebra",
+      "module": "Systems of Equations",
+      "title": "Solving Systems by Elimination",
+      "prerequisites": [
+        "alg_025"
+      ]
+    },
+    {
+      "id": "alg_027",
+      "domain": "algebra",
+      "module": "Systems of Equations",
+      "title": "Applications of Systems",
+      "prerequisites": [
+        "alg_026"
+      ]
+    },
+    {
+      "id": "alg_028",
+      "domain": "algebra",
+      "module": "Systems of Equations",
+      "title": "Systems of Linear Inequalities",
+      "prerequisites": [
+        "alg_015",
+        "alg_024"
+      ]
+    },
+    {
+      "id": "alg_029",
+      "domain": "algebra",
+      "module": "Exponents and Polynomials",
+      "title": "Rules of Exponents",
+      "prerequisites": [
+        "alg_004",
+        "alg_008"
+      ]
+    },
+    {
+      "id": "alg_030",
+      "domain": "algebra",
+      "module": "Exponents and Polynomials",
+      "title": "Introduction to Polynomials",
+      "prerequisites": [
+        "alg_007",
+        "alg_029"
+      ]
+    },
+    {
+      "id": "alg_031",
+      "domain": "algebra",
+      "module": "Exponents and Polynomials",
+      "title": "Adding and Subtracting Polynomials",
+      "prerequisites": [
+        "alg_030"
+      ]
+    },
+    {
+      "id": "alg_032",
+      "domain": "algebra",
+      "module": "Exponents and Polynomials",
+      "title": "Multiplying Polynomials",
+      "prerequisites": [
+        "alg_031"
+      ]
+    },
+    {
+      "id": "alg_033",
+      "domain": "algebra",
+      "module": "Exponents and Polynomials",
+      "title": "Special Products",
+      "prerequisites": [
+        "alg_032"
+      ]
+    },
+    {
+      "id": "alg_034",
+      "domain": "algebra",
+      "module": "Factoring",
+      "title": "Greatest Common Factor and Factoring by Grouping",
+      "prerequisites": [
+        "alg_032"
+      ]
+    },
+    {
+      "id": "alg_035",
+      "domain": "algebra",
+      "module": "Factoring",
+      "title": "Factoring Trinomials (Leading Coefficient 1)",
+      "prerequisites": [
+        "alg_034"
+      ]
+    },
+    {
+      "id": "alg_036",
+      "domain": "algebra",
+      "module": "Factoring",
+      "title": "Factoring Trinomials (Leading Coefficient \u2260 1)",
+      "prerequisites": [
+        "alg_035"
+      ]
+    },
+    {
+      "id": "alg_037",
+      "domain": "algebra",
+      "module": "Factoring",
+      "title": "Factoring Special Forms",
+      "prerequisites": [
+        "alg_033",
+        "alg_034"
+      ]
+    },
+    {
+      "id": "alg_038",
+      "domain": "algebra",
+      "module": "Factoring",
+      "title": "General Factoring Strategy",
+      "prerequisites": [
+        "alg_036",
+        "alg_037"
+      ]
+    },
+    {
+      "id": "alg_039",
+      "domain": "algebra",
+      "module": "Rational Expressions",
+      "title": "Simplifying Rational Expressions",
+      "prerequisites": [
+        "alg_038"
+      ]
+    },
+    {
+      "id": "alg_040",
+      "domain": "algebra",
+      "module": "Rational Expressions",
+      "title": "Multiplying and Dividing Rational Expressions",
+      "prerequisites": [
+        "alg_039"
+      ]
+    },
+    {
+      "id": "alg_041",
+      "domain": "algebra",
+      "module": "Rational Expressions",
+      "title": "Adding and Subtracting Rational Expressions",
+      "prerequisites": [
+        "alg_040"
+      ]
+    },
+    {
+      "id": "alg_042",
+      "domain": "algebra",
+      "module": "Rational Expressions",
+      "title": "Solving Rational Equations",
+      "prerequisites": [
+        "alg_041"
+      ]
+    },
+    {
+      "id": "alg_043",
+      "domain": "algebra",
+      "module": "Radicals",
+      "title": "Simplifying Radical Expressions",
+      "prerequisites": [
+        "alg_029"
+      ]
+    },
+    {
+      "id": "alg_044",
+      "domain": "algebra",
+      "module": "Radicals",
+      "title": "Operations with Radicals",
+      "prerequisites": [
+        "alg_043"
+      ]
+    },
+    {
+      "id": "alg_045",
+      "domain": "algebra",
+      "module": "Radicals",
+      "title": "Rationalizing Denominators",
+      "prerequisites": [
+        "alg_044"
+      ]
+    },
+    {
+      "id": "alg_046",
+      "domain": "algebra",
+      "module": "Radicals",
+      "title": "Solving Radical Equations",
+      "prerequisites": [
+        "alg_045"
+      ]
+    },
+    {
+      "id": "alg_047",
+      "domain": "algebra",
+      "module": "Quadratic Equations",
+      "title": "Solving Quadratics by Factoring",
+      "prerequisites": [
+        "alg_038"
+      ]
+    },
+    {
+      "id": "alg_048",
+      "domain": "algebra",
+      "module": "Quadratic Equations",
+      "title": "Completing the Square",
+      "prerequisites": [
+        "alg_033",
+        "alg_047"
+      ]
+    },
+    {
+      "id": "alg_049",
+      "domain": "algebra",
+      "module": "Quadratic Equations",
+      "title": "The Quadratic Formula",
+      "prerequisites": [
+        "alg_043",
+        "alg_048"
+      ]
+    },
+    {
+      "id": "alg_050",
+      "domain": "algebra",
+      "module": "Quadratic Equations",
+      "title": "Graphing Quadratic Functions",
+      "prerequisites": [
+        "alg_048",
+        "alg_049"
+      ]
+    },
+    {
+      "id": "alg_051",
+      "domain": "algebra",
+      "module": "Quadratic Equations",
+      "title": "Applications of Quadratics",
+      "prerequisites": [
+        "alg_050"
+      ]
+    },
+    {
+      "id": "alg_052",
+      "domain": "algebra",
+      "module": "Functions",
+      "title": "Function Notation and Evaluation",
+      "prerequisites": [
+        "alg_006",
+        "alg_021"
+      ]
+    },
+    {
+      "id": "alg_053",
+      "domain": "algebra",
+      "module": "Functions",
+      "title": "Domain and Range",
+      "prerequisites": [
+        "alg_052"
+      ]
+    },
+    {
+      "id": "alg_054",
+      "domain": "algebra",
+      "module": "Functions",
+      "title": "Function Operations and Composition",
+      "prerequisites": [
+        "alg_053"
+      ]
+    },
+    {
+      "id": "alg_055",
+      "domain": "algebra",
+      "module": "Functions",
+      "title": "Inverse Functions",
+      "prerequisites": [
+        "alg_054"
+      ]
+    },
+    {
+      "id": "alg_056",
+      "domain": "algebra",
+      "module": "Functions",
+      "title": "Transformations of Functions",
+      "prerequisites": [
+        "alg_053"
+      ]
+    },
+    {
+      "id": "precalc_001",
+      "domain": "precalculus",
+      "module": "Advanced Function Analysis",
+      "title": "Piecewise and Step Functions",
+      "prerequisites": [
+        "alg_052",
+        "alg_053"
+      ]
+    },
+    {
+      "id": "precalc_002",
+      "domain": "precalculus",
+      "module": "Advanced Function Analysis",
+      "title": "Symmetry, End Behavior, and Leading-Term Analysis",
+      "prerequisites": [
+        "alg_056",
+        "alg_030"
+      ]
+    },
+    {
+      "id": "precalc_003",
+      "domain": "precalculus",
+      "module": "Advanced Function Analysis",
+      "title": "Rates of Change and the Difference Quotient",
+      "prerequisites": [
+        "alg_054",
+        "alg_020"
+      ]
+    },
+    {
+      "id": "precalc_004",
+      "domain": "precalculus",
+      "module": "Advanced Function Analysis",
+      "title": "Combining Transformations and Building Functions",
+      "prerequisites": [
+        "alg_056",
+        "alg_054"
+      ]
+    },
+    {
+      "id": "precalc_005",
+      "domain": "precalculus",
+      "module": "Polynomial and Rational Functions",
+      "title": "Graphs of Polynomial Functions",
+      "prerequisites": [
+        "precalc_002",
+        "alg_050"
+      ]
+    },
+    {
+      "id": "precalc_006",
+      "domain": "precalculus",
+      "module": "Polynomial and Rational Functions",
+      "title": "Polynomial Division and the Remainder Theorem",
+      "prerequisites": [
+        "alg_032",
+        "precalc_005"
+      ]
+    },
+    {
+      "id": "precalc_007",
+      "domain": "precalculus",
+      "module": "Polynomial and Rational Functions",
+      "title": "Zeros of Polynomial Functions",
+      "prerequisites": [
+        "precalc_006",
+        "alg_049"
+      ]
+    },
+    {
+      "id": "precalc_008",
+      "domain": "precalculus",
+      "module": "Polynomial and Rational Functions",
+      "title": "Rational Functions and Asymptotes",
+      "prerequisites": [
+        "alg_039",
+        "precalc_005"
+      ]
+    },
+    {
+      "id": "precalc_009",
+      "domain": "precalculus",
+      "module": "Polynomial and Rational Functions",
+      "title": "Polynomial and Rational Inequalities",
+      "prerequisites": [
+        "precalc_007",
+        "precalc_008",
+        "alg_015"
+      ]
+    },
+    {
+      "id": "precalc_010",
+      "domain": "precalculus",
+      "module": "Exponential and Logarithmic Functions",
+      "title": "Exponential Functions and Their Graphs",
+      "prerequisites": [
+        "alg_029",
+        "alg_056"
+      ]
+    },
+    {
+      "id": "precalc_011",
+      "domain": "precalculus",
+      "module": "Exponential and Logarithmic Functions",
+      "title": "Logarithmic Functions and Their Graphs",
+      "prerequisites": [
+        "precalc_010",
+        "alg_055"
+      ]
+    },
+    {
+      "id": "precalc_012",
+      "domain": "precalculus",
+      "module": "Exponential and Logarithmic Functions",
+      "title": "Properties of Logarithms",
+      "prerequisites": [
+        "precalc_011"
+      ]
+    },
+    {
+      "id": "precalc_013",
+      "domain": "precalculus",
+      "module": "Exponential and Logarithmic Functions",
+      "title": "Exponential and Logarithmic Equations",
+      "prerequisites": [
+        "precalc_012"
+      ]
+    },
+    {
+      "id": "precalc_014",
+      "domain": "precalculus",
+      "module": "Exponential and Logarithmic Functions",
+      "title": "Exponential Growth and Decay Models",
+      "prerequisites": [
+        "precalc_013"
+      ]
+    },
+    {
+      "id": "precalc_015",
+      "domain": "precalculus",
+      "module": "Sequences and Series",
+      "title": "Arithmetic Sequences and Series",
+      "prerequisites": [
+        "alg_010",
+        "alg_052"
+      ]
+    },
+    {
+      "id": "precalc_016",
+      "domain": "precalculus",
+      "module": "Sequences and Series",
+      "title": "Geometric Sequences and Series",
+      "prerequisites": [
+        "precalc_015",
+        "alg_029"
+      ]
+    },
+    {
+      "id": "precalc_017",
+      "domain": "precalculus",
+      "module": "Sequences and Series",
+      "title": "The Binomial Theorem",
+      "prerequisites": [
+        "precalc_016",
+        "alg_033"
+      ]
+    },
+    {
+      "id": "precalc_018",
+      "domain": "precalculus",
+      "module": "Conic Sections",
+      "title": "Parabolas",
+      "prerequisites": [
+        "alg_050",
+        "alg_048"
+      ]
+    },
+    {
+      "id": "precalc_019",
+      "domain": "precalculus",
+      "module": "Conic Sections",
+      "title": "Ellipses",
+      "prerequisites": [
+        "precalc_018",
+        "alg_019"
+      ]
+    },
+    {
+      "id": "precalc_020",
+      "domain": "precalculus",
+      "module": "Conic Sections",
+      "title": "Hyperbolas",
+      "prerequisites": [
+        "precalc_019"
+      ]
+    },
+    {
+      "id": "precalc_021",
+      "domain": "precalculus",
+      "module": "Conic Sections",
+      "title": "General Conic Sections and Classification",
+      "prerequisites": [
+        "precalc_020"
+      ]
+    },
+    {
+      "id": "precalc_022",
+      "domain": "precalculus",
+      "module": "Introduction to Limits",
+      "title": "Intuitive Understanding of Limits",
+      "prerequisites": [
+        "precalc_003",
+        "precalc_008"
+      ]
+    },
+    {
+      "id": "precalc_023",
+      "domain": "precalculus",
+      "module": "Introduction to Limits",
+      "title": "Computing Limits Algebraically",
+      "prerequisites": [
+        "precalc_022",
+        "alg_039"
+      ]
+    },
+    {
+      "id": "precalc_024",
+      "domain": "precalculus",
+      "module": "Introduction to Limits",
+      "title": "Limits at Infinity",
+      "prerequisites": [
+        "precalc_023",
+        "precalc_008"
+      ]
+    },
+    {
+      "id": "precalc_025",
+      "domain": "precalculus",
+      "module": "Introduction to Limits",
+      "title": "Continuity",
+      "prerequisites": [
+        "precalc_023",
+        "precalc_001"
+      ]
+    },
+    {
+      "id": "trig_001",
+      "domain": "trigonometry",
+      "module": "Angles and Their Measure",
+      "title": "Angle Measurement in Degrees",
+      "prerequisites": [
+        "alg_019"
+      ]
+    },
+    {
+      "id": "trig_002",
+      "domain": "trigonometry",
+      "module": "Angles and Their Measure",
+      "title": "Radian Measure",
+      "prerequisites": [
+        "trig_001",
+        "alg_014"
+      ]
+    },
+    {
+      "id": "trig_003",
+      "domain": "trigonometry",
+      "module": "Angles and Their Measure",
+      "title": "Angles in Standard Position",
+      "prerequisites": [
+        "trig_002"
+      ]
+    },
+    {
+      "id": "trig_004",
+      "domain": "trigonometry",
+      "module": "Angles and Their Measure",
+      "title": "Angular and Linear Speed",
+      "prerequisites": [
+        "trig_002"
+      ]
+    },
+    {
+      "id": "trig_005",
+      "domain": "trigonometry",
+      "module": "Right Triangle Trigonometry",
+      "title": "Trigonometric Ratios",
+      "prerequisites": [
+        "trig_001",
+        "alg_014"
+      ]
+    },
+    {
+      "id": "trig_006",
+      "domain": "trigonometry",
+      "module": "Right Triangle Trigonometry",
+      "title": "Solving Right Triangles",
+      "prerequisites": [
+        "trig_005"
+      ]
+    },
+    {
+      "id": "trig_007",
+      "domain": "trigonometry",
+      "module": "Right Triangle Trigonometry",
+      "title": "Trigonometric Functions of Special Angles",
+      "prerequisites": [
+        "trig_005",
+        "alg_043"
+      ]
+    },
+    {
+      "id": "trig_008",
+      "domain": "trigonometry",
+      "module": "Right Triangle Trigonometry",
+      "title": "Applications of Right Triangle Trigonometry",
+      "prerequisites": [
+        "trig_006",
+        "trig_007"
+      ]
+    },
+    {
+      "id": "trig_009",
+      "domain": "trigonometry",
+      "module": "The Unit Circle",
+      "title": "Unit Circle Definition of Trigonometric Functions",
+      "prerequisites": [
+        "trig_003",
+        "trig_007"
+      ]
+    },
+    {
+      "id": "trig_010",
+      "domain": "trigonometry",
+      "module": "The Unit Circle",
+      "title": "Reference Angles and the Unit Circle",
+      "prerequisites": [
+        "trig_009"
+      ]
+    },
+    {
+      "id": "trig_011",
+      "domain": "trigonometry",
+      "module": "The Unit Circle",
+      "title": "Properties of the Trigonometric Functions",
+      "prerequisites": [
+        "trig_010"
+      ]
+    },
+    {
+      "id": "trig_012",
+      "domain": "trigonometry",
+      "module": "Graphs of Trigonometric Functions",
+      "title": "Graphs of Sine and Cosine",
+      "prerequisites": [
+        "trig_011",
+        "alg_056"
+      ]
+    },
+    {
+      "id": "trig_013",
+      "domain": "trigonometry",
+      "module": "Graphs of Trigonometric Functions",
+      "title": "Graphs of Tangent, Cotangent, Secant, and Cosecant",
+      "prerequisites": [
+        "trig_012"
+      ]
+    },
+    {
+      "id": "trig_014",
+      "domain": "trigonometry",
+      "module": "Graphs of Trigonometric Functions",
+      "title": "Sinusoidal Modeling",
+      "prerequisites": [
+        "trig_012"
+      ]
+    },
+    {
+      "id": "trig_015",
+      "domain": "trigonometry",
+      "module": "Trigonometric Identities",
+      "title": "Fundamental Identities",
+      "prerequisites": [
+        "trig_011"
+      ]
+    },
+    {
+      "id": "trig_016",
+      "domain": "trigonometry",
+      "module": "Trigonometric Identities",
+      "title": "Proving Trigonometric Identities",
+      "prerequisites": [
+        "trig_015"
+      ]
+    },
+    {
+      "id": "trig_017",
+      "domain": "trigonometry",
+      "module": "Trigonometric Identities",
+      "title": "Sum and Difference Formulas",
+      "prerequisites": [
+        "trig_015"
+      ]
+    },
+    {
+      "id": "trig_018",
+      "domain": "trigonometry",
+      "module": "Trigonometric Identities",
+      "title": "Double-Angle and Half-Angle Formulas",
+      "prerequisites": [
+        "trig_017"
+      ]
+    },
+    {
+      "id": "trig_019",
+      "domain": "trigonometry",
+      "module": "Inverse Trigonometric Functions",
+      "title": "Inverse Sine, Cosine, and Tangent",
+      "prerequisites": [
+        "trig_011",
+        "alg_055"
+      ]
+    },
+    {
+      "id": "trig_020",
+      "domain": "trigonometry",
+      "module": "Inverse Trigonometric Functions",
+      "title": "Solving Trigonometric Equations",
+      "prerequisites": [
+        "trig_015",
+        "trig_019"
+      ]
+    },
+    {
+      "id": "trig_021",
+      "domain": "trigonometry",
+      "module": "Inverse Trigonometric Functions",
+      "title": "Solving Advanced Trigonometric Equations",
+      "prerequisites": [
+        "trig_018",
+        "trig_020"
+      ]
+    },
+    {
+      "id": "trig_022",
+      "domain": "trigonometry",
+      "module": "Oblique Triangles",
+      "title": "Law of Sines",
+      "prerequisites": [
+        "trig_006",
+        "trig_010"
+      ]
+    },
+    {
+      "id": "trig_023",
+      "domain": "trigonometry",
+      "module": "Oblique Triangles",
+      "title": "Law of Cosines",
+      "prerequisites": [
+        "trig_022"
+      ]
+    },
+    {
+      "id": "trig_024",
+      "domain": "trigonometry",
+      "module": "Oblique Triangles",
+      "title": "Area of Triangles",
+      "prerequisites": [
+        "trig_023"
+      ]
+    },
+    {
+      "id": "trig_025",
+      "domain": "trigonometry",
+      "module": "Polar Coordinates and Vectors",
+      "title": "Polar Coordinates",
+      "prerequisites": [
+        "trig_010",
+        "alg_019"
+      ]
+    },
+    {
+      "id": "trig_026",
+      "domain": "trigonometry",
+      "module": "Polar Coordinates and Vectors",
+      "title": "Vectors in Two Dimensions",
+      "prerequisites": [
+        "trig_006",
+        "trig_025"
+      ]
+    },
+    {
+      "id": "trig_027",
+      "domain": "trigonometry",
+      "module": "Polar Coordinates and Vectors",
+      "title": "The Dot Product",
+      "prerequisites": [
+        "trig_026"
+      ]
+    },
+    {
+      "id": "trig_028",
+      "domain": "trigonometry",
+      "module": "Polar Coordinates and Vectors",
+      "title": "Applications of Vectors",
+      "prerequisites": [
+        "trig_027"
+      ]
+    }
+  ]
+}

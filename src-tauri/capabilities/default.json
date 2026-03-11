@@ -1,0 +1,23 @@
+{
+  "identifier": "default",
+  "description": "Default capabilities for Astrolabe",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:default",
+    "core:window:allow-close",
+    "core:window:allow-minimize",
+    "core:window:allow-maximize",
+    "core:window:allow-set-size",
+    "core:window:allow-set-title",
+    {
+      "identifier": "core:event:default",
+      "allow": [
+        { "channel": "stream-*" }
+      ]
+    },
+    "core:app:default",
+    "core:resources:default",
+    "core:path:default"
+  ]
+}

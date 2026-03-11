@@ -1,0 +1,397 @@
+{
+  "domain": "differential_equations",
+  "display_name": "Differential Equations",
+  "phase": 2,
+  "description": "Study of equations involving derivatives. Covers first-order and second-order ODEs, systems of differential equations, Laplace transforms, and series solutions, with applications to science and engineering.",
+  "prerequisites": ["single_variable_calculus"],
+  "modules": [
+    {
+      "id": "diffeq_m01",
+      "title": "Introduction to Differential Equations",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "diffeq_001",
+          "title": "Classification and Terminology",
+          "prerequisites": ["calc1_024"],
+          "learning_objectives": [
+            "Classify differential equations by order, linearity, and type (ODE vs PDE)",
+            "Identify the dependent and independent variables in a differential equation",
+            "Verify that a given function is a solution to a differential equation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "diffeq_002",
+          "title": "Direction Fields and Solution Curves",
+          "prerequisites": ["diffeq_001"],
+          "learning_objectives": [
+            "Sketch direction (slope) fields for first-order ODEs",
+            "Trace solution curves through the direction field from given initial conditions",
+            "Identify equilibrium solutions from a direction field"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "diffeq_003",
+          "title": "Existence and Uniqueness Theorem",
+          "prerequisites": ["diffeq_002"],
+          "learning_objectives": [
+            "State the Picard-Lindelof existence and uniqueness theorem for first-order IVPs",
+            "Identify conditions under which uniqueness may fail",
+            "Apply the theorem to determine whether a given IVP has a unique solution"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "diffeq_m02",
+      "title": "First-Order ODEs: Analytic Methods",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "diffeq_004",
+          "title": "Separable Equations",
+          "prerequisites": ["diffeq_001", "calc1_030"],
+          "learning_objectives": [
+            "Identify and solve separable differential equations by separation of variables",
+            "Handle implicit solutions and determine explicit solutions when possible",
+            "Solve initial value problems for separable equations"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "diffeq_005",
+          "title": "First-Order Linear Equations",
+          "prerequisites": ["diffeq_004", "calc1_031"],
+          "learning_objectives": [
+            "Identify first-order linear equations in standard form dy/dx + P(x)y = Q(x)",
+            "Solve using the integrating factor method",
+            "Solve initial value problems for first-order linear equations"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "diffeq_006",
+          "title": "Exact Equations",
+          "prerequisites": ["diffeq_005", "mvc_010"],
+          "learning_objectives": [
+            "Determine whether M dx + N dy = 0 is exact using the exactness condition ∂M/∂y = ∂N/∂x",
+            "Solve exact differential equations by finding the potential function",
+            "Find integrating factors to convert non-exact equations to exact form"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_007",
+          "title": "Substitution Methods",
+          "prerequisites": ["diffeq_005"],
+          "learning_objectives": [
+            "Solve homogeneous first-order equations using the substitution v = y/x",
+            "Solve Bernoulli equations using the substitution w = y^{1−n}",
+            "Identify which substitution technique applies to a given equation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "diffeq_m03",
+      "title": "Applications of First-Order ODEs",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "diffeq_008",
+          "title": "Growth, Decay, and Mixing Models",
+          "prerequisites": ["diffeq_004", "precalc_014"],
+          "learning_objectives": [
+            "Model exponential growth and decay with dy/dt = ky",
+            "Model logistic growth and determine carrying capacity and inflection point",
+            "Set up and solve mixing problems involving inflow and outflow rates"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "diffeq_009",
+          "title": "Newton's Law of Cooling and Other Models",
+          "prerequisites": ["diffeq_005"],
+          "learning_objectives": [
+            "Model temperature change with Newton's law of cooling dT/dt = k(T − Tₑ)",
+            "Model simple electric circuits (RC circuits) with first-order linear ODEs",
+            "Set up and solve free-fall with air resistance as a first-order ODE"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_010",
+          "title": "Numerical Methods: Euler's Method",
+          "prerequisites": ["diffeq_002"],
+          "learning_objectives": [
+            "Apply Euler's method to approximate solutions of first-order IVPs",
+            "Analyze the effect of step size on the accuracy of Euler's method",
+            "Apply the improved Euler method (Heun's method) for better accuracy"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "diffeq_m04",
+      "title": "Second-Order Linear ODEs",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "diffeq_011",
+          "title": "Homogeneous Equations with Constant Coefficients",
+          "prerequisites": ["diffeq_005", "alg_049"],
+          "learning_objectives": [
+            "Solve ay'' + by' + cy = 0 by finding roots of the characteristic equation",
+            "Handle distinct real, repeated real, and complex conjugate roots",
+            "Write the general solution using appropriate basis functions (exponentials, sines, cosines)"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "diffeq_012",
+          "title": "The Wronskian and Linear Independence",
+          "prerequisites": ["diffeq_011"],
+          "learning_objectives": [
+            "Compute the Wronskian of two solutions",
+            "Use the Wronskian to test for linear independence of solutions",
+            "Apply Abel's theorem to relate the Wronskian to the coefficients of the ODE"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_013",
+          "title": "Nonhomogeneous Equations: Undetermined Coefficients",
+          "prerequisites": ["diffeq_011"],
+          "learning_objectives": [
+            "Identify the structure of a particular solution based on the forcing function",
+            "Apply the method of undetermined coefficients for polynomial, exponential, and sinusoidal forcing",
+            "Handle cases where the particular solution form duplicates a homogeneous solution"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_014",
+          "title": "Nonhomogeneous Equations: Variation of Parameters",
+          "prerequisites": ["diffeq_012"],
+          "learning_objectives": [
+            "Derive the variation of parameters formulas for second-order linear ODEs",
+            "Apply variation of parameters to solve equations with arbitrary forcing functions",
+            "Compare undetermined coefficients and variation of parameters in terms of applicability"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "diffeq_m05",
+      "title": "Applications of Second-Order ODEs",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "diffeq_015",
+          "title": "Free Vibrations: Mass-Spring Systems",
+          "prerequisites": ["diffeq_011"],
+          "learning_objectives": [
+            "Derive the equation of motion for a mass-spring system from Newton's second law",
+            "Solve undamped, underdamped, critically damped, and overdamped free vibration problems",
+            "Express solutions in amplitude-phase form and interpret physical behavior"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_016",
+          "title": "Forced Vibrations and Resonance",
+          "prerequisites": ["diffeq_013", "diffeq_015"],
+          "learning_objectives": [
+            "Solve forced oscillation problems with sinusoidal driving forces",
+            "Identify and analyze resonance when the driving frequency matches the natural frequency",
+            "Analyze steady-state and transient responses in damped forced systems"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "diffeq_017",
+          "title": "Electric Circuit Models (RLC Circuits)",
+          "prerequisites": ["diffeq_013"],
+          "learning_objectives": [
+            "Derive the ODE governing a series RLC circuit using Kirchhoff's voltage law",
+            "Solve for current and charge in free and forced RLC circuits",
+            "Draw the analogy between mechanical and electrical oscillating systems"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "diffeq_m06",
+      "title": "The Laplace Transform",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "diffeq_018",
+          "title": "Definition and Properties of the Laplace Transform",
+          "prerequisites": ["calc1_035", "diffeq_005"],
+          "learning_objectives": [
+            "Compute Laplace transforms using the definition L{f(t)} = ∫₀^∞ e^{−st} f(t) dt",
+            "Apply linearity and the transforms of elementary functions (eᵃᵗ, tⁿ, sin, cos)",
+            "Apply the first and second shifting theorems"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_019",
+          "title": "Inverse Laplace Transform and Partial Fractions",
+          "prerequisites": ["diffeq_018", "calc1_034"],
+          "learning_objectives": [
+            "Compute inverse Laplace transforms using tables and partial fraction decomposition",
+            "Apply the convolution theorem to find inverse transforms",
+            "Handle transforms involving s-shifting and t-shifting"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_020",
+          "title": "Solving IVPs with the Laplace Transform",
+          "prerequisites": ["diffeq_019"],
+          "learning_objectives": [
+            "Transform an ODE initial value problem into an algebraic equation in s",
+            "Solve second-order constant-coefficient IVPs using Laplace transforms",
+            "Handle discontinuous forcing functions using the unit step function"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_021",
+          "title": "The Dirac Delta Function",
+          "prerequisites": ["diffeq_020"],
+          "learning_objectives": [
+            "Define the Dirac delta function as a limit of unit impulse functions",
+            "Compute the Laplace transform of the delta function",
+            "Solve IVPs with impulsive forcing using delta functions"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "diffeq_m07",
+      "title": "Systems of Differential Equations",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "diffeq_022",
+          "title": "Introduction to Systems and Phase Portraits",
+          "prerequisites": ["diffeq_011", "alg_026"],
+          "learning_objectives": [
+            "Convert a higher-order ODE to a system of first-order ODEs",
+            "Sketch phase portraits for two-dimensional linear systems",
+            "Classify equilibrium points from the phase portrait"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_023",
+          "title": "Solving Linear Systems with Eigenvalues",
+          "prerequisites": ["diffeq_022"],
+          "learning_objectives": [
+            "Solve 2×2 homogeneous linear systems x' = Ax using eigenvalues and eigenvectors",
+            "Handle real distinct, complex, and repeated eigenvalue cases",
+            "Classify equilibrium points as nodes, spirals, or saddles based on eigenvalue type"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_024",
+          "title": "Nonlinear Systems and Stability",
+          "prerequisites": ["diffeq_023"],
+          "learning_objectives": [
+            "Find equilibrium points of nonlinear autonomous systems",
+            "Linearize a nonlinear system at an equilibrium point using the Jacobian",
+            "Assess stability of equilibrium points using eigenvalues of the Jacobian"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "diffeq_m08",
+      "title": "Series Solutions",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "diffeq_025",
+          "title": "Power Series Solutions Near Ordinary Points",
+          "prerequisites": ["calc1_048", "diffeq_011"],
+          "learning_objectives": [
+            "Assume a power series solution y = Σ aₙ xⁿ and derive a recurrence relation for the coefficients",
+            "Find the radius of convergence of the series solution",
+            "Solve second-order ODEs near ordinary points using power series"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "diffeq_026",
+          "title": "Series Solutions Near Regular Singular Points (Frobenius Method)",
+          "prerequisites": ["diffeq_025"],
+          "learning_objectives": [
+            "Classify singular points as regular or irregular",
+            "Apply the method of Frobenius to find series solutions y = xʳ Σ aₙ xⁿ",
+            "Determine the indicial equation and handle cases of equal and differing roots"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "diffeq_027",
+          "title": "Bessel Functions and Legendre Polynomials",
+          "prerequisites": ["diffeq_026"],
+          "learning_objectives": [
+            "Derive Bessel's equation and identify Bessel functions of the first and second kind",
+            "Derive Legendre's equation and identify Legendre polynomials",
+            "Recognize the role of these special functions in physics and engineering applications"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "diffeq_proj_01",
+      "title": "Predator-Prey Dynamics (Lotka-Volterra)",
+      "description": "Model a predator-prey ecosystem using the Lotka-Volterra system. Analyze equilibria, linearize, classify stability, and numerically simulate population oscillations over time.",
+      "required_concepts": ["diffeq_024", "diffeq_010"],
+      "learning_objectives": [
+        "Set up a nonlinear system of ODEs from a biological model",
+        "Linearize around equilibria and classify their stability",
+        "Numerically simulate trajectories and interpret phase portraits"
+      ]
+    },
+    {
+      "id": "diffeq_proj_02",
+      "title": "Designing a Shock Absorber",
+      "description": "Model a car suspension as a mass-spring-damper system. Determine the damping coefficient that achieves critical damping, then analyze the forced response to a sinusoidal road surface.",
+      "required_concepts": ["diffeq_015", "diffeq_016"],
+      "learning_objectives": [
+        "Derive and solve the ODE for a mass-spring-damper system",
+        "Determine critical damping parameters analytically",
+        "Analyze the steady-state response amplitude as a function of driving frequency"
+      ]
+    },
+    {
+      "id": "diffeq_proj_03",
+      "title": "Solving an RLC Circuit with Laplace Transforms",
+      "description": "Analyze the transient and steady-state response of a series RLC circuit driven by a piecewise-constant voltage. Use the Laplace transform with step functions to handle the discontinuous input.",
+      "required_concepts": ["diffeq_017", "diffeq_020", "diffeq_021"],
+      "learning_objectives": [
+        "Model a physical circuit as a second-order ODE with discontinuous forcing",
+        "Apply Laplace transform techniques including the unit step function",
+        "Interpret the solution in terms of transient decay and steady-state oscillation"
+      ]
+    }
+  ]
+}

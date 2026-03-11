@@ -1,0 +1,408 @@
+{
+  "domain": "trigonometry",
+  "display_name": "Trigonometry",
+  "phase": 1,
+  "description": "Study of triangle relationships and periodic functions. Covers right-triangle trigonometry, the unit circle, trigonometric functions and their graphs, identities, equations, and the laws of sines and cosines.",
+  "prerequisites": ["algebra"],
+  "modules": [
+    {
+      "id": "trig_m01",
+      "title": "Angles and Their Measure",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "trig_001",
+          "title": "Angle Measurement in Degrees",
+          "prerequisites": ["alg_019"],
+          "learning_objectives": [
+            "Measure and classify angles as acute, right, obtuse, or straight",
+            "Identify complementary and supplementary angle pairs",
+            "Convert between degrees, minutes, and seconds (DMS) and decimal degrees"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_002",
+          "title": "Radian Measure",
+          "prerequisites": ["trig_001", "alg_014"],
+          "learning_objectives": [
+            "Define a radian as the ratio of arc length to radius",
+            "Convert between degree and radian measure",
+            "Calculate arc length and sector area using radians"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_003",
+          "title": "Angles in Standard Position",
+          "prerequisites": ["trig_002"],
+          "learning_objectives": [
+            "Sketch angles in standard position on the coordinate plane",
+            "Identify coterminal angles and find them by adding or subtracting full rotations",
+            "Determine the reference angle for any angle in standard position"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_004",
+          "title": "Angular and Linear Speed",
+          "prerequisites": ["trig_002"],
+          "learning_objectives": [
+            "Calculate angular speed in radians per unit time",
+            "Relate angular speed to linear speed via v = rω",
+            "Solve applied problems involving rotating objects"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "trig_m02",
+      "title": "Right Triangle Trigonometry",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "trig_005",
+          "title": "Trigonometric Ratios",
+          "prerequisites": ["trig_001", "alg_014"],
+          "learning_objectives": [
+            "Define sine, cosine, and tangent as ratios of sides of a right triangle",
+            "Define cosecant, secant, and cotangent as reciprocals of the primary ratios",
+            "Evaluate trigonometric ratios for given right triangles"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_006",
+          "title": "Solving Right Triangles",
+          "prerequisites": ["trig_005"],
+          "learning_objectives": [
+            "Find unknown sides and angles of a right triangle using trigonometric ratios",
+            "Apply the Pythagorean theorem in conjunction with trigonometric ratios",
+            "Solve applied problems involving angles of elevation and depression"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_007",
+          "title": "Trigonometric Functions of Special Angles",
+          "prerequisites": ["trig_005", "alg_043"],
+          "learning_objectives": [
+            "Evaluate exact trigonometric values for 30°, 45°, and 60° angles",
+            "Derive these values from the 45-45-90 and 30-60-90 reference triangles",
+            "Apply special angle values to simplify expressions"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_008",
+          "title": "Applications of Right Triangle Trigonometry",
+          "prerequisites": ["trig_006", "trig_007"],
+          "learning_objectives": [
+            "Solve navigation and bearing problems using right triangle trigonometry",
+            "Calculate heights and distances using indirect measurement",
+            "Model and solve real-world problems involving right triangles"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "trig_m03",
+      "title": "The Unit Circle",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "trig_009",
+          "title": "Unit Circle Definition of Trigonometric Functions",
+          "prerequisites": ["trig_003", "trig_007"],
+          "learning_objectives": [
+            "Define sin θ and cos θ as coordinates of the point on the unit circle corresponding to angle θ",
+            "Evaluate trigonometric functions for quadrantal angles (0, π/2, π, 3π/2)",
+            "Determine the sign of each trigonometric function in each quadrant"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_010",
+          "title": "Reference Angles and the Unit Circle",
+          "prerequisites": ["trig_009"],
+          "learning_objectives": [
+            "Use reference angles to evaluate trigonometric functions for any angle",
+            "Reproduce exact values for all multiples of π/6 and π/4 on the unit circle",
+            "Evaluate trigonometric functions for negative angles and angles beyond 2π"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_011",
+          "title": "Properties of the Trigonometric Functions",
+          "prerequisites": ["trig_010"],
+          "learning_objectives": [
+            "Identify the domain and range of each of the six trigonometric functions",
+            "Classify each trigonometric function as even or odd",
+            "State the period of each trigonometric function"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "trig_m04",
+      "title": "Graphs of Trigonometric Functions",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "trig_012",
+          "title": "Graphs of Sine and Cosine",
+          "prerequisites": ["trig_011", "alg_056"],
+          "learning_objectives": [
+            "Graph y = sin x and y = cos x over multiple periods",
+            "Identify the amplitude, period, and midline of a sinusoidal function",
+            "Graph y = A sin(Bx − C) + D and y = A cos(Bx − C) + D with transformations"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_013",
+          "title": "Graphs of Tangent, Cotangent, Secant, and Cosecant",
+          "prerequisites": ["trig_012"],
+          "learning_objectives": [
+            "Graph y = tan x and y = cot x, identifying period and vertical asymptotes",
+            "Graph y = sec x and y = csc x, identifying period and vertical asymptotes",
+            "Apply transformations to the graphs of all six trigonometric functions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_014",
+          "title": "Sinusoidal Modeling",
+          "prerequisites": ["trig_012"],
+          "learning_objectives": [
+            "Determine amplitude, period, phase shift, and vertical shift from real-world data",
+            "Write a sinusoidal function to model periodic phenomena (tides, temperature, sound)",
+            "Use a sinusoidal model to make predictions"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "trig_m05",
+      "title": "Trigonometric Identities",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "trig_015",
+          "title": "Fundamental Identities",
+          "prerequisites": ["trig_011"],
+          "learning_objectives": [
+            "State and apply the Pythagorean identities: sin²θ + cos²θ = 1 and its variants",
+            "Apply reciprocal and quotient identities to simplify expressions",
+            "Simplify trigonometric expressions using fundamental identities"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_016",
+          "title": "Proving Trigonometric Identities",
+          "prerequisites": ["trig_015"],
+          "learning_objectives": [
+            "Verify a trigonometric identity by transforming one side to match the other",
+            "Select appropriate strategies: work from the more complex side, convert to sines and cosines, factor",
+            "Distinguish between conditional equations and identities"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "trig_017",
+          "title": "Sum and Difference Formulas",
+          "prerequisites": ["trig_015"],
+          "learning_objectives": [
+            "Apply the sum and difference formulas for sine, cosine, and tangent",
+            "Evaluate exact trigonometric values for non-standard angles like 15° and 75°",
+            "Use sum and difference formulas to prove or derive other identities"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_018",
+          "title": "Double-Angle and Half-Angle Formulas",
+          "prerequisites": ["trig_017"],
+          "learning_objectives": [
+            "Derive and apply double-angle formulas for sine, cosine, and tangent",
+            "Derive and apply half-angle formulas for sine, cosine, and tangent",
+            "Use these formulas to simplify expressions and solve equations"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "trig_m06",
+      "title": "Inverse Trigonometric Functions",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "trig_019",
+          "title": "Inverse Sine, Cosine, and Tangent",
+          "prerequisites": ["trig_011", "alg_055"],
+          "learning_objectives": [
+            "Define arcsin, arccos, and arctan with their restricted domains and ranges",
+            "Evaluate inverse trigonometric functions for exact and approximate values",
+            "Compose trigonometric and inverse trigonometric functions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_020",
+          "title": "Solving Trigonometric Equations",
+          "prerequisites": ["trig_015", "trig_019"],
+          "learning_objectives": [
+            "Solve basic trigonometric equations on a given interval",
+            "Solve trigonometric equations requiring factoring or the quadratic formula",
+            "Find all solutions of a trigonometric equation using periodicity"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "trig_021",
+          "title": "Solving Advanced Trigonometric Equations",
+          "prerequisites": ["trig_018", "trig_020"],
+          "learning_objectives": [
+            "Solve equations involving multiple angles using double-angle or half-angle formulas",
+            "Solve equations requiring sum-to-product or product-to-sum transformations",
+            "Solve applied trigonometric equations in context"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "trig_m07",
+      "title": "Oblique Triangles",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "trig_022",
+          "title": "Law of Sines",
+          "prerequisites": ["trig_006", "trig_010"],
+          "learning_objectives": [
+            "State and apply the law of sines to solve ASA and AAS triangles",
+            "Identify and resolve the ambiguous case (SSA) using the law of sines",
+            "Determine when a triangle has zero, one, or two solutions"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_023",
+          "title": "Law of Cosines",
+          "prerequisites": ["trig_022"],
+          "learning_objectives": [
+            "State and apply the law of cosines to solve SAS and SSS triangles",
+            "Recognize when to use the law of cosines versus the law of sines",
+            "Derive the law of cosines from the distance formula"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_024",
+          "title": "Area of Triangles",
+          "prerequisites": ["trig_023"],
+          "learning_objectives": [
+            "Calculate the area of a triangle using A = ½ ab sin C",
+            "Apply Heron's formula when three sides are known",
+            "Solve applied problems involving area of non-right triangles"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "trig_m08",
+      "title": "Polar Coordinates and Vectors",
+      "order": 8,
+      "concepts": [
+        {
+          "id": "trig_025",
+          "title": "Polar Coordinates",
+          "prerequisites": ["trig_010", "alg_019"],
+          "learning_objectives": [
+            "Plot points in the polar coordinate system",
+            "Convert between polar and rectangular coordinates",
+            "Graph basic polar equations (circles, cardioids, roses)"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_026",
+          "title": "Vectors in Two Dimensions",
+          "prerequisites": ["trig_006", "trig_025"],
+          "learning_objectives": [
+            "Represent vectors graphically and in component form",
+            "Compute vector addition, subtraction, and scalar multiplication",
+            "Calculate the magnitude and direction angle of a vector"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_027",
+          "title": "The Dot Product",
+          "prerequisites": ["trig_026"],
+          "learning_objectives": [
+            "Compute the dot product of two vectors",
+            "Use the dot product to find the angle between two vectors",
+            "Determine whether two vectors are orthogonal using the dot product"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "trig_028",
+          "title": "Applications of Vectors",
+          "prerequisites": ["trig_027"],
+          "learning_objectives": [
+            "Decompose a force vector into horizontal and vertical components",
+            "Solve equilibrium and resultant force problems",
+            "Compute work as a dot product of force and displacement vectors"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "trig_proj_01",
+      "title": "Mapping a Terrain with Triangulation",
+      "description": "Use the law of sines and cosines to determine distances and positions of landmarks from two observation points. Create a scaled map from angle and distance measurements.",
+      "required_concepts": ["trig_022", "trig_023", "trig_024"],
+      "learning_objectives": [
+        "Apply oblique triangle solving techniques to a surveying scenario",
+        "Select the appropriate law (sines vs. cosines) based on known information",
+        "Calculate areas and distances from indirect measurements"
+      ]
+    },
+    {
+      "id": "trig_proj_02",
+      "title": "Modeling Daylight Hours with Sinusoidal Functions",
+      "description": "Using real daylight-hour data for a chosen latitude, fit a sinusoidal model, predict sunrise and sunset times, and compare the model to the equinox and solstice data.",
+      "required_concepts": ["trig_012", "trig_014"],
+      "learning_objectives": [
+        "Extract amplitude, period, and phase shift from real-world data",
+        "Write and validate a sinusoidal model",
+        "Interpret model parameters in a physical context"
+      ]
+    },
+    {
+      "id": "trig_proj_03",
+      "title": "Prove the Angle Addition Formulas Geometrically",
+      "description": "Construct a geometric proof of the cosine sum formula using the unit circle and the distance formula, then derive the sine sum formula as a corollary.",
+      "required_concepts": ["trig_009", "trig_017"],
+      "learning_objectives": [
+        "Construct a rigorous geometric argument from unit circle definitions",
+        "Apply the distance formula to derive an algebraic identity",
+        "Extend a result to derive related identities"
+      ]
+    }
+  ]
+}
