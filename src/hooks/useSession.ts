@@ -13,6 +13,10 @@ export function useSession() {
 
   const startSession = useCallback(
     async (concepts?: Concept[]) => {
+      // Clear stale content from any previous session
+      store.setLessonContent(null);
+      store.setQuizSession(null);
+      store.resetExplanationAttempt();
       try {
         const session = await ipc.getDailySession();
         if (session && session.concepts.length > 0) {
@@ -44,6 +48,10 @@ export function useSession() {
         ) ?? concepts[0];
       store.setSessionConcepts(concepts);
       store.setCurrentConcept(current ?? null);
+      // Clear stale lesson/quiz content from previous path
+      store.setLessonContent(null);
+      store.setQuizSession(null);
+      store.resetExplanationAttempt();
       store.setActiveSession(`path_${current?.domain?.id ?? "custom"}`);
     },
     [store]

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LessonContent } from "@/components/lesson/LessonContent";
@@ -6,7 +6,6 @@ import { ExplainButton } from "@/components/lesson/ExplainButton";
 import { SkeletonLoader } from "@/components/shared/SkeletonLoader";
 import { RichText } from "@/components/lesson/LessonContent";
 import { useSession } from "@/hooks/useSession";
-import { useGamification } from "@/hooks/useGamification";
 import * as ipc from "@/lib/ipc";
 import type { ExplanationResponse } from "@/types/lesson";
 
@@ -16,14 +15,14 @@ export default function Lesson() {
     currentConcept,
     lessonContent,
     loadLesson,
+    loadQuiz,
+    quizSession,
     explanationAttempt,
     incrementExplanationAttempt,
   } = useSession();
-  const { awardXP } = useGamification();
 
   const [loading, setLoading] = useState(false);
   const [explanationLoading, setExplanationLoading] = useState(false);
-  const hasAwardedXP = useRef(false);
   const [extraExplanation, setExtraExplanation] =
     useState<ExplanationResponse | null>(null);
 
@@ -34,6 +33,13 @@ export default function Lesson() {
       void loadLesson(currentConcept.id).finally(() => setLoading(false));
     }
   }, [currentConcept, lessonContent, loadLesson]);
+
+  // Pre-fetch quiz in the background once the lesson is loaded
+  useEffect(() => {
+    if (currentConcept && lessonContent && !quizSession) {
+      void loadQuiz(currentConcept.id);
+    }
+  }, [currentConcept, lessonContent, quizSession, loadQuiz]);
 
   const handleExplainRequest = async () => {
     if (!currentConcept || !lessonContent) return;
@@ -58,12 +64,8 @@ export default function Lesson() {
     }
   };
 
-  const handleReadyForQuiz = async () => {
+  const handleReadyForQuiz = () => {
     if (currentConcept) {
-      if (!hasAwardedXP.current) {
-        hasAwardedXP.current = true;
-        await awardXP(25, "lesson_complete", `Completed lesson: ${currentConcept.name}`);
-      }
       navigate("/quiz");
     }
   };
@@ -152,7 +154,7 @@ export default function Lesson() {
               onRequest={() => void handleExplainRequest()}
             />
             <button
-              onClick={() => void handleReadyForQuiz()}
+              onClick={handleReadyForQuiz}
               className="btn-primary"
             >
               I'm ready for the quiz
