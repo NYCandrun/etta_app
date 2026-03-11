@@ -582,17 +582,58 @@ pub fn get_submission_feedback(
     match sub {
         Some(s) if s.status == "reviewed" && s.feedback_json.is_some() => {
             let feedback_text = s.feedback_json.unwrap_or_default();
-            // Try to parse structured feedback, fall back to wrapping raw text
+
+            // Try to parse structured feedback from the AI response
+            #[derive(Deserialize)]
+            struct ParsedFeedback {
+                #[serde(default)]
+                verdict: Option<String>,
+                #[serde(default, alias = "overall_score")]
+                overall_score: Option<f64>,
+                #[serde(default)]
+                strengths: Option<Vec<String>>,
+                #[serde(default, alias = "areas_for_improvement")]
+                areas_for_improvement: Option<Vec<String>>,
+                #[serde(default, alias = "next_steps")]
+                next_steps: Option<Vec<String>>,
+                #[serde(default, alias = "detailed_comments")]
+                detailed_comments: Option<String>,
+                #[serde(default, alias = "xp_earned")]
+                xp_earned: Option<u32>,
+            }
+
+            // Strip markdown code fences if present
+            let json_str = feedback_text.trim()
+                .strip_prefix("```json").or_else(|| feedback_text.trim().strip_prefix("```"))
+                .unwrap_or(feedback_text.trim())
+                .strip_suffix("```").unwrap_or(feedback_text.trim()).trim();
+
+            let parsed = serde_json::from_str::<ParsedFeedback>(json_str).ok();
+
             Ok(Some(FeedbackResultInfo {
                 submission_id: id.to_string(),
-                verdict: if s.status == "reviewed" { "pass".to_string() } else { "revise".to_string() },
-                overall_score: 0.8,
-                strengths: vec!["Submitted work for review".to_string()],
-                areas_for_improvement: vec![],
-                next_steps: vec!["Review the feedback below".to_string()],
-                detailed_comments: feedback_text,
+                verdict: parsed.as_ref()
+                    .and_then(|p| p.verdict.clone())
+                    .unwrap_or_else(|| "pass".to_string()),
+                overall_score: parsed.as_ref()
+                    .and_then(|p| p.overall_score)
+                    .unwrap_or(0.0),
+                strengths: parsed.as_ref()
+                    .and_then(|p| p.strengths.clone())
+                    .unwrap_or_default(),
+                areas_for_improvement: parsed.as_ref()
+                    .and_then(|p| p.areas_for_improvement.clone())
+                    .unwrap_or_default(),
+                next_steps: parsed.as_ref()
+                    .and_then(|p| p.next_steps.clone())
+                    .unwrap_or_default(),
+                detailed_comments: parsed.as_ref()
+                    .and_then(|p| p.detailed_comments.clone())
+                    .unwrap_or_else(|| feedback_text.clone()),
                 evaluated_at: s.submitted_at,
-                xp_earned: 25,
+                xp_earned: parsed.as_ref()
+                    .and_then(|p| p.xp_earned)
+                    .unwrap_or(0),
             }))
         }
         _ => Ok(None),

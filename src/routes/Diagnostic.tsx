@@ -144,21 +144,22 @@ export default function Diagnostic() {
       const q = questions[currentIndex];
       if (!q) return;
 
-      setAnswers((prev) => {
-        const next = new Map(prev);
-        next.set(q.id, optionId);
-        return next;
-      });
+      // Build updated answers synchronously to avoid stale closure in setTimeout
+      const updatedAnswers = new Map(answers);
+      updatedAnswers.set(q.id, optionId);
+      setAnswers(updatedAnswers);
+
+      // Capture values needed by the timeout so it doesn't rely on stale state
+      const isLast = currentIndex >= questions.length - 1;
+      const nextIndex = currentIndex + 1;
 
       // Auto-advance after a brief delay
       setTimeout(() => {
-        if (currentIndex < questions.length - 1) {
-          setCurrentIndex((i) => i + 1);
+        if (!isLast) {
+          setCurrentIndex(nextIndex);
         } else {
-          // Score and show results
-          const newAnswers = new Map(answers);
-          newAnswers.set(q.id, optionId);
-          const scored = scoreDiagnostic(questions, newAnswers);
+          // Score using the pre-computed updatedAnswers (not stale `answers`)
+          const scored = scoreDiagnostic(questions, updatedAnswers);
           setResults(scored);
           setPhase("results");
         }
@@ -332,7 +333,18 @@ export default function Diagnostic() {
 
   // Testing phase
   const currentQ = questions[currentIndex];
-  if (!currentQ) return null;
+  if (!currentQ) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <p className="mb-4 text-warm-500 dark:text-warm-400">
+          No diagnostic questions available. Try loading the curriculum first.
+        </p>
+        <button onClick={() => navigate("/")} className="btn-secondary">
+          Go to Dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <motion.div
