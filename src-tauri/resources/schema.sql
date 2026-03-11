@@ -44,9 +44,18 @@ CREATE TABLE IF NOT EXISTS content_cache (
     created_at      TEXT NOT NULL            -- ISO 8601 datetime
 );
 
+CREATE TABLE IF NOT EXISTS xp_events (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    amount          INTEGER NOT NULL,
+    source          TEXT NOT NULL,         -- lesson_complete, quiz_perfect, etc.
+    description     TEXT NOT NULL DEFAULT '',
+    created_at      TEXT NOT NULL           -- ISO 8601 datetime
+);
+
 -- Indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_concepts_next_review ON concepts(next_review);
 CREATE INDEX IF NOT EXISTS idx_concepts_domain ON concepts(domain);
 CREATE INDEX IF NOT EXISTS idx_submissions_concept ON submissions(concept_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_project ON submissions(project_id);
 CREATE INDEX IF NOT EXISTS idx_cache_concept_type ON content_cache(concept_id, content_type);
+CREATE INDEX IF NOT EXISTS idx_xp_events_created ON xp_events(created_at);

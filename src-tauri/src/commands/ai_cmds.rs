@@ -610,6 +610,19 @@ pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
     let submissions = db::submissions::get_recent_submissions(&conn, 1000)
         .map_err(|e| format!("DB error: {e}"))?;
 
+    // Include quiz/lesson history from content cache
+    let quiz_history: Vec<_> = concepts
+        .iter()
+        .flat_map(|c| {
+            db::content_cache::get_cache_for_concept(&conn, &c.id)
+                .unwrap_or_default()
+        })
+        .collect();
+
+    // Include XP event history
+    let xp_events = db::xp_events::get_all_xp_events(&conn)
+        .map_err(|e| format!("DB error: {e}"))?;
+
     // Filter out sensitive settings (API keys, tokens, passwords)
     let safe_settings: Vec<_> = settings
         .into_iter()
@@ -622,10 +635,12 @@ pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
 
     let export = serde_json::json!({
         "exportedAt": chrono::Utc::now().to_rfc3339(),
-        "version": "1.0",
+        "version": "1.1",
         "concepts": concepts,
         "settings": safe_settings,
         "submissions": submissions,
+        "contentHistory": quiz_history,
+        "xpEvents": xp_events,
     });
 
     serde_json::to_string_pretty(&export).map_err(|e| format!("Serialization error: {e}"))

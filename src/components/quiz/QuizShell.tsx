@@ -43,17 +43,17 @@ export function QuizShell({
       setSubmitted(true);
       // Build question context for backend grading
       const q = session.questions[session.currentIndex];
-      const questionCtx: ipc.QuestionContext | undefined = q
+      const questionCtx: ipc.QuestionContext = q
         ? {
             conceptId: session.conceptId,
             questionType: q.type,
             prompt: q.prompt,
-            correctOptionId: q.options?.find((o) => o.isCorrect)?.id,
+            correctOptionId: q.options?.find((o: { isCorrect?: boolean; id?: string }) => o.isCorrect)?.id,
             expectedBlanks: q.blanks,
             rubric: q.rubric,
             explanation: q.explanation,
           }
-        : undefined;
+        : { conceptId: session.conceptId, questionType: "multiple_choice", prompt: "" };
       try {
         const feedback = await ipc.submitAnswer(session.id, answer, questionCtx);
         setCurrentFeedback(feedback);

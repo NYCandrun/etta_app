@@ -18,7 +18,9 @@ export async function getSetting<T>(key: string): Promise<T | null> {
 
 export async function setSetting<T>(key: string, value: T): Promise<void> {
   if (!isTauri()) return;
-  return tauriInvoke<void>("set_setting", { key, value });
+  // Backend expects a string value; coerce non-string types
+  const stringValue = typeof value === "string" ? value : String(value);
+  return tauriInvoke<void>("set_setting", { key, value: stringValue });
 }
 
 // ─── API Key ───────────────────────────────────────────────
@@ -39,7 +41,19 @@ export async function testApiKey(): Promise<{ valid: boolean; message: string }>
   if (!isTauri()) {
     return { valid: false, message: "Tauri not available in browser mode" };
   }
-  return tauriInvoke<{ valid: boolean; message: string }>("test_api_key");
+  try {
+    const result = await tauriInvoke<boolean | { valid: boolean; message: string }>("test_api_key");
+    // Backend returns bool; normalize to { valid, message }
+    if (typeof result === "boolean") {
+      return {
+        valid: result,
+        message: result ? "API key is valid. Connection successful!" : "API key test failed.",
+      };
+    }
+    return result;
+  } catch (e) {
+    return { valid: false, message: String(e) };
+  }
 }
 
 // ─── Curriculum ────────────────────────────────────────────
@@ -178,7 +192,74 @@ export async function getDailySession(): Promise<DailySessionResponse | null> {
 // ─── Lessons ───────────────────────────────────────────────
 
 export async function getLesson(conceptId: string): Promise<LessonContent> {
-  return tauriInvoke<LessonContent>("get_lesson", { conceptId });
+  const raw = await tauriInvoke<LessonContent | string>("get_lesson", { conceptId });
+  return normalizeLessonContent(raw, conceptId);
+}
+
+/**
+ * Normalize the backend lesson response into the frontend LessonContent shape.
+ * Backend may return a structured object or a raw markdown/JSON string.
+ */
+function normalizeLessonContent(raw: LessonContent | string, conceptId: string): LessonContent {
+  if (typeof raw === "object" && raw !== null && "sections" in raw) {
+    return raw;
+  }
+
+  const text = typeof raw === "string" ? raw : JSON.stringify(raw);
+
+  // Try parsing as JSON first
+  try {
+    const parsed = JSON.parse(text);
+    if (typeof parsed === "object" && parsed !== null) {
+      return {
+        id: parsed.id ?? `lesson_${conceptId}`,
+        conceptId: parsed.conceptId ?? parsed.concept_id ?? conceptId,
+        title: parsed.title ?? "",
+        summary: parsed.summary ?? "",
+        sections: Array.isArray(parsed.sections)
+          ? parsed.sections.map((s: Record<string, unknown>, i: number) => ({
+              id: s.id ?? `section_${i}`,
+              title: String(s.title ?? ""),
+              content: String(s.content ?? ""),
+              order: Number(s.order ?? i),
+            }))
+          : [],
+        workedExamples: Array.isArray(parsed.workedExamples ?? parsed.worked_examples)
+          ? (parsed.workedExamples ?? parsed.worked_examples).map(
+              (e: Record<string, unknown>, i: number) => ({
+                id: e.id ?? `example_${i}`,
+                title: String(e.title ?? ""),
+                steps: Array.isArray(e.steps)
+                  ? e.steps.map((st: Record<string, unknown>, j: number) => ({
+                      id: st.id ?? `step_${j}`,
+                      label: String(st.label ?? ""),
+                      content: String(st.content ?? ""),
+                    }))
+                  : [],
+              })
+            )
+          : [],
+        strategy: parsed.strategy ?? "default",
+        estimatedMinutes: Number(parsed.estimatedMinutes ?? parsed.estimated_minutes ?? 10),
+        prerequisites: Array.isArray(parsed.prerequisites) ? parsed.prerequisites : [],
+      };
+    }
+  } catch {
+    // Not valid JSON — treat as markdown
+  }
+
+  // Fallback: wrap raw markdown text as a single-section lesson
+  return {
+    id: `lesson_${conceptId}`,
+    conceptId,
+    title: "",
+    summary: "",
+    sections: [{ id: "section_0", title: "Lesson", content: text, order: 0 }],
+    workedExamples: [],
+    strategy: "default",
+    estimatedMinutes: 10,
+    prerequisites: [],
+  };
 }
 
 export async function requestExplanation(
@@ -196,7 +277,74 @@ export async function requestExplanation(
 // ─── Quiz ──────────────────────────────────────────────────
 
 export async function getQuiz(conceptId: string): Promise<QuizSession> {
-  return tauriInvoke<QuizSession>("get_quiz", { conceptId });
+  const raw = await tauriInvoke<QuizSession | string>("get_quiz", { conceptId });
+  return normalizeQuizSession(raw, conceptId);
+}
+
+/**
+ * Normalize the backend quiz response into the frontend QuizSession shape.
+ * Backend returns a raw JSON string; the frontend expects a parsed QuizSession.
+ */
+function normalizeQuizSession(raw: QuizSession | string, conceptId: string): QuizSession {
+  if (typeof raw === "object" && raw !== null && "questions" in raw) {
+    return raw;
+  }
+
+  const text = typeof raw === "string" ? raw : JSON.stringify(raw);
+
+  try {
+    const parsed = JSON.parse(text);
+    if (typeof parsed === "object" && parsed !== null) {
+      const questions = Array.isArray(parsed.questions)
+        ? parsed.questions.map((q: Record<string, unknown>, i: number) => ({
+            id: q.id ?? `q_${i}`,
+            type: String(q.type ?? q.questionType ?? q.question_type ?? "multiple_choice"),
+            prompt: String(q.prompt ?? q.question ?? ""),
+            options: Array.isArray(q.options)
+              ? q.options.map((o: Record<string, unknown>, j: number) => ({
+                  id: o.id ?? `opt_${j}`,
+                  text: String(o.text ?? o.label ?? ""),
+                  isCorrect: Boolean(o.isCorrect ?? o.is_correct ?? o.correct ?? false),
+                }))
+              : undefined,
+            blanks: Array.isArray(q.blanks ?? q.expectedBlanks ?? q.expected_blanks)
+              ? (q.blanks ?? q.expectedBlanks ?? q.expected_blanks) as string[]
+              : undefined,
+            rubric: (q.rubric as string) ?? undefined,
+            explanation: (q.explanation as string) ?? undefined,
+          }))
+        : [];
+
+      return {
+        id: parsed.id ?? `quiz_${conceptId}_${Date.now()}`,
+        conceptId: parsed.conceptId ?? parsed.concept_id ?? conceptId,
+        questions,
+        answers: [],
+        feedbacks: [],
+        currentIndex: 0,
+        startedAt: parsed.startedAt ?? new Date().toISOString(),
+        completedAt: null,
+        totalScore: 0,
+        xpEarned: 0,
+      };
+    }
+  } catch {
+    // Not valid JSON
+  }
+
+  // Fallback: empty quiz
+  return {
+    id: `quiz_${conceptId}_${Date.now()}`,
+    conceptId,
+    questions: [],
+    answers: [],
+    feedbacks: [],
+    currentIndex: 0,
+    startedAt: new Date().toISOString(),
+    completedAt: null,
+    totalScore: 0,
+    xpEarned: 0,
+  };
 }
 
 /** Context about the question so the backend can grade the answer. */
@@ -213,9 +361,9 @@ export interface QuestionContext {
 export async function submitAnswer(
   sessionId: string,
   answer: Answer,
-  question?: QuestionContext
+  question: QuestionContext
 ): Promise<Feedback> {
-  return tauriInvoke<Feedback>("submit_answer", { sessionId, answer, question: question ?? { conceptId: "", questionType: "multiple_choice", prompt: "" } });
+  return tauriInvoke<Feedback>("submit_answer", { sessionId, answer, question });
 }
 
 export async function completeQuiz(
@@ -254,37 +402,157 @@ export async function verifyNoRightAnswer(
 
 export async function getProjects(): Promise<ProjectDefinition[]> {
   if (!isTauri()) return [];
-  return tauriInvoke<ProjectDefinition[]>("get_projects");
+  const raw = await tauriInvoke<Record<string, unknown>[]>("get_projects");
+  if (!Array.isArray(raw)) return [];
+  return raw.map(normalizeProjectDefinition);
+}
+
+/**
+ * Normalize backend ProjectInfo into frontend ProjectDefinition.
+ * Backend returns submission-shaped objects; frontend expects project metadata.
+ */
+function normalizeProjectDefinition(raw: Record<string, unknown>): ProjectDefinition {
+  return {
+    id: String(raw.id ?? raw.project_id ?? raw.projectId ?? ""),
+    conceptIds: Array.isArray(raw.conceptIds ?? raw.concept_ids)
+      ? (raw.conceptIds ?? raw.concept_ids) as string[]
+      : raw.concept_id || raw.conceptId
+        ? [String(raw.concept_id ?? raw.conceptId)]
+        : [],
+    title: String(raw.title ?? raw.name ?? `Project ${raw.id ?? ""}`),
+    description: String(raw.description ?? raw.feedback ?? ""),
+    requirements: Array.isArray(raw.requirements) ? raw.requirements as string[] : [],
+    acceptedFormats: Array.isArray(raw.acceptedFormats ?? raw.accepted_formats)
+      ? (raw.acceptedFormats ?? raw.accepted_formats) as string[]
+      : [".pdf", ".png", ".jpg", ".txt"],
+    estimatedMinutes: Number(raw.estimatedMinutes ?? raw.estimated_minutes ?? 30),
+  };
 }
 
 export async function submitProject(
   projectId: string,
   filePath: string
 ): Promise<Submission> {
-  return tauriInvoke<Submission>("submit_project", { projectId, filePath });
+  const raw = await tauriInvoke<Record<string, unknown>>(
+    "submit_project",
+    { submission: { conceptId: projectId, projectId, filePath } }
+  );
+  return normalizeSubmission(raw);
+}
+
+/**
+ * Normalize backend ProjectInfo into frontend Submission.
+ */
+function normalizeSubmission(raw: Record<string, unknown>): Submission {
+  const feedbackText = raw.feedback ?? raw.feedbackJson ?? raw.feedback_json;
+  let feedback: FeedbackResult | null = null;
+  if (feedbackText && typeof feedbackText === "string") {
+    try {
+      const parsed = JSON.parse(feedbackText);
+      feedback = parsed as FeedbackResult;
+    } catch {
+      feedback = {
+        submissionId: String(raw.id ?? ""),
+        verdict: raw.status === "reviewed" ? "pass" : "revise",
+        overallScore: 0.8,
+        strengths: [],
+        areasForImprovement: [],
+        nextSteps: [],
+        detailedComments: feedbackText,
+        evaluatedAt: String(raw.submitted_at ?? raw.submittedAt ?? ""),
+        xpEarned: 25,
+      };
+    }
+  } else if (typeof feedbackText === "object" && feedbackText !== null) {
+    feedback = feedbackText as FeedbackResult;
+  }
+
+  const filePath = String(raw.file_path ?? raw.filePath ?? "");
+  return {
+    id: String(raw.id ?? ""),
+    projectId: String(raw.project_id ?? raw.projectId ?? ""),
+    fileName: filePath.split("/").pop() ?? "",
+    fileType: String(raw.mime_type ?? raw.mimeType ?? ""),
+    filePath,
+    submittedAt: String(raw.submitted_at ?? raw.submittedAt ?? ""),
+    status: (raw.status as "pending" | "evaluating" | "reviewed") ?? "pending",
+    feedback,
+  };
 }
 
 export async function getSubmissions(
   projectId?: string
 ): Promise<Submission[]> {
   if (!isTauri()) return [];
-  return tauriInvoke<Submission[]>("get_submissions", { projectId });
+  const raw = await tauriInvoke<Record<string, unknown>[]>("get_submissions", { projectId });
+  if (!Array.isArray(raw)) return [];
+  return raw.map(normalizeSubmission);
 }
 
 export async function getSubmissionFeedback(
   submissionId: string
 ): Promise<FeedbackResult | null> {
   if (!isTauri()) return null;
-  return tauriInvoke<FeedbackResult>("get_submission_feedback", {
-    submissionId,
-  });
+  try {
+    return await tauriInvoke<FeedbackResult>("get_submission_feedback", {
+      submissionId,
+    });
+  } catch {
+    return null;
+  }
 }
 
 // ─── Gamification ──────────────────────────────────────────
 
 export async function getGamificationState(): Promise<GamificationState | null> {
   if (!isTauri()) return null;
-  return tauriInvoke<GamificationState>("get_gamification_state");
+  const raw = await tauriInvoke<Record<string, unknown>>("get_gamification_state");
+  if (!raw) return null;
+  return normalizeGamificationState(raw);
+}
+
+/**
+ * Normalize the backend GamificationState into the frontend shape.
+ * Handles both the new nested shape and legacy flat shape for robustness.
+ */
+function normalizeGamificationState(raw: Record<string, unknown>): GamificationState {
+  // XP: accept either "xp" (new) or "total_xp"/"totalXp" (legacy)
+  const xp = Number(raw.xp ?? raw.totalXp ?? raw.total_xp ?? 0);
+
+  // Level: accept nested object (new) or flat integer (legacy)
+  const level =
+    typeof raw.level === "object" && raw.level !== null
+      ? (raw.level as GamificationState["level"])
+      : {
+          current: Number(raw.level ?? 1),
+          title: "",
+          xpForCurrent: 0,
+          xpForNext: Number(raw.xpToNextLevel ?? raw.xp_to_next_level ?? 100),
+          progress: 0,
+        };
+
+  // Streak: accept nested object (new) or flat fields (legacy)
+  const streak =
+    typeof raw.streak === "object" && raw.streak !== null
+      ? (raw.streak as GamificationState["streak"])
+      : {
+          currentDays: Number(raw.currentStreakDays ?? raw.current_streak_days ?? 0),
+          longestDays: Number(raw.longestStreakDays ?? raw.longest_streak_days ?? 0),
+          todayCompleted: false,
+          freezesAvailable: 0,
+          freezeActive: false,
+          lastActiveDate: "",
+        };
+
+  const badges = Array.isArray(raw.badges)
+    ? (raw.badges as GamificationState["badges"])
+    : [];
+
+  const recentXpEvents = Array.isArray(raw.recentXpEvents)
+    ? (raw.recentXpEvents as GamificationState["recentXpEvents"])
+    : [];
+
+  return { xp, level, streak, badges, recentXpEvents };
 }
 
 export async function awardXp(
