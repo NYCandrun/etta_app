@@ -26,7 +26,7 @@ const SENSITIVE_KEYS: &[&str] = &[
 ];
 
 /// Helper: get the configured base model from settings, falling back to default.
-fn get_base_model(conn: &rusqlite::Connection) -> String {
+pub(crate) fn get_base_model(conn: &rusqlite::Connection) -> String {
     db::settings::get_setting(conn, "base_model")
         .ok()
         .flatten()
@@ -247,18 +247,9 @@ fn known_models() -> Vec<AvailableModel> {
 
 #[tauri::command]
 pub async fn list_available_models() -> Result<Vec<AvailableModel>, String> {
-    // Try to discover models from the API
-    match keychain::get_api_key() {
-        Ok(Some(api_key)) => {
-            // Attempt to validate the key and return known models if valid
-            let client = ClaudeClient::new(&api_key);
-            match client.test_connection().await {
-                Ok(true) => Ok(known_models()),
-                _ => Ok(known_models()),
-            }
-        }
-        _ => Ok(known_models()),
-    }
+    // Return known models directly — no need to waste an API call since the
+    // result is the same regardless of connection status.
+    Ok(known_models())
 }
 
 // ── Request Explanation (Lesson) ────────────────────────────────────────────
@@ -328,7 +319,7 @@ pub async fn request_explanation(
     let user_msg = format!(
         "<concept>\n  <id>{}</id>\n  <title>{}</title>\n  <domain>{}</domain>\n  <module>{}</module>\n</concept>\n\n\
          Please explain this concept again using the {} approach.",
-        concept.id, concept.title, concept.domain, concept.module, strategy
+        xml_escape(&concept.id), xml_escape(&concept.title), xml_escape(&concept.domain), xml_escape(&concept.module), strategy
     );
 
     let request = MessagesRequest::new(&model, 2048, Some(system), vec![Message::user_text(&user_msg)], false);
@@ -435,8 +426,8 @@ pub fn get_mastery_history(state: State<'_, AppState>) -> Result<Vec<MasteryData
         let _ = db::mastery_snapshots::upsert_snapshot(&conn, &today, domain, avg);
     }
 
-    // Return all stored snapshots (includes today's freshly-upserted data)
-    let snapshots = db::mastery_snapshots::get_all_snapshots(&conn)
+    // Return recent snapshots (90-day window) to avoid sending unbounded data
+    let snapshots = db::mastery_snapshots::get_snapshots_since(&conn, None)
         .map_err(|e| format!("DB error: {e}"))?;
 
     Ok(snapshots.into_iter().map(|s| MasteryDataPoint {
@@ -486,7 +477,7 @@ pub fn get_review_forecast(state: State<'_, AppState>) -> Result<Vec<ReviewForec
 pub fn activate_streak_freeze(state: State<'_, AppState>) -> Result<bool, String> {
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
 
-    let freezes = db::settings::get_setting(&conn, "streak_freezes")
+    let freezes = db::settings::get_setting(&conn, "streak_freezes_available")
         .map_err(|e| format!("DB error: {e}"))?
         .and_then(|v| v.parse::<i64>().ok())
         .unwrap_or(1); // Default 1 free freeze
@@ -496,7 +487,7 @@ pub fn activate_streak_freeze(state: State<'_, AppState>) -> Result<bool, String
     }
 
     // Use a freeze
-    db::settings::set_setting(&conn, "streak_freezes", &(freezes - 1).to_string())
+    db::settings::set_setting(&conn, "streak_freezes_available", &(freezes - 1).to_string())
         .map_err(|e| format!("DB error: {e}"))?;
     db::settings::set_setting(&conn, "streak_freeze_active", "true")
         .map_err(|e| format!("DB error: {e}"))?;

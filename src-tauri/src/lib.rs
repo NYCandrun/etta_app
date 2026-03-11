@@ -16,6 +16,13 @@ pub struct AppState {
     pub db: Mutex<Connection>,
 }
 
+/// Record mastery snapshots using the shared app state.
+fn take_mastery_snapshot(state: &AppState) {
+    if let Ok(conn) = state.db.lock() {
+        let _ = engine::snapshots::record_mastery_snapshots(&conn);
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -46,7 +53,21 @@ pub fn run() {
                 _ => {}
             }
 
+            // Take a mastery snapshot on startup so progress is captured on launch
+            let _ = engine::snapshots::record_mastery_snapshots(&db);
+
             drop(db);
+
+            // Start a background timer to take mastery snapshots every 10 minutes.
+            // This ensures progress is captured even if the user closes the app abruptly.
+            let app_handle = app.handle().clone();
+            std::thread::spawn(move || {
+                loop {
+                    std::thread::sleep(std::time::Duration::from_secs(600)); // 10 minutes
+                    let state = app_handle.state::<AppState>();
+                    take_mastery_snapshot(&state);
+                }
+            });
 
             Ok(())
         })
@@ -88,6 +109,13 @@ pub fn run() {
             commands::ai_cmds::get_submission_feedback,
             commands::ai_cmds::export_data,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running Astrolabe");
+        .build(tauri::generate_context!())
+        .expect("error while building Astrolabe")
+        .run(|app_handle, event| {
+            // Take a final mastery snapshot when the app is about to exit
+            if let tauri::RunEvent::ExitRequested { .. } = event {
+                let state = app_handle.state::<AppState>();
+                take_mastery_snapshot(&state);
+            }
+        });
 }

@@ -10,8 +10,25 @@ pub fn get_setting(state: State<'_, AppState>, key: String) -> Result<Option<Str
     db::settings::get_setting(&conn, &key).map_err(|e| format!("DB error: {e}"))
 }
 
+/// Settings that may be modified from the frontend. Keys not in this list
+/// are rejected to prevent tampering with internal state (e.g. streak_freezes,
+/// streak_freeze_active) via the IPC boundary.
+const ALLOWED_SETTING_KEYS: &[&str] = &[
+    "base_model",
+    "escalation_model",
+    "theme",
+    "daily_goal_minutes",
+    "notifications_enabled",
+    "sound_enabled",
+    "display_name",
+    "session_length",
+];
+
 #[tauri::command]
 pub fn set_setting(state: State<'_, AppState>, key: String, value: String) -> Result<(), String> {
+    if !ALLOWED_SETTING_KEYS.contains(&key.as_str()) {
+        return Err(format!("Setting '{}' cannot be modified.", key));
+    }
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
     db::settings::set_setting(&conn, &key, &value).map_err(|e| format!("DB error: {e}"))
 }

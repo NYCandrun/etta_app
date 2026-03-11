@@ -21,6 +21,10 @@ pub struct ScheduleUpdate {
 
 /// Minimum ease factor floor.
 const MIN_EASE_FACTOR: f64 = 1.3;
+/// Maximum ease factor cap — prevents intervals from growing too aggressively.
+const MAX_EASE_FACTOR: f64 = 3.5;
+/// Maximum interval in days — ensures concepts are reviewed at least this often.
+const MAX_INTERVAL_DAYS: i64 = 180;
 
 /// Modified SM-2 algorithm.
 ///
@@ -52,12 +56,14 @@ pub fn update_schedule(
             (current_ease, interval.max(1))
         }
         ResponseQuality::Easy => {
-            let ease = current_ease + 0.1;
+            let ease = (current_ease + 0.1).min(MAX_EASE_FACTOR);
             let interval = ((current_interval as f64) * ease).round() as i64;
             (ease, interval.max(1))
         }
     };
 
+    // Cap interval to prevent reviews from being scheduled too far out
+    let new_interval = new_interval.min(MAX_INTERVAL_DAYS);
     let next_review = compute_next_review_date(new_interval);
 
     ScheduleUpdate {
@@ -86,6 +92,26 @@ pub fn classify_response(correct: bool, streak: i64, latency_ms: Option<i64>) ->
     }
 
     ResponseQuality::Good
+}
+
+/// Mastery threshold above which a concept is considered expert-level.
+/// Expert concepts are automatically rescheduled without requiring a review quiz.
+pub const EXPERT_MASTERY_THRESHOLD: f64 = 0.95;
+
+/// Auto-reschedule an expert-level concept (mastery >= 0.95) to a longer interval
+/// without requiring the user to take a quiz. Returns the new schedule.
+pub fn expert_reschedule(current_ease: f64, current_interval: i64) -> ScheduleUpdate {
+    // Treat as Easy — boost ease and multiply interval
+    let ease = (current_ease + 0.1).min(MAX_EASE_FACTOR);
+    let interval = ((current_interval as f64) * ease).round() as i64;
+    let new_interval = interval.max(30).min(MAX_INTERVAL_DAYS); // at least 30 days out
+    let next_review = compute_next_review_date(new_interval);
+
+    ScheduleUpdate {
+        ease_factor: ease,
+        interval_days: new_interval,
+        next_review,
+    }
 }
 
 /// Compute next review date string (ISO 8601) by adding interval_days to today.
