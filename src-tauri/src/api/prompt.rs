@@ -2,7 +2,7 @@ use super::types::{Message, MessagesRequest};
 use crate::db::concepts::Concept;
 use serde::{Deserialize, Serialize};
 
-const DEFAULT_MODEL: &str = "claude-sonnet-4-20250514";
+pub const DEFAULT_MODEL: &str = "claude-sonnet-4-20250514";
 const DEFAULT_MAX_TOKENS: u32 = 4096;
 
 /// The modes the tutor can operate in.
@@ -51,6 +51,7 @@ impl From<&Concept> for LearnerContext {
 }
 
 /// Build a complete API request for a given tutor mode.
+/// If `model_override` is provided, it takes precedence over DEFAULT_MODEL.
 pub fn build_request(
     mode: &TutorMode,
     concept: &Concept,
@@ -58,14 +59,27 @@ pub fn build_request(
     system_prompt: &str,
     extra_user_text: Option<&str>,
 ) -> MessagesRequest {
+    build_request_with_model(DEFAULT_MODEL, mode, concept, learner_ctx, system_prompt, extra_user_text, false)
+}
+
+/// Build a request with a specific model.
+pub fn build_request_with_model(
+    model: &str,
+    mode: &TutorMode,
+    concept: &Concept,
+    learner_ctx: &LearnerContext,
+    system_prompt: &str,
+    extra_user_text: Option<&str>,
+    stream: bool,
+) -> MessagesRequest {
     let user_message = build_user_message(mode, concept, learner_ctx, extra_user_text);
 
     MessagesRequest::new(
-        DEFAULT_MODEL,
+        model,
         DEFAULT_MAX_TOKENS,
         Some(system_prompt.to_string()),
         vec![Message::user_text(&user_message)],
-        false,
+        stream,
     )
 }
 
@@ -77,15 +91,7 @@ pub fn build_streaming_request(
     system_prompt: &str,
     extra_user_text: Option<&str>,
 ) -> MessagesRequest {
-    let user_message = build_user_message(mode, concept, learner_ctx, extra_user_text);
-
-    MessagesRequest::new(
-        DEFAULT_MODEL,
-        DEFAULT_MAX_TOKENS,
-        Some(system_prompt.to_string()),
-        vec![Message::user_text(&user_message)],
-        true,
-    )
+    build_request_with_model(DEFAULT_MODEL, mode, concept, learner_ctx, system_prompt, extra_user_text, true)
 }
 
 fn build_user_message(

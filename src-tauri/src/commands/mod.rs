@@ -1,3 +1,4 @@
+pub mod ai_cmds;
 pub mod gamification_cmds;
 pub mod lesson_cmds;
 pub mod progress_cmds;

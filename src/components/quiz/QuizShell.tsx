@@ -30,6 +30,8 @@ export function QuizShell({
   const [currentFeedback, setCurrentFeedback] = useState<Feedback | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
+  const [hasFileUpload, setHasFileUpload] = useState(false);
+  const [lastUserAnswer, setLastUserAnswer] = useState("");
 
   const currentQuestion = session.questions[session.currentIndex];
   const isLastQuestion =
@@ -39,8 +41,21 @@ export function QuizShell({
   const handleSubmitAnswer = useCallback(
     async (answer: Answer) => {
       setSubmitted(true);
+      // Build question context for backend grading
+      const q = session.questions[session.currentIndex];
+      const questionCtx: ipc.QuestionContext | undefined = q
+        ? {
+            conceptId: session.conceptId,
+            questionType: q.type,
+            prompt: q.prompt,
+            correctOptionId: q.options?.find((o) => o.isCorrect)?.id,
+            expectedBlanks: q.blanks,
+            rubric: q.rubric,
+            explanation: q.explanation,
+          }
+        : undefined;
       try {
-        const feedback = await ipc.submitAnswer(session.id, answer);
+        const feedback = await ipc.submitAnswer(session.id, answer, questionCtx);
         setCurrentFeedback(feedback);
         setSession((prev) => ({
           ...prev,
@@ -64,12 +79,15 @@ export function QuizShell({
         }));
       }
     },
-    [session.id]
+    [session.id, session.conceptId, session.currentIndex, session.questions]
   );
 
   const handleMultipleChoiceSubmit = useCallback(
     (optionId: string) => {
       if (!currentQuestion) return;
+      const selected = currentQuestion.options?.find((o) => o.id === optionId);
+      setLastUserAnswer(selected?.text ?? optionId);
+      setHasFileUpload(false);
       const answer: Answer = {
         questionId: currentQuestion.id,
         selectedOptionId: optionId,
@@ -81,14 +99,15 @@ export function QuizShell({
   );
 
   const handleFreeResponseSubmit = useCallback(
-    (text: string, _file?: File) => {
+    (text: string, files?: File[]) => {
       if (!currentQuestion) return;
+      setLastUserAnswer(text);
+      setHasFileUpload(!!files && files.length > 0);
       const answer: Answer = {
         questionId: currentQuestion.id,
         freeText: text,
         timeSpentMs: Date.now() - questionStartTime,
       };
-      // TODO: Upload file via IPC when backend supports it
       void handleSubmitAnswer(answer);
     },
     [currentQuestion, questionStartTime, handleSubmitAnswer]
@@ -97,6 +116,8 @@ export function QuizShell({
   const handleFillInBlankSubmit = useCallback(
     (blanks: string[]) => {
       if (!currentQuestion) return;
+      setLastUserAnswer(blanks.join(", "));
+      setHasFileUpload(false);
       const answer: Answer = {
         questionId: currentQuestion.id,
         filledBlanks: blanks,
@@ -109,14 +130,17 @@ export function QuizShell({
 
   const handleContinue = useCallback(() => {
     if (isLastQuestion) {
+      const totalScore =
+        session.feedbacks.reduce((s, f) => s + f.score, 0) /
+        Math.max(1, session.feedbacks.length);
       const completed: QuizSession = {
         ...session,
         completedAt: new Date().toISOString(),
-        totalScore:
-          session.feedbacks.reduce((s, f) => s + f.score, 0) /
-          Math.max(1, session.feedbacks.length),
+        totalScore,
       };
       setSession(completed);
+      // Send scores to backend for XP calculation
+      void ipc.completeQuiz(session.id, session.feedbacks.map((f) => f.score));
       onComplete(completed);
     } else {
       setSession((prev) => ({
@@ -126,6 +150,8 @@ export function QuizShell({
       setCurrentFeedback(null);
       setSubmitted(false);
       setQuestionStartTime(Date.now());
+      setHasFileUpload(false);
+      setLastUserAnswer("");
     }
   }, [isLastQuestion, session, onComplete]);
 
@@ -293,6 +319,9 @@ export function QuizShell({
           <QuizFeedback
             feedback={currentFeedback}
             onContinue={handleContinue}
+            questionPrompt={currentQuestion?.prompt}
+            userAnswer={lastUserAnswer}
+            hasFileUpload={hasFileUpload}
           />
         )}
       </AnimatePresence>

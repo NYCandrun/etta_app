@@ -4,21 +4,63 @@ use std::path::Path;
 
 use super::graph::{self, Curriculum};
 
-/// Seed the concepts table from the curriculum JSON file.
-/// Expects the file at the given resource directory path.
+/// Seed the concepts table from individual domain JSON files in the curriculum directory.
+/// Falls back to the flat curriculum.json if domain files can't be loaded.
 pub fn seed_concepts_from_file(conn: &Connection, resource_dir: &Path) -> Result<(), String> {
-    let curriculum_path = resource_dir.join("curriculum").join("curriculum.json");
-    let curriculum = graph::load_curriculum(&curriculum_path)?;
+    let curriculum_dir = resource_dir.join("curriculum");
+
+    // Try loading all individual domain files first (preferred)
+    let curriculum = match graph::load_all_domains(&curriculum_dir) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("Warning: failed to load domain files ({e}), falling back to curriculum.json");
+            let curriculum_path = curriculum_dir.join("curriculum.json");
+            graph::load_curriculum(&curriculum_path)?
+        }
+    };
 
     graph::validate_dag(&curriculum)?;
+    eprintln!("Seeding {} concepts from {} domains",
+        curriculum.concepts.len(),
+        curriculum.concepts.iter().map(|c| c.domain.as_str()).collect::<std::collections::HashSet<_>>().len()
+    );
     insert_curriculum(conn, &curriculum)
 }
 
-/// Seed concepts from the built-in curriculum (fallback if resource file not found).
+/// Seed concepts from the built-in domain files (fallback if resource directory not found).
+/// Reads all 12 domain JSON files compiled into the binary.
 pub fn seed_concepts(conn: &Connection) -> Result<(), String> {
-    let json = include_str!("../../resources/curriculum/curriculum.json");
-    let curriculum = graph::load_curriculum_from_str(json)?;
+    let mut all_concepts = Vec::new();
+
+    // Include all domain files at compile time — source of truth
+    let domain_sources: &[(&str, &str)] = &[
+        ("algebra", include_str!("../../resources/curriculum/algebra.json")),
+        ("trigonometry", include_str!("../../resources/curriculum/trigonometry.json")),
+        ("precalculus", include_str!("../../resources/curriculum/precalculus.json")),
+        ("single_variable_calculus", include_str!("../../resources/curriculum/single_variable_calculus.json")),
+        ("multivariable_calculus", include_str!("../../resources/curriculum/multivariable_calculus.json")),
+        ("linear_algebra", include_str!("../../resources/curriculum/linear_algebra.json")),
+        ("differential_equations", include_str!("../../resources/curriculum/differential_equations.json")),
+        ("classical_mechanics", include_str!("../../resources/curriculum/classical_mechanics.json")),
+        ("electromagnetism", include_str!("../../resources/curriculum/electromagnetism.json")),
+        ("thermodynamics", include_str!("../../resources/curriculum/thermodynamics.json")),
+        ("quantum_mechanics", include_str!("../../resources/curriculum/quantum_mechanics.json")),
+        ("astrophysics", include_str!("../../resources/curriculum/astrophysics.json")),
+    ];
+
+    for (name, json) in domain_sources {
+        match graph::load_domain_from_str(json) {
+            Ok(concepts) => all_concepts.extend(concepts),
+            Err(e) => return Err(format!("Failed to parse domain '{}': {e}", name)),
+        }
+    }
+
+    let curriculum = graph::Curriculum { concepts: all_concepts };
     graph::validate_dag(&curriculum)?;
+    eprintln!("Seeding {} concepts from {} domains (built-in)",
+        curriculum.concepts.len(),
+        curriculum.concepts.iter().map(|c| c.domain.as_str()).collect::<std::collections::HashSet<_>>().len()
+    );
     insert_curriculum(conn, &curriculum)
 }
 

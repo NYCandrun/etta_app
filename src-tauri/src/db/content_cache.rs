@@ -12,6 +12,7 @@ pub struct CachedContent {
 }
 
 /// Insert a new cache entry. Returns the new row id.
+/// Also prunes old entries for the same concept+type to prevent bloat (keeps most recent 3).
 pub fn insert_cache_entry(conn: &Connection, entry: &CachedContent) -> Result<i64> {
     conn.execute(
         "INSERT INTO content_cache
@@ -25,7 +26,21 @@ pub fn insert_cache_entry(conn: &Connection, entry: &CachedContent) -> Result<i6
             entry.created_at,
         ],
     )?;
-    Ok(conn.last_insert_rowid())
+    let id = conn.last_insert_rowid();
+
+    // Keep only the 3 most recent entries per concept+type
+    conn.execute(
+        "DELETE FROM content_cache
+         WHERE concept_id = ?1 AND content_type = ?2
+           AND id NOT IN (
+               SELECT id FROM content_cache
+               WHERE concept_id = ?1 AND content_type = ?2
+               ORDER BY created_at DESC LIMIT 3
+           )",
+        params![entry.concept_id, entry.content_type],
+    )?;
+
+    Ok(id)
 }
 
 /// Look up a cached entry by concept_id and content_type.

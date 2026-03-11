@@ -36,6 +36,16 @@ pub fn run() {
                     eprintln!("Warning: failed to seed curriculum: {e}");
                 }
             }
+
+            // Purge stale content cache entries (older than 30 days) to prevent bloat
+            let cutoff = (chrono::Utc::now() - chrono::Duration::days(30)).to_rfc3339();
+            match db::content_cache::purge_cache_before(&db, &cutoff) {
+                Ok(purged) if purged > 0 => {
+                    eprintln!("Purged {purged} stale cache entries (older than 30 days)");
+                }
+                _ => {}
+            }
+
             drop(db);
 
             Ok(())
@@ -65,6 +75,18 @@ pub fn run() {
             // Projects
             commands::project_cmds::get_projects,
             commands::project_cmds::submit_project,
+            // AI — explain mistake, re-grade, model discovery
+            commands::ai_cmds::explain_mistake,
+            commands::ai_cmds::regrade_with_reasoning,
+            commands::ai_cmds::list_available_models,
+            commands::ai_cmds::request_explanation,
+            commands::ai_cmds::verify_no_right_answer,
+            commands::ai_cmds::get_mastery_history,
+            commands::ai_cmds::get_review_forecast,
+            commands::ai_cmds::activate_streak_freeze,
+            commands::ai_cmds::get_submissions,
+            commands::ai_cmds::get_submission_feedback,
+            commands::ai_cmds::export_data,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Astrolabe");

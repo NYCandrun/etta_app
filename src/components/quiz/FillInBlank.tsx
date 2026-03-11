@@ -55,8 +55,12 @@ export function FillInBlank({
 
   const allFilled = answers.every((a) => a.trim().length > 0);
 
-  // Split the prompt on blank markers
-  const parts = question.prompt.split(/___BLANK___|\{BLANK\}|\[BLANK\]/);
+  // Split the prompt on blank markers (supports ___BLANK___, {BLANK}, [BLANK], __, ___)
+  const blankRegex = /___BLANK___|\{BLANK\}|\[BLANK\]|_{2,}(?=[^_a-zA-Z]|$)/;
+  const parts = question.prompt.split(blankRegex);
+
+  // If no blank marker was found, treat as a standalone question with one input below
+  const hasBlankMarker = parts.length > 1;
   let blankIndex = 0;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,6 +130,29 @@ export function FillInBlank({
         })}
       </div>
 
+      {/* Standalone input when no blank marker was found in the prompt */}
+      {!hasBlankMarker && !isComplex && (
+        <div className="mt-2">
+          <input
+            type="text"
+            value={answers[0] ?? ""}
+            onFocus={() => setFocusedBlank(0)}
+            onChange={(e) => updateAnswer(0, e.target.value)}
+            disabled={submitted}
+            className={`input w-full max-w-md font-mono text-base ${
+              submitted
+                ? correctAnswers?.[0]?.toLowerCase() ===
+                  answers[0]?.toLowerCase()
+                  ? "border-success-500"
+                  : "border-danger-500"
+                : ""
+            }`}
+            placeholder="Type your answer..."
+            aria-label="Answer"
+          />
+        </div>
+      )}
+
       {/* Complex blanks: show larger text areas below the prompt */}
       {isComplex && (
         <div className="space-y-3">
@@ -156,35 +183,53 @@ export function FillInBlank({
       )}
 
       {/* File upload for showing work */}
-      {question.difficulty >= 3 && (
-        <div className="rounded-xl border border-dashed border-warm-300 p-4 dark:border-warm-600">
-          <p className="mb-2 text-xs font-medium text-warm-500 dark:text-warm-400">
-            Show your work (optional)
-          </p>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={submitted}
-              className="btn-secondary text-xs"
-            >
-              {uploadedFile ? "Change file" : "Upload image or file"}
-            </button>
-            {uploadedFile && (
-              <span className="truncate text-xs text-warm-600 dark:text-warm-400">
+      <div className="rounded-xl border border-dashed border-warm-300 p-4 dark:border-warm-600">
+        <p className="mb-2 text-xs font-medium text-warm-500 dark:text-warm-400">
+          Upload your work (optional)
+        </p>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={submitted}
+            className="btn-secondary text-xs"
+          >
+            <svg className="mr-1.5 inline h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+            </svg>
+            {uploadedFile ? "Change file" : "Upload file"}
+          </button>
+          {uploadedFile && (
+            <div className="flex items-center gap-2">
+              <span className="max-w-[200px] truncate text-xs text-warm-600 dark:text-warm-400">
                 {uploadedFile.name}
               </span>
-            )}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*,.pdf,.txt"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-          </div>
+              {!submitted && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUploadedFile(null);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                  className="text-warm-400 hover:text-danger-500"
+                  aria-label="Remove file"
+                >
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.md,.txt"
+            onChange={handleFileChange}
+            className="hidden"
+          />
         </div>
-      )}
+      </div>
 
       {/* Correct answers display after submit */}
       {submitted && correctAnswers && (

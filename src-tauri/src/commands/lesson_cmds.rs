@@ -42,8 +42,21 @@ pub async fn get_lesson(
     let system_prompt = prompt::load_system_prompt(&resource_dir);
 
     let learner_ctx = LearnerContext::from(&concept);
-    let request =
-        prompt::build_request(&TutorMode::Lesson, &concept, &learner_ctx, &system_prompt, None);
+
+    // Use user-configured base model if available
+    let model = {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        db::settings::get_setting(&conn, "base_model")
+            .ok()
+            .flatten()
+            .map(|v| v.trim_matches('"').to_string())
+            .filter(|v| !v.is_empty())
+            .unwrap_or_else(|| prompt::DEFAULT_MODEL.to_string())
+    };
+
+    let request = prompt::build_request_with_model(
+        &model, &TutorMode::Lesson, &concept, &learner_ctx, &system_prompt, None, false,
+    );
 
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;

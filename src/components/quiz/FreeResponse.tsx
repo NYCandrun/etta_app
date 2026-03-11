@@ -5,7 +5,7 @@ import { MathKeyboard } from "@/components/quiz/MathKeyboard";
 
 interface FreeResponseProps {
   question: Question;
-  onSubmit: (text: string, file?: File) => void;
+  onSubmit: (text: string, files?: File[]) => void;
   submitted: boolean;
   className?: string;
 }
@@ -17,7 +17,7 @@ export function FreeResponse({
   className = "",
 }: FreeResponseProps) {
   const [text, setText] = useState("");
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -26,12 +26,14 @@ export function FreeResponse({
   const rows = isSimple ? 3 : question.difficulty >= 4 ? 8 : 6;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setUploadedFile(file);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setUploadedFiles((prev) => [...prev, ...Array.from(files)]);
+    }
   };
 
-  const handleRemoveFile = () => {
-    setUploadedFile(null);
+  const handleRemoveFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -106,42 +108,45 @@ export function FreeResponse({
                 d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
               />
             </svg>
-            {uploadedFile ? "Change file" : "Upload file"}
+            {uploadedFiles.length > 0 ? "Add more files" : "Upload file"}
           </button>
-          {uploadedFile && (
-            <div className="flex items-center gap-2">
-              <span className="max-w-[200px] truncate text-xs text-warm-600 dark:text-warm-400">
-                {uploadedFile.name}
-              </span>
-              {!submitted && (
-                <button
-                  type="button"
-                  onClick={handleRemoveFile}
-                  className="text-warm-400 hover:text-danger-500"
-                  aria-label="Remove file"
-                >
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
-          )}
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*,.pdf,.txt,.py,.js,.ts,.tex"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.md,.txt"
+            multiple
             onChange={handleFileChange}
             className="hidden"
           />
         </div>
-        {uploadedFile && uploadedFile.type.startsWith("image/") && (
-          <div className="mt-3">
-            <img
-              src={URL.createObjectURL(uploadedFile)}
-              alt="Uploaded work"
-              className="max-h-48 rounded-lg border border-warm-200 dark:border-warm-700"
-            />
+        {uploadedFiles.length > 0 && (
+          <div className="mt-2 space-y-2">
+            {uploadedFiles.map((file, i) => (
+              <div key={`${file.name}-${i}`} className="flex items-center gap-2">
+                <span className="max-w-[200px] truncate text-xs text-warm-600 dark:text-warm-400">
+                  {file.name}
+                </span>
+                {!submitted && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFile(i)}
+                    className="text-warm-400 hover:text-danger-500"
+                    aria-label={`Remove ${file.name}`}
+                  >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+                {file.type.startsWith("image/") && (
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview: ${file.name}`}
+                    className="ml-2 max-h-24 rounded-lg border border-warm-200 dark:border-warm-700"
+                  />
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -157,9 +162,9 @@ export function FreeResponse({
       {!submitted && (
         <button
           onClick={() => {
-            if (text.trim() || uploadedFile) onSubmit(text.trim(), uploadedFile ?? undefined);
+            if (text.trim() || uploadedFiles.length > 0) onSubmit(text.trim(), uploadedFiles.length > 0 ? uploadedFiles : undefined);
           }}
-          disabled={!text.trim() && !uploadedFile}
+          disabled={!text.trim() && uploadedFiles.length === 0}
           className="btn-primary"
         >
           Submit Answer

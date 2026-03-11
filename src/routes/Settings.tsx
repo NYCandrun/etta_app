@@ -18,8 +18,12 @@ const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
 ];
 
 export default function Settings() {
-  const { theme, dailyGoal, apiKeySet, setTheme, setDailyGoal, setApiKeySet } =
-    useSettings();
+  const {
+    theme, dailyGoal, apiKeySet,
+    baseModel, escalationModel, availableModels,
+    setTheme, setDailyGoal, setApiKeySet,
+    setBaseModel, setEscalationModel,
+  } = useSettings();
 
   const [apiKey, setApiKey] = useState("");
   const [apiKeyMasked, setApiKeyMasked] = useState(apiKeySet);
@@ -225,6 +229,54 @@ export default function Settings() {
               {opt.label}
             </button>
           ))}
+        </div>
+      </section>
+
+      {/* Model Selection */}
+      <section className="card space-y-4">
+        <h2 className="text-lg font-semibold text-warm-900 dark:text-warm-100">
+          AI Models
+        </h2>
+        <p className="text-sm text-warm-500 dark:text-warm-400">
+          Choose which Claude models to use. The base model handles lessons and quizzes.
+          The escalation model is used for &quot;Explain my mistake,&quot; &quot;There are no right answers,&quot; and re-grading.
+        </p>
+
+        <div className="space-y-3">
+          <div>
+            <label className="label">Base Model (lessons &amp; quizzes)</label>
+            <select
+              value={baseModel}
+              onChange={(e) => void setBaseModel(e.target.value)}
+              className="input"
+            >
+              {availableModels.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.displayName}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="label">
+              Escalation Model (explain mistake / re-grade / no right answer)
+            </label>
+            <select
+              value={escalationModel}
+              onChange={(e) => void setEscalationModel(e.target.value)}
+              className="input"
+            >
+              {availableModels.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.displayName}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-warm-400 dark:text-warm-500">
+              A more capable model gives better explanations for complex problems but costs more.
+            </p>
+          </div>
         </div>
       </section>
 
