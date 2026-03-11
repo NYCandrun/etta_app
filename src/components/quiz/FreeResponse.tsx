@@ -167,7 +167,7 @@ export function FreeResponse({
           disabled={!text.trim() && uploadedFiles.length === 0}
           className="btn-primary"
         >
-          Submit Answer
+          Check Answer
         </button>
       )}
 

@@ -20,6 +20,20 @@ export default function Dashboard() {
   const { startSession, startLearningPath, sessionConcepts } = useSession();
   const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadCurriculum = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const state = await ipc.getCurriculumState();
+      if (state) setCurriculum(state);
+    } catch {
+      setError("Failed to load curriculum. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -28,7 +42,7 @@ export default function Dashboard() {
         const state = await ipc.getCurriculumState();
         if (!cancelled && state) setCurriculum(state);
       } catch {
-        // empty
+        if (!cancelled) setError("Failed to load curriculum. Please try again.");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -62,6 +76,21 @@ export default function Dashboard() {
         <StreakDisplay streak={streak} />
         <XPBar xp={xp} level={level} />
       </div>
+
+      {/* Error state */}
+      {error && !curriculum && (
+        <div className="card border border-danger-200 bg-danger-50 dark:border-danger-800 dark:bg-danger-950/30">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-danger-700 dark:text-danger-300">{error}</p>
+            <button
+              onClick={() => void loadCurriculum()}
+              className="rounded-lg bg-danger-100 px-3 py-1.5 text-xs font-medium text-danger-700 transition-colors hover:bg-danger-200 dark:bg-danger-900 dark:text-danger-300 dark:hover:bg-danger-800"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Diagnostic test + quick actions */}
       <div className="flex items-center gap-3">
