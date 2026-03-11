@@ -21,6 +21,10 @@ pub struct ScheduleUpdate {
 
 /// Minimum ease factor floor.
 const MIN_EASE_FACTOR: f64 = 1.3;
+/// Maximum ease factor cap — prevents intervals from growing too aggressively.
+const MAX_EASE_FACTOR: f64 = 3.5;
+/// Maximum interval in days — ensures concepts are reviewed at least this often.
+const MAX_INTERVAL_DAYS: i64 = 180;
 
 /// Modified SM-2 algorithm.
 ///
@@ -52,12 +56,14 @@ pub fn update_schedule(
             (current_ease, interval.max(1))
         }
         ResponseQuality::Easy => {
-            let ease = current_ease + 0.1;
+            let ease = (current_ease + 0.1).min(MAX_EASE_FACTOR);
             let interval = ((current_interval as f64) * ease).round() as i64;
             (ease, interval.max(1))
         }
     };
 
+    // Cap interval to prevent reviews from being scheduled too far out
+    let new_interval = new_interval.min(MAX_INTERVAL_DAYS);
     let next_review = compute_next_review_date(new_interval);
 
     ScheduleUpdate {
