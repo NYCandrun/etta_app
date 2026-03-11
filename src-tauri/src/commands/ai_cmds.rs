@@ -319,7 +319,7 @@ pub async fn request_explanation(
     let user_msg = format!(
         "<concept>\n  <id>{}</id>\n  <title>{}</title>\n  <domain>{}</domain>\n  <module>{}</module>\n</concept>\n\n\
          Please explain this concept again using the {} approach.",
-        concept.id, concept.title, concept.domain, concept.module, strategy
+        xml_escape(&concept.id), xml_escape(&concept.title), xml_escape(&concept.domain), xml_escape(&concept.module), strategy
     );
 
     let request = MessagesRequest::new(&model, 2048, Some(system), vec![Message::user_text(&user_msg)], false);
