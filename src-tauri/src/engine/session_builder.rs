@@ -61,12 +61,25 @@ pub fn build_daily_session(conn: &Connection) -> Result<DailySession, String> {
         }
     }
 
-    // Scope reviews to the current domain + previous domain only.
-    // This prevents a learner deep into calculus from being buried by old algebra reviews.
+    // Build a set of modules the user has actually started working on.
+    // Within the current domain, only review concepts from modules where the user has
+    // attempted at least one concept — never pull in reviews from modules further ahead.
+    let started_modules: std::collections::HashSet<(String, String)> = all_concepts
+        .iter()
+        .filter(|c| c.attempt_count > 0)
+        .map(|c| (c.domain.clone(), c.module.clone()))
+        .collect();
+
+    // Scope reviews to:
+    // - Current domain: only modules the user has started
+    // - Previous domain: all modules (it's fully completed)
+    // This prevents a learner deep into calculus from being buried by old algebra reviews,
+    // and within the current domain, never shows reviews from modules not yet reached.
     reviews.retain(|c| {
         if let Some(ref curr) = current_domain {
             if c.domain == *curr {
-                return true;
+                // Within current domain, only review from modules already started
+                return started_modules.contains(&(c.domain.clone(), c.module.clone()));
             }
         }
         if let Some(ref prev) = previous_domain {
@@ -212,6 +225,27 @@ mod tests {
         let (current, previous) = determine_active_domains(&concepts);
         assert_eq!(current, Some("precalculus".to_string()));
         assert_eq!(previous, Some("algebra".to_string()));
+    }
+
+    #[test]
+    fn test_started_modules_filter() {
+        // User has started "Numbers and Operations" but not "Linear Equations"
+        let mut c1 = make_concept("a1", "algebra", 0.6, 3);
+        c1.module = "Numbers and Operations".to_string();
+        let mut c2 = make_concept("a2", "algebra", 0.0, 0);
+        c2.module = "Linear Equations".to_string();
+
+        let all = vec![c1.clone(), c2.clone()];
+        let started: std::collections::HashSet<(String, String)> = all
+            .iter()
+            .filter(|c| c.attempt_count > 0)
+            .map(|c| (c.domain.clone(), c.module.clone()))
+            .collect();
+
+        // c1 is from a started module — should be included
+        assert!(started.contains(&("algebra".to_string(), "Numbers and Operations".to_string())));
+        // c2 is from an unstarted module — should be excluded
+        assert!(!started.contains(&("algebra".to_string(), "Linear Equations".to_string())));
     }
 
     #[test]
