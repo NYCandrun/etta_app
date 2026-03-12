@@ -20,9 +20,11 @@ export function FileUpload({
     path: string;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSelectFile = useCallback(async () => {
     setError(null);
+    setLoading(true);
     try {
       if (isTauri()) {
         const { open } = await import("@tauri-apps/plugin-dialog");
@@ -65,6 +67,8 @@ export function FileUpload({
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to select file");
+    } finally {
+      setLoading(false);
     }
   }, [acceptedFormats, onFileSelected]);
 
@@ -72,29 +76,33 @@ export function FileUpload({
     <div className={`space-y-3 ${className}`}>
       <motion.button
         onClick={handleSelectFile}
-        disabled={disabled}
+        disabled={disabled || loading}
         className="flex w-full flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-warm-300 bg-warm-50 p-8
           hover:border-primary-400 hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-500
           disabled:cursor-not-allowed disabled:opacity-50
           dark:border-warm-700 dark:bg-warm-850 dark:hover:border-primary-600 dark:hover:bg-primary-950"
-        whileHover={!disabled ? { scale: 1.01 } : {}}
-        whileTap={!disabled ? { scale: 0.99 } : {}}
+        whileHover={!disabled && !loading ? { scale: 1.01 } : {}}
+        whileTap={!disabled && !loading ? { scale: 0.99 } : {}}
       >
-        <svg
-          className="h-10 w-10 text-warm-400 dark:text-warm-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-          />
-        </svg>
+        {loading ? (
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
+        ) : (
+          <svg
+            className="h-10 w-10 text-warm-400 dark:text-warm-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={1.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+            />
+          </svg>
+        )}
         <span className="text-sm font-medium text-warm-600 dark:text-warm-400">
-          {selectedFile ? "Change file" : "Choose a file to upload"}
+          {loading ? "Selecting file..." : selectedFile ? "Change file" : "Choose a file to upload"}
         </span>
         <span className="text-xs text-warm-400 dark:text-warm-500">
           Accepted: {acceptedFormats.map((f) => `.${f}`).join(", ")}

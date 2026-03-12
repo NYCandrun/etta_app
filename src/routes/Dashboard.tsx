@@ -17,7 +17,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { xp, level, streak } = useGamification();
   const { dailyGoal } = useSettings();
-  const { startSession, startLearningPath, sessionConcepts } = useSession();
+  const { startSession, startLearningPath, sessionConcepts, todayMinutes } = useSession();
   const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,8 +55,8 @@ export default function Dashboard() {
   // Build learning paths from curriculum
   const learningPaths = curriculum ? buildLearningPaths(curriculum) : [];
 
-  const minutesCompleted = streak.todayCompleted ? dailyGoal : Math.round(dailyGoal * 0.4);
-  const dailyProgress = minutesCompleted / dailyGoal;
+  const minutesCompleted = streak.todayCompleted ? dailyGoal : Math.min(Math.round(todayMinutes), dailyGoal);
+  const dailyProgress = dailyGoal > 0 ? Math.min(minutesCompleted / dailyGoal, 1) : 0;
 
   return (
     <motion.div
@@ -67,7 +67,7 @@ export default function Dashboard() {
       className="space-y-6"
     >
       {/* Top stats row */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         <DailyGoalRing
           progress={dailyProgress}
           goalMinutes={dailyGoal}
@@ -138,8 +138,8 @@ export default function Dashboard() {
       </div>
 
       {/* Main content: Skill tree + session suggestion */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="md:col-span-2 lg:col-span-2">
           {loading ? (
             <SkeletonCard className="min-h-[400px]" />
           ) : (

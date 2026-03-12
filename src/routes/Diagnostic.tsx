@@ -228,25 +228,65 @@ export default function Diagnostic() {
           Answer a series of questions to help us figure out where you are in your learning journey.
           No prior knowledge is assumed — this starts from the very beginning.
         </p>
-        <p className="mb-8 text-sm text-warm-400 dark:text-warm-500">
-          {questions.length} questions across {curriculum?.domains.length ?? 0} subjects.
-          Takes about {Math.ceil(questions.length * 0.25)} minutes.
-        </p>
+        {questions.length > 0 ? (
+          <>
+            <p className="mb-8 text-sm text-warm-400 dark:text-warm-500">
+              {questions.length} questions across {curriculum?.domains.length ?? 0} subjects.
+              Takes about {Math.ceil(questions.length * 0.25)} minutes.
+            </p>
 
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={() => setPhase("testing")}
-            className="btn-primary w-full"
-          >
-            Start Diagnostic
-          </button>
-          <button
-            onClick={() => navigate("/")}
-            className="btn-secondary w-full"
-          >
-            Skip — I'll pick my own path
-          </button>
-        </div>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => setPhase("testing")}
+                className="btn-primary w-full"
+              >
+                Start Diagnostic
+              </button>
+              <button
+                onClick={() => navigate("/")}
+                className="btn-secondary w-full"
+              >
+                Skip — I'll pick my own path
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mb-6 rounded-xl border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-accent-700 dark:border-accent-800 dark:bg-accent-950/30 dark:text-accent-300">
+              No curriculum data is available yet. Please check your connection or try again later.
+            </div>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  setPhase("loading");
+                  (async () => {
+                    try {
+                      const state = await ipc.getCurriculumState();
+                      if (state) {
+                        setCurriculum(state);
+                        const qs = buildDiagnosticQuestions(state);
+                        setQuestions(qs);
+                      }
+                    } catch {
+                      // empty
+                    } finally {
+                      setPhase("intro");
+                    }
+                  })();
+                }}
+                className="btn-primary w-full"
+              >
+                Retry
+              </button>
+              <button
+                onClick={() => navigate("/")}
+                className="btn-secondary w-full"
+              >
+                Back to Dashboard
+              </button>
+            </div>
+          </>
+        )}
       </motion.div>
     );
   }

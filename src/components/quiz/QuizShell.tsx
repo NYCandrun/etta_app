@@ -7,6 +7,7 @@ import { FillInBlank } from "@/components/quiz/FillInBlank";
 import { QuizFeedback } from "@/components/quiz/QuizFeedback";
 import { QuizTimer } from "@/components/quiz/QuizTimer";
 import { formatXP } from "@/lib/format";
+import { classifyError } from "@/hooks/useInvoke";
 import * as ipc from "@/lib/ipc";
 
 interface QuizShellProps {
@@ -62,13 +63,16 @@ export function QuizShell({
           answers: [...prev.answers, answer],
           feedbacks: [...prev.feedbacks, feedback],
         }));
-      } catch {
-        // Offline fallback: generate local feedback
+      } catch (err) {
+        // Distinguish network vs app errors for clearer messaging
+        const errorType = classifyError(err);
         const fallback: Feedback = {
           questionId: answer.questionId,
           isCorrect: false,
           score: 0,
-          explanation: "Unable to evaluate right now. We'll check this when you're back online.",
+          explanation: errorType === "network"
+            ? "You appear to be offline. We'll check this answer when you're back online."
+            : "Something went wrong evaluating your answer. Please try again.",
           encouragement: "Keep going!",
         };
         setCurrentFeedback(fallback);
@@ -163,64 +167,119 @@ export function QuizShell({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`card mx-auto max-w-2xl text-center ${className}`}
+        className={`mx-auto max-w-2xl space-y-4 ${className}`}
       >
-        <div className="mb-4">
-          {score >= 80 ? (
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-success-100 dark:bg-success-900">
-              <svg
-                className="h-8 w-8 text-success-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg>
+        {/* Summary card */}
+        <div className="card text-center">
+          <div className="mb-4">
+            {score >= 80 ? (
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-success-100 dark:bg-success-900">
+                <svg
+                  className="h-8 w-8 text-success-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 12.75l6 6 9-13.5"
+                  />
+                </svg>
+              </div>
+            ) : (
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent-100 dark:bg-accent-900">
+                <svg
+                  className="h-8 w-8 text-accent-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+
+          <h2 className="mb-1 text-2xl font-bold text-warm-900 dark:text-warm-100">
+            {score >= 80 ? "Great work!" : "Keep practicing!"}
+          </h2>
+          <p className="mb-4 text-warm-500 dark:text-warm-400">
+            You got {correct} out of {session.questions.length} correct
+          </p>
+
+          <div className="mb-6 flex items-center justify-center gap-6">
+            <div>
+              <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
+                {score}%
+              </p>
+              <p className="text-xs text-warm-400">Score</p>
             </div>
-          ) : (
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent-100 dark:bg-accent-900">
-              <svg
-                className="h-8 w-8 text-accent-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+            <div className="h-10 w-px bg-warm-200 dark:bg-warm-700" />
+            <div>
+              <p className="text-3xl font-bold text-accent-600 dark:text-accent-400">
+                +{formatXP(session.xpEarned)}
+              </p>
+              <p className="text-xs text-warm-400">XP earned</p>
             </div>
-          )}
+          </div>
         </div>
 
-        <h2 className="mb-1 text-2xl font-bold text-warm-900 dark:text-warm-100">
-          {score >= 80 ? "Great work!" : "Keep practicing!"}
-        </h2>
-        <p className="mb-4 text-warm-500 dark:text-warm-400">
-          You got {correct} out of {session.questions.length} correct
-        </p>
+        {/* Per-question review */}
+        <div className="card">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-warm-500 dark:text-warm-400">
+            Question Review
+          </h3>
+          <div className="space-y-3">
+            {session.questions.map((q, i) => {
+              const fb = session.feedbacks[i];
+              const answer = session.answers[i];
+              const userAnswerText = answer?.selectedOptionId
+                ? q.options?.find((o) => o.id === answer.selectedOptionId)?.text ?? answer.selectedOptionId
+                : answer?.freeText
+                  ? answer.freeText
+                  : answer?.filledBlanks
+                    ? answer.filledBlanks.join(", ")
+                    : "No answer";
 
-        <div className="mb-6 flex items-center justify-center gap-6">
-          <div>
-            <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
-              {score}%
-            </p>
-            <p className="text-xs text-warm-400">Score</p>
-          </div>
-          <div className="h-10 w-px bg-warm-200 dark:bg-warm-700" />
-          <div>
-            <p className="text-3xl font-bold text-accent-600 dark:text-accent-400">
-              +{formatXP(session.xpEarned)}
-            </p>
-            <p className="text-xs text-warm-400">XP earned</p>
+              return (
+                <div
+                  key={q.id}
+                  className={`rounded-xl border p-3 ${
+                    fb?.isCorrect
+                      ? "border-success-200 bg-success-50/50 dark:border-success-800 dark:bg-success-950/20"
+                      : "border-accent-200 bg-accent-50/50 dark:border-accent-800 dark:bg-accent-950/20"
+                  }`}
+                >
+                  <div className="mb-1 flex items-start gap-2">
+                    <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
+                      fb?.isCorrect ? "bg-success-500" : "bg-accent-500"
+                    }`}>
+                      {fb?.isCorrect ? "\u2713" : "\u2717"}
+                    </span>
+                    <p className="text-sm font-medium text-warm-900 dark:text-warm-100">
+                      {q.prompt}
+                    </p>
+                  </div>
+                  <div className="ml-7 space-y-1">
+                    <p className="text-xs text-warm-500 dark:text-warm-400">
+                      <span className="font-medium">Your answer:</span> {userAnswerText}
+                    </p>
+                    {!fb?.isCorrect && fb?.explanation && (
+                      <p className="text-xs text-warm-500 dark:text-warm-400">
+                        {fb.explanation}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 

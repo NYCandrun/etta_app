@@ -33,8 +33,8 @@ const PATTERNS: DelimiterPattern[] = [
   { regex: /\$\$([\s\S]+?)\$\$/, type: "display-math" },
   // \[...\] display math
   { regex: /\\\[([\s\S]+?)\\\]/, type: "display-math" },
-  // $...$ inline math (not preceded/followed by $)
-  { regex: /(?<!\$)\$(?!\$)((?:[^$\\]|\\.)+?)\$(?!\$)/, type: "math" },
+  // $...$ inline math (not preceded/followed by $, skip currency like $10 or $5.99)
+  { regex: /(?<!\$)\$(?!\$)(?!\d+(?:[.,]\d+)*(?:[^$\\]|$))((?:[^$\\]|\\.)+?)\$(?!\$)/, type: "math" },
   // \(...\) inline math
   { regex: /\\\(([\s\S]+?)\\\)/, type: "math" },
   // Bare \begin{...}...\end{...} blocks (display math)
@@ -171,5 +171,5 @@ export function parseLatexSegments(input: string): Segment[] {
  * Quick check if a string likely contains LaTeX.
  */
 export function containsLatex(text: string): boolean {
-  return /\$[^$]|\\\(|\\\[|\\begin\{/.test(text);
+  return /\$[^$]|\\\(|\\\[|\\begin\{|\\(?:frac|sqrt|sum|int|lim|alpha|beta|gamma|delta|theta|pi|sigma|infty)\b/.test(text);
 }

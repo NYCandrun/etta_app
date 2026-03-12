@@ -87,7 +87,7 @@ export function QuizFeedback({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className={`rounded-2xl border p-5 ${
+      className={`card border ${
         feedback.isCorrect
           ? "border-success-200 bg-success-50 dark:border-success-800 dark:bg-success-950/30"
           : "border-accent-200 bg-accent-50 dark:border-accent-800 dark:bg-accent-950/30"
@@ -154,6 +154,7 @@ export function QuizFeedback({
           <button
             onClick={() => void handleExplainMistake()}
             disabled={explanationLoading}
+            title="Get an AI-generated explanation of why your answer was incorrect and how to approach this problem"
             className="flex items-center gap-1.5 rounded-xl border border-accent-200 bg-white px-3 py-2 text-sm font-medium text-accent-700 transition-all hover:bg-accent-50 disabled:opacity-60 dark:border-accent-700 dark:bg-warm-800 dark:text-accent-300 dark:hover:bg-accent-950"
           >
             {explanationLoading ? (
@@ -172,6 +173,7 @@ export function QuizFeedback({
           <button
             onClick={() => void handleRegrade()}
             disabled={regradeLoading || regradeResult !== null}
+            title="Submit your uploaded work to a more advanced reasoning model for a second opinion on grading"
             className="flex items-center gap-1.5 rounded-xl border border-primary-200 bg-white px-3 py-2 text-sm font-medium text-primary-700 transition-all hover:bg-primary-50 disabled:opacity-60 dark:border-primary-700 dark:bg-warm-800 dark:text-primary-300 dark:hover:bg-primary-950"
           >
             {regradeLoading ? (
