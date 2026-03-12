@@ -158,12 +158,19 @@ export function QuizShell({
         session.feedbacks.reduce((s, f) => s + f.score, 0) /
         Math.max(1, session.feedbacks.length);
       // Send scores to backend and get actual XP earned (awarded per-answer)
-      const result = await ipc.completeQuiz(session.id, session.feedbacks.map((f) => f.score));
+      let xpEarned = 0;
+      try {
+        const result = await ipc.completeQuiz(session.id, session.feedbacks.map((f) => f.score));
+        xpEarned = result.xpEarned;
+      } catch {
+        // If completion call fails, still let the user proceed
+        console.warn("[QuizShell] completeQuiz failed, proceeding with 0 XP");
+      }
       const completed: QuizSession = {
         ...session,
         completedAt: new Date().toISOString(),
         totalScore,
-        xpEarned: result.xpEarned,
+        xpEarned,
       };
       setSession(completed);
       onComplete(completed);
