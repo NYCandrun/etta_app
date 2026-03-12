@@ -71,7 +71,25 @@ function renderInlineFormatting(text: string, keyPrefix: string | number = 0): R
 }
 
 /**
- * Renders content that may contain markdown block structure (headings, lists, paragraphs)
+ * Parse a markdown table row into cell strings.
+ * Handles rows like "| cell1 | cell2 |" or "cell1 | cell2".
+ */
+function parseTableRow(line: string): string[] {
+  let s = line.trim();
+  if (s.startsWith("|")) s = s.slice(1);
+  if (s.endsWith("|")) s = s.slice(0, -1);
+  return s.split("|").map((cell) => cell.trim());
+}
+
+/**
+ * Check if a line is a table separator row (e.g. "|---|---|" or "---|---").
+ */
+function isTableSeparator(line: string): boolean {
+  return /^\|?(\s*:?-+:?\s*\|)+\s*:?-+:?\s*\|?$/.test(line.trim());
+}
+
+/**
+ * Renders content that may contain markdown block structure (headings, lists, paragraphs, tables)
  * mixed with LaTeX math expressions. Markdown is parsed at the line level first,
  * then LaTeX + inline formatting is applied within each block.
  */
@@ -81,6 +99,7 @@ function RichText({ text }: { text: string }) {
   let listItems: { text: string; ordered: boolean }[] = [];
   let blockKey = 0;
   let paragraphLines: string[] = [];
+  let tableLines: string[] = [];
 
   const flushParagraph = () => {
     if (paragraphLines.length > 0) {
@@ -112,9 +131,92 @@ function RichText({ text }: { text: string }) {
     }
   };
 
+  const flushTable = () => {
+    if (tableLines.length === 0) return;
+
+    // Find separator row to split header from body
+    let separatorIdx = -1;
+    for (let t = 0; t < tableLines.length; t++) {
+      if (isTableSeparator(tableLines[t]!)) {
+        separatorIdx = t;
+        break;
+      }
+    }
+
+    const headerRows = separatorIdx > 0 ? tableLines.slice(0, separatorIdx) : [];
+    const bodyRows =
+      separatorIdx >= 0
+        ? tableLines.slice(separatorIdx + 1)
+        : tableLines;
+
+    const tKey = blockKey++;
+    blocks.push(
+      <div key={`tw-${tKey}`} className="my-4 overflow-x-auto">
+        <table className="min-w-full border-collapse text-sm">
+          {headerRows.length > 0 && (
+            <thead>
+              {headerRows.map((row, ri) => {
+                const cells = parseTableRow(row);
+                return (
+                  <tr key={ri} className="border-b-2 border-warm-300 dark:border-warm-600">
+                    {cells.map((cell, ci) => (
+                      <th
+                        key={ci}
+                        className="px-3 py-2 text-left font-semibold text-warm-800 dark:text-warm-200"
+                      >
+                        {renderRichInline(cell, `th-${tKey}-${ri}-${ci}`)}
+                      </th>
+                    ))}
+                  </tr>
+                );
+              })}
+            </thead>
+          )}
+          <tbody>
+            {bodyRows
+              .filter((row) => row.trim() !== "")
+              .map((row, ri) => {
+                const cells = parseTableRow(row);
+                return (
+                  <tr
+                    key={ri}
+                    className="border-b border-warm-200 dark:border-warm-700"
+                  >
+                    {cells.map((cell, ci) => (
+                      <td
+                        key={ci}
+                        className="px-3 py-2 text-warm-700 dark:text-warm-300"
+                      >
+                        {renderRichInline(cell, `td-${tKey}-${ri}-${ci}`)}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      </div>
+    );
+    tableLines = [];
+  };
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]!;
     const trimmed = line.trim();
+
+    // Table rows: lines containing pipe characters with content on both sides
+    const isTableRow = /^\|.+\|$/.test(trimmed) || isTableSeparator(trimmed);
+    if (isTableRow) {
+      flushParagraph();
+      flushList();
+      tableLines.push(trimmed);
+      continue;
+    }
+
+    // If we were accumulating table lines but this line isn't a table row, flush
+    if (tableLines.length > 0) {
+      flushTable();
+    }
 
     // Headings: # through ####
     const headingMatch = trimmed.match(/^(#{1,4})\s+(.+)$/);
@@ -160,6 +262,14 @@ function RichText({ text }: { text: string }) {
       continue;
     }
 
+    // Horizontal rule: --- or *** or ___
+    if (/^[-*_]{3,}$/.test(trimmed)) {
+      flushParagraph();
+      flushList();
+      blocks.push(<hr key={`hr-${blockKey++}`} className="my-4 border-warm-200 dark:border-warm-700" />);
+      continue;
+    }
+
     // Empty line: paragraph break
     if (trimmed === "") {
       flushParagraph();
@@ -174,6 +284,7 @@ function RichText({ text }: { text: string }) {
 
   flushParagraph();
   flushList();
+  flushTable();
 
   return <>{blocks}</>;
 }
