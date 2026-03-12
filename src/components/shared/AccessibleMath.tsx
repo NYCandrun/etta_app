@@ -11,15 +11,15 @@ interface AccessibleMathProps {
   className?: string;
 }
 
-// Configure DOMPurify to allow KaTeX output elements and MathML
+// Configure DOMPurify to allow KaTeX output elements
 const PURIFY_CONFIG = {
-  USE_PROFILES: { mathMl: true, html: true },
-  ADD_TAGS: ["semantics", "annotation"] as string[],
-  ADD_ATTR: ["encoding", "aria-hidden", "style"] as string[],
+  USE_PROFILES: { html: true },
+  ADD_ATTR: ["aria-hidden", "style", "class"] as string[],
 };
 
 /**
- * Renders a LaTeX expression using KaTeX with MathML for accessibility.
+ * Renders a LaTeX expression using KaTeX with HTML-only output.
+ * Accessibility is provided via aria-label on the wrapper element.
  * Output is sanitized with DOMPurify to prevent XSS.
  * Falls back to a styled code block if KaTeX fails to parse.
  */
@@ -33,7 +33,11 @@ export function AccessibleMath({
       const rawHtml = katex.renderToString(latex, {
         displayMode: display,
         throwOnError: false,
-        output: "htmlAndMathml",
+        // Use HTML-only output. MathML is not needed because the wrapper
+        // element carries role="math" and aria-label for screen readers.
+        // "htmlAndMathml" caused visible duplication when MathML CSS was
+        // missing or stripped by DOMPurify.
+        output: "html",
         trust: false,
         strict: "warn",
       });
