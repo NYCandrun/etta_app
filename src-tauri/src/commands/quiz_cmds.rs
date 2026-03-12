@@ -160,6 +160,30 @@ pub async fn get_quiz(
     prompt::log_token_usage(&TutorMode::Quiz, &model, &response);
     let text = extract_text(&response);
 
+    if text.trim().is_empty() {
+        return Err("The AI returned an empty quiz. Please try again.".to_string());
+    }
+
+    // Validate that the response contains at least one parseable question before caching.
+    // This prevents caching malformed responses that would be served for 7 days.
+    let has_questions = {
+        let json_str = text.trim()
+            .strip_prefix("```json").or_else(|| text.trim().strip_prefix("```"))
+            .unwrap_or(text.trim())
+            .strip_suffix("```").unwrap_or(text.trim()).trim();
+        if let Ok(arr) = serde_json::from_str::<Vec<serde_json::Value>>(json_str) {
+            !arr.is_empty()
+        } else if let Ok(obj) = serde_json::from_str::<serde_json::Value>(json_str) {
+            obj.get("questions").and_then(|q| q.as_array()).map_or(false, |a| !a.is_empty())
+        } else {
+            false
+        }
+    };
+
+    if !has_questions {
+        return Err("Quiz generation produced no valid questions. Please try again.".to_string());
+    }
+
     // Cache the quiz with mastery band tag for personalized invalidation.
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
