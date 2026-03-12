@@ -52,6 +52,16 @@ pub fn process_file(path: &str) -> Result<ProcessedFile, String> {
         .canonicalize()
         .map_err(|e| format!("Failed to resolve file path: {e}"))?;
 
+    // Directory sandboxing: only allow files under the user's home directory.
+    // This prevents reading arbitrary system files (e.g., /etc/passwd).
+    if let Some(home) = dirs::home_dir() {
+        if !canonical.starts_with(&home) {
+            return Err(
+                "Access denied: files must be located within your home directory.".to_string(),
+            );
+        }
+    }
+
     // Ensure it's a regular file, not a directory, device, or pipe
     let metadata = std::fs::metadata(&canonical)
         .map_err(|e| format!("Failed to read file metadata: {e}"))?;

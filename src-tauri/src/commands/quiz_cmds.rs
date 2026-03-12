@@ -4,6 +4,7 @@ use crate::api::types::{Message, MessagesRequest};
 use crate::db;
 use crate::engine::{mastery, spaced_rep, struggle};
 use crate::keychain;
+use crate::rate_limit;
 use crate::AppState;
 use serde::{Deserialize, Serialize};
 use tauri::{Manager, State};
@@ -20,12 +21,103 @@ fn xml_escape(s: &str) -> String {
         .replace('\'', "&apos;")
 }
 
+// ── Server-side quiz answer lookup ───────────────────────────────────────────
+
+/// Parsed quiz question from the cached quiz JSON (server-authoritative answers).
+#[derive(Debug, Deserialize)]
+struct CachedQuizOption {
+    #[serde(default)]
+    id: Option<String>,
+    #[serde(default, alias = "is_correct")]
+    #[serde(rename = "isCorrect")]
+    is_correct: Option<bool>,
+    #[serde(default)]
+    correct: Option<bool>,
+}
+
+#[derive(Debug, Deserialize)]
+struct CachedQuizQuestion {
+    #[serde(default)]
+    id: Option<String>,
+    #[serde(default)]
+    options: Option<Vec<CachedQuizOption>>,
+    #[serde(default)]
+    blanks: Option<Vec<String>>,
+    #[serde(default, alias = "expected_blanks")]
+    #[serde(rename = "expectedBlanks")]
+    expected_blanks_alt: Option<Vec<String>>,
+}
+
+/// Look up the correct answer for a question from the server-side cached quiz.
+/// Returns (correct_option_id, expected_blanks) extracted from the cached quiz JSON.
+fn lookup_server_answers(
+    conn: &rusqlite::Connection,
+    concept_id: &str,
+    question_id: &str,
+) -> (Option<String>, Option<Vec<String>>) {
+    let cached = match db::content_cache::get_cached_content(conn, concept_id, "quiz") {
+        Ok(Some(c)) => c,
+        _ => return (None, None),
+    };
+
+    // Strip markdown code fences if present
+    let json_str = cached.payload_json.trim()
+        .strip_prefix("```json").or_else(|| cached.payload_json.trim().strip_prefix("```"))
+        .unwrap_or(cached.payload_json.trim())
+        .strip_suffix("```").unwrap_or(cached.payload_json.trim()).trim();
+
+    // Try parsing as array of questions or object with "questions" field
+    let questions: Vec<CachedQuizQuestion> = if let Ok(qs) = serde_json::from_str::<Vec<CachedQuizQuestion>>(json_str) {
+        qs
+    } else {
+        #[derive(Deserialize)]
+        struct QuizWrapper { #[serde(default)] questions: Vec<CachedQuizQuestion> }
+        match serde_json::from_str::<QuizWrapper>(json_str) {
+            Ok(w) => w.questions,
+            Err(_) => return (None, None),
+        }
+    };
+
+    // Match question by ID. The frontend normalizes IDs as q_0, q_1, etc.
+    // Try exact match first, then try matching by index suffix.
+    let question = questions.iter().enumerate().find(|(i, q)| {
+        match &q.id {
+            Some(id) => id == question_id || format!("q_{i}") == question_id,
+            None => format!("q_{i}") == question_id,
+        }
+    });
+
+    match question {
+        Some((_, q)) => {
+            // Extract correct option ID for MC
+            let correct_option = q.options.as_ref().and_then(|opts| {
+                opts.iter().enumerate().find_map(|(j, opt)| {
+                    let is_correct = opt.is_correct.or(opt.correct).unwrap_or(false);
+                    if is_correct {
+                        Some(opt.id.clone().unwrap_or_else(|| format!("opt_{j}")))
+                    } else {
+                        None
+                    }
+                })
+            });
+
+            // Extract expected blanks for fill-in-blank
+            let blanks = q.blanks.clone().or_else(|| q.expected_blanks_alt.clone());
+
+            (correct_option, blanks)
+        }
+        None => (None, None),
+    }
+}
+
 #[tauri::command]
 pub async fn get_quiz(
     state: State<'_, AppState>,
     app_handle: tauri::AppHandle,
     concept_id: String,
 ) -> Result<String, String> {
+    rate_limit::check_rate_limit("get_quiz")?;
+
     // Check cache.
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
@@ -148,6 +240,8 @@ pub async fn submit_answer(
     answer: FrontendAnswer,
     question: QuestionContext,
 ) -> Result<FeedbackResponse, String> {
+    rate_limit::check_rate_limit("submit_answer")?;
+
     // Validate free-response text length to prevent token exhaustion
     if let Some(ref text) = answer.free_text {
         if text.len() > MAX_FREE_RESPONSE_LEN {
@@ -160,17 +254,30 @@ pub async fn submit_answer(
 
     let time_ms = answer.time_spent_ms;
 
-    // Grade the answer based on question type
+    // Look up server-side correct answers from the cached quiz to prevent
+    // the frontend from supplying manipulated correct answers.
+    let (server_correct_option, server_expected_blanks) = {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        lookup_server_answers(&conn, &question.concept_id, &answer.question_id)
+    };
+
+    // Grade the answer based on question type, preferring server-side answers
     let (is_correct, score) = match question.question_type.as_str() {
         "multiple_choice" => {
-            let correct = match (&answer.selected_option_id, &question.correct_option_id) {
+            // Use server-side correct answer; fall back to frontend only if cache miss
+            let correct_id = server_correct_option.as_ref()
+                .or(question.correct_option_id.as_ref());
+            let correct = match (&answer.selected_option_id, correct_id) {
                 (Some(selected), Some(correct)) => selected == correct,
                 _ => false,
             };
             (correct, if correct { 1.0 } else { 0.0 })
         }
         "fill_in_blank" => {
-            match (&answer.filled_blanks, &question.expected_blanks) {
+            // Use server-side expected blanks; fall back to frontend only if cache miss
+            let expected = server_expected_blanks.as_ref()
+                .or(question.expected_blanks.as_ref());
+            match (&answer.filled_blanks, expected) {
                 (Some(filled), Some(expected)) => {
                     let mut matches = 0;
                     for (f, e) in filled.iter().zip(expected.iter()) {
@@ -186,7 +293,7 @@ pub async fn submit_answer(
             }
         }
         "free_response" => {
-            // Call AI to grade free-response answers
+            // Call AI to grade free-response answers (already server-authoritative)
             match grade_free_response(&state, &question.prompt, answer.free_text.as_deref().unwrap_or(""), question.rubric.as_deref()).await {
                 Ok((correct, s)) => (correct, s),
                 Err(_) => {
@@ -379,16 +486,14 @@ pub fn complete_quiz(
         clamped.iter().sum::<f64>() / clamped.len() as f64
     };
 
-    // Calculate XP to report back to frontend (frontend awards XP via award_xp)
-    let base_xp = 10u32;
-    let bonus_xp = (total_score * 40.0) as u32; // Up to 40 bonus XP for perfect score
-    let xp_earned = base_xp + bonus_xp;
-
-    // Log the quiz completion (XP is NOT awarded here — frontend calls award_xp separately)
-    eprintln!("Quiz {} completed: score={:.2}, xp_suggested={}", session_id, total_score, xp_earned);
+    // XP is awarded per-answer in submit_answer (backend-authoritative).
+    // Do NOT return an xp_earned value for the frontend to double-award via
+    // a separate award_xp call. Report 0 so the frontend displays
+    // "quiz complete" without inflating XP.
+    eprintln!("Quiz {} completed: score={:.2}", session_id, total_score);
 
     Ok(QuizCompletionResult {
         total_score,
-        xp_earned,
+        xp_earned: 0,
     })
 }

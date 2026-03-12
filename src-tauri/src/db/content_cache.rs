@@ -9,21 +9,37 @@ pub struct CachedContent {
     pub payload_json: String,
     pub model_version: Option<String>,
     pub created_at: String,
+    /// HMAC-SHA256 hex digest for integrity verification.
+    #[serde(default)]
+    pub content_hash: Option<String>,
 }
 
-/// Insert a new cache entry. Returns the new row id.
+/// Insert a new cache entry with an HMAC integrity hash.
+/// Returns the new row id.
 /// Also prunes old entries for the same concept+type to prevent bloat (keeps most recent 3).
 pub fn insert_cache_entry(conn: &Connection, entry: &CachedContent) -> Result<i64> {
+    // Compute HMAC for the payload
+    let hmac_hex = match crate::cache_integrity::get_or_create_secret(conn) {
+        Ok(secret) => Some(crate::cache_integrity::compute_hmac(
+            &secret,
+            &entry.concept_id,
+            &entry.content_type,
+            &entry.payload_json,
+        )),
+        Err(_) => None,
+    };
+
     conn.execute(
         "INSERT INTO content_cache
-         (concept_id, content_type, payload_json, model_version, created_at)
-         VALUES (?1, ?2, ?3, ?4, ?5)",
+         (concept_id, content_type, payload_json, model_version, created_at, content_hash)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
         params![
             entry.concept_id,
             entry.content_type,
             entry.payload_json,
             entry.model_version,
             entry.created_at,
+            hmac_hex,
         ],
     )?;
     let id = conn.last_insert_rowid();
@@ -47,6 +63,7 @@ pub fn insert_cache_entry(conn: &Connection, entry: &CachedContent) -> Result<i6
 /// Returns the most recent entry if multiple exist.
 /// Skips entries older than 7 days so learners get content calibrated to
 /// their current mastery level rather than stale cached material.
+/// Rejects entries with invalid or missing HMAC signatures (cache poisoning protection).
 pub fn get_cached_content(
     conn: &Connection,
     concept_id: &str,
@@ -58,7 +75,7 @@ pub fn get_cached_content(
         .unwrap_or_default();
 
     let mut stmt = conn.prepare(
-        "SELECT id, concept_id, content_type, payload_json, model_version, created_at
+        "SELECT id, concept_id, content_type, payload_json, model_version, created_at, content_hash
          FROM content_cache
          WHERE concept_id = ?1 AND content_type = ?2 AND created_at >= ?3
          ORDER BY created_at DESC
@@ -67,7 +84,38 @@ pub fn get_cached_content(
 
     let mut rows = stmt.query(params![concept_id, content_type, stale_cutoff])?;
     match rows.next()? {
-        Some(row) => Ok(Some(row_to_cached(row)?)),
+        Some(row) => {
+            let entry = row_to_cached(row)?;
+
+            // Verify HMAC integrity if a hash is present
+            if let Some(ref stored_hash) = entry.content_hash {
+                if let Ok(secret) = crate::cache_integrity::get_or_create_secret(conn) {
+                    if !crate::cache_integrity::verify_hmac(
+                        &secret,
+                        &entry.concept_id,
+                        &entry.content_type,
+                        &entry.payload_json,
+                        stored_hash,
+                    ) {
+                        eprintln!(
+                            "Cache integrity check failed for {}:{} — discarding entry",
+                            entry.concept_id, entry.content_type
+                        );
+                        // Delete the tampered entry
+                        if let Some(id) = entry.id {
+                            let _ = conn.execute(
+                                "DELETE FROM content_cache WHERE id = ?1",
+                                params![id],
+                            );
+                        }
+                        return Ok(None);
+                    }
+                }
+            }
+            // Entries without a hash (pre-upgrade) are allowed but will be
+            // replaced on next cache write with a signed entry.
+            Ok(Some(entry))
+        }
         None => Ok(None),
     }
 }
@@ -75,7 +123,7 @@ pub fn get_cached_content(
 /// Get all cache entries for a concept.
 pub fn get_cache_for_concept(conn: &Connection, concept_id: &str) -> Result<Vec<CachedContent>> {
     let mut stmt = conn.prepare(
-        "SELECT id, concept_id, content_type, payload_json, model_version, created_at
+        "SELECT id, concept_id, content_type, payload_json, model_version, created_at, content_hash
          FROM content_cache
          WHERE concept_id = ?1
          ORDER BY created_at DESC",
@@ -115,5 +163,6 @@ fn row_to_cached(row: &rusqlite::Row) -> Result<CachedContent> {
         payload_json: row.get(3)?,
         model_version: row.get(4)?,
         created_at: row.get(5)?,
+        content_hash: row.get(6)?,
     })
 }

@@ -2,9 +2,13 @@ use crate::api::client::{extract_text, ClaudeClient};
 use crate::api::types::{ContentBlock, ImageSource, Message, MessagesRequest};
 use crate::db;
 use crate::keychain;
+use crate::rate_limit;
 use crate::AppState;
 use serde::{Deserialize, Serialize};
 use tauri::{Manager, State};
+
+/// Maximum length for string parameters sent to AI commands (characters).
+const MAX_INPUT_LEN: usize = 10_000;
 
 /// Default models — can be overridden by user settings.
 const FALLBACK_BASE_MODEL: &str = "claude-sonnet-4-20250514";
@@ -56,6 +60,20 @@ pub async fn explain_mistake(
     context: String,
     escalate: bool,
 ) -> Result<String, String> {
+    rate_limit::check_rate_limit("explain_mistake")?;
+
+    // Validate input lengths to prevent token exhaustion / DoS
+    for (name, val) in [
+        ("question_prompt", &question_prompt),
+        ("user_answer", &user_answer),
+        ("correct_answer", &correct_answer),
+        ("context", &context),
+    ] {
+        if val.len() > MAX_INPUT_LEN {
+            return Err(format!("{name} exceeds maximum length of {MAX_INPUT_LEN} characters."));
+        }
+    }
+
     let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
@@ -126,6 +144,19 @@ pub async fn regrade_with_reasoning(
     file_data: Option<String>,
     file_mime_type: Option<String>,
 ) -> Result<RegradeResult, String> {
+    rate_limit::check_rate_limit("regrade_with_reasoning")?;
+
+    // Validate input lengths
+    for (name, val) in [
+        ("question_prompt", &question_prompt),
+        ("user_answer", &user_answer),
+        ("rubric", &rubric),
+    ] {
+        if val.len() > MAX_INPUT_LEN {
+            return Err(format!("{name} exceeds maximum length of {MAX_INPUT_LEN} characters."));
+        }
+    }
+
     let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
@@ -270,6 +301,8 @@ pub async fn request_explanation(
     _lesson_id: String,
     attempt: u32,
 ) -> Result<ExplanationResponse, String> {
+    rate_limit::check_rate_limit("request_explanation")?;
+
     let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
@@ -348,6 +381,18 @@ pub async fn verify_no_right_answer(
     question_prompt: String,
     options: Vec<String>,
 ) -> Result<NoRightAnswerResult, String> {
+    rate_limit::check_rate_limit("verify_no_right_answer")?;
+
+    // Validate input lengths
+    if question_prompt.len() > MAX_INPUT_LEN {
+        return Err(format!("question_prompt exceeds maximum length of {MAX_INPUT_LEN} characters."));
+    }
+    for opt in &options {
+        if opt.len() > MAX_INPUT_LEN {
+            return Err(format!("Option text exceeds maximum length of {MAX_INPUT_LEN} characters."));
+        }
+    }
+
     let api_key = keychain::get_api_key_cached(&state)?
         .ok_or_else(|| "API key not configured.".to_string())?;
 
