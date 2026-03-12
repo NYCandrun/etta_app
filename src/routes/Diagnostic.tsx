@@ -131,8 +131,8 @@ export default function Diagnostic() {
           const qs = buildDiagnosticQuestions(state);
           setQuestions(qs);
         }
-      } catch {
-        // empty
+      } catch (err) {
+        console.warn("[Diagnostic] Failed to load curriculum:", err);
       } finally {
         setPhase("intro");
       }
@@ -253,7 +253,9 @@ export default function Diagnostic() {
         ) : (
           <>
             <div className="mb-6 rounded-xl border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-accent-700 dark:border-accent-800 dark:bg-accent-950/30 dark:text-accent-300">
-              No curriculum data is available yet. Please check your connection or try again later.
+              {curriculum
+                ? "Your curriculum loaded but has no concepts to assess. Head to the Dashboard to start learning directly."
+                : "No curriculum data is available yet. Please check your connection or try again later."}
             </div>
             <div className="flex flex-col gap-3">
               <button
@@ -267,8 +269,8 @@ export default function Diagnostic() {
                         const qs = buildDiagnosticQuestions(state);
                         setQuestions(qs);
                       }
-                    } catch {
-                      // empty
+                    } catch (err) {
+                      console.warn("[Diagnostic] Retry failed:", err);
                     } finally {
                       setPhase("intro");
                     }

@@ -361,6 +361,22 @@ pub async fn submit_answer(
                 &format!("Answer for {}", concept.title),
             );
         }
+
+        // Persist per-question answer for data export
+        let blanks_json = answer.filled_blanks.as_ref().map(|b| serde_json::to_string(b).unwrap_or_default());
+        let _ = db::quiz_answers::insert_quiz_answer(
+            &conn,
+            &_session_id,
+            &answer.question_id,
+            &question.concept_id,
+            &question.question_type,
+            answer.selected_option_id.as_deref(),
+            answer.free_text.as_deref(),
+            blanks_json.as_deref(),
+            is_correct,
+            score,
+            time_ms,
+        );
     }
 
     // Check for struggle after mastery update
@@ -486,14 +502,23 @@ pub fn complete_quiz(
         clamped.iter().sum::<f64>() / clamped.len() as f64
     };
 
-    // XP is awarded per-answer in submit_answer (backend-authoritative).
-    // Do NOT return an xp_earned value for the frontend to double-award via
-    // a separate award_xp call. Report 0 so the frontend displays
-    // "quiz complete" without inflating XP.
-    eprintln!("Quiz {} completed: score={:.2}", session_id, total_score);
+    // XP was already awarded per-answer in submit_answer (backend-authoritative).
+    // Sum the most recent quiz_answer XP events to report the total earned.
+    let xp_earned = {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        let recent_events = db::xp_events::get_recent_xp_events(&conn, scores.len() as i64)
+            .unwrap_or_default();
+        recent_events
+            .iter()
+            .filter(|e| e.source == "quiz_answer")
+            .map(|e| e.amount)
+            .sum::<i64>() as u32
+    };
+
+    eprintln!("Quiz {} completed: score={:.2}, xp_earned={}", session_id, total_score, xp_earned);
 
     Ok(QuizCompletionResult {
         total_score,
-        xp_earned: 0,
+        xp_earned,
     })
 }

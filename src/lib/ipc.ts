@@ -91,7 +91,12 @@ function normalizeConcept(raw: Record<string, unknown>): Concept {
   return {
     id: String(raw.id ?? ""),
     name: String(raw.name ?? raw.title ?? ""),
-    description: String(raw.description ?? `Learn about ${raw.name ?? raw.title ?? ""}`),
+    description: String(
+      raw.description
+        ?? (domain && typeof domain === "object" && "name" in domain
+          ? `Explore ${(domain as { name: string }).name}: ${raw.name ?? raw.title ?? ""}`
+          : `Learn about ${raw.name ?? raw.title ?? ""}`)
+    ),
     domain,
     moduleId: String(raw.moduleId ?? raw.module ?? ""),
     state,
@@ -240,7 +245,14 @@ function normalizeLessonContent(raw: LessonContent | string, conceptId: string):
             )
           : [],
         strategy: parsed.strategy ?? "default",
-        estimatedMinutes: Number(parsed.estimatedMinutes ?? parsed.estimated_minutes ?? 10),
+        estimatedMinutes: Number(
+          parsed.estimatedMinutes ?? parsed.estimated_minutes
+            ?? Math.max(5, Math.ceil(
+                (Array.isArray(parsed.sections)
+                  ? (parsed.sections as { content?: string }[]).reduce(
+                      (sum: number, s) => sum + (String(s.content ?? "")).split(/\s+/).length, 0)
+                  : 0) / 200))
+        ),
         prerequisites: Array.isArray(parsed.prerequisites) ? parsed.prerequisites : [],
       };
     }
@@ -318,6 +330,10 @@ function parseMarkdownIntoLesson(markdown: string, conceptId: string): LessonCon
     });
   }
 
+  // Estimate reading time: ~200 words/min, count total words across sections
+  const totalWords = sections.reduce((sum, s) => sum + s.content.split(/\s+/).length, 0);
+  const estimatedMinutes = Math.max(5, Math.ceil(totalWords / 200));
+
   return {
     id: `lesson_${conceptId}`,
     conceptId,
@@ -326,7 +342,7 @@ function parseMarkdownIntoLesson(markdown: string, conceptId: string): LessonCon
     sections,
     workedExamples: [],
     strategy: "default",
-    estimatedMinutes: 10,
+    estimatedMinutes,
     prerequisites: [],
   };
 }

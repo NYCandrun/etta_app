@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { QuizShell } from "@/components/quiz/QuizShell";
@@ -11,10 +11,9 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { currentConcept, quizSession, loadQuiz, setQuizSession } =
     useSession();
-  const { awardXP } = useGamification();
+  const { refresh: refreshGamification } = useGamification();
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState(false);
-  const xpAwarded = useRef(false);
 
   const fetchQuiz = useCallback(async () => {
     if (!currentConcept) return;
@@ -43,15 +42,9 @@ export default function Quiz() {
 
   const handleComplete = async (completedSession: QuizSession) => {
     setQuizSession(completedSession);
-    if (!xpAwarded.current) {
-      xpAwarded.current = true;
-      const score = completedSession.totalScore;
-      if (score >= 0.9) {
-        await awardXP(100, "quiz_perfect", "Perfect quiz score!");
-      } else if (score >= 0.6) {
-        await awardXP(50, "quiz_pass", "Quiz passed!");
-      }
-    }
+    // XP is awarded per-answer on the backend. Refresh gamification state
+    // to reflect the updated total — no frontend lump-sum award needed.
+    await refreshGamification();
   };
 
   if (!currentConcept) {

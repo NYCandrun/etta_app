@@ -1,7 +1,9 @@
 pub mod concepts;
 pub mod content_cache;
 pub mod init;
+pub mod lesson_views;
 pub mod mastery_snapshots;
+pub mod quiz_answers;
 pub mod settings;
 pub mod submissions;
 pub mod xp_events;

@@ -14,6 +14,12 @@ pub async fn get_lesson(
 ) -> Result<String, String> {
     rate_limit::check_rate_limit("get_lesson")?;
 
+    // Record the lesson view for export/analytics
+    {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        let _ = db::lesson_views::insert_lesson_view(&conn, &concept_id, "");
+    }
+
     // Check content cache first.
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
