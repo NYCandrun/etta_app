@@ -167,6 +167,12 @@ export default function Quiz() {
         <QuizShell
           session={quizSession}
           onComplete={(s) => void handleComplete(s)}
+          onRetry={() => {
+            setQuizSession(null);
+            setQuizFinished(false);
+            void fetchQuiz();
+          }}
+          onReviewLesson={() => navigate("/lesson")}
         />
       ) : (
         <div className="card py-12 text-center">

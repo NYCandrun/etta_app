@@ -8,6 +8,7 @@ import { QuizFeedback } from "@/components/quiz/QuizFeedback";
 import { QuizTimer } from "@/components/quiz/QuizTimer";
 import { formatXP } from "@/lib/format";
 import { classifyError } from "@/hooks/useInvoke";
+import { RichText } from "@/components/lesson/LessonContent";
 import * as ipc from "@/lib/ipc";
 
 interface QuizShellProps {
@@ -17,6 +18,10 @@ interface QuizShellProps {
   /** Seconds per question if timed */
   secondsPerQuestion?: number;
   onComplete: (session: QuizSession) => void;
+  /** Called when the user wants to retry the quiz after a low score */
+  onRetry?: () => void;
+  /** Called when the user wants to review the lesson after a low score */
+  onReviewLesson?: () => void;
   className?: string;
 }
 
@@ -25,6 +30,8 @@ export function QuizShell({
   timed = false,
   secondsPerQuestion = 60,
   onComplete,
+  onRetry,
+  onReviewLesson,
   className = "",
 }: QuizShellProps) {
   const [session, setSession] = useState(initialSession);
@@ -291,18 +298,18 @@ export function QuizShell({
                     }`}>
                       {fb?.isCorrect ? "\u2713" : "\u2717"}
                     </span>
-                    <p className="text-sm font-medium text-warm-900 dark:text-warm-100">
-                      {q.prompt}
-                    </p>
+                    <div className="text-sm font-medium text-warm-900 dark:text-warm-100">
+                      <RichText text={q.prompt} />
+                    </div>
                   </div>
                   <div className="ml-7 space-y-1">
                     <p className="text-xs text-warm-500 dark:text-warm-400">
                       <span className="font-medium">Your answer:</span> {userAnswerText}
                     </p>
                     {!fb?.isCorrect && fb?.explanation && (
-                      <p className="text-xs text-warm-500 dark:text-warm-400">
-                        {fb.explanation}
-                      </p>
+                      <div className="text-xs text-warm-500 dark:text-warm-400">
+                        <RichText text={fb.explanation} />
+                      </div>
                     )}
                   </div>
                 </div>
@@ -311,9 +318,30 @@ export function QuizShell({
           </div>
         </div>
 
-        <button onClick={() => onComplete(session)} className="btn-primary w-full">
-          Done
-        </button>
+        {score >= 80 ? (
+          <button onClick={() => onComplete(session)} className="btn-primary w-full">
+            Done
+          </button>
+        ) : (
+          <div className="flex gap-3">
+            {onRetry && (
+              <button onClick={onRetry} className="btn-primary flex-1">
+                Retry Quiz
+              </button>
+            )}
+            {onReviewLesson && (
+              <button onClick={onReviewLesson} className="btn-secondary flex-1">
+                Review Lesson
+              </button>
+            )}
+            <button
+              onClick={() => onComplete(session)}
+              className="btn-secondary flex-1"
+            >
+              Continue Anyway
+            </button>
+          </div>
+        )}
       </motion.div>
     );
   }
