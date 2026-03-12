@@ -705,6 +705,14 @@ pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
     let mastery_snapshots = db::mastery_snapshots::get_all_snapshots(&conn)
         .map_err(|e| format!("DB error: {e}"))?;
 
+    // Include per-question quiz answers
+    let quiz_answers = db::quiz_answers::get_all_quiz_answers(&conn)
+        .map_err(|e| format!("DB error: {e}"))?;
+
+    // Include lesson view history
+    let lesson_views = db::lesson_views::get_all_lesson_views(&conn)
+        .map_err(|e| format!("DB error: {e}"))?;
+
     // Filter out sensitive settings (API keys, tokens, passwords)
     let safe_settings: Vec<_> = settings
         .into_iter()
@@ -717,13 +725,15 @@ pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
 
     let export = serde_json::json!({
         "exportedAt": chrono::Utc::now().to_rfc3339(),
-        "version": "1.2",
+        "version": "1.3",
         "concepts": concepts,
         "settings": safe_settings,
         "submissions": submissions,
         "contentHistory": quiz_history,
         "xpEvents": xp_events,
         "masterySnapshots": mastery_snapshots,
+        "quizAnswers": quiz_answers,
+        "lessonViews": lesson_views,
     });
 
     serde_json::to_string_pretty(&export).map_err(|e| format!("Serialization error: {e}"))

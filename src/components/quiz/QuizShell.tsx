@@ -44,17 +44,33 @@ export function QuizShell({
       setSubmitted(true);
       // Build question context for backend grading
       const q = session.questions[session.currentIndex];
-      const questionCtx: ipc.QuestionContext = q
-        ? {
-            conceptId: session.conceptId,
-            questionType: q.type,
-            prompt: q.prompt,
-            correctOptionId: q.options?.find((o: { isCorrect?: boolean; id?: string }) => o.isCorrect)?.id,
-            expectedBlanks: q.blanks,
-            rubric: q.rubric,
-            explanation: q.explanation,
-          }
-        : { conceptId: session.conceptId, questionType: "multiple_choice", prompt: "" };
+      if (!q) {
+        // Guard: question must exist — skip submission to avoid meaningless grade
+        console.warn("[QuizShell] No question at index", session.currentIndex);
+        const fallback: Feedback = {
+          questionId: answer.questionId,
+          isCorrect: false,
+          score: 0,
+          explanation: "Question data is missing. Please retry the quiz.",
+          encouragement: "This looks like a bug — try loading the quiz again.",
+        };
+        setCurrentFeedback(fallback);
+        setSession((prev) => ({
+          ...prev,
+          answers: [...prev.answers, answer],
+          feedbacks: [...prev.feedbacks, fallback],
+        }));
+        return;
+      }
+      const questionCtx: ipc.QuestionContext = {
+        conceptId: session.conceptId,
+        questionType: q.type,
+        prompt: q.prompt,
+        correctOptionId: q.options?.find((o: { isCorrect?: boolean; id?: string }) => o.isCorrect)?.id,
+        expectedBlanks: q.blanks,
+        rubric: q.rubric,
+        explanation: q.explanation,
+      };
       try {
         const feedback = await ipc.submitAnswer(session.id, answer, questionCtx);
         setCurrentFeedback(feedback);
@@ -73,7 +89,11 @@ export function QuizShell({
           explanation: errorType === "network"
             ? "You appear to be offline. We'll check this answer when you're back online."
             : "Something went wrong evaluating your answer. Please try again.",
-          encouragement: "Keep going!",
+          encouragement: session.currentIndex === 0
+            ? "Don't worry — let's keep going!"
+            : session.feedbacks.filter((f) => f.isCorrect).length > 0
+              ? "You've been doing well — keep it up!"
+              : "Every attempt helps you learn. Keep going!",
         };
         setCurrentFeedback(fallback);
         setSession((prev) => ({
@@ -132,19 +152,20 @@ export function QuizShell({
     [currentQuestion, questionStartTime, handleSubmitAnswer]
   );
 
-  const handleContinue = useCallback(() => {
+  const handleContinue = useCallback(async () => {
     if (isLastQuestion) {
       const totalScore =
         session.feedbacks.reduce((s, f) => s + f.score, 0) /
         Math.max(1, session.feedbacks.length);
+      // Send scores to backend and get actual XP earned (awarded per-answer)
+      const result = await ipc.completeQuiz(session.id, session.feedbacks.map((f) => f.score));
       const completed: QuizSession = {
         ...session,
         completedAt: new Date().toISOString(),
         totalScore,
+        xpEarned: result.xpEarned,
       };
       setSession(completed);
-      // Send scores to backend for XP calculation
-      void ipc.completeQuiz(session.id, session.feedbacks.map((f) => f.score));
       onComplete(completed);
     } else {
       setSession((prev) => ({

@@ -78,6 +78,28 @@ pub fn initialize_database() -> Result<Connection, Box<dyn std::error::Error>> {
             score           REAL NOT NULL DEFAULT 0.0 CHECK(score >= 0.0 AND score <= 1.0),
             PRIMARY KEY (date, domain)
         );
+
+        CREATE TABLE IF NOT EXISTS quiz_answers (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id      TEXT NOT NULL,
+            question_id     TEXT NOT NULL,
+            concept_id      TEXT NOT NULL,
+            question_type   TEXT NOT NULL,
+            selected_option TEXT,
+            free_text       TEXT,
+            filled_blanks   TEXT,
+            is_correct      INTEGER NOT NULL DEFAULT 0,
+            score           REAL NOT NULL DEFAULT 0.0,
+            time_spent_ms   INTEGER,
+            created_at      TEXT NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS lesson_views (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            concept_id      TEXT NOT NULL,
+            lesson_id       TEXT NOT NULL DEFAULT '',
+            viewed_at       TEXT NOT NULL
+        );
         ",
     )?;
 
