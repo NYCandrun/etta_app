@@ -23,7 +23,7 @@ export function TopBar() {
   const navigate = useNavigate();
   const { xp, streak, level } = useGamification();
   const { dailyGoal } = useSettings();
-  const { currentConcept, startLearningPath } = useSession();
+  const { currentConcept, startLearningPath, todayMinutes } = useSession();
   const { save } = useSaveProgress();
   const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
@@ -89,7 +89,7 @@ export function TopBar() {
     }
   };
 
-  const dailyProgress = streak.todayCompleted ? 1 : 0.4;
+  const dailyProgress = streak.todayCompleted ? 1 : dailyGoal > 0 ? Math.min(todayMinutes / dailyGoal, 1) : 0;
   const circumference = 2 * Math.PI * 10;
   const dashOffset = circumference * (1 - dailyProgress);
 

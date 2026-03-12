@@ -109,7 +109,14 @@
 
   /* KaTeX display math centering */
   .katex-display {
-    @apply my-4 overflow-x-auto;
+    @apply my-6 overflow-x-auto text-center;
+  }
+
+  /* Tighter spacing when display math is nested inside cards, feedback, or list items */
+  .card .katex-display,
+  li .katex-display,
+  blockquote .katex-display {
+    @apply my-4;
   }
 
   .katex {

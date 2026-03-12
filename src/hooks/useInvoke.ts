@@ -66,4 +66,27 @@ export function useInvoke<T>(command: string): UseInvokeReturn<T> {
   return { data, loading, error, invoke, reset };
 }
 
+/**
+ * Classify an IPC error as network-related or application-level.
+ * Helps distinguish connectivity issues from backend errors.
+ */
+export function classifyError(err: unknown): "network" | "app" {
+  const msg = err instanceof Error ? err.message : String(err);
+  const lower = msg.toLowerCase();
+  if (
+    lower.includes("network") ||
+    lower.includes("fetch") ||
+    lower.includes("timeout") ||
+    lower.includes("connection") ||
+    lower.includes("econnrefused") ||
+    lower.includes("enotfound") ||
+    lower.includes("offline") ||
+    lower.includes("failed to fetch") ||
+    lower.includes("load failed")
+  ) {
+    return "network";
+  }
+  return "app";
+}
+
 export { tauriInvoke, isTauri };
