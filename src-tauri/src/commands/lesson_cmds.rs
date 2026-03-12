@@ -29,6 +29,7 @@ pub async fn get_lesson(
     };
 
     // Check content cache with mastery- and model-aware lookup.
+    // Validate cached content is non-empty; invalidate corrupt entries.
     let model = {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         let m = db::settings::get_setting(&conn, "base_model")
@@ -43,7 +44,12 @@ pub async fn get_lesson(
                 Some(concept.mastery_score), Some(&m),
             ).map_err(|e| format!("DB error: {e}"))?
         {
-            return Ok(cached.payload_json);
+            if cached.payload_json.trim().len() > 20 {
+                return Ok(cached.payload_json);
+            }
+            // Cached lesson is empty/corrupt — invalidate so we regenerate.
+            eprintln!("[get_lesson] Invalidating cached lesson with no content for {concept_id}");
+            let _ = db::content_cache::invalidate_cache(&conn, &concept_id, "lesson");
         }
         m
     };

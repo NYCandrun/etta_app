@@ -12,6 +12,21 @@ use tauri::{Manager, State};
 /// Maximum length for free-response text (characters).
 const MAX_FREE_RESPONSE_LEN: usize = 5000;
 
+/// Check whether a quiz payload string contains at least one parseable question.
+fn quiz_has_questions(text: &str) -> bool {
+    let json_str = text.trim()
+        .strip_prefix("```json").or_else(|| text.trim().strip_prefix("```"))
+        .unwrap_or(text.trim())
+        .strip_suffix("```").unwrap_or(text.trim()).trim();
+    if let Ok(arr) = serde_json::from_str::<Vec<serde_json::Value>>(json_str) {
+        !arr.is_empty()
+    } else if let Ok(obj) = serde_json::from_str::<serde_json::Value>(json_str) {
+        obj.get("questions").and_then(|q| q.as_array()).map_or(false, |a| !a.is_empty())
+    } else {
+        false
+    }
+}
+
 // ── Server-side quiz answer lookup ───────────────────────────────────────────
 
 /// Parsed quiz question from the cached quiz JSON (server-authoritative answers).
@@ -128,6 +143,7 @@ pub async fn get_quiz(
     };
 
     // Check cache with mastery- and model-aware lookup.
+    // Validate cached content actually contains questions; delete stale/corrupt entries.
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         if let Some(cached) =
@@ -136,7 +152,12 @@ pub async fn get_quiz(
                 Some(concept.mastery_score), Some(&model),
             ).map_err(|e| format!("DB error: {e}"))?
         {
-            return Ok(cached.payload_json);
+            if quiz_has_questions(&cached.payload_json) {
+                return Ok(cached.payload_json);
+            }
+            // Cached quiz is empty/corrupt — delete it so we regenerate.
+            eprintln!("[get_quiz] Invalidating cached quiz with no valid questions for {concept_id}");
+            let _ = db::content_cache::invalidate_cache(&conn, &concept_id, "quiz");
         }
     }
 
@@ -165,22 +186,7 @@ pub async fn get_quiz(
     }
 
     // Validate that the response contains at least one parseable question before caching.
-    // This prevents caching malformed responses that would be served for 7 days.
-    let has_questions = {
-        let json_str = text.trim()
-            .strip_prefix("```json").or_else(|| text.trim().strip_prefix("```"))
-            .unwrap_or(text.trim())
-            .strip_suffix("```").unwrap_or(text.trim()).trim();
-        if let Ok(arr) = serde_json::from_str::<Vec<serde_json::Value>>(json_str) {
-            !arr.is_empty()
-        } else if let Ok(obj) = serde_json::from_str::<serde_json::Value>(json_str) {
-            obj.get("questions").and_then(|q| q.as_array()).map_or(false, |a| !a.is_empty())
-        } else {
-            false
-        }
-    };
-
-    if !has_questions {
+    if !quiz_has_questions(&text) {
         return Err("Quiz generation produced no valid questions. Please try again.".to_string());
     }
 
