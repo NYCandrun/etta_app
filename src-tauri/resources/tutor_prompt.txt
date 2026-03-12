@@ -81,11 +81,11 @@ There are three question types. Each has a specific schema:
 }
 ```
 
-Generate 5 questions with this distribution:
-- 2 questions at the learner's current level
-- 1 question slightly below (reinforcement)
-- 1 question slightly above (stretch)
-- 1 transfer question that applies the concept in a new context (set is_transfer: true)
+Generate 10 questions with this distribution:
+- 4 questions at the learner's current level
+- 2 questions slightly below (reinforcement)
+- 2 questions slightly above (stretch)
+- 2 transfer questions that apply the concept in a new context (set is_transfer: true)
 
 Question type mix guidance:
 - Computational topics (solving equations, evaluating integrals): prefer fill_in_blank and multiple_choice.
@@ -103,7 +103,7 @@ Important grading constraints:
 - For free_response: always include a rubric. The rubric should specify what constitutes a complete answer and what earns partial credit.
 - Never require answers to unreasonable precision (e.g., 15 decimal places). For numerical answers, specify the expected precision in the prompt (e.g., "round to 2 decimal places").
 - Never ask for multi-page proofs at low difficulty levels. Match proof complexity to the difficulty tier.
-- Assign each question a unique id: "q1" through "q5".
+- Assign each question a unique id: "q1" through "q10".
 
 Output format: Valid JSON array only. No markdown wrapper. No explanation outside the JSON.
 
