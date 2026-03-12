@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS concepts (
     module          TEXT NOT NULL,
     title           TEXT NOT NULL,
     prerequisites   TEXT NOT NULL DEFAULT '[]',   -- JSON array of concept IDs
+    learning_objectives TEXT NOT NULL DEFAULT '[]', -- JSON array of objective strings
+    difficulty_tier INTEGER,                        -- 1-5 difficulty level from curriculum
+    error_patterns  TEXT NOT NULL DEFAULT '[]',     -- JSON array of common error patterns
     mastery_score   REAL NOT NULL DEFAULT 0.0 CHECK(mastery_score >= 0.0 AND mastery_score <= 1.0),
     ease_factor     REAL NOT NULL DEFAULT 2.5 CHECK(ease_factor >= 1.3 AND ease_factor <= 3.5),
     interval_days   INTEGER NOT NULL DEFAULT 1 CHECK(interval_days >= 1 AND interval_days <= 180),

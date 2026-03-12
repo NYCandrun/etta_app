@@ -137,6 +137,23 @@ fn build_user_message(
             concept.prerequisites.join(", ")
         ));
     }
+    if !concept.learning_objectives.is_empty() {
+        msg.push_str("  <learning_objectives>\n");
+        for obj in &concept.learning_objectives {
+            msg.push_str(&format!("    - {}\n", obj));
+        }
+        msg.push_str("  </learning_objectives>\n");
+    }
+    if let Some(tier) = concept.difficulty_tier {
+        msg.push_str(&format!("  <difficulty_tier>{}</difficulty_tier>\n", tier));
+    }
+    if !concept.error_patterns.is_empty() {
+        msg.push_str("  <error_patterns>\n");
+        for pat in &concept.error_patterns {
+            msg.push_str(&format!("    - {}\n", pat));
+        }
+        msg.push_str("  </error_patterns>\n");
+    }
     msg.push_str("</concept>\n\n");
 
     msg.push_str("<learner_context>\n");

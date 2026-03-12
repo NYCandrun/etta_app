@@ -11,6 +11,12 @@ pub struct CurriculumConcept {
     pub title: String,
     #[serde(default)]
     pub prerequisites: Vec<String>,
+    #[serde(default)]
+    pub learning_objectives: Vec<String>,
+    #[serde(default)]
+    pub difficulty_tier: Option<i64>,
+    #[serde(default)]
+    pub error_patterns: Vec<String>,
 }
 
 /// The full curriculum structure (flat concept list).
@@ -26,6 +32,12 @@ pub struct DomainConcept {
     pub title: String,
     #[serde(default)]
     pub prerequisites: Vec<String>,
+    #[serde(default)]
+    pub learning_objectives: Vec<String>,
+    #[serde(default)]
+    pub difficulty_tier: Option<i64>,
+    #[serde(default)]
+    pub error_patterns: Vec<String>,
 }
 
 /// A module within a domain.
@@ -72,6 +84,9 @@ pub fn load_domain_from_str(json: &str) -> Result<Vec<CurriculumConcept>, String
                 module: module.title.clone(),
                 title: concept.title.clone(),
                 prerequisites: concept.prerequisites.clone(),
+                learning_objectives: concept.learning_objectives.clone(),
+                difficulty_tier: concept.difficulty_tier,
+                error_patterns: concept.error_patterns.clone(),
             });
         }
     }
@@ -218,6 +233,9 @@ mod tests {
                     module: "basics".into(),
                     title: "Addition".into(),
                     prerequisites: vec![],
+                    learning_objectives: vec![],
+                    difficulty_tier: None,
+                    error_patterns: vec![],
                 },
                 CurriculumConcept {
                     id: "b".into(),
@@ -225,6 +243,9 @@ mod tests {
                     module: "basics".into(),
                     title: "Subtraction".into(),
                     prerequisites: vec!["a".into()],
+                    learning_objectives: vec![],
+                    difficulty_tier: None,
+                    error_patterns: vec![],
                 },
             ],
         };
@@ -241,6 +262,9 @@ mod tests {
                     module: "basics".into(),
                     title: "A".into(),
                     prerequisites: vec!["b".into()],
+                    learning_objectives: vec![],
+                    difficulty_tier: None,
+                    error_patterns: vec![],
                 },
                 CurriculumConcept {
                     id: "b".into(),
@@ -248,6 +272,9 @@ mod tests {
                     module: "basics".into(),
                     title: "B".into(),
                     prerequisites: vec!["a".into()],
+                    learning_objectives: vec![],
+                    difficulty_tier: None,
+                    error_patterns: vec![],
                 },
             ],
         };
@@ -263,6 +290,9 @@ mod tests {
                 module: "basics".into(),
                 title: "A".into(),
                 prerequisites: vec!["nonexistent".into()],
+                learning_objectives: vec![],
+                difficulty_tier: None,
+                error_patterns: vec![],
             }],
         };
         assert!(validate_dag(&curriculum).is_err());

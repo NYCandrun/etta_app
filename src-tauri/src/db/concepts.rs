@@ -9,6 +9,9 @@ pub struct Concept {
     pub module: String,
     pub title: String,
     pub prerequisites: Vec<String>,
+    pub learning_objectives: Vec<String>,
+    pub difficulty_tier: Option<i64>,
+    pub error_patterns: Vec<String>,
     pub mastery_score: f64,
     pub ease_factor: f64,
     pub interval_days: i64,
@@ -19,20 +22,27 @@ pub struct Concept {
     pub streak_correct: i64,
 }
 
-/// Insert a new concept. Prerequisites are stored as a JSON array string.
+/// Insert a new concept. Prerequisites, learning_objectives, and error_patterns
+/// are stored as JSON array strings.
 pub fn insert_concept(conn: &Connection, concept: &Concept) -> Result<()> {
     let prereqs_json = serde_json::to_string(&concept.prerequisites).unwrap_or_default();
+    let objectives_json = serde_json::to_string(&concept.learning_objectives).unwrap_or_default();
+    let errors_json = serde_json::to_string(&concept.error_patterns).unwrap_or_default();
     conn.execute(
         "INSERT OR REPLACE INTO concepts
-         (id, domain, module, title, prerequisites, mastery_score, ease_factor,
+         (id, domain, module, title, prerequisites, learning_objectives, difficulty_tier,
+          error_patterns, mastery_score, ease_factor,
           interval_days, next_review, last_correct, last_latency_ms, attempt_count, streak_correct)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)",
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
         params![
             concept.id,
             concept.domain,
             concept.module,
             concept.title,
             prereqs_json,
+            objectives_json,
+            concept.difficulty_tier,
+            errors_json,
             concept.mastery_score,
             concept.ease_factor,
             concept.interval_days,
@@ -49,7 +59,8 @@ pub fn insert_concept(conn: &Connection, concept: &Concept) -> Result<()> {
 /// Retrieve a single concept by id.
 pub fn get_concept(conn: &Connection, id: &str) -> Result<Option<Concept>> {
     let mut stmt = conn.prepare(
-        "SELECT id, domain, module, title, prerequisites, mastery_score, ease_factor,
+        "SELECT id, domain, module, title, prerequisites, learning_objectives,
+                difficulty_tier, error_patterns, mastery_score, ease_factor,
                 interval_days, next_review, last_correct, last_latency_ms, attempt_count,
                 streak_correct
          FROM concepts WHERE id = ?1",
@@ -65,7 +76,8 @@ pub fn get_concept(conn: &Connection, id: &str) -> Result<Option<Concept>> {
 /// Retrieve all concepts.
 pub fn get_all_concepts(conn: &Connection) -> Result<Vec<Concept>> {
     let mut stmt = conn.prepare(
-        "SELECT id, domain, module, title, prerequisites, mastery_score, ease_factor,
+        "SELECT id, domain, module, title, prerequisites, learning_objectives,
+                difficulty_tier, error_patterns, mastery_score, ease_factor,
                 interval_days, next_review, last_correct, last_latency_ms, attempt_count,
                 streak_correct
          FROM concepts ORDER BY domain, module, title",
@@ -82,7 +94,8 @@ pub fn get_all_concepts(conn: &Connection) -> Result<Vec<Concept>> {
 /// Get concepts whose next_review is due (on or before the given date string).
 pub fn get_due_concepts(conn: &Connection, today: &str) -> Result<Vec<Concept>> {
     let mut stmt = conn.prepare(
-        "SELECT id, domain, module, title, prerequisites, mastery_score, ease_factor,
+        "SELECT id, domain, module, title, prerequisites, learning_objectives,
+                difficulty_tier, error_patterns, mastery_score, ease_factor,
                 interval_days, next_review, last_correct, last_latency_ms, attempt_count,
                 streak_correct
          FROM concepts
@@ -164,7 +177,8 @@ pub fn update_mastery(
 /// Get concepts by domain.
 pub fn get_concepts_by_domain(conn: &Connection, domain: &str) -> Result<Vec<Concept>> {
     let mut stmt = conn.prepare(
-        "SELECT id, domain, module, title, prerequisites, mastery_score, ease_factor,
+        "SELECT id, domain, module, title, prerequisites, learning_objectives,
+                difficulty_tier, error_patterns, mastery_score, ease_factor,
                 interval_days, next_review, last_correct, last_latency_ms, attempt_count,
                 streak_correct
          FROM concepts WHERE domain = ?1 ORDER BY module, title",
@@ -180,8 +194,18 @@ pub fn get_concepts_by_domain(conn: &Connection, domain: &str) -> Result<Vec<Con
 
 fn row_to_concept(row: &rusqlite::Row) -> Result<Concept> {
     let prereqs_str: String = row.get(4)?;
-    let prerequisites: Vec<String> =
-        serde_json::from_str(&prereqs_str).unwrap_or_default();
+    let prerequisites: Vec<String> = serde_json::from_str(&prereqs_str).unwrap_or_default();
+
+    let objectives_str: String = row
+        .get::<_, Option<String>>(5)?
+        .unwrap_or_else(|| "[]".to_string());
+    let learning_objectives: Vec<String> =
+        serde_json::from_str(&objectives_str).unwrap_or_default();
+
+    let errors_str: String = row
+        .get::<_, Option<String>>(7)?
+        .unwrap_or_else(|| "[]".to_string());
+    let error_patterns: Vec<String> = serde_json::from_str(&errors_str).unwrap_or_default();
 
     Ok(Concept {
         id: row.get(0)?,
@@ -189,13 +213,16 @@ fn row_to_concept(row: &rusqlite::Row) -> Result<Concept> {
         module: row.get(2)?,
         title: row.get(3)?,
         prerequisites,
-        mastery_score: row.get(5)?,
-        ease_factor: row.get(6)?,
-        interval_days: row.get(7)?,
-        next_review: row.get(8)?,
-        last_correct: row.get(9)?,
-        last_latency_ms: row.get(10)?,
-        attempt_count: row.get(11)?,
-        streak_correct: row.get(12)?,
+        learning_objectives,
+        difficulty_tier: row.get(6)?,
+        error_patterns,
+        mastery_score: row.get(8)?,
+        ease_factor: row.get(9)?,
+        interval_days: row.get(10)?,
+        next_review: row.get(11)?,
+        last_correct: row.get(12)?,
+        last_latency_ms: row.get(13)?,
+        attempt_count: row.get(14)?,
+        streak_correct: row.get(15)?,
     })
 }
