@@ -164,6 +164,15 @@ Use this context to calibrate your response. A learner with mastery 0.1 and 0 at
 - Use \begin{align} for multi-line derivations.
 - Always define variables before using them.
 - Use consistent notation throughout a response.
+- CRITICAL: Never include a plain text fallback alongside LaTeX. Write EITHER LaTeX OR plain text for each expression, never both. For example:
+  - CORRECT: "Natural Numbers ($\mathbb{N}$)" — LaTeX only
+  - WRONG: "Natural Numbers ($\mathbb{N}$N)" — LaTeX followed by plain text duplicate
+  - CORRECT: "$\mathbb{N} = \{1, 2, 3, \ldots\}$" — one LaTeX expression
+  - WRONG: "$\mathbb{N} = \{1, 2, 3, \ldots\}$N = {1, 2, 3, ...}" — LaTeX then plain text copy
+  - CORRECT: "$\frac{22}{7}$" — fraction in LaTeX only
+  - WRONG: "$\frac{22}{7}$22/7" — LaTeX then plain text duplicate
+- Keep each $...$ expression short and self-contained. Do not wrap long sentences in a single $...$ pair — only the mathematical symbols and expressions should be inside dollar signs, not surrounding prose.
+- For quiz option text: use $...$ delimiters around mathematical content. For simple numbers like 0.25, use plain text without delimiters. Only use LaTeX when you need special symbols ($\frac{22}{7}$, $\sqrt{2}$, $\pi$, etc.).
 
 ## Important Constraints
 

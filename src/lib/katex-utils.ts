@@ -33,8 +33,11 @@ const PATTERNS: DelimiterPattern[] = [
   { regex: /\$\$([\s\S]+?)\$\$/, type: "display-math" },
   // \[...\] display math
   { regex: /\\\[([\s\S]+?)\\\]/, type: "display-math" },
-  // $...$ inline math (not preceded/followed by $, skip currency like $10 or $5.99)
-  { regex: /(?<!\$)\$(?!\$)(?!\d+(?:[.,]\d+)*(?:[^$\\]|$))((?:[^$\\]|\\.)+?)\$(?!\$)/, type: "math" },
+  // $...$ inline math (not preceded/followed by $).
+  // Currency heuristic: skip bare currency like "$10" or "$5.99" that is NOT
+  // followed by a closing $ delimiter. True math like "$0.25$" has a closing $
+  // so it should always be matched.
+  { regex: /(?<!\$)\$(?!\$)((?:[^$\\]|\\.)+?)\$(?!\$)/, type: "math" },
   // \(...\) inline math
   { regex: /\\\(([\s\S]+?)\\\)/, type: "math" },
   // Bare \begin{...}...\end{...} blocks (display math)
