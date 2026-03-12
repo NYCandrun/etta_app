@@ -123,6 +123,13 @@ pub async fn submit_project(
     );
 
     // Build content blocks with the file.
+    // Estimate attachment tokens and log the estimate before sending
+    let attachment_tokens = prompt::estimate_attachment_tokens(&processed.data_base64, &processed.mime_type);
+    eprintln!(
+        "[token-estimate] project attachment: ~{} tokens ({}, {} bytes)",
+        attachment_tokens, processed.mime_type, processed.size_bytes
+    );
+
     let file_block = build_file_content_block(&processed)?;
     let text_block = ContentBlock::Text {
         text: user_text,
@@ -135,16 +142,19 @@ pub async fn submit_project(
         crate::commands::ai_cmds::get_base_model(&conn)
     };
 
+    // Use mode-specific system prompt (Evaluate mode) and per-mode token budget
+    let trimmed_prompt = prompt::extract_mode_prompt(&system_prompt, &TutorMode::Evaluate);
     let request = crate::api::types::MessagesRequest::new(
         &model,
-        4096,
-        Some(system_prompt),
+        TutorMode::Evaluate.max_tokens(),
+        Some(trimmed_prompt),
         messages,
         false,
     );
 
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+    prompt::log_token_usage(&TutorMode::Evaluate, &model, &response);
     let feedback = extract_text(&response);
 
     // Update the submission with feedback.
@@ -161,6 +171,7 @@ pub async fn submit_project(
         let score = parse_project_score(&feedback);
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         if let Ok(Some(concept)) = db::concepts::get_concept(&conn, &submission.concept_id) {
+            let old_mastery = concept.mastery_score;
             let is_correct = score >= 0.7;
             let new_streak = if is_correct { concept.streak_correct + 1 } else { 0 };
 
@@ -197,6 +208,11 @@ pub async fn submit_project(
                 last_correct.as_deref(),
                 None,
                 new_streak,
+            );
+
+            // Invalidate cache if the mastery band changed (event-driven)
+            let _ = db::content_cache::invalidate_on_mastery_change(
+                &conn, &submission.concept_id, old_mastery, new_mastery,
             );
 
             // Award XP atomically with the mastery update (same db lock)

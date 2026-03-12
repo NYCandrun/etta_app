@@ -1,9 +1,8 @@
-use super::types::{Message, MessagesRequest};
+use super::types::{Message, MessagesRequest, MessagesResponse};
 use crate::db::concepts::Concept;
 use serde::{Deserialize, Serialize};
 
 pub const DEFAULT_MODEL: &str = "claude-sonnet-4-20250514";
-const DEFAULT_MAX_TOKENS: u32 = 4096;
 
 /// The modes the tutor can operate in.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -26,6 +25,28 @@ impl TutorMode {
             TutorMode::Review => "review",
         }
     }
+
+    /// Per-mode max output token budget. Keeps tight limits on shorter tasks
+    /// to avoid wasting tokens, while allowing full budget for content generation.
+    pub fn max_tokens(&self) -> u32 {
+        match self {
+            TutorMode::Lesson => 4096,
+            TutorMode::Quiz => 4096,
+            TutorMode::Explain => 2048,
+            TutorMode::Evaluate => 4096,
+            TutorMode::Review => 2048,
+        }
+    }
+}
+
+/// Escape user-supplied content for safe interpolation into XML-structured prompts.
+/// Prevents prompt injection via XML tag breakout.
+pub fn xml_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&apos;")
 }
 
 /// Context about the learner injected into the prompt.
@@ -51,7 +72,6 @@ impl From<&Concept> for LearnerContext {
 }
 
 /// Build a complete API request for a given tutor mode.
-/// If `model_override` is provided, it takes precedence over DEFAULT_MODEL.
 pub fn build_request(
     mode: &TutorMode,
     concept: &Concept,
@@ -62,7 +82,8 @@ pub fn build_request(
     build_request_with_model(DEFAULT_MODEL, mode, concept, learner_ctx, system_prompt, extra_user_text, false)
 }
 
-/// Build a request with a specific model.
+/// Build a request with a specific model. Uses mode-specific max tokens and
+/// extracts only the relevant system prompt sections for the given mode.
 pub fn build_request_with_model(
     model: &str,
     mode: &TutorMode,
@@ -73,11 +94,12 @@ pub fn build_request_with_model(
     stream: bool,
 ) -> MessagesRequest {
     let user_message = build_user_message(mode, concept, learner_ctx, extra_user_text);
+    let trimmed_prompt = extract_mode_prompt(system_prompt, mode);
 
     MessagesRequest::new(
         model,
-        DEFAULT_MAX_TOKENS,
-        Some(system_prompt.to_string()),
+        mode.max_tokens(),
+        Some(trimmed_prompt),
         vec![Message::user_text(&user_message)],
         stream,
     )
@@ -162,5 +184,88 @@ pub fn load_system_prompt(resource_dir: &std::path::Path) -> String {
             );
             include_str!("../../resources/tutor_prompt.txt").to_string()
         }
+    }
+}
+
+/// Extract mode-relevant sections from the full system prompt.
+///
+/// The full tutor_prompt.txt contains instructions for all 5 modes, but each
+/// API call only uses one mode. This extracts the shared preamble (Core Persona,
+/// Voice Guidelines), the specific mode section, and shared footer sections
+/// (Learner Context, Mathematical Formatting, Important Constraints),
+/// saving ~800-1000 tokens per call by omitting irrelevant mode sections.
+pub fn extract_mode_prompt(full_prompt: &str, mode: &TutorMode) -> String {
+    let mode_header = format!("### Mode: {}", mode.as_str());
+
+    // Find the "## Operating Modes" boundary
+    let modes_start = full_prompt.find("## Operating Modes");
+    // Find the start of our target mode section
+    let target_start = full_prompt.find(&mode_header);
+    // Find the "## Learner Context" footer section
+    let footer_start = full_prompt.find("## Learner Context Interpretation");
+
+    // If we can't find the expected structure, return the full prompt as fallback
+    let (modes_start, target_start, footer_start) = match (modes_start, target_start, footer_start) {
+        (Some(ms), Some(ts), Some(fs)) => (ms, ts, fs),
+        _ => return full_prompt.to_string(),
+    };
+
+    // Find the end of the target mode section (start of the next ### Mode: header or footer)
+    let after_target = &full_prompt[target_start + mode_header.len()..];
+    let target_end = after_target
+        .find("### Mode: ")
+        .map(|offset| target_start + mode_header.len() + offset)
+        .unwrap_or(footer_start);
+
+    let mut result = String::with_capacity(full_prompt.len());
+
+    // Preamble: everything before "## Operating Modes"
+    result.push_str(full_prompt[..modes_start].trim_end());
+    result.push_str("\n\n");
+
+    // Operating Modes header + only the relevant mode
+    result.push_str("## Operating Modes\n\n");
+    result.push_str("You operate in exactly one mode per request, indicated by the <mode> tag.\n\n");
+    result.push_str(full_prompt[target_start..target_end].trim_end());
+    result.push_str("\n\n");
+
+    // Footer: Learner Context, Math Formatting, Constraints
+    result.push_str(full_prompt[footer_start..].trim_end());
+    result.push('\n');
+
+    result
+}
+
+/// Log token usage from an API response. Writes to stderr for now;
+/// a future iteration could persist this to the database for analytics.
+pub fn log_token_usage(mode: &TutorMode, model: &str, response: &MessagesResponse) {
+    eprintln!(
+        "[token-usage] mode={} model={} input_tokens={} output_tokens={} total={}",
+        mode.as_str(),
+        model,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+        response.usage.input_tokens + response.usage.output_tokens,
+    );
+}
+
+/// Estimate the number of Claude API tokens for a base64-encoded attachment.
+///
+/// Claude counts ~1 token per 6.5 bytes of base64 for images, and roughly
+/// 1 token per 4 characters of text/document content after decoding.
+/// Returns an estimate so callers can warn users before sending oversized payloads.
+pub fn estimate_attachment_tokens(base64_data: &str, mime_type: &str) -> u64 {
+    let base64_len = base64_data.len() as u64;
+
+    if mime_type.starts_with("image/") {
+        // Images: Claude vision uses ~85 tokens per 512x512 tile.
+        // Rough estimate: base64 length / 750 (empirically derived).
+        // Minimum 85 tokens (one tile).
+        (base64_len / 750).max(85)
+    } else {
+        // Documents (PDF, text, etc.): roughly 1 token per 4 decoded bytes.
+        // base64 encodes 3 bytes into 4 chars, so decoded_bytes ≈ base64_len * 3/4.
+        let decoded_bytes = base64_len * 3 / 4;
+        decoded_bytes / 4
     }
 }

@@ -30,7 +30,14 @@ pub fn set_setting(state: State<'_, AppState>, key: String, value: String) -> Re
         return Err(format!("Setting '{}' cannot be modified.", key));
     }
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
-    db::settings::set_setting(&conn, &key, &value).map_err(|e| format!("DB error: {e}"))
+    db::settings::set_setting(&conn, &key, &value).map_err(|e| format!("DB error: {e}"))?;
+
+    // When the model changes, all cached content is stale — invalidate eagerly
+    if key == "base_model" || key == "escalation_model" {
+        let _ = db::content_cache::invalidate_on_model_change(&conn);
+    }
+
+    Ok(())
 }
 
 /// Check whether an API key is stored without returning the key itself.

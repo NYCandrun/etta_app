@@ -1,4 +1,5 @@
 use crate::api::client::{extract_text, ClaudeClient};
+use crate::api::prompt::{self, xml_escape, LearnerContext, TutorMode};
 use crate::api::types::{ContentBlock, ImageSource, Message, MessagesRequest};
 use crate::db;
 use crate::keychain;
@@ -13,16 +14,6 @@ const MAX_INPUT_LEN: usize = 10_000;
 /// Default models — can be overridden by user settings.
 const FALLBACK_BASE_MODEL: &str = "claude-sonnet-4-20250514";
 const FALLBACK_ESCALATION_MODEL: &str = "claude-opus-4-6";
-
-/// Escape user-supplied content for safe interpolation into XML-structured prompts.
-/// Prevents prompt injection via XML tag breakout.
-fn xml_escape(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&apos;")
-}
 
 /// Settings keys that must never appear in exported data.
 const SENSITIVE_KEYS: &[&str] = &[
@@ -122,6 +113,11 @@ pub async fn explain_mistake(
 
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+    eprintln!(
+        "[token-usage] mode=explain_mistake model={} input_tokens={} output_tokens={} total={}",
+        model, response.usage.input_tokens, response.usage.output_tokens,
+        response.usage.input_tokens + response.usage.output_tokens,
+    );
     Ok(extract_text(&response))
 }
 
@@ -203,10 +199,21 @@ pub async fn regrade_with_reasoning(
         vec![Message::user_text(&user_text)]
     };
 
+    // Estimate attachment tokens if an image is provided
+    if let Some(data) = &file_data {
+        let est = prompt::estimate_attachment_tokens(data, file_mime_type.as_deref().unwrap_or(""));
+        eprintln!("[token-estimate] regrade attachment: ~{est} tokens");
+    }
+
     let request = MessagesRequest::new(&model, 1024, Some(system), messages, false);
 
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+    eprintln!(
+        "[token-usage] mode=regrade model={} input_tokens={} output_tokens={} total={}",
+        model, response.usage.input_tokens, response.usage.output_tokens,
+        response.usage.input_tokens + response.usage.output_tokens,
+    );
     let text = extract_text(&response);
 
     // Parse the JSON response
@@ -331,33 +338,42 @@ pub async fn request_explanation(
         .path()
         .resource_dir()
         .map_err(|e| format!("Failed to resolve resource dir: {e}"))?;
-    let system_prompt = crate::api::prompt::load_system_prompt(&resource_dir);
+    let full_system_prompt = prompt::load_system_prompt(&resource_dir);
 
+    // Use the mode-specific prompt extractor, then append strategy instructions
+    let strategy_desc = match *strategy {
+        "analogy" => "Explain using real-world analogies the student can relate to",
+        "visual" => "Describe the concept using a text-based visual approach: ASCII diagrams, tables, number lines, or LaTeX-formatted expressions. Do NOT reference or generate images. Structure the explanation spatially using formatting the student can read as plain text.",
+        "step_by_step" => "Break down into very small, numbered steps",
+        "basics_review" => "Review the fundamental prerequisite concepts first",
+        _ => "Explain in a clear, straightforward manner",
+    };
+    let mode_prompt = prompt::extract_mode_prompt(&full_system_prompt, &TutorMode::Explain);
     let system = format!(
-        "{}\n\nThe student is requesting an additional explanation (attempt #{}) for the concept below. \
-         Use the '{}' strategy: {}. \
+        "{mode_prompt}\n\n\
+         The student is requesting an additional explanation (attempt #{}) for the concept below. \
+         Use the '{strategy}' strategy: {strategy_desc}. \
          Use LaTeX notation wrapped in $ delimiters for math. Be encouraging.",
-        system_prompt,
         attempt + 1,
-        strategy,
-        match *strategy {
-            "analogy" => "Explain using real-world analogies the student can relate to",
-            "visual" => "Describe the concept using a text-based visual approach: ASCII diagrams, tables, number lines, or LaTeX-formatted expressions. Do NOT reference or generate images. Structure the explanation spatially using formatting the student can read as plain text.",
-            "step_by_step" => "Break down into very small, numbered steps",
-            "basics_review" => "Review the fundamental prerequisite concepts first",
-            _ => "Explain in a clear, straightforward manner",
-        }
     );
 
-    let user_msg = format!(
-        "<concept>\n  <id>{}</id>\n  <title>{}</title>\n  <domain>{}</domain>\n  <module>{}</module>\n</concept>\n\n\
-         Please explain this concept again using the {} approach.",
-        xml_escape(&concept.id), xml_escape(&concept.title), xml_escape(&concept.domain), xml_escape(&concept.module), strategy
+    // Use the shared prompt builder's user message format with proper XML tags:
+    // <mode>explain</mode>, <concept>, <learner_context>, <user_input>
+    let learner_ctx = LearnerContext::from(&concept);
+    let extra_text = format!("Please explain this concept again using the {strategy} approach.");
+    let request = prompt::build_request_with_model(
+        &model,
+        &TutorMode::Explain,
+        &concept,
+        &learner_ctx,
+        &system,
+        Some(&extra_text),
+        false,
     );
 
-    let request = MessagesRequest::new(&model, 2048, Some(system), vec![Message::user_text(&user_msg)], false);
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+    prompt::log_token_usage(&TutorMode::Explain, &model, &response);
 
     Ok(ExplanationResponse {
         content: extract_text(&response),
@@ -420,6 +436,11 @@ pub async fn verify_no_right_answer(
     let request = MessagesRequest::new(&model, 512, Some(system), vec![Message::user_text(&user_msg)], false);
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+    eprintln!(
+        "[token-usage] mode=verify_no_right_answer model={} input_tokens={} output_tokens={} total={}",
+        model, response.usage.input_tokens, response.usage.output_tokens,
+        response.usage.input_tokens + response.usage.output_tokens,
+    );
     let text = extract_text(&response);
 
     #[derive(Deserialize)]
