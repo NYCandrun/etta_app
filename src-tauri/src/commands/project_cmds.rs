@@ -5,6 +5,7 @@ use crate::db;
 use crate::engine::{mastery, spaced_rep};
 use crate::file_handler;
 use crate::keychain;
+use crate::rate_limit;
 use crate::AppState;
 use serde::{Deserialize, Serialize};
 use tauri::{Manager, State};
@@ -36,14 +37,22 @@ pub fn get_projects(
 
     Ok(subs
         .into_iter()
-        .map(|s| ProjectInfo {
-            id: s.id.unwrap_or(0),
-            concept_id: s.concept_id,
-            project_id: s.project_id,
-            file_path: s.file_path,
-            status: s.status,
-            feedback: s.feedback_json,
-            submitted_at: s.submitted_at,
+        .map(|s| {
+            // Expose only the file name, not the full absolute path (privacy)
+            let safe_path = s.file_path.as_ref().and_then(|p| {
+                std::path::Path::new(p)
+                    .file_name()
+                    .map(|n| n.to_string_lossy().to_string())
+            });
+            ProjectInfo {
+                id: s.id.unwrap_or(0),
+                concept_id: s.concept_id,
+                project_id: s.project_id,
+                file_path: safe_path,
+                status: s.status,
+                feedback: s.feedback_json,
+                submitted_at: s.submitted_at,
+            }
         })
         .collect())
 }
@@ -61,6 +70,8 @@ pub async fn submit_project(
     app_handle: tauri::AppHandle,
     submission: ProjectSubmission,
 ) -> Result<ProjectInfo, String> {
+    rate_limit::check_rate_limit("submit_project")?;
+
     // Process the file.
     let processed = file_handler::process_file(&submission.file_path)?;
 
@@ -204,11 +215,17 @@ pub async fn submit_project(
         }
     }
 
+    // Return only the file name, not the full path (privacy)
+    let safe_name = std::path::Path::new(&submission.file_path)
+        .file_name()
+        .map(|n| n.to_string_lossy().to_string())
+        .unwrap_or_else(|| "unknown".to_string());
+
     Ok(ProjectInfo {
         id: sub_id,
         concept_id: submission.concept_id,
         project_id: Some(submission.project_id),
-        file_path: Some(submission.file_path),
+        file_path: Some(safe_name),
         status: "reviewed".to_string(),
         feedback: Some(feedback),
         submitted_at: now,

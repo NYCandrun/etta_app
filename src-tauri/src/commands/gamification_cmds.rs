@@ -222,6 +222,16 @@ pub fn award_xp(
         ));
     }
 
+    // Reject frontend XP awards for quiz answers/completions — these are already
+    // awarded server-side in submit_answer to prevent double-counting.
+    let src = source.as_deref().unwrap_or("unknown");
+    if src == "quiz_answer" || src == "quiz_completion" || src == "quiz_complete" {
+        return Err(
+            "Quiz XP is awarded server-side. Frontend award_xp for quiz sources is not allowed."
+                .to_string(),
+        );
+    }
+
     let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
 
     let current_xp = db::settings::get_setting(&conn, "total_xp")

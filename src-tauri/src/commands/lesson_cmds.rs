@@ -2,6 +2,7 @@ use crate::api::client::{extract_text, ClaudeClient};
 use crate::api::prompt::{self, LearnerContext, TutorMode};
 use crate::db;
 use crate::keychain;
+use crate::rate_limit;
 use crate::AppState;
 use tauri::{Manager, State};
 
@@ -11,6 +12,8 @@ pub async fn get_lesson(
     app_handle: tauri::AppHandle,
     concept_id: String,
 ) -> Result<String, String> {
+    rate_limit::check_rate_limit("get_lesson")?;
+
     // Check content cache first.
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;

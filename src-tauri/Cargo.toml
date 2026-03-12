@@ -16,6 +16,10 @@ base64 = "0.22"
 dirs = "5"
 keyring = { version = "3", features = ["sync-secret-service", "apple-native", "windows-native"] }
 futures-lite = "2"
+hmac = "0.12"
+sha2 = "0.10"
+rand = "0.8"
+hex = "0.4"
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }

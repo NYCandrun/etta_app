@@ -4,12 +4,14 @@ use rusqlite::Connection;
 use tauri::Manager;
 
 mod api;
+mod cache_integrity;
 mod commands;
 mod curriculum;
 mod db;
 mod engine;
 mod file_handler;
 mod keychain;
+mod rate_limit;
 
 /// Shared application state holding the SQLite connection and cached API key.
 pub struct AppState {
