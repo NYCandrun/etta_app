@@ -94,6 +94,11 @@ pub fn classify_response(correct: bool, streak: i64, latency_ms: Option<i64>) ->
     ResponseQuality::Good
 }
 
+/// Minimum mastery required for a concept to appear in review sessions.
+/// Concepts below this threshold were only briefly encountered (e.g., the user
+/// started an advanced section then moved down) and should not clutter reviews.
+pub const MIN_MASTERY_FOR_REVIEW: f64 = 0.3;
+
 /// Mastery threshold above which a concept is considered expert-level.
 /// Expert concepts are automatically rescheduled without requiring a review quiz.
 pub const EXPERT_MASTERY_THRESHOLD: f64 = 0.95;
