@@ -30,11 +30,11 @@ impl TutorMode {
     /// to avoid wasting tokens, while allowing full budget for content generation.
     pub fn max_tokens(&self) -> u32 {
         match self {
-            TutorMode::Lesson => 4096,
-            TutorMode::Quiz => 4096,
-            TutorMode::Explain => 2048,
-            TutorMode::Evaluate => 4096,
-            TutorMode::Review => 2048,
+            TutorMode::Lesson => 8192,
+            TutorMode::Quiz => 16384,
+            TutorMode::Explain => 4096,
+            TutorMode::Evaluate => 8192,
+            TutorMode::Review => 4096,
         }
     }
 }
