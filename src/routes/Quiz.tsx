@@ -5,6 +5,7 @@ import { QuizShell } from "@/components/quiz/QuizShell";
 import { SkeletonLoader } from "@/components/shared/SkeletonLoader";
 import { useSession } from "@/hooks/useSession";
 import { useGamification } from "@/hooks/useGamification";
+import * as ipc from "@/lib/ipc";
 import type { QuizSession } from "@/types/quiz";
 
 export default function Quiz() {
@@ -170,7 +171,14 @@ export default function Quiz() {
           onRetry={() => {
             setQuizSession(null);
             setQuizFinished(false);
-            void fetchQuiz();
+            // Invalidate cached quiz so the backend generates fresh questions
+            const doRetry = async () => {
+              if (currentConcept) {
+                await ipc.invalidateQuizCache(currentConcept.id);
+              }
+              await fetchQuiz();
+            };
+            void doRetry();
           }}
           onReviewLesson={() => navigate("/lesson")}
         />

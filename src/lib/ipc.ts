@@ -366,6 +366,10 @@ export async function getQuiz(conceptId: string): Promise<QuizSession> {
   return normalizeQuizSession(raw, conceptId);
 }
 
+export async function invalidateQuizCache(conceptId: string): Promise<void> {
+  await tauriInvoke<void>("invalidate_quiz_cache", { conceptId });
+}
+
 /**
  * Normalize the backend quiz response into the frontend QuizSession shape.
  * Backend returns a raw JSON string; the frontend expects a parsed QuizSession.

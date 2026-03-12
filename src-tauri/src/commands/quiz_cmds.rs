@@ -559,6 +559,18 @@ pub struct QuizCompletionResult {
 }
 
 #[tauri::command]
+pub fn invalidate_quiz_cache(
+    state: State<'_, AppState>,
+    concept_id: String,
+) -> Result<(), String> {
+    let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+    db::content_cache::invalidate_cache(&conn, &concept_id, "quiz")
+        .map_err(|e| format!("Failed to invalidate quiz cache: {e}"))?;
+    eprintln!("[invalidate_quiz_cache] Invalidated quiz cache for {concept_id}");
+    Ok(())
+}
+
+#[tauri::command]
 pub fn complete_quiz(
     state: State<'_, AppState>,
     session_id: String,
