@@ -278,8 +278,22 @@ pub async fn submit_answer(
                 (Some(filled), Some(expected)) => {
                     let mut matches = 0;
                     for (f, e) in filled.iter().zip(expected.iter()) {
-                        if f.trim().eq_ignore_ascii_case(e.trim()) {
+                        let f_trimmed = f.trim();
+                        let e_trimmed = e.trim();
+                        // First try exact case-insensitive match
+                        if f_trimmed.eq_ignore_ascii_case(e_trimmed) {
                             matches += 1;
+                        } else if let (Ok(fv), Ok(ev)) = (
+                            f_trimmed.parse::<f64>(),
+                            e_trimmed.parse::<f64>(),
+                        ) {
+                            // Numeric tolerance: accept answers within 1% relative
+                            // error or 0.01 absolute error (whichever is larger).
+                            let abs_diff = (fv - ev).abs();
+                            let rel_threshold = ev.abs() * 0.01;
+                            if abs_diff <= rel_threshold.max(0.01) {
+                                matches += 1;
+                            }
                         }
                     }
                     let total = expected.len().max(1);
@@ -290,12 +304,16 @@ pub async fn submit_answer(
             }
         }
         "free_response" => {
-            // Call AI to grade free-response answers (already server-authoritative)
+            // Call AI to grade free-response answers (already server-authoritative).
+            // On API/parse failure, don't penalize — skip the mastery update for
+            // this question and flag for re-grade.
             match grade_free_response(&state, &question.prompt, answer.free_text.as_deref().unwrap_or(""), question.rubric.as_deref()).await {
                 Ok((correct, s)) => (correct, s),
                 Err(_) => {
-                    // Fallback: give partial credit and let user re-grade
-                    (false, 0.3)
+                    // Don't penalize learner for grading failures — give neutral
+                    // partial credit (0.5) instead of punitive 0.3, so SM-2
+                    // treats it as uncertain rather than incorrect.
+                    (false, 0.5)
                 }
             }
         }
@@ -315,13 +333,14 @@ pub async fn submit_answer(
                 is_transfer: false,
             };
 
-            let new_mastery = if concept.attempt_count == 0 {
-                mastery::compute_mastery(&[attempt])
-            } else {
-                let single_score = mastery::compute_mastery(&[attempt]);
-                let weight = 1.0 / (concept.attempt_count as f64 + 1.0);
-                concept.mastery_score * (1.0 - weight) + single_score * weight
-            };
+            // Compute mastery as an exponential moving average.
+            // Cap weight at 0.5 so a single correct answer on a fresh concept
+            // yields ~0.50, not 1.0.  This means reaching the 0.8 prereq
+            // threshold requires multiple consistent successes.
+            let single_score = mastery::compute_mastery(&[attempt]);
+            let total_attempts = concept.attempt_count as f64 + 1.0;
+            let weight = (1.0 / total_attempts).min(0.5);
+            let new_mastery = concept.mastery_score * (1.0 - weight) + single_score * weight;
 
             let quality = spaced_rep::classify_response(is_correct, new_streak, time_ms);
             let schedule = spaced_rep::update_schedule(quality, concept.ease_factor, concept.interval_days);

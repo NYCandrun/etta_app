@@ -1,5 +1,5 @@
 use crate::db::concepts::{self, Concept};
-use crate::engine::spaced_rep;
+use crate::engine::{interleave, spaced_rep};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -100,8 +100,27 @@ pub fn build_daily_session(conn: &Connection) -> Result<DailySession, String> {
 
     let new_concepts: Vec<Concept> = unlocked.into_iter().take(MAX_NEW_PER_SESSION).collect();
 
-    let mut session_concepts: Vec<Concept> = reviews;
-    session_concepts.extend(new_concepts);
+    // Split reviews into "recent" (attempted within 7 days) vs "older review"
+    // for proper interleaving, rather than flat-appending.
+    let seven_days_ago = (chrono::Local::now() - chrono::Duration::days(7))
+        .format("%Y-%m-%d")
+        .to_string();
+    let (recent_reviews, older_reviews): (Vec<Concept>, Vec<Concept>) =
+        reviews.into_iter().partition(|c| {
+            c.last_correct
+                .as_deref()
+                .map_or(false, |d| d >= seven_days_ago.as_str())
+        });
+
+    let target_size = MAX_REVIEWS_PER_SESSION + MAX_NEW_PER_SESSION;
+    let interleaved = interleave::generate_interleaved_set(
+        &new_concepts,
+        &recent_reviews,
+        &older_reviews,
+        target_size,
+    );
+
+    let session_concepts: Vec<Concept> = interleaved.into_iter().map(|item| item.concept).collect();
 
     // Estimate ~10 min per concept
     let estimated_minutes = (session_concepts.len() as u32) * 10;
@@ -198,6 +217,9 @@ mod tests {
             module: "test".to_string(),
             title: format!("Concept {id}"),
             prerequisites: vec![],
+            learning_objectives: vec![],
+            difficulty_tier: None,
+            error_patterns: vec![],
             mastery_score: mastery,
             ease_factor: 2.5,
             interval_days: 1,

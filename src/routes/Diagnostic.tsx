@@ -15,7 +15,112 @@ interface DiagnosticQuestion {
   prompt: string;
   options: { id: string; text: string; isCorrect: boolean }[];
   difficulty: number; // 1–5
+  /** Whether this is a skill-testing question (true) or a self-report fallback (false). */
+  isSkillTest: boolean;
 }
+
+/** Pre-built diagnostic skill probes keyed by concept ID.
+ *  Each tests actual understanding rather than self-reported familiarity. */
+const SKILL_PROBES: Record<string, { prompt: string; options: { id: string; text: string; isCorrect: boolean }[] }> = {
+  // Algebra - early
+  alg_001: {
+    prompt: "Which of the following is an irrational number?",
+    options: [
+      { id: "a", text: "$\\sqrt{2}$", isCorrect: true },
+      { id: "b", text: "$\\frac{3}{4}$", isCorrect: false },
+      { id: "c", text: "$-7$", isCorrect: false },
+      { id: "d", text: "$0.25$", isCorrect: false },
+    ],
+  },
+  alg_010: {
+    prompt: "Solve for $x$: $3x - 7 = 14$",
+    options: [
+      { id: "a", text: "$x = 7$", isCorrect: true },
+      { id: "b", text: "$x = 3$", isCorrect: false },
+      { id: "c", text: "$x = 21$", isCorrect: false },
+      { id: "d", text: "$x = \\frac{7}{3}$", isCorrect: false },
+    ],
+  },
+  // Algebra - mid
+  alg_032: {
+    prompt: "Expand $(2x + 3)(x - 4)$",
+    options: [
+      { id: "a", text: "$2x^2 - 5x - 12$", isCorrect: true },
+      { id: "b", text: "$2x^2 + 5x - 12$", isCorrect: false },
+      { id: "c", text: "$2x^2 - 8x + 3$", isCorrect: false },
+      { id: "d", text: "$2x^2 - x - 12$", isCorrect: false },
+    ],
+  },
+  // Algebra - late
+  alg_049: {
+    prompt: "What does the discriminant $b^2 - 4ac$ tell you about a quadratic equation?",
+    options: [
+      { id: "a", text: "The number and type of solutions", isCorrect: true },
+      { id: "b", text: "The vertex of the parabola", isCorrect: false },
+      { id: "c", text: "The y-intercept", isCorrect: false },
+      { id: "d", text: "The axis of symmetry", isCorrect: false },
+    ],
+  },
+  // Precalculus
+  pre_001: {
+    prompt: "What is the domain of $f(x) = \\frac{1}{x - 3}$?",
+    options: [
+      { id: "a", text: "All real numbers except $x = 3$", isCorrect: true },
+      { id: "b", text: "All real numbers", isCorrect: false },
+      { id: "c", text: "$x > 3$", isCorrect: false },
+      { id: "d", text: "$x \\geq 0$", isCorrect: false },
+    ],
+  },
+  // Trigonometry
+  trig_001: {
+    prompt: "In a right triangle, $\\sin(\\theta)$ equals:",
+    options: [
+      { id: "a", text: "opposite / hypotenuse", isCorrect: true },
+      { id: "b", text: "adjacent / hypotenuse", isCorrect: false },
+      { id: "c", text: "opposite / adjacent", isCorrect: false },
+      { id: "d", text: "hypotenuse / opposite", isCorrect: false },
+    ],
+  },
+  // Calculus
+  svc_001: {
+    prompt: "What does $\\lim_{x \\to 2} (3x + 1)$ equal?",
+    options: [
+      { id: "a", text: "$7$", isCorrect: true },
+      { id: "b", text: "$6$", isCorrect: false },
+      { id: "c", text: "$\\infty$", isCorrect: false },
+      { id: "d", text: "Does not exist", isCorrect: false },
+    ],
+  },
+  svc_010: {
+    prompt: "What is the derivative of $x^3$?",
+    options: [
+      { id: "a", text: "$3x^2$", isCorrect: true },
+      { id: "b", text: "$x^2$", isCorrect: false },
+      { id: "c", text: "$3x^3$", isCorrect: false },
+      { id: "d", text: "$\\frac{x^4}{4}$", isCorrect: false },
+    ],
+  },
+  // Linear algebra
+  la_001: {
+    prompt: "What is the result of $\\begin{bmatrix} 1 & 2 \\end{bmatrix} \\cdot \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}$?",
+    options: [
+      { id: "a", text: "$11$", isCorrect: true },
+      { id: "b", text: "$\\begin{bmatrix} 3 & 8 \\end{bmatrix}$", isCorrect: false },
+      { id: "c", text: "$7$", isCorrect: false },
+      { id: "d", text: "$\\begin{bmatrix} 3 \\\\ 8 \\end{bmatrix}$", isCorrect: false },
+    ],
+  },
+  // Classical mechanics
+  cm_001: {
+    prompt: "Newton's second law states that $F$ equals:",
+    options: [
+      { id: "a", text: "$ma$ (mass times acceleration)", isCorrect: true },
+      { id: "b", text: "$mv$ (mass times velocity)", isCorrect: false },
+      { id: "c", text: "$\\frac{1}{2}mv^2$ (kinetic energy)", isCorrect: false },
+      { id: "d", text: "$mg$ (weight only)", isCorrect: false },
+    ],
+  },
+};
 
 /** Build diagnostic questions from curriculum concepts. */
 function buildDiagnosticQuestions(curriculum: CurriculumState): DiagnosticQuestion[] {
@@ -54,7 +159,8 @@ function buildDiagnosticQuestions(curriculum: CurriculumState): DiagnosticQuesti
   return questions;
 }
 
-/** Generate a multiple-choice diagnostic question for a concept. */
+/** Generate a diagnostic question for a concept.
+ *  Prefers a skill-testing probe if one exists; falls back to self-report. */
 function generateQuestionForConcept(
   concept: Concept,
   domainName: string,
@@ -62,7 +168,23 @@ function generateQuestionForConcept(
 ): DiagnosticQuestion {
   const difficulty = Math.ceil(positionRatio * 4) + 1;
 
-  // Generate a diagnostic question based on the concept name
+  // Use a real skill-testing probe if available for this concept
+  const probe = SKILL_PROBES[concept.id];
+  if (probe) {
+    return {
+      id: `diag_${concept.id}`,
+      domain: concept.domain.id,
+      domainName,
+      conceptId: concept.id,
+      conceptName: concept.name,
+      prompt: probe.prompt,
+      options: probe.options,
+      difficulty,
+      isSkillTest: true,
+    };
+  }
+
+  // Fallback: self-report (clearly labeled as such in scoring)
   const options = [
     { id: "a", text: `I can explain ${concept.name} confidently`, isCorrect: true },
     { id: "b", text: `I've seen ${concept.name} before but I'm not confident`, isCorrect: false },
@@ -79,24 +201,44 @@ function generateQuestionForConcept(
     prompt: `How familiar are you with "${concept.name}"?`,
     options,
     difficulty,
+    isSkillTest: false,
   };
 }
 
-/** Score the diagnostic results per domain. Returns domain -> familiarity 0–1 */
+/** Score the diagnostic results per domain. Returns domain -> familiarity 0–1.
+ *  Skill-test questions are weighted at 2x compared to self-report questions,
+ *  since demonstrated ability is a stronger signal than claimed confidence. */
 function scoreDiagnostic(
   questions: DiagnosticQuestion[],
   answers: Map<string, string>
 ): Map<string, { score: number; startIndex: number }> {
-  const domainScores = new Map<string, { total: number; confident: number; firstUnknown: number; count: number }>();
+  const domainScores = new Map<string, { weightedTotal: number; weightedCorrect: number; firstUnknown: number; count: number }>();
 
   for (const q of questions) {
-    const entry = domainScores.get(q.domain) ?? { total: 0, confident: 0, firstUnknown: questions.length, count: 0 };
-    entry.total++;
+    const entry = domainScores.get(q.domain) ?? { weightedTotal: 0, weightedCorrect: 0, firstUnknown: questions.length, count: 0 };
+    // Skill-test answers count double since they measure actual ability
+    const weight = q.isSkillTest ? 2 : 1;
+    entry.weightedTotal += weight;
+
     const answer = answers.get(q.id);
-    if (answer === "a") {
-      entry.confident++;
-    } else if (entry.firstUnknown === questions.length) {
-      entry.firstUnknown = entry.count;
+    if (q.isSkillTest) {
+      // For skill tests, check if the correct option was selected
+      const correctOpt = q.options.find(o => o.isCorrect);
+      if (answer === correctOpt?.id) {
+        entry.weightedCorrect += weight;
+      } else if (entry.firstUnknown === questions.length) {
+        entry.firstUnknown = entry.count;
+      }
+    } else {
+      // Self-report: "a" = confident, others indicate unfamiliarity
+      if (answer === "a") {
+        entry.weightedCorrect += weight;
+      } else if (answer === "b") {
+        // Partial credit for "seen before but not confident"
+        entry.weightedCorrect += weight * 0.3;
+      } else if (entry.firstUnknown === questions.length) {
+        entry.firstUnknown = entry.count;
+      }
     }
     entry.count++;
     domainScores.set(q.domain, entry);
@@ -105,7 +247,7 @@ function scoreDiagnostic(
   const result = new Map<string, { score: number; startIndex: number }>();
   for (const [domain, data] of domainScores) {
     result.set(domain, {
-      score: data.total > 0 ? data.confident / data.total : 0,
+      score: data.weightedTotal > 0 ? data.weightedCorrect / data.weightedTotal : 0,
       startIndex: data.firstUnknown,
     });
   }

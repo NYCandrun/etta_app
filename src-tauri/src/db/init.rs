@@ -28,6 +28,9 @@ pub fn initialize_database() -> Result<Connection, Box<dyn std::error::Error>> {
             module          TEXT NOT NULL,
             title           TEXT NOT NULL,
             prerequisites   TEXT NOT NULL DEFAULT '[]',
+            learning_objectives TEXT NOT NULL DEFAULT '[]',
+            difficulty_tier INTEGER,
+            error_patterns  TEXT NOT NULL DEFAULT '[]',
             mastery_score   REAL NOT NULL DEFAULT 0.0 CHECK(mastery_score >= 0.0 AND mastery_score <= 1.0),
             ease_factor     REAL NOT NULL DEFAULT 2.5 CHECK(ease_factor >= 1.3 AND ease_factor <= 3.5),
             interval_days   INTEGER NOT NULL DEFAULT 1 CHECK(interval_days >= 1 AND interval_days <= 180),
@@ -106,8 +109,15 @@ pub fn initialize_database() -> Result<Connection, Box<dyn std::error::Error>> {
     // Migration: add content_hash column to existing content_cache tables.
     // ALTER TABLE ADD COLUMN is a no-op if the column already exists in SQLite
     // (we catch the error silently).
+    let _ = conn.execute_batch("ALTER TABLE content_cache ADD COLUMN content_hash TEXT;");
+
+    // Migration: add learning context columns to existing concepts tables.
     let _ = conn.execute_batch(
-        "ALTER TABLE content_cache ADD COLUMN content_hash TEXT;",
+        "ALTER TABLE concepts ADD COLUMN learning_objectives TEXT NOT NULL DEFAULT '[]';",
+    );
+    let _ = conn.execute_batch("ALTER TABLE concepts ADD COLUMN difficulty_tier INTEGER;");
+    let _ = conn.execute_batch(
+        "ALTER TABLE concepts ADD COLUMN error_patterns TEXT NOT NULL DEFAULT '[]';",
     );
 
     Ok(conn)
