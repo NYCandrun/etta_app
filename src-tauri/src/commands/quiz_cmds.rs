@@ -176,6 +176,7 @@ pub async fn get_quiz(
             payload_json: text.clone(),
             model_version: Some(response.model),
             created_at: chrono::Utc::now().to_rfc3339(),
+            content_hash: None,
         };
         let _ = db::content_cache::insert_cache_entry(&conn, &entry);
     }
