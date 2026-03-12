@@ -449,23 +449,13 @@ function normalizeQuizSession(raw: QuizSession | string, conceptId: string): Qui
         xpEarned: 0,
       };
     }
-  } catch {
-    console.error("[normalizeQuizSession] Failed to parse quiz JSON:", text.slice(0, 200));
-  }
 
-  // Fallback: empty quiz
-  return {
-    id: `quiz_${conceptId}_${Date.now()}`,
-    conceptId,
-    questions: [],
-    answers: [],
-    feedbacks: [],
-    currentIndex: 0,
-    startedAt: new Date().toISOString(),
-    completedAt: null,
-    totalScore: 0,
-    xpEarned: 0,
-  };
+    throw new Error("Quiz response contained no questions.");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to parse quiz response";
+    console.error("[normalizeQuizSession]", msg, text.slice(0, 300));
+    throw new Error(msg);
+  }
 }
 
 /** Context about the question so the backend can grade the answer. */

@@ -19,19 +19,19 @@ export default function Quiz() {
   } = useSession();
   const { refresh: refreshGamification } = useGamification();
   const [loading, setLoading] = useState(false);
-  const [loadError, setLoadError] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const fetchQuiz = useCallback(async () => {
     if (!currentConcept) return;
     setLoading(true);
-    setLoadError(false);
+    setLoadError(null);
     try {
       const quiz = await loadQuiz(currentConcept.id);
       if (!quiz || quiz.questions.length === 0) {
-        setLoadError(true);
+        setLoadError("No quiz questions were generated.");
       }
-    } catch {
-      setLoadError(true);
+    } catch (err) {
+      setLoadError(String(err));
     } finally {
       setLoading(false);
     }
@@ -138,10 +138,13 @@ export default function Quiz() {
       ) : (loadError || quizIsEmpty) ? (
         <div className="card py-12 text-center">
           <p className="text-warm-400 dark:text-warm-500">
-            {quizIsEmpty
-              ? "No quiz questions were generated. Try again."
-              : "Unable to load quiz. Please try again."}
+            Unable to load quiz. Please try again.
           </p>
+          {loadError && (
+            <p className="mt-2 text-xs text-warm-400 dark:text-warm-600">
+              {loadError}
+            </p>
+          )}
           <div className="mt-4 flex justify-center gap-3">
             <button
               onClick={() => {

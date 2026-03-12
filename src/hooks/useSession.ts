@@ -78,8 +78,9 @@ export function useSession() {
         const quiz = await ipc.getQuiz(conceptId);
         store.setQuizSession(quiz);
         return quiz;
-      } catch {
-        return null;
+      } catch (err) {
+        console.error("[useSession] loadQuiz failed:", err);
+        throw err;
       }
     },
     [store]

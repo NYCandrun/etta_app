@@ -54,7 +54,7 @@ export default function Lesson() {
   // Pre-fetch quiz in the background once the lesson is loaded
   useEffect(() => {
     if (currentConcept && lessonContent && !quizSession) {
-      void loadQuiz(currentConcept.id);
+      loadQuiz(currentConcept.id).catch(() => { /* prefetch — errors handled when quiz page loads */ });
     }
   }, [currentConcept, lessonContent, quizSession, loadQuiz]);
 
