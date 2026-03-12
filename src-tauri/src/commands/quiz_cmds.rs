@@ -333,14 +333,27 @@ pub async fn submit_answer(
                 is_transfer: false,
             };
 
-            // Compute mastery as an exponential moving average.
-            // Cap weight at 0.5 so a single correct answer on a fresh concept
-            // yields ~0.50, not 1.0.  This means reaching the 0.8 prereq
-            // threshold requires multiple consistent successes.
+            // Compute mastery as an exponential moving average with a
+            // streak-based bonus.  The EMA weight is capped at 0.35 so
+            // early attempts grow slowly (~0.35 after the first correct
+            // answer).  Reaching mastery = 1.0 requires a streak of 5
+            // consecutive correct answers, ensuring the learner truly
+            // demonstrates sustained competence rather than getting lucky.
             let single_score = mastery::compute_mastery(&[attempt]);
             let total_attempts = concept.attempt_count as f64 + 1.0;
-            let weight = (1.0 / total_attempts).min(0.5);
-            let new_mastery = concept.mastery_score * (1.0 - weight) + single_score * weight;
+            let weight = (1.0 / total_attempts).min(0.35);
+            let ema_mastery = concept.mastery_score * (1.0 - weight) + single_score * weight;
+
+            // Streak floors: consecutive correct answers are the strongest
+            // signal of genuine mastery.  3 in a row clears the 0.8 prereq
+            // gate, 5 in a row grants full mastery.
+            let streak_floor = match new_streak {
+                s if s >= 5 => 1.0,
+                4 => 0.92,
+                3 => 0.82,
+                _ => 0.0,
+            };
+            let new_mastery = ema_mastery.max(streak_floor);
 
             let quality = spaced_rep::classify_response(is_correct, new_streak, time_ms);
             let schedule = spaced_rep::update_schedule(quality, concept.ease_factor, concept.interval_days);
@@ -502,7 +515,7 @@ async fn grade_free_response(
 
     match serde_json::from_str::<GradeResult>(json_str) {
         Ok(parsed) => Ok((parsed.correct, parsed.score.clamp(0.0, 1.0))),
-        Err(_) => Ok((false, 0.3)), // Fallback partial credit
+        Err(_) => Ok((false, 0.5)), // Neutral partial credit — don't penalize for parse failures
     }
 }
 
