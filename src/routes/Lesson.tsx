@@ -22,6 +22,7 @@ export default function Lesson() {
   } = useSession();
 
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [explanationLoading, setExplanationLoading] = useState(false);
   const [extraExplanation, setExtraExplanation] =
     useState<ExplanationResponse | null>(null);
@@ -30,9 +31,25 @@ export default function Lesson() {
   useEffect(() => {
     if (currentConcept && !lessonContent) {
       setLoading(true);
-      void loadLesson(currentConcept.id).finally(() => setLoading(false));
+      setLoadError(null);
+      loadLesson(currentConcept.id)
+        .catch((err) => {
+          setLoadError(String(err));
+        })
+        .finally(() => setLoading(false));
     }
   }, [currentConcept, lessonContent, loadLesson]);
+
+  const handleRetryLesson = () => {
+    if (!currentConcept) return;
+    setLoading(true);
+    setLoadError(null);
+    loadLesson(currentConcept.id)
+      .catch((err) => {
+        setLoadError(String(err));
+      })
+      .finally(() => setLoading(false));
+  };
 
   // Pre-fetch quiz in the background once the lesson is loaded
   useEffect(() => {
@@ -164,8 +181,21 @@ export default function Lesson() {
       ) : (
         <div className="card py-12 text-center">
           <p className="text-warm-400 dark:text-warm-500">
-            Unable to load lesson content. Please try again later.
+            Unable to load lesson content.
           </p>
+          {loadError && (
+            <p className="mt-2 text-xs text-warm-400 dark:text-warm-600">
+              {loadError}
+            </p>
+          )}
+          <div className="mt-4 flex justify-center gap-3">
+            <button onClick={handleRetryLesson} className="btn-primary">
+              Retry
+            </button>
+            <button onClick={() => navigate("/")} className="btn-secondary">
+              Back to Dashboard
+            </button>
+          </div>
         </div>
       )}
     </motion.div>

@@ -9,8 +9,14 @@ import type { QuizSession } from "@/types/quiz";
 
 export default function Quiz() {
   const navigate = useNavigate();
-  const { currentConcept, quizSession, loadQuiz, setQuizSession } =
-    useSession();
+  const {
+    currentConcept,
+    quizSession,
+    loadQuiz,
+    setQuizSession,
+    sessionConcepts,
+    selectConcept,
+  } = useSession();
   const { refresh: refreshGamification } = useGamification();
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState(false);
@@ -40,11 +46,37 @@ export default function Quiz() {
   // Detect empty quiz that was "loaded" but has no questions
   const quizIsEmpty = quizSession !== null && quizSession.questions.length === 0;
 
+  const [quizFinished, setQuizFinished] = useState(false);
+
+  const advanceToNextConcept = useCallback(() => {
+    if (!currentConcept) {
+      navigate("/");
+      return;
+    }
+    const idx = sessionConcepts.findIndex((c) => c.id === currentConcept.id);
+    const next = idx >= 0 ? sessionConcepts[idx + 1] : undefined;
+    if (next) {
+      // Move to the next concept's lesson
+      selectConcept(next);
+      navigate("/lesson");
+    } else {
+      // No more concepts — return to dashboard
+      navigate("/");
+    }
+  }, [currentConcept, sessionConcepts, selectConcept, navigate]);
+
   const handleComplete = async (completedSession: QuizSession) => {
     setQuizSession(completedSession);
     // XP is awarded per-answer on the backend. Refresh gamification state
     // to reflect the updated total — no frontend lump-sum award needed.
     await refreshGamification();
+    // If the quiz was already marked complete and the user clicks "Done",
+    // advance to the next concept in the session.
+    if (quizFinished) {
+      advanceToNextConcept();
+      return;
+    }
+    setQuizFinished(true);
   };
 
   if (!currentConcept) {

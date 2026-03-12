@@ -64,8 +64,9 @@ export function useSession() {
         store.setLessonContent(lesson);
         store.resetExplanationAttempt();
         return lesson;
-      } catch {
-        return null;
+      } catch (err) {
+        console.error("[useSession] loadLesson failed:", err);
+        throw err;
       }
     },
     [store]

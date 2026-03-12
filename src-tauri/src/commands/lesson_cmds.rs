@@ -69,6 +69,9 @@ pub async fn get_lesson(
     let response = client.send(&request).await?;
     prompt::log_token_usage(&TutorMode::Lesson, &model, &response);
     let text = extract_text(&response);
+    if text.trim().is_empty() {
+        return Err("The AI returned an empty lesson. Please try again.".to_string());
+    }
 
     // Cache the result with mastery band tag for personalized invalidation.
     {

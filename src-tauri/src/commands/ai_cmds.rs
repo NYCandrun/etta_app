@@ -119,7 +119,11 @@ pub async fn explain_mistake(
         model, response.usage.input_tokens, response.usage.output_tokens,
         response.usage.input_tokens + response.usage.output_tokens,
     );
-    Ok(extract_text(&response))
+    let text = extract_text(&response);
+    if text.trim().is_empty() {
+        return Err("The AI returned an empty explanation. Please try again.".to_string());
+    }
+    Ok(text)
 }
 
 // ── Re-grade with Reasoning ─────────────────────────────────────────────────
@@ -376,8 +380,12 @@ pub async fn request_explanation(
     let response = client.send(&request).await?;
     prompt::log_token_usage(&TutorMode::Explain, &model, &response);
 
+    let content = extract_text(&response);
+    if content.trim().is_empty() {
+        return Err("The AI returned an empty explanation. Please try again.".to_string());
+    }
     Ok(ExplanationResponse {
-        content: extract_text(&response),
+        content,
         strategy: strategy.to_string(),
         next_strategy,
     })
@@ -443,6 +451,13 @@ pub async fn verify_no_right_answer(
         response.usage.input_tokens + response.usage.output_tokens,
     );
     let text = extract_text(&response);
+
+    if text.trim().is_empty() {
+        return Ok(NoRightAnswerResult {
+            confirmed: false,
+            explanation: "Unable to verify right now. Please try selecting an answer.".to_string(),
+        });
+    }
 
     #[derive(Deserialize)]
     struct RawResult {
