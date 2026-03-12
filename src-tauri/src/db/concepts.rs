@@ -113,8 +113,24 @@ pub fn get_due_concepts(conn: &Connection, today: &str) -> Result<Vec<Concept>> 
 
 /// Get concepts that have never been reviewed (next_review IS NULL) and whose
 /// prerequisites are all mastered (mastery_score >= 0.8 for each prerequisite).
+///
+/// Domain entry concepts (those with no intra-domain prerequisites) are always
+/// unlocked, allowing users to start any section of the curriculum freely.
 pub fn get_unlocked_new_concepts(conn: &Connection) -> Result<Vec<Concept>> {
     let all = get_all_concepts(conn)?;
+
+    // Build a set of concept IDs per domain for intra-domain prerequisite checks
+    let domain_concepts: std::collections::HashMap<String, std::collections::HashSet<String>> = {
+        let mut map: std::collections::HashMap<String, std::collections::HashSet<String>> =
+            std::collections::HashMap::new();
+        for c in &all {
+            map.entry(c.domain.clone())
+                .or_default()
+                .insert(c.id.clone());
+        }
+        map
+    };
+
     let mut unlocked = Vec::new();
 
     for concept in &all {
@@ -123,13 +139,31 @@ pub fn get_unlocked_new_concepts(conn: &Connection) -> Result<Vec<Concept>> {
             continue;
         }
 
-        // Check prerequisites — require mastery, not just any progress.
-        let prereqs_met = concept.prerequisites.iter().all(|prereq_id| {
+        // A domain entry concept has no prerequisites within its own domain.
+        // These are always unlocked so users can start any curriculum section.
+        let domain_ids = domain_concepts.get(&concept.domain);
+        let is_domain_entry = concept
+            .prerequisites
+            .iter()
+            .all(|prereq_id| domain_ids.map_or(true, |ids| !ids.contains(prereq_id)));
+
+        if is_domain_entry {
+            unlocked.push(concept.clone());
+            continue;
+        }
+
+        // For non-entry concepts, require intra-domain prerequisites to be mastered.
+        // Cross-domain prerequisites are not enforced (the user chose to start this domain).
+        let intra_domain_prereqs_met = concept.prerequisites.iter().all(|prereq_id| {
+            let is_intra_domain = domain_ids.map_or(false, |ids| ids.contains(prereq_id));
+            if !is_intra_domain {
+                return true; // Cross-domain prerequisite — don't block
+            }
             all.iter()
                 .any(|c| c.id == *prereq_id && c.mastery_score >= 0.8)
         });
 
-        if prereqs_met {
+        if intra_domain_prereqs_met {
             unlocked.push(concept.clone());
         }
     }

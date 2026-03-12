@@ -51,10 +51,25 @@ export default function LearningPath() {
     (c) => c.state === "in_progress" || c.state === "unlocked"
   );
 
-  const canAccess = (concept: Concept) =>
-    concept.state === "mastered" ||
-    concept.state === "in_progress" ||
-    concept.state === "unlocked";
+  // Build a set of concept IDs in this domain for intra-domain prerequisite checks
+  const domainConceptIds = new Set(domainConcepts.map((c) => c.id));
+
+  const canAccess = (concept: Concept) => {
+    if (
+      concept.state === "mastered" ||
+      concept.state === "in_progress" ||
+      concept.state === "unlocked"
+    ) {
+      return true;
+    }
+
+    // Domain entry concepts (no intra-domain prerequisites) are always accessible,
+    // letting users start any curriculum section they want.
+    const hasIntraDomainPrereq = concept.prerequisites.some((p) =>
+      domainConceptIds.has(p)
+    );
+    return !hasIntraDomainPrereq;
+  };
 
   const handleConceptClick = (concept: Concept) => {
     if (!canAccess(concept)) return;

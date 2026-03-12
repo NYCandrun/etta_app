@@ -39,8 +39,14 @@ pub fn build_daily_session(conn: &Connection) -> Result<DailySession, String> {
     let mut due = concepts::get_due_concepts(conn, &today).map_err(|e| format!("DB error: {e}"))?;
 
     // Auto-reschedule expert-level concepts (mastery >= 0.95) — they skip the review queue.
+    // Also skip concepts where the user never achieved meaningful mastery (e.g., briefly
+    // started an advanced section then moved down to a lower level).
     let mut reviews = Vec::new();
     for concept in due.drain(..) {
+        if concept.mastery_score < spaced_rep::MIN_MASTERY_FOR_REVIEW {
+            // Not enough mastery to warrant review — silently skip
+            continue;
+        }
         if concept.mastery_score >= spaced_rep::EXPERT_MASTERY_THRESHOLD {
             // Silently push the next review far out without requiring a quiz
             let schedule =

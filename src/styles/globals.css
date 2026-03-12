@@ -107,6 +107,21 @@
     @apply mb-1.5 block text-sm font-medium text-warm-600 dark:text-warm-400;
   }
 
+  /*
+   * KaTeX MathML hidden fallback — the CDN stylesheet normally hides this,
+   * but in Tauri / offline scenarios the CDN may not load, causing MathML
+   * text to render visibly alongside the KaTeX HTML, duplicating numbers.
+   */
+  .katex-mathml {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+  }
+
   /* KaTeX display math centering */
   .katex-display {
     @apply my-6 overflow-x-auto text-center;

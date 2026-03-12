@@ -2,6 +2,7 @@ use crate::api::client::{extract_text, ClaudeClient};
 use crate::api::prompt::{self, xml_escape, LearnerContext, TutorMode};
 use crate::api::types::{ContentBlock, ImageSource, Message, MessagesRequest};
 use crate::db;
+use crate::engine::spaced_rep;
 use crate::keychain;
 use crate::rate_limit;
 use crate::AppState;
@@ -522,6 +523,12 @@ pub fn get_review_forecast(state: State<'_, AppState>) -> Result<Vec<ReviewForec
     let mut forecast: Vec<ReviewForecastItem> = concepts
         .iter()
         .filter_map(|c| {
+            // Only include concepts where the user achieved meaningful mastery.
+            // Concepts briefly encountered (e.g., user started an advanced section
+            // then moved down) should not appear in reviews.
+            if c.mastery_score < spaced_rep::MIN_MASTERY_FOR_REVIEW {
+                return None;
+            }
             c.next_review.as_ref().map(|date| ReviewForecastItem {
                 concept_id: c.id.clone(),
                 concept_name: c.title.clone(),
