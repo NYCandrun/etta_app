@@ -1,5 +1,5 @@
 use crate::api::client::{extract_text, ClaudeClient};
-use crate::api::prompt::{self, LearnerContext, TutorMode};
+use crate::api::prompt::{self, xml_escape, LearnerContext, TutorMode};
 use crate::api::types::{Message, MessagesRequest};
 use crate::db;
 use crate::engine::{mastery, spaced_rep, struggle};
@@ -11,15 +11,6 @@ use tauri::{Manager, State};
 
 /// Maximum length for free-response text (characters).
 const MAX_FREE_RESPONSE_LEN: usize = 5000;
-
-/// Escape user-supplied content for safe interpolation into XML-structured prompts.
-fn xml_escape(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&apos;")
-}
 
 // ── Server-side quiz answer lookup ───────────────────────────────────────────
 
@@ -118,34 +109,12 @@ pub async fn get_quiz(
 ) -> Result<String, String> {
     rate_limit::check_rate_limit("get_quiz")?;
 
-    // Check cache.
-    {
-        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
-        if let Some(cached) =
-            db::content_cache::get_cached_content(&conn, &concept_id, "quiz")
-                .map_err(|e| format!("DB error: {e}"))?
-        {
-            return Ok(cached.payload_json);
-        }
-    }
-
     let concept = {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         db::concepts::get_concept(&conn, &concept_id)
             .map_err(|e| format!("DB error: {e}"))?
             .ok_or_else(|| format!("Concept not found: {concept_id}"))?
     };
-
-    let api_key = keychain::get_api_key_cached(&state)?
-        .ok_or_else(|| "API key not configured.".to_string())?;
-
-    let resource_dir = app_handle
-        .path()
-        .resource_dir()
-        .map_err(|e| format!("Failed to resolve resource dir: {e}"))?;
-    let system_prompt = prompt::load_system_prompt(&resource_dir);
-
-    let learner_ctx = LearnerContext::from(&concept);
 
     // Use user-configured base model if available
     let model = {
@@ -158,15 +127,40 @@ pub async fn get_quiz(
             .unwrap_or_else(|| prompt::DEFAULT_MODEL.to_string())
     };
 
+    // Check cache with mastery- and model-aware lookup.
+    {
+        let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+        if let Some(cached) =
+            db::content_cache::get_cached_content_personalized(
+                &conn, &concept_id, "quiz",
+                Some(concept.mastery_score), Some(&model),
+            ).map_err(|e| format!("DB error: {e}"))?
+        {
+            return Ok(cached.payload_json);
+        }
+    }
+
+    let api_key = keychain::get_api_key_cached(&state)?
+        .ok_or_else(|| "API key not configured.".to_string())?;
+
+    let resource_dir = app_handle
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Failed to resolve resource dir: {e}"))?;
+    let system_prompt = prompt::load_system_prompt(&resource_dir);
+
+    let learner_ctx = LearnerContext::from(&concept);
+
     let request = prompt::build_request_with_model(
         &model, &TutorMode::Quiz, &concept, &learner_ctx, &system_prompt, None, false,
     );
 
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+    prompt::log_token_usage(&TutorMode::Quiz, &model, &response);
     let text = extract_text(&response);
 
-    // Cache the quiz.
+    // Cache the quiz with mastery band tag for personalized invalidation.
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         let entry = db::content_cache::CachedContent {
@@ -176,8 +170,11 @@ pub async fn get_quiz(
             payload_json: text.clone(),
             model_version: Some(response.model),
             created_at: chrono::Utc::now().to_rfc3339(),
+            content_hash: None,
         };
-        let _ = db::content_cache::insert_cache_entry(&conn, &entry);
+        let _ = db::content_cache::insert_cache_entry_with_mastery(
+            &conn, &entry, Some(concept.mastery_score),
+        );
     }
 
     Ok(text)
@@ -309,6 +306,7 @@ pub async fn submit_answer(
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         if let Ok(Some(concept)) = db::concepts::get_concept(&conn, &question.concept_id) {
+            let old_mastery = concept.mastery_score;
             let new_streak = if is_correct { concept.streak_correct + 1 } else { 0 };
 
             let attempt = mastery::AttemptRecord {
@@ -344,6 +342,11 @@ pub async fn submit_answer(
                 last_correct.as_deref(),
                 time_ms,
                 new_streak,
+            );
+
+            // Invalidate cache if the mastery band changed (event-driven)
+            let _ = db::content_cache::invalidate_on_mastery_change(
+                &conn, &question.concept_id, old_mastery, new_mastery,
             );
 
             // Award per-answer XP atomically with the mastery update.
@@ -460,6 +463,11 @@ async fn grade_free_response(
     let request = MessagesRequest::new(&model, 256, Some(system), vec![Message::user_text(&user_msg)], false);
     let client = ClaudeClient::new(&api_key);
     let response = client.send(&request).await?;
+    eprintln!(
+        "[token-usage] mode=grade_free_response model={} input_tokens={} output_tokens={} total={}",
+        model, response.usage.input_tokens, response.usage.output_tokens,
+        response.usage.input_tokens + response.usage.output_tokens,
+    );
     let text = extract_text(&response);
 
     #[derive(Deserialize)]
