@@ -10,6 +10,99 @@ interface LessonContentProps {
 }
 
 /**
+ * Strip HTML comments (e.g. <!-- mastery_band:low -->) from text.
+ */
+function stripHtmlComments(text: string): string {
+  return text.replace(/<!--[\s\S]*?-->/g, "").trim();
+}
+
+/**
+ * Detect a flattened markdown table (all rows on one line) and split into separate lines.
+ * AI responses sometimes return tables without proper newlines between rows.
+ */
+function unflattenTableLines(text: string): string {
+  return text.split("\n").map((line) => {
+    const trimmed = line.trim();
+    // Quick check: must contain pipes and a separator pattern (e.g. |---|)
+    if (!trimmed.includes("|") || !/\|[\s]*:?-{2,}:?[\s]*\|/.test(trimmed)) {
+      return line;
+    }
+    // Only process lines that look like a flattened table (separator embedded in longer content)
+    const sepRegex = /(\|[\s]*:?-{2,}:?[\s]*(?:\|[\s]*:?-{2,}:?[\s]*)*\|)/;
+    const sepMatch = trimmed.match(sepRegex);
+    if (!sepMatch) return line;
+
+    // Count columns from the separator row
+    const numCols = sepMatch[0].split("|").filter((s) => s.trim().length > 0).length;
+    if (numCols === 0) return line;
+
+    const sepStart = sepMatch.index!;
+    const sepEnd = sepStart + sepMatch[0].length;
+
+    const before = trimmed.slice(0, sepStart).trim();
+    const separator = sepMatch[0].trim();
+    const after = trimmed.slice(sepEnd).trim();
+
+    // Only unflatten if there's actually content before or after the separator on this line
+    if (!before && !after) return line;
+
+    const rows: string[] = [];
+    if (before) rows.push(...splitIntoTableRows(before, numCols));
+    rows.push(separator);
+    if (after) rows.push(...splitIntoTableRows(after, numCols));
+
+    return rows.join("\n");
+  }).join("\n");
+}
+
+/**
+ * Split a concatenated string of table rows into individual rows based on column count.
+ * Handles LaTeX pipes inside $...$ by skipping them when counting.
+ */
+function splitIntoTableRows(text: string, numCols: number): string[] {
+  const rows: string[] = [];
+  let remaining = text.trim();
+
+  while (remaining.length > 0) {
+    if (!remaining.startsWith("|")) {
+      // Not a proper row start — include as-is
+      rows.push(remaining);
+      break;
+    }
+
+    // Count pipes, skipping those inside $...$ math delimiters
+    let pipeCount = 0;
+    let inMath = false;
+    let endIdx = -1;
+
+    for (let i = 0; i < remaining.length; i++) {
+      const ch = remaining[i]!;
+      if (ch === "$" && (i === 0 || remaining[i - 1] !== "\\")) {
+        inMath = !inMath;
+        continue;
+      }
+      if (ch === "|" && !inMath) {
+        pipeCount++;
+        if (pipeCount === numCols + 1) {
+          endIdx = i;
+          break;
+        }
+      }
+    }
+
+    if (endIdx === -1) {
+      rows.push(remaining);
+      break;
+    }
+
+    rows.push(remaining.slice(0, endIdx + 1).trim());
+    remaining = remaining.slice(endIdx + 1).trim();
+  }
+
+  return rows;
+}
+
+/**
  * Render a string that may contain both LaTeX and inline markdown (bold, italic, code).
  * LaTeX is parsed first so delimiters inside math are not treated as markdown.
  */
@@ -36,11 +129,14 @@ function renderRichInline(text: string, keyPrefix: string | number = 0): ReactNo
 
 /**
  * Render inline markdown formatting (bold, italic, inline code) within a plain text string.
+ * Bold (**) is matched before italic (*) to handle nesting correctly.
+ * Uses word-boundary-aware patterns to avoid matching stray asterisks.
  */
 function renderInlineFormatting(text: string, keyPrefix: string | number = 0): ReactNode[] {
   const nodes: ReactNode[] = [];
-  // Match **bold**, *italic*, and `code`
-  const inlineRe = /(\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`)/g;
+  // Match `code` first, then **bold** (with proper closing), then *italic*
+  // The bold/italic patterns require non-space after opening and before closing markers
+  const inlineRe = /(`(.+?)`|\*\*([^\s*](?:[^]*?[^\s*])?)\*\*|\*([^\s*](?:[^]*?[^\s*])?)\*)/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
@@ -49,18 +145,18 @@ function renderInlineFormatting(text: string, keyPrefix: string | number = 0): R
       nodes.push(text.slice(lastIndex, match.index));
     }
     if (match[2]) {
-      nodes.push(<strong key={`${keyPrefix}-b-${match.index}`}>{match[2]}</strong>);
-    } else if (match[3]) {
-      nodes.push(<em key={`${keyPrefix}-i-${match.index}`}>{match[3]}</em>);
-    } else if (match[4]) {
       nodes.push(
         <code
           key={`${keyPrefix}-c-${match.index}`}
           className="rounded bg-warm-100 px-1 py-0.5 text-sm dark:bg-warm-800"
         >
-          {match[4]}
+          {match[2]}
         </code>
       );
+    } else if (match[3]) {
+      nodes.push(<strong key={`${keyPrefix}-b-${match.index}`}>{match[3]}</strong>);
+    } else if (match[4]) {
+      nodes.push(<em key={`${keyPrefix}-i-${match.index}`}>{match[4]}</em>);
     }
     lastIndex = match.index + match[0].length;
   }
@@ -94,7 +190,9 @@ function isTableSeparator(line: string): boolean {
  * then LaTeX + inline formatting is applied within each block.
  */
 function RichText({ text }: { text: string }) {
-  const lines = text.split("\n");
+  // Preprocess: strip HTML comments and unflatten any single-line tables
+  const cleaned = unflattenTableLines(stripHtmlComments(text));
+  const lines = cleaned.split("\n");
   const blocks: ReactNode[] = [];
   let listItems: { text: string; ordered: boolean }[] = [];
   let blockKey = 0;
@@ -204,8 +302,12 @@ function RichText({ text }: { text: string }) {
     const line = lines[i]!;
     const trimmed = line.trim();
 
-    // Table rows: lines containing pipe characters with content on both sides
-    const isTableRow = /^\|.+\|$/.test(trimmed) || isTableSeparator(trimmed);
+    // Table rows: lines starting and ending with |, or separator rows,
+    // or continuation rows when we're already accumulating a table
+    const isTableRow =
+      /^\|.+\|$/.test(trimmed) ||
+      isTableSeparator(trimmed) ||
+      (tableLines.length > 0 && trimmed.includes("|") && !trimmed.startsWith("#"));
     if (isTableRow) {
       flushParagraph();
       flushList();
