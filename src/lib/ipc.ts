@@ -205,12 +205,21 @@ export async function getLesson(conceptId: string): Promise<LessonContent> {
  * Normalize the backend lesson response into the frontend LessonContent shape.
  * Backend may return a structured object or a raw markdown/JSON string.
  */
+/**
+ * Strip HTML-comment cache tags (e.g. <!-- mastery_band:low -->) that the backend
+ * appends to cached payloads for cache invalidation. These must be removed before
+ * JSON parsing or rendering.
+ */
+function stripCacheTags(text: string): string {
+  return text.replace(/<!--[\s\S]*?-->/g, "").trim();
+}
+
 function normalizeLessonContent(raw: LessonContent | string, conceptId: string): LessonContent {
   if (typeof raw === "object" && raw !== null && "sections" in raw) {
     return raw;
   }
 
-  const text = typeof raw === "string" ? raw : JSON.stringify(raw);
+  const text = stripCacheTags(typeof raw === "string" ? raw : JSON.stringify(raw));
 
   // Try parsing as JSON first
   try {
@@ -411,7 +420,7 @@ function normalizeQuizSession(raw: QuizSession | string, conceptId: string): Qui
     return raw;
   }
 
-  const text = typeof raw === "string" ? raw : JSON.stringify(raw);
+  const text = stripCacheTags(typeof raw === "string" ? raw : JSON.stringify(raw));
 
   try {
     const jsonStr = stripMarkdownCodeBlock(text);
