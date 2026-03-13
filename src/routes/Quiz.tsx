@@ -20,6 +20,7 @@ export default function Quiz() {
     selectConcept,
     reinforcementConceptId,
     reinforcementAttempt,
+    reinforcementMistakes,
     enterReinforcement,
     incrementReinforcementAttempt,
     exitReinforcement,
@@ -34,7 +35,17 @@ export default function Quiz() {
     setLoading(true);
     setLoadError(null);
     try {
-      const quiz = await loadQuiz(currentConcept.id);
+      // During reinforcement, pass the student's mistakes so the quiz targets them
+      let mistakesContext: string | undefined;
+      if (reinforcementConceptId && reinforcementMistakes.length > 0) {
+        mistakesContext = reinforcementMistakes
+          .map(
+            (m, i) =>
+              `Mistake ${i + 1}:\n  Question: ${m.questionPrompt}\n  Student answered: ${m.userAnswer}\n  Correct answer: ${m.correctAnswer}\n  Why wrong: ${m.explanation}`
+          )
+          .join("\n\n");
+      }
+      const quiz = await loadQuiz(currentConcept.id, mistakesContext);
       if (!quiz || quiz.questions.length === 0) {
         setLoadError("No quiz questions were generated.");
       }
@@ -43,7 +54,7 @@ export default function Quiz() {
     } finally {
       setLoading(false);
     }
-  }, [currentConcept, loadQuiz]);
+  }, [currentConcept, loadQuiz, reinforcementConceptId, reinforcementMistakes]);
 
   useEffect(() => {
     if (currentConcept && !quizSession) {

@@ -37,12 +37,25 @@ export default function Lesson() {
   const [reinforcementExplanation, setReinforcementExplanation] =
     useState<ExplanationResponse | null>(null);
 
+  // Format mistakes for passing to backend
+  const formatMistakes = () => {
+    if (reinforcementMistakes.length === 0) return undefined;
+    return reinforcementMistakes
+      .map(
+        (m, i) =>
+          `Mistake ${i + 1}:\n  Question: ${m.questionPrompt}\n  Student answered: ${m.userAnswer}\n  Correct answer: ${m.correctAnswer}\n  Why wrong: ${m.explanation}`
+      )
+      .join("\n\n");
+  };
+
   // Load lesson when concept changes
   useEffect(() => {
     if (currentConcept && !lessonContent) {
       setLoading(true);
       setLoadError(null);
-      loadLesson(currentConcept.id)
+      // During reinforcement (not prereq review), pass mistakes so the lesson targets them
+      const mistakes = isReinforcing && !isPrereqReview ? formatMistakes() : undefined;
+      loadLesson(currentConcept.id, mistakes)
         .catch((err) => {
           setLoadError(String(err));
         })
@@ -102,7 +115,8 @@ export default function Lesson() {
   // Pre-fetch quiz in the background once the lesson is loaded
   useEffect(() => {
     if (currentConcept && lessonContent && !quizSession) {
-      loadQuiz(currentConcept.id).catch(() => { /* prefetch — errors handled when quiz page loads */ });
+      const quizMistakes = isReinforcing && !isPrereqReview ? formatMistakes() : undefined;
+      loadQuiz(currentConcept.id, quizMistakes).catch(() => { /* prefetch — errors handled when quiz page loads */ });
     }
   }, [currentConcept, lessonContent, quizSession, loadQuiz]);
 
