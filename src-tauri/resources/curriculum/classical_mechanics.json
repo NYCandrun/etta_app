@@ -19,6 +19,12 @@
             "Derive kinematic equations for constant acceleration from integration",
             "Interpret position-time, velocity-time, and acceleration-time graphs"
           ],
+          "error_patterns": [
+            "confuses_velocity_with_acceleration",
+            "treats_displacement_as_distance",
+            "applies_kinematic_equations_to_non_constant_acceleration",
+            "reads_slope_of_position_graph_as_acceleration"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Decompose projectile motion into independent horizontal and vertical components",
             "Derive equations for range, maximum height, and time of flight",
             "Solve projectile problems with non-zero launch height and angled surfaces"
+          ],
+          "error_patterns": [
+            "assumes_horizontal_velocity_changes_during_flight",
+            "forgets_vertical_velocity_is_zero_at_max_height",
+            "uses_same_angle_for_velocity_components_without_sin_cos",
+            "neglects_negative_sign_for_downward_acceleration"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Solve problems involving relative velocity in one and two dimensions",
             "Distinguish between inertial and non-inertial reference frames"
           ],
+          "error_patterns": [
+            "adds_velocities_instead_of_subtracting_for_same_direction",
+            "confuses_velocity_of_a_relative_to_b_with_b_relative_to_a",
+            "treats_non_inertial_frame_as_inertial",
+            "forgets_vector_nature_of_velocity_addition_in_2d"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -51,6 +69,12 @@
             "Express velocity and acceleration in polar coordinates (radial and tangential components)",
             "Analyze circular motion using angular velocity and centripetal acceleration",
             "Derive the acceleration vector in polar coordinates: a = (r̈ − rθ̇²)r̂ + (rθ̈ + 2ṙθ̇)θ̂"
+          ],
+          "error_patterns": [
+            "forgets_that_polar_unit_vectors_change_with_time",
+            "omits_coriolis_term_in_polar_acceleration",
+            "confuses_radial_and_tangential_components",
+            "assumes_centripetal_acceleration_is_tangential"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,13 @@
             "Distinguish between mass and weight and between contact and field forces",
             "Draw free-body diagrams for systems of interacting objects"
           ],
+          "error_patterns": [
+            "confuses_weight_with_mass",
+            "thinks_force_is_needed_to_maintain_constant_velocity",
+            "misidentifies_action_reaction_pairs_on_same_object",
+            "omits_forces_in_free_body_diagram",
+            "believes_heavier_objects_always_fall_faster"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -80,6 +111,12 @@
             "Apply F = ma to solve problems involving friction, normal forces, and tension",
             "Analyze systems with multiple objects connected by strings or in contact",
             "Solve inclined plane problems with and without friction"
+          ],
+          "error_patterns": [
+            "sets_normal_force_equal_to_weight_on_inclined_plane",
+            "confuses_static_and_kinetic_friction",
+            "uses_wrong_angle_for_components_on_inclined_plane",
+            "assumes_tension_is_always_equal_to_weight_in_accelerating_systems"
           ],
           "difficulty_tier": 1
         },
@@ -92,6 +129,12 @@
             "Analyze banked curves, vertical loops, and conical pendulums",
             "Distinguish between centripetal acceleration and centrifugal effects in rotating frames"
           ],
+          "error_patterns": [
+            "treats_centripetal_force_as_separate_force_in_free_body_diagram",
+            "forgets_centripetal_direction_is_inward",
+            "confuses_centripetal_and_centrifugal_force",
+            "uses_mg_for_normal_force_at_top_of_vertical_loop"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -102,6 +145,12 @@
             "Model linear and quadratic drag forces and solve the resulting ODEs",
             "Derive terminal velocity from the force balance condition",
             "Analyze motion with drag in both horizontal and vertical contexts"
+          ],
+          "error_patterns": [
+            "thinks_terminal_velocity_means_zero_velocity",
+            "confuses_linear_and_quadratic_drag_regimes",
+            "forgets_drag_force_direction_opposes_velocity",
+            "assumes_constant_acceleration_with_drag_present"
           ],
           "difficulty_tier": 2
         }
@@ -121,6 +170,12 @@
             "Derive and apply the work-energy theorem: W_net = ΔKE",
             "Calculate work done by gravity, spring forces, and friction"
           ],
+          "error_patterns": [
+            "forgets_to_use_dot_product_for_work_calculation",
+            "confuses_work_done_by_system_with_work_done_on_system",
+            "treats_work_as_always_positive",
+            "uses_total_force_instead_of_net_force_in_work_energy_theorem"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -132,6 +187,12 @@
             "Verify that a force is conservative using the curl test",
             "Construct energy diagrams and identify equilibrium points from U(x)"
           ],
+          "error_patterns": [
+            "forgets_negative_sign_in_force_potential_relation",
+            "treats_friction_as_conservative_force",
+            "confuses_stable_and_unstable_equilibrium_on_energy_diagram",
+            "assumes_all_forces_have_potential_energy"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -142,6 +203,12 @@
             "Apply conservation of mechanical energy to closed systems",
             "Incorporate non-conservative forces (friction, drag) using the work-energy theorem",
             "Solve problems combining gravitational and elastic potential energy"
+          ],
+          "error_patterns": [
+            "applies_energy_conservation_when_non_conservative_forces_present",
+            "forgets_to_include_all_forms_of_potential_energy",
+            "confuses_initial_and_final_energy_states",
+            "sets_reference_point_inconsistently_during_problem"
           ],
           "difficulty_tier": 2
         }
@@ -161,6 +228,12 @@
             "Compute impulse as J = ∫F dt and apply the impulse-momentum theorem",
             "Analyze force-time graphs to determine impulse"
           ],
+          "error_patterns": [
+            "confuses_impulse_with_momentum",
+            "forgets_momentum_is_a_vector_quantity",
+            "uses_f_equals_ma_instead_of_dp_dt_for_variable_mass",
+            "reads_force_time_graph_area_incorrectly"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -172,6 +245,12 @@
             "Analyze elastic and perfectly inelastic collisions in one and two dimensions",
             "Use conservation of energy in conjunction with momentum for elastic collisions"
           ],
+          "error_patterns": [
+            "assumes_kinetic_energy_is_conserved_in_inelastic_collisions",
+            "forgets_to_account_for_direction_in_momentum_conservation",
+            "confuses_elastic_and_perfectly_inelastic_collisions",
+            "applies_momentum_conservation_to_non_isolated_systems"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -182,6 +261,12 @@
             "Calculate the center of mass of discrete and continuous mass distributions",
             "Apply Newton's second law to the center of mass of a system",
             "Derive the Tsiolkovsky rocket equation from conservation of momentum"
+          ],
+          "error_patterns": [
+            "confuses_center_of_mass_with_geometric_center",
+            "forgets_to_account_for_changing_mass_in_rocket_equation",
+            "assumes_center_of_mass_must_be_inside_the_object",
+            "applies_f_equals_ma_with_constant_mass_to_rocket"
           ],
           "difficulty_tier": 2
         }
@@ -201,6 +286,12 @@
             "Derive rotational kinematic equations analogous to linear kinematics",
             "Relate angular and linear quantities (v = rω, a_t = rα)"
           ],
+          "error_patterns": [
+            "confuses_angular_velocity_with_linear_velocity",
+            "uses_degrees_instead_of_radians_in_rotational_equations",
+            "forgets_to_multiply_by_radius_when_converting_angular_to_linear",
+            "applies_rotational_kinematics_to_non_constant_angular_acceleration"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -211,6 +302,12 @@
             "Calculate moment of inertia for discrete and continuous mass distributions using integration",
             "Apply the parallel-axis theorem to find moment of inertia about shifted axes",
             "Compute moments of inertia for standard shapes (rod, disk, sphere, cylinder)"
+          ],
+          "error_patterns": [
+            "uses_parallel_axis_theorem_with_non_center_of_mass_axis",
+            "confuses_moment_of_inertia_formulas_for_different_shapes",
+            "forgets_moment_of_inertia_depends_on_axis_of_rotation",
+            "treats_moment_of_inertia_as_scalar_mass"
           ],
           "difficulty_tier": 2
         },
@@ -223,6 +320,12 @@
             "Analyze rolling motion (rolling without slipping) combining translation and rotation",
             "Solve problems involving pulleys, wheels, and gears with rotational inertia"
           ],
+          "error_patterns": [
+            "uses_force_magnitude_instead_of_perpendicular_component_for_torque",
+            "forgets_rolling_constraint_v_equals_r_omega",
+            "neglects_rotational_inertia_of_pulley_in_atwood_machine",
+            "confuses_torque_direction_with_force_direction"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -233,6 +336,12 @@
             "Define angular momentum L = r × p for a particle and L = Iω for rigid bodies",
             "Apply conservation of angular momentum to collisions and variable-inertia systems",
             "Analyze precession qualitatively using the torque-angular momentum relation τ = dL/dt"
+          ],
+          "error_patterns": [
+            "confuses_angular_momentum_with_linear_momentum",
+            "forgets_angular_momentum_is_conserved_only_when_net_torque_is_zero",
+            "assumes_angular_velocity_is_conserved_instead_of_angular_momentum",
+            "neglects_orbital_angular_momentum_for_point_particles"
           ],
           "difficulty_tier": 2
         }
@@ -252,6 +361,12 @@
             "Identify amplitude, frequency, period, and phase of SHM",
             "Analyze energy oscillation between kinetic and potential in SHM"
           ],
+          "error_patterns": [
+            "confuses_angular_frequency_with_regular_frequency",
+            "thinks_period_depends_on_amplitude_in_shm",
+            "forgets_phase_constant_in_general_solution",
+            "confuses_maximum_velocity_position_with_maximum_displacement"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -262,6 +377,12 @@
             "Derive and solve the damped oscillator equation ẍ + 2γẋ + ω₀²x = 0",
             "Classify motion as underdamped, critically damped, or overdamped",
             "Calculate the quality factor Q and relate it to energy dissipation rate"
+          ],
+          "error_patterns": [
+            "confuses_damping_regimes_based_on_discriminant_sign",
+            "thinks_critically_damped_means_no_motion",
+            "forgets_damped_frequency_differs_from_natural_frequency",
+            "assumes_energy_decays_linearly_instead_of_exponentially"
           ],
           "difficulty_tier": 2
         },
@@ -274,6 +395,12 @@
             "Derive the steady-state amplitude and phase as functions of driving frequency",
             "Analyze resonance curves and the effect of damping on resonance peak width"
           ],
+          "error_patterns": [
+            "thinks_resonance_occurs_exactly_at_natural_frequency_with_damping",
+            "forgets_transient_solution_in_forced_oscillator",
+            "confuses_amplitude_resonance_with_energy_resonance",
+            "assumes_infinite_amplitude_at_resonance_even_with_damping"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -284,6 +411,12 @@
             "Set up the equations of motion for coupled oscillators as a matrix eigenvalue problem",
             "Find normal mode frequencies and mode shapes from the eigenvalues and eigenvectors",
             "Express general motion as a superposition of normal modes"
+          ],
+          "error_patterns": [
+            "confuses_normal_mode_frequencies_with_individual_oscillator_frequencies",
+            "forgets_to_include_coupling_terms_in_equations_of_motion",
+            "assumes_normal_modes_are_always_symmetric_and_antisymmetric",
+            "fails_to_apply_initial_conditions_to_superposition_of_modes"
           ],
           "difficulty_tier": 3
         }
@@ -303,6 +436,12 @@
             "Derive gravitational acceleration g at the surface and at altitude",
             "Apply the shell theorem for spherically symmetric mass distributions"
           ],
+          "error_patterns": [
+            "uses_distance_from_surface_instead_of_center_in_gravity_formula",
+            "forgets_gravitational_force_is_always_attractive",
+            "confuses_gravitational_field_strength_with_gravitational_constant",
+            "misapplies_shell_theorem_to_non_spherical_distributions"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -314,6 +453,12 @@
             "Calculate escape velocity from energy conservation",
             "Apply energy and angular momentum conservation to classify orbits (bound vs unbound)"
           ],
+          "error_patterns": [
+            "forgets_negative_sign_in_gravitational_potential_energy",
+            "uses_mgh_instead_of_negative_gmm_over_r_for_large_distances",
+            "confuses_escape_velocity_with_orbital_velocity",
+            "assumes_bound_orbit_requires_negative_kinetic_energy"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -324,6 +469,12 @@
             "Derive Kepler's three laws from Newton's law of gravitation and angular momentum conservation",
             "Relate orbital parameters (semi-major axis, eccentricity, period) to energy and angular momentum",
             "Calculate orbital transfers (Hohmann transfer) using energy conservation"
+          ],
+          "error_patterns": [
+            "assumes_planets_orbit_in_circles_instead_of_ellipses",
+            "confuses_period_squared_proportional_to_radius_cubed_exponents",
+            "thinks_equal_areas_in_equal_times_means_constant_speed",
+            "forgets_hohmann_transfer_requires_two_impulse_burns"
           ],
           "difficulty_tier": 3
         }
@@ -343,6 +494,12 @@
             "Identify and compute centrifugal and Coriolis fictitious forces in a rotating frame",
             "Apply effective gravity in a rotating frame (e.g., variation of g with latitude)"
           ],
+          "error_patterns": [
+            "treats_fictitious_forces_as_real_interaction_forces",
+            "confuses_coriolis_force_direction_with_centrifugal_direction",
+            "forgets_coriolis_force_depends_on_velocity_in_rotating_frame",
+            "omits_centrifugal_term_when_computing_effective_gravity"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -353,6 +510,12 @@
             "Analyze the Foucault pendulum as evidence of Earth's rotation",
             "Explain weather patterns (cyclones, trade winds) using the Coriolis effect",
             "Solve projectile problems on a rotating Earth with Coriolis corrections"
+          ],
+          "error_patterns": [
+            "reverses_coriolis_deflection_direction_between_hemispheres",
+            "thinks_foucault_pendulum_period_equals_24_hours_at_all_latitudes",
+            "confuses_cyclone_rotation_direction_in_northern_and_southern_hemispheres",
+            "neglects_latitude_dependence_of_coriolis_effect"
           ],
           "difficulty_tier": 3
         }
@@ -372,6 +535,12 @@
             "Calculate components of the inertia tensor for continuous and discrete mass distributions",
             "Find principal axes and principal moments of inertia by diagonalizing the inertia tensor"
           ],
+          "error_patterns": [
+            "confuses_products_of_inertia_with_moments_of_inertia",
+            "forgets_off_diagonal_elements_of_inertia_tensor",
+            "assumes_principal_axes_always_align_with_coordinate_axes",
+            "neglects_symmetry_of_inertia_tensor"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -382,6 +551,12 @@
             "Derive Euler's equations for torque-free rotation in the body frame",
             "Analyze stable and unstable rotation about principal axes (tennis racket theorem)",
             "Solve Euler's equations for symmetric and asymmetric tops"
+          ],
+          "error_patterns": [
+            "confuses_body_frame_and_lab_frame_angular_velocities",
+            "forgets_cross_product_terms_in_euler_equations",
+            "misidentifies_which_principal_axis_gives_unstable_rotation",
+            "assumes_angular_velocity_and_angular_momentum_are_always_parallel"
           ],
           "difficulty_tier": 3
         }
@@ -401,6 +576,12 @@
             "Distinguish between holonomic and non-holonomic constraints",
             "Express kinetic and potential energy in terms of generalized coordinates"
           ],
+          "error_patterns": [
+            "chooses_more_coordinates_than_degrees_of_freedom",
+            "confuses_holonomic_and_non_holonomic_constraints",
+            "forgets_to_express_cartesian_velocities_in_terms_of_generalized_coordinates",
+            "treats_constraint_forces_as_generalized_forces"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -412,6 +593,12 @@
             "Apply the Euler-Lagrange equations to mechanical systems (pendulum, bead on wire, Atwood machine)",
             "Identify cyclic coordinates and their associated conserved quantities"
           ],
+          "error_patterns": [
+            "writes_lagrangian_as_t_plus_u_instead_of_t_minus_u",
+            "confuses_partial_and_total_derivatives_in_euler_lagrange",
+            "fails_to_identify_cyclic_coordinates",
+            "omits_velocity_dependent_terms_in_kinetic_energy"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -422,6 +609,12 @@
             "State Noether's theorem relating continuous symmetries to conservation laws",
             "Derive conservation of energy from time-translation symmetry",
             "Derive conservation of linear and angular momentum from spatial symmetries"
+          ],
+          "error_patterns": [
+            "confuses_which_symmetry_corresponds_to_which_conserved_quantity",
+            "thinks_noether_theorem_applies_to_discrete_symmetries",
+            "assumes_time_translation_symmetry_when_lagrangian_is_explicitly_time_dependent",
+            "conflates_rotational_symmetry_about_one_axis_with_full_rotational_invariance"
           ],
           "difficulty_tier": 3
         }
@@ -441,6 +634,12 @@
             "Derive Hamilton's canonical equations: q̇ᵢ = ∂H/∂pᵢ, ṗᵢ = −∂H/∂qᵢ",
             "Apply Hamilton's equations to solve simple mechanical systems"
           ],
+          "error_patterns": [
+            "assumes_hamiltonian_always_equals_total_energy",
+            "swaps_signs_in_hamiltons_canonical_equations",
+            "fails_to_express_hamiltonian_in_terms_of_q_and_p_only",
+            "confuses_legendre_transform_with_simple_substitution"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -452,6 +651,12 @@
             "Draw and interpret phase space trajectories for simple systems (SHM, pendulum)",
             "State Liouville's theorem on the incompressibility of phase space flow"
           ],
+          "error_patterns": [
+            "confuses_phase_space_with_configuration_space",
+            "thinks_phase_space_trajectories_can_cross",
+            "misinterprets_liouville_theorem_as_conservation_of_energy",
+            "plots_position_vs_time_instead_of_position_vs_momentum"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -462,6 +667,12 @@
             "Define the Poisson bracket {f, g} and compute it for dynamical variables",
             "Express Hamilton's equations using Poisson brackets: ḟ = {f, H}",
             "Identify constants of motion from vanishing Poisson brackets with the Hamiltonian"
+          ],
+          "error_patterns": [
+            "swaps_order_of_partial_derivatives_in_poisson_bracket",
+            "forgets_antisymmetry_of_poisson_bracket",
+            "confuses_poisson_bracket_with_commutator",
+            "fails_to_recognize_constant_of_motion_from_zero_poisson_bracket"
           ],
           "difficulty_tier": 3
         }
@@ -481,6 +692,12 @@
             "Derive the Lorentz transformation equations from the postulates",
             "Apply Lorentz transformations to relate space and time coordinates between inertial frames"
           ],
+          "error_patterns": [
+            "uses_galilean_transformation_instead_of_lorentz",
+            "forgets_time_also_transforms_between_frames",
+            "confuses_sign_convention_for_relative_velocity_in_lorentz_transform",
+            "applies_lorentz_transformation_to_non_inertial_frames"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -491,6 +708,12 @@
             "Derive and apply the time dilation formula Δt = γΔt₀",
             "Derive and apply the length contraction formula L = L₀/γ",
             "Explain and compute the relativity of simultaneity"
+          ],
+          "error_patterns": [
+            "applies_length_contraction_perpendicular_to_motion",
+            "confuses_proper_time_with_coordinate_time",
+            "inverts_gamma_factor_in_time_dilation_or_length_contraction",
+            "assumes_simultaneity_is_absolute_across_frames"
           ],
           "difficulty_tier": 2
         },
@@ -503,6 +726,12 @@
             "Derive and apply the energy-momentum relation E² = (pc)² + (mc²)²",
             "Solve collision and decay problems using relativistic conservation laws"
           ],
+          "error_patterns": [
+            "uses_classical_momentum_formula_at_relativistic_speeds",
+            "confuses_rest_energy_with_kinetic_energy",
+            "assumes_e_equals_mc_squared_includes_kinetic_energy",
+            "adds_velocities_classically_in_relativistic_collisions"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -513,6 +742,12 @@
             "Define the spacetime interval and classify events as timelike, spacelike, or lightlike",
             "Construct four-vectors (position, momentum, force) and compute Lorentz-invariant quantities",
             "Apply four-momentum conservation to relativistic collision problems"
+          ],
+          "error_patterns": [
+            "confuses_metric_signature_conventions",
+            "misclassifies_spacetime_intervals_as_timelike_or_spacelike",
+            "treats_four_vectors_with_euclidean_dot_product",
+            "forgets_zeroth_component_of_four_momentum_is_energy_over_c"
           ],
           "difficulty_tier": 3
         }

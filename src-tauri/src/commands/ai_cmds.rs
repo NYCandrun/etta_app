@@ -312,6 +312,7 @@ pub async fn request_explanation(
     concept_id: String,
     _lesson_id: String,
     attempt: u32,
+    mistakes_context: Option<String>,
 ) -> Result<ExplanationResponse, String> {
     rate_limit::check_rate_limit("request_explanation")?;
 
@@ -365,7 +366,15 @@ pub async fn request_explanation(
     // Use the shared prompt builder's user message format with proper XML tags:
     // <mode>explain</mode>, <concept>, <learner_context>, <user_input>
     let learner_ctx = LearnerContext::from(&concept);
-    let extra_text = format!("Please explain this concept again using the {strategy} approach.");
+    let extra_text = if let Some(ref mistakes) = mistakes_context {
+        format!(
+            "Please explain this concept again using the {strategy} approach.\n\n\
+             The student made these specific mistakes on the quiz — focus your explanation \
+             on addressing these misunderstandings:\n{mistakes}"
+        )
+    } else {
+        format!("Please explain this concept again using the {strategy} approach.")
+    };
     let request = prompt::build_request_with_model(
         &model,
         &TutorMode::Explain,

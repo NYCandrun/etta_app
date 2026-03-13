@@ -19,6 +19,12 @@
             "Determine continuity at the boundary points of a piecewise function",
             "Model real-world scenarios using piecewise functions (tax brackets, shipping rates)"
           ],
+          "error_patterns": [
+            "uses_wrong_piece_of_function_for_boundary_value",
+            "forgets_to_check_continuity_at_transition_points",
+            "graphs_pieces_beyond_their_defined_intervals",
+            "confuses_open_and_closed_circles_at_boundary_points"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Determine whether a function is even, odd, or neither algebraically and graphically",
             "Describe the end behavior of a polynomial function using leading-term analysis",
             "Use arrow notation to express end behavior formally"
+          ],
+          "error_patterns": [
+            "tests_even_odd_with_specific_values_instead_of_general_proof",
+            "confuses_even_odd_function_with_even_odd_degree",
+            "ignores_leading_coefficient_sign_when_determining_end_behavior",
+            "reverses_end_behavior_for_odd_degree_polynomials"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Compute and simplify the difference quotient [f(x+h) − f(x)] / h",
             "Interpret the difference quotient as a precursor to the derivative"
           ],
+          "error_patterns": [
+            "expands_f_of_x_plus_h_without_distributing_to_all_terms",
+            "forgets_to_subtract_entire_f_of_x_dropping_negative_sign",
+            "fails_to_cancel_h_after_simplifying_numerator",
+            "confuses_average_rate_of_change_with_average_value"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -51,6 +69,12 @@
             "Apply sequences of transformations to any parent function",
             "Build complex functions from simpler ones using arithmetic and composition",
             "Determine the domain of the resulting combined function"
+          ],
+          "error_patterns": [
+            "applies_horizontal_transformations_in_wrong_order",
+            "neglects_domain_restriction_from_inner_function_in_composition",
+            "reflects_over_wrong_axis_for_negative_sign_placement",
+            "applies_horizontal_shift_in_wrong_direction"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,11 @@
             "Determine the maximum number of turning points from the degree",
             "Identify the effect of multiplicity on the graph at each zero"
           ],
+          "error_patterns": [
+            "confuses_bounce_and_cross_behavior_for_even_vs_odd_multiplicity",
+            "states_turning_points_equal_degree_instead_of_degree_minus_one",
+            "draws_wrong_end_behavior_for_negative_leading_coefficient"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -80,6 +109,12 @@
             "Divide polynomials using long division and synthetic division",
             "Apply the Remainder Theorem to evaluate polynomials efficiently",
             "Apply the Factor Theorem to determine whether a linear expression is a factor"
+          ],
+          "error_patterns": [
+            "omits_zero_coefficient_placeholder_in_synthetic_division",
+            "uses_wrong_sign_for_divisor_in_synthetic_division",
+            "confuses_remainder_theorem_output_as_quotient_instead_of_remainder",
+            "misaligns_terms_during_polynomial_long_division"
           ],
           "difficulty_tier": 2
         },
@@ -92,6 +127,12 @@
             "Use Descartes' Rule of Signs to predict the number of positive and negative real zeros",
             "Find all zeros of a polynomial using a combination of theorems and synthetic division"
           ],
+          "error_patterns": [
+            "lists_factors_of_leading_coefficient_over_constant_instead_of_reverse",
+            "miscounts_sign_changes_in_descartes_rule",
+            "forgets_complex_zeros_come_in_conjugate_pairs",
+            "stops_after_finding_rational_zeros_ignoring_remaining_irrational_or_complex_zeros"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -103,6 +144,12 @@
             "Determine holes (removable discontinuities) in rational functions",
             "Graph rational functions using intercepts, asymptotes, and sign analysis"
           ],
+          "error_patterns": [
+            "identifies_hole_as_vertical_asymptote_without_canceling_common_factor",
+            "misidentifies_horizontal_asymptote_when_degrees_are_equal",
+            "forgets_oblique_asymptote_when_numerator_degree_exceeds_denominator_by_one",
+            "confuses_x_intercept_and_vertical_asymptote_locations"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -113,6 +160,12 @@
             "Solve polynomial inequalities using sign charts and test points",
             "Solve rational inequalities by finding critical values and testing intervals",
             "Express solutions in interval notation and interpret them graphically"
+          ],
+          "error_patterns": [
+            "includes_values_where_rational_expression_is_undefined_in_solution",
+            "uses_only_zeros_of_numerator_ignoring_denominator_critical_values",
+            "flips_inequality_direction_when_multiplying_by_expression_of_unknown_sign",
+            "writes_union_instead_of_intersection_or_vice_versa_in_interval_notation"
           ],
           "difficulty_tier": 3
         }
@@ -132,6 +185,11 @@
             "Distinguish between exponential growth and decay based on the base",
             "Apply transformations to exponential parent functions"
           ],
+          "error_patterns": [
+            "confuses_base_between_0_and_1_as_growth_instead_of_decay",
+            "assumes_horizontal_asymptote_is_always_y_equals_0_after_vertical_shift",
+            "treats_exponential_growth_as_linear_for_large_x_values"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -142,6 +200,12 @@
             "Define a logarithm as the inverse of an exponential function",
             "Evaluate logarithms and convert between logarithmic and exponential forms",
             "Graph logarithmic functions and identify domain, range, and asymptotes"
+          ],
+          "error_patterns": [
+            "reverses_base_and_argument_when_converting_log_to_exponential_form",
+            "states_domain_of_log_as_all_reals_instead_of_positive_reals",
+            "confuses_vertical_asymptote_of_log_with_horizontal_asymptote",
+            "evaluates_log_of_negative_number_as_negative_instead_of_undefined"
           ],
           "difficulty_tier": 1
         },
@@ -154,6 +218,12 @@
             "Expand and condense logarithmic expressions",
             "Apply the change-of-base formula to evaluate logarithms with any base"
           ],
+          "error_patterns": [
+            "distributes_log_over_addition_as_log_a_plus_b_equals_log_a_plus_log_b",
+            "applies_power_rule_to_base_instead_of_argument",
+            "reverses_numerator_and_denominator_in_change_of_base_formula",
+            "confuses_log_quotient_rule_with_subtraction_of_arguments"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -165,6 +235,12 @@
             "Solve logarithmic equations by converting to exponential form",
             "Check for and exclude extraneous solutions in logarithmic equations"
           ],
+          "error_patterns": [
+            "takes_log_of_each_term_separately_instead_of_entire_side",
+            "forgets_to_check_for_extraneous_solutions_in_log_equations",
+            "drops_negative_solution_that_is_actually_valid_for_the_variable",
+            "incorrectly_cancels_log_base_with_exponential_of_different_base"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -175,6 +251,12 @@
             "Model population growth, radioactive decay, and compound interest with exponential functions",
             "Solve for time, rate, or initial amount in exponential models",
             "Compare continuous growth (Pert) with discrete compounding models"
+          ],
+          "error_patterns": [
+            "confuses_rate_and_growth_factor_using_r_instead_of_1_plus_r",
+            "uses_wrong_compounding_formula_continuous_vs_discrete",
+            "plugs_percentage_as_whole_number_instead_of_decimal_for_rate",
+            "confuses_half_life_with_doubling_time_formula"
           ],
           "difficulty_tier": 2
         }
@@ -194,6 +276,12 @@
             "Write the explicit and recursive formulas for an arithmetic sequence",
             "Compute the sum of the first n terms of an arithmetic series"
           ],
+          "error_patterns": [
+            "uses_first_term_index_as_0_instead_of_1_in_explicit_formula",
+            "confuses_common_difference_with_common_ratio",
+            "uses_last_term_instead_of_number_of_terms_in_sum_formula",
+            "off_by_one_error_when_counting_number_of_terms"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -205,6 +293,12 @@
             "Write explicit and recursive formulas for a geometric sequence",
             "Compute finite geometric sums and determine convergence of infinite geometric series"
           ],
+          "error_patterns": [
+            "applies_infinite_series_formula_when_absolute_r_is_not_less_than_1",
+            "uses_n_instead_of_n_minus_1_as_exponent_in_explicit_formula",
+            "confuses_finite_sum_formula_with_infinite_sum_formula",
+            "miscalculates_common_ratio_by_subtracting_instead_of_dividing"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -215,6 +309,12 @@
             "Compute binomial coefficients using factorials and Pascal's triangle",
             "Expand (a + b)ⁿ using the Binomial Theorem",
             "Find a specific term in a binomial expansion without full expansion"
+          ],
+          "error_patterns": [
+            "off_by_one_when_finding_kth_term_using_n_choose_k",
+            "forgets_to_raise_both_a_and_b_to_appropriate_powers",
+            "computes_binomial_coefficient_with_wrong_factorial_arrangement",
+            "neglects_to_include_negative_sign_when_expanding_a_minus_b_to_nth"
           ],
           "difficulty_tier": 2
         }
@@ -234,6 +334,12 @@
             "Identify the vertex, focus, and directrix from the equation",
             "Convert between standard and general forms of a parabola equation"
           ],
+          "error_patterns": [
+            "confuses_focus_and_directrix_positions_relative_to_vertex",
+            "uses_4p_value_as_focal_length_instead_of_p",
+            "misidentifies_axis_of_symmetry_for_horizontal_parabola",
+            "gets_sign_of_p_wrong_for_downward_or_leftward_opening_parabola"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -244,6 +350,12 @@
             "Write the standard form equation of an ellipse centered at the origin or (h, k)",
             "Identify the center, vertices, co-vertices, and foci of an ellipse",
             "Graph an ellipse and determine its eccentricity"
+          ],
+          "error_patterns": [
+            "confuses_a_squared_and_b_squared_for_major_vs_minor_axis",
+            "uses_c_squared_equals_a_squared_plus_b_squared_instead_of_minus",
+            "places_foci_on_wrong_axis_of_ellipse",
+            "forgets_to_account_for_center_offset_when_identifying_vertices"
           ],
           "difficulty_tier": 2
         },
@@ -256,6 +368,12 @@
             "Identify the center, vertices, foci, and asymptotes of a hyperbola",
             "Graph a hyperbola and distinguish it from an ellipse"
           ],
+          "error_patterns": [
+            "confuses_horizontal_and_vertical_hyperbola_based_on_positive_term",
+            "uses_ellipse_foci_formula_instead_of_c_sq_equals_a_sq_plus_b_sq",
+            "writes_asymptote_slopes_as_a_over_b_instead_of_b_over_a_or_vice_versa",
+            "draws_hyperbola_branches_along_wrong_axis"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -266,6 +384,12 @@
             "Classify a conic section from the general second-degree equation Ax² + Bxy + Cy² + Dx + Ey + F = 0",
             "Complete the square to convert general form to standard form",
             "Identify degenerate conics"
+          ],
+          "error_patterns": [
+            "misclassifies_conic_by_ignoring_discriminant_b_sq_minus_4ac",
+            "makes_error_completing_the_square_with_leading_coefficient_not_one",
+            "forgets_to_factor_out_coefficient_before_completing_the_square",
+            "fails_to_recognize_degenerate_case_like_two_intersecting_lines"
           ],
           "difficulty_tier": 3
         }
@@ -285,6 +409,12 @@
             "Distinguish between the limit of a function at a point and the function's value at that point",
             "Identify one-sided limits and determine when a two-sided limit does not exist"
           ],
+          "error_patterns": [
+            "confuses_function_value_at_point_with_limit_at_that_point",
+            "assumes_limit_exists_when_left_and_right_limits_differ",
+            "reads_limit_from_table_using_value_at_point_instead_of_nearby_values",
+            "states_limit_is_undefined_whenever_function_is_undefined_at_point"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -295,6 +425,12 @@
             "Evaluate limits using direct substitution",
             "Resolve 0/0 indeterminate forms by factoring, rationalizing, or simplifying",
             "Apply the limit laws (sum, product, quotient, power) to evaluate limits"
+          ],
+          "error_patterns": [
+            "declares_limit_does_not_exist_upon_getting_0_over_0_without_simplifying",
+            "cancels_common_factor_but_forgets_to_resubstitute",
+            "applies_quotient_limit_law_when_denominator_limit_is_zero",
+            "rationalizes_wrong_part_of_expression_numerator_vs_denominator"
           ],
           "difficulty_tier": 2
         },
@@ -307,6 +443,12 @@
             "Determine horizontal asymptotes from limits at infinity",
             "Evaluate limits at infinity for functions involving radicals"
           ],
+          "error_patterns": [
+            "states_limit_is_always_zero_when_denominator_degree_is_higher",
+            "forgets_to_consider_sign_of_leading_coefficients_for_equal_degree",
+            "incorrectly_simplifies_radical_expressions_when_dividing_by_x",
+            "confuses_limit_at_infinity_with_infinite_limit_at_finite_point"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -317,6 +459,12 @@
             "State the three conditions for continuity at a point",
             "Determine intervals on which a function is continuous",
             "Apply the Intermediate Value Theorem to show the existence of zeros"
+          ],
+          "error_patterns": [
+            "checks_only_that_limit_exists_without_verifying_it_equals_function_value",
+            "applies_ivt_without_confirming_function_is_continuous_on_interval",
+            "confuses_removable_and_nonremovable_discontinuity_types",
+            "assumes_function_defined_at_point_implies_continuity_at_that_point"
           ],
           "difficulty_tier": 2
         }

@@ -19,6 +19,12 @@
             "Explain the photoelectric effect and Einstein's photon hypothesis",
             "Describe the Compton effect and its evidence for particle-like behavior of light"
           ],
+          "error_patterns": [
+            "confuses_ultraviolet_catastrophe_with_infrared",
+            "thinks_photoelectric_effect_depends_on_intensity_not_frequency",
+            "treats_photon_energy_as_proportional_to_amplitude",
+            "conflates_compton_scattering_with_photoelectric_effect"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -30,6 +36,12 @@
             "Describe the Davisson-Germer experiment as evidence for electron diffraction",
             "Explain the double-slit experiment and its implications for quantum superposition"
           ],
+          "error_patterns": [
+            "uses_kinetic_energy_instead_of_momentum_in_de_broglie_relation",
+            "treats_wavefunction_as_physical_wave_in_space",
+            "thinks_observation_requires_conscious_observer_in_double_slit",
+            "confuses_wavelength_and_frequency_in_matter_waves"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -40,6 +52,12 @@
             "State the position-momentum uncertainty relation Δx Δp ≥ ℏ/2",
             "State the energy-time uncertainty relation ΔE Δt ≥ ℏ/2",
             "Apply uncertainty relations to estimate ground-state energies and explain the stability of atoms"
+          ],
+          "error_patterns": [
+            "attributes_uncertainty_to_measurement_disturbance_only",
+            "uses_h_instead_of_hbar_over_two_in_uncertainty_relation",
+            "thinks_uncertainty_principle_applies_only_to_simultaneous_measurements",
+            "confuses_delta_x_delta_p_with_x_times_p"
           ],
           "difficulty_tier": 2
         }
@@ -59,6 +77,12 @@
             "Interpret the wave function ψ(x,t) and the probability density |ψ|²",
             "Apply the normalization condition ∫|ψ|² dx = 1"
           ],
+          "error_patterns": [
+            "interprets_psi_as_probability_instead_of_probability_amplitude",
+            "forgets_normalization_of_probability_density",
+            "omits_imaginary_unit_in_schrodinger_equation",
+            "confuses_psi_with_psi_squared_for_measurable_quantity"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -70,6 +94,12 @@
             "State the time-independent Schrodinger equation Ĥψ = Eψ as an eigenvalue problem",
             "Express the general solution as a superposition of stationary states"
           ],
+          "error_patterns": [
+            "confuses_stationary_states_with_static_wavefunctions",
+            "forgets_time_dependent_phase_factor_in_stationary_states",
+            "assumes_superposition_coefficients_must_be_real",
+            "treats_energy_eigenvalue_as_operator"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -80,6 +110,12 @@
             "Derive the probability current density j = (ℏ/2mi)(ψ*∇ψ − ψ∇ψ*)",
             "State the continuity equation ∂ρ/∂t + ∇·j = 0 for quantum probability",
             "Apply boundary conditions requiring continuity of ψ and dψ/dx"
+          ],
+          "error_patterns": [
+            "confuses_probability_current_with_probability_density",
+            "forgets_continuity_of_derivative_at_boundary",
+            "drops_complex_conjugate_in_current_density_formula",
+            "applies_boundary_conditions_to_psi_but_not_dpsi_dx"
           ],
           "difficulty_tier": 2
         }
@@ -99,6 +135,12 @@
             "Derive the quantized energy levels Eₙ = n²π²ℏ²/(2mL²)",
             "Normalize the wave functions and verify their orthogonality"
           ],
+          "error_patterns": [
+            "starts_quantum_number_at_zero_instead_of_one",
+            "uses_wrong_well_width_in_energy_formula",
+            "forgets_wavefunction_must_vanish_at_walls",
+            "confuses_energy_proportional_to_n_vs_n_squared"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -109,6 +151,12 @@
             "Solve the harmonic oscillator Schrodinger equation using power series (Hermite polynomials)",
             "Derive the energy spectrum Eₙ = (n + ½)ℏω and discuss the zero-point energy",
             "Sketch the wave functions and probability densities and compare with classical turning points"
+          ],
+          "error_patterns": [
+            "forgets_zero_point_energy_in_harmonic_oscillator",
+            "confuses_classical_and_quantum_turning_points",
+            "uses_n_instead_of_n_plus_half_in_energy_levels",
+            "thinks_probability_density_vanishes_beyond_classical_turning_points"
           ],
           "difficulty_tier": 2
         },
@@ -121,6 +169,12 @@
             "Construct wave packets from superpositions of plane waves using Fourier transforms",
             "Compute and interpret group velocity and phase velocity of a wave packet"
           ],
+          "error_patterns": [
+            "confuses_group_velocity_with_phase_velocity",
+            "thinks_plane_wave_is_normalizable",
+            "forgets_dispersion_causes_wave_packet_spreading",
+            "uses_wrong_dispersion_relation_for_free_particle"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -131,6 +185,12 @@
             "Solve the Schrodinger equation for a finite potential step and barrier",
             "Compute transmission and reflection coefficients",
             "Explain quantum tunneling and apply it to alpha decay and scanning tunneling microscopy"
+          ],
+          "error_patterns": [
+            "assumes_transmission_plus_reflection_amplitudes_equal_one",
+            "thinks_tunneling_probability_is_independent_of_barrier_width",
+            "forgets_evanescent_wave_inside_barrier_region",
+            "confuses_transmission_coefficient_with_transmission_amplitude"
           ],
           "difficulty_tier": 2
         }
@@ -150,6 +210,12 @@
             "Compute inner products ⟨φ|ψ⟩ and expand states in orthonormal bases",
             "Express the completeness relation and resolution of the identity"
           ],
+          "error_patterns": [
+            "reverses_bra_and_ket_in_inner_product",
+            "forgets_completeness_relation_when_inserting_identity",
+            "confuses_hilbert_space_dimension_with_physical_dimensions",
+            "treats_ket_as_row_vector_instead_of_column_vector"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -160,6 +226,12 @@
             "Represent physical observables as Hermitian operators",
             "Prove that eigenvalues of Hermitian operators are real and eigenstates are orthogonal",
             "Compute expectation values ⟨A⟩ = ⟨ψ|Â|ψ⟩ and standard deviations"
+          ],
+          "error_patterns": [
+            "confuses_hermitian_with_unitary_operators",
+            "thinks_expectation_value_must_be_an_eigenvalue",
+            "forgets_operator_ordering_matters_for_non_commuting_observables",
+            "computes_variance_without_squaring_the_operator"
           ],
           "difficulty_tier": 2
         },
@@ -172,6 +244,12 @@
             "Compute commutators of common operators (x̂, p̂, L̂, Ĥ)",
             "Identify compatible observables (commuting operators) and their simultaneous eigenstates"
           ],
+          "error_patterns": [
+            "drops_factor_of_one_half_in_generalized_uncertainty_relation",
+            "computes_commutator_without_acting_on_test_function",
+            "assumes_commuting_operators_share_all_eigenstates_without_degeneracy_check",
+            "confuses_anticommutator_with_commutator"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -182,6 +260,12 @@
             "Express time evolution using the unitary operator U(t) = e^{−iĤt/ℏ}",
             "State Ehrenfest's theorem relating quantum expectation values to classical equations of motion",
             "Distinguish between the Schrodinger picture and the Heisenberg picture of time evolution"
+          ],
+          "error_patterns": [
+            "confuses_which_evolves_in_schrodinger_vs_heisenberg_picture",
+            "thinks_ehrenfest_theorem_means_quantum_particles_follow_classical_paths",
+            "omits_minus_sign_in_time_evolution_operator_exponent",
+            "applies_time_evolution_operator_to_operators_in_schrodinger_picture"
           ],
           "difficulty_tier": 3
         }
@@ -201,6 +285,12 @@
             "Separate the equation into radial and angular parts",
             "Identify the angular solutions as spherical harmonics Yₗᵐ(θ,φ)"
           ],
+          "error_patterns": [
+            "forgets_jacobian_factor_in_spherical_coordinate_integration",
+            "confuses_radial_wavefunction_R_with_reduced_u_equals_rR",
+            "misapplies_separation_constant_between_radial_and_angular_parts",
+            "drops_centrifugal_term_in_radial_equation"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -212,6 +302,12 @@
             "Solve the eigenvalue problem for L̂² and L̂_z using ladder operators",
             "Identify the quantum numbers l and m and their allowed values"
           ],
+          "error_patterns": [
+            "allows_m_to_exceed_l_in_angular_momentum_quantum_numbers",
+            "confuses_L_squared_eigenvalue_l_squared_with_l_times_l_plus_one",
+            "applies_ladder_operators_without_normalization_factor",
+            "thinks_all_components_of_L_can_be_simultaneously_determined"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -222,6 +318,12 @@
             "Solve the radial equation for the Coulomb potential to find hydrogen energy levels Eₙ = −13.6/n² eV",
             "Identify the quantum numbers n, l, m and their relationship to orbitals",
             "Sketch radial wave functions and probability distributions for low-n states"
+          ],
+          "error_patterns": [
+            "confuses_n_with_l_when_counting_radial_nodes",
+            "thinks_energy_depends_on_l_for_hydrogen",
+            "forgets_l_ranges_from_zero_to_n_minus_one",
+            "interprets_orbital_shape_as_electron_trajectory"
           ],
           "difficulty_tier": 2
         }
@@ -241,6 +343,12 @@
             "Represent spin-½ states as two-component spinors and spin operators as Pauli matrices",
             "Compute expectation values and probabilities for spin measurements along arbitrary axes"
           ],
+          "error_patterns": [
+            "treats_spin_as_literal_rotation_of_particle",
+            "confuses_spin_up_down_with_definite_state_along_all_axes",
+            "forgets_factor_of_hbar_over_two_in_spin_eigenvalues",
+            "misapplies_pauli_matrix_algebra_in_spin_calculations"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -252,6 +360,12 @@
             "Determine the allowed values of total angular momentum quantum numbers",
             "Apply angular momentum addition to spin-orbit coupling in hydrogen"
           ],
+          "error_patterns": [
+            "adds_angular_momentum_quantum_numbers_instead_of_using_triangle_rule",
+            "forgets_total_j_ranges_from_abs_l_minus_s_to_l_plus_s",
+            "misidentifies_clebsch_gordan_coefficients_from_table",
+            "confuses_coupled_and_uncoupled_basis_representations"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -262,6 +376,12 @@
             "Describe the Stern-Gerlach experiment and its demonstration of spin quantization",
             "Analyze sequential Stern-Gerlach measurements and state collapse",
             "Discuss the measurement problem and the projection postulate"
+          ],
+          "error_patterns": [
+            "expects_continuous_distribution_in_stern_gerlach_experiment",
+            "thinks_second_measurement_remembers_first_axis_result",
+            "confuses_state_preparation_with_measurement",
+            "assumes_measurement_always_returns_same_value_regardless_of_axis"
           ],
           "difficulty_tier": 2
         }
@@ -281,6 +401,12 @@
             "Write the two-particle wave function as a Slater determinant for fermions",
             "Explain exchange degeneracy and its resolution by symmetrization"
           ],
+          "error_patterns": [
+            "swaps_symmetric_and_antisymmetric_for_bosons_and_fermions",
+            "forgets_normalization_factor_in_slater_determinant",
+            "constructs_product_state_instead_of_symmetrized_state",
+            "treats_distinguishable_particles_as_identical"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -292,6 +418,12 @@
             "Apply the aufbau principle and Hund's rules to determine electron configurations",
             "Explain the structure of the periodic table using quantum numbers and the exclusion principle"
           ],
+          "error_patterns": [
+            "applies_exclusion_principle_to_bosons",
+            "confuses_exclusion_principle_with_no_two_electrons_in_same_orbital",
+            "misorders_subshell_filling_in_aufbau_principle",
+            "violates_hunds_rule_by_pairing_before_filling_degenerate_orbitals"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -302,6 +434,12 @@
             "Describe the exchange interaction and its effect on the energy of multi-electron states",
             "Analyze the ground state and first excited states of helium (singlet and triplet)",
             "Apply variational methods to estimate the ground-state energy of helium"
+          ],
+          "error_patterns": [
+            "treats_exchange_force_as_a_real_physical_force",
+            "confuses_singlet_and_triplet_spin_states_for_helium",
+            "forgets_spatial_antisymmetry_when_spin_is_symmetric",
+            "uses_wrong_trial_wavefunction_in_variational_method"
           ],
           "difficulty_tier": 3
         }
@@ -321,6 +459,12 @@
             "Compute second-order energy corrections using summation over unperturbed states",
             "Apply perturbation theory to the ground state of helium (first-order energy correction)"
           ],
+          "error_patterns": [
+            "includes_n_equals_m_term_in_second_order_energy_sum",
+            "uses_perturbed_states_instead_of_unperturbed_in_matrix_elements",
+            "forgets_energy_denominator_in_first_order_wavefunction_correction",
+            "applies_non_degenerate_theory_to_degenerate_states"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -332,6 +476,12 @@
             "Diagonalize the perturbation matrix within the degenerate subspace",
             "Apply degenerate perturbation theory to the Stark effect in hydrogen"
           ],
+          "error_patterns": [
+            "diagonalizes_full_hamiltonian_instead_of_perturbation_in_degenerate_subspace",
+            "fails_to_identify_degeneracy_requiring_degenerate_theory",
+            "uses_wrong_basis_for_degenerate_subspace",
+            "confuses_stark_effect_linear_vs_quadratic_regimes"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -342,6 +492,12 @@
             "Calculate the relativistic kinetic energy correction to hydrogen energy levels",
             "Calculate the spin-orbit coupling correction using degenerate perturbation theory",
             "Derive the fine structure formula and compare energy level splittings to spectral data"
+          ],
+          "error_patterns": [
+            "omits_darwin_term_in_fine_structure_calculation",
+            "confuses_fine_structure_with_hyperfine_structure",
+            "uses_wrong_quantum_numbers_j_vs_l_for_fine_structure_splitting",
+            "forgets_spin_orbit_coupling_vanishes_for_l_equals_zero"
           ],
           "difficulty_tier": 3
         }
@@ -361,6 +517,12 @@
             "Apply the result to sudden and adiabatic perturbations",
             "Compute transition probabilities for sinusoidal perturbations"
           ],
+          "error_patterns": [
+            "confuses_sudden_and_adiabatic_approximation_regimes",
+            "forgets_interaction_picture_phase_in_transition_amplitude",
+            "squares_amplitude_before_integrating_over_time",
+            "neglects_energy_conservation_condition_in_sinusoidal_perturbation"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -372,6 +534,12 @@
             "Apply Fermi's Golden Rule to calculate photoelectric effect transition rates",
             "Identify the role of the density of states in determining transition rates"
           ],
+          "error_patterns": [
+            "forgets_density_of_states_factor_in_fermis_golden_rule",
+            "confuses_transition_rate_with_transition_probability",
+            "applies_golden_rule_to_discrete_spectrum_without_modification",
+            "omits_two_pi_over_hbar_prefactor_in_golden_rule"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -382,6 +550,12 @@
             "Derive electric dipole selection rules Δl = ±1, Δm = 0, ±1 from matrix elements",
             "Apply Einstein's A and B coefficients to relate spontaneous and stimulated emission",
             "Compute spontaneous emission rates for hydrogen transitions"
+          ],
+          "error_patterns": [
+            "allows_delta_l_equals_zero_in_electric_dipole_transitions",
+            "confuses_spontaneous_and_stimulated_emission_coefficients",
+            "forgets_delta_m_selection_rule_for_polarization",
+            "treats_forbidden_transitions_as_completely_impossible"
           ],
           "difficulty_tier": 3
         }
@@ -401,6 +575,12 @@
             "Derive the Bell (CHSH) inequality from local hidden variable assumptions",
             "Explain how quantum mechanics violates Bell's inequality and the implications for locality"
           ],
+          "error_patterns": [
+            "thinks_entanglement_allows_faster_than_light_communication",
+            "confuses_entangled_state_with_classical_correlation",
+            "misidentifies_product_states_as_entangled",
+            "assumes_bell_violation_disproves_all_hidden_variable_theories"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -412,6 +592,12 @@
             "Compute expectation values and time evolution using the density matrix",
             "Perform partial traces to describe subsystems of entangled states"
           ],
+          "error_patterns": [
+            "confuses_mixed_state_with_coherent_superposition",
+            "forgets_trace_rho_squared_less_than_one_for_mixed_states",
+            "performs_partial_trace_over_wrong_subsystem",
+            "treats_density_matrix_probabilities_as_amplitudes"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -422,6 +608,12 @@
             "Represent qubit states on the Bloch sphere",
             "Define and apply common quantum gates (Hadamard, CNOT, Pauli, phase)",
             "Analyze simple quantum circuits and compute output states"
+          ],
+          "error_patterns": [
+            "confuses_bloch_sphere_angles_with_physical_angles",
+            "applies_cnot_gate_with_control_and_target_swapped",
+            "forgets_global_phase_irrelevance_for_single_qubit_states",
+            "miscomputes_tensor_product_of_multi_qubit_gates"
           ],
           "difficulty_tier": 3
         }

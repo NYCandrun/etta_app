@@ -6,7 +6,7 @@ import { SkeletonLoader } from "@/components/shared/SkeletonLoader";
 import { useSession } from "@/hooks/useSession";
 import { useGamification } from "@/hooks/useGamification";
 import * as ipc from "@/lib/ipc";
-import type { QuizSession, StruggleAlert } from "@/types/quiz";
+import type { QuizSession, StruggleAlert, MistakeDetail } from "@/types/quiz";
 
 export default function Quiz() {
   const navigate = useNavigate();
@@ -92,12 +92,12 @@ export default function Quiz() {
   }, [currentConcept, sessionConcepts, selectConcept, navigate, reinforcementConceptId, exitReinforcement]);
 
   const handleReinforce = useCallback(
-    async (struggleAlert: StruggleAlert | null) => {
+    async (struggleAlert: StruggleAlert | null, mistakes: MistakeDetail[] = []) => {
       if (!currentConcept) return;
 
-      // Enter reinforcement mode for this concept
+      // Enter reinforcement mode for this concept, passing specific mistakes
       if (!reinforcementConceptId) {
-        enterReinforcement(currentConcept.id);
+        enterReinforcement(currentConcept.id, mistakes);
       } else {
         incrementReinforcementAttempt();
       }
@@ -249,7 +249,7 @@ export default function Quiz() {
         <QuizShell
           session={quizSession}
           onComplete={(s) => void handleComplete(s)}
-          onReinforce={reinforcementAttempt < 2 ? (alert) => void handleReinforce(alert) : undefined}
+          onReinforce={reinforcementAttempt < 2 ? (alert, mistakes) => void handleReinforce(alert, mistakes) : undefined}
           onRetry={() => {
             setQuizSession(null);
             setQuizFinished(false);

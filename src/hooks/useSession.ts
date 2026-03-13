@@ -124,6 +124,7 @@ export function useSession() {
     todayMinutes: store.getTodayMinutes(),
     reinforcementConceptId: store.reinforcementConceptId,
     reinforcementAttempt: store.reinforcementAttempt,
+    reinforcementMistakes: store.reinforcementMistakes,
     incrementExplanationAttempt: store.incrementExplanationAttempt,
     startTimeTracking: store.startTimeTracking,
     stopTimeTracking: store.stopTimeTracking,

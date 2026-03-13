@@ -19,6 +19,12 @@
             "Define the electric field E as force per unit charge and compute it for point charge configurations",
             "Apply the principle of superposition to find E for discrete charge distributions"
           ],
+          "error_patterns": [
+            "treats_electric_field_as_scalar",
+            "forgets_to_use_vector_superposition_for_multiple_charges",
+            "confuses_force_on_charge_with_field_at_point",
+            "uses_wrong_sign_convention_for_field_direction"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Compute the electric field from continuous line, surface, and volume charge distributions using integration",
             "Set up and evaluate integrals for E from symmetric charge distributions (ring, disk, rod)",
             "Apply symmetry arguments to simplify electric field calculations"
+          ],
+          "error_patterns": [
+            "confuses_linear_surface_and_volume_charge_densities",
+            "forgets_to_account_for_vector_nature_in_field_integration",
+            "uses_wrong_integration_limits_for_charge_distribution",
+            "fails_to_exploit_symmetry_to_cancel_field_components"
           ],
           "difficulty_tier": 2
         },
@@ -41,6 +53,12 @@
             "Apply Gauss's law to calculate electric fields for systems with high symmetry (sphere, cylinder, plane)",
             "Relate Gauss's law to the divergence theorem and state the differential form ∇·E = ρ/ε₀"
           ],
+          "error_patterns": [
+            "uses_total_charge_instead_of_enclosed_charge_in_gauss_law",
+            "applies_gauss_law_without_sufficient_symmetry",
+            "confuses_flux_through_surface_with_field_at_surface",
+            "chooses_gaussian_surface_that_does_not_match_symmetry"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -51,6 +69,12 @@
             "Define electric potential V as the line integral of E and compute V for point charges and continuous distributions",
             "Relate E to V via E = −∇V",
             "Calculate potential differences and work done moving charges in electric fields"
+          ],
+          "error_patterns": [
+            "confuses_electric_potential_with_electric_potential_energy",
+            "forgets_negative_sign_in_e_equals_negative_grad_v",
+            "treats_potential_as_a_vector_quantity",
+            "assumes_zero_potential_means_zero_field"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,12 @@
             "Derive the energy density of the electric field: u = ½ε₀E²",
             "Calculate the total electrostatic energy by integrating the energy density"
           ],
+          "error_patterns": [
+            "forgets_factor_of_one_half_in_energy_formula",
+            "double_counts_interaction_pairs_in_energy_sum",
+            "includes_self_energy_of_point_charges",
+            "confuses_energy_density_with_total_energy"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -80,6 +110,12 @@
             "Explain why E = 0 inside a conductor and charge resides on the surface",
             "Determine surface charge distributions on conductors using boundary conditions",
             "Analyze the method of images for a point charge near a grounded conducting plane"
+          ],
+          "error_patterns": [
+            "thinks_field_is_zero_just_outside_conductor_surface",
+            "places_image_charge_at_wrong_location_or_wrong_sign",
+            "assumes_charge_distributes_uniformly_on_non_spherical_conductors",
+            "forgets_conductor_surface_is_an_equipotential"
           ],
           "difficulty_tier": 2
         },
@@ -92,6 +128,12 @@
             "Calculate the energy stored in a capacitor: U = ½CV²",
             "Analyze the effect of dielectric materials on capacitance and field using ε = κε₀"
           ],
+          "error_patterns": [
+            "thinks_capacitance_depends_on_charge_or_voltage",
+            "confuses_series_and_parallel_capacitor_combination_formulas",
+            "forgets_dielectric_increases_capacitance",
+            "uses_wrong_energy_formula_when_charge_vs_voltage_is_held_constant"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -102,6 +144,12 @@
             "Derive Poisson's equation ∇²V = −ρ/ε₀ and Laplace's equation ∇²V = 0",
             "Solve Laplace's equation in Cartesian and spherical coordinates for simple boundary conditions",
             "Apply uniqueness theorems to electrostatic boundary value problems"
+          ],
+          "error_patterns": [
+            "confuses_laplace_and_poisson_equations",
+            "applies_wrong_boundary_conditions_to_potential",
+            "forgets_sign_in_poisson_equation",
+            "ignores_uniqueness_theorem_and_guesses_non_unique_solutions"
           ],
           "difficulty_tier": 3
         }
@@ -121,6 +169,12 @@
             "State Ohm's law in microscopic form J = σE and macroscopic form V = IR",
             "Calculate resistance from resistivity and geometry"
           ],
+          "error_patterns": [
+            "confuses_drift_velocity_with_signal_speed",
+            "confuses_resistivity_with_resistance",
+            "thinks_current_is_used_up_as_it_flows_through_resistor",
+            "applies_ohms_law_to_non_ohmic_materials"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -131,6 +185,12 @@
             "Apply Kirchhoff's junction and loop rules to analyze multi-loop circuits",
             "Analyze series and parallel combinations of resistors and capacitors",
             "Solve RC circuit transient problems using first-order ODEs"
+          ],
+          "error_patterns": [
+            "confuses_series_and_parallel_resistor_formulas",
+            "assigns_wrong_sign_to_voltage_drops_in_kirchhoff_loop",
+            "forgets_current_splits_at_junctions",
+            "uses_wrong_time_constant_for_rc_circuit"
           ],
           "difficulty_tier": 2
         }
@@ -150,6 +210,12 @@
             "Analyze the motion of charged particles in uniform magnetic fields (cyclotron motion)",
             "Compute the force on a current-carrying wire in a magnetic field"
           ],
+          "error_patterns": [
+            "thinks_magnetic_force_can_do_work_on_charged_particle",
+            "uses_wrong_hand_rule_for_cross_product_direction",
+            "forgets_magnetic_force_is_zero_when_velocity_parallel_to_field",
+            "confuses_force_on_positive_vs_negative_charge"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -160,6 +226,12 @@
             "State the Biot-Savart law dB = (μ₀/4π)(Idl × r̂)/r²",
             "Compute the magnetic field from a straight wire, a circular loop, and a solenoid using Biot-Savart",
             "Apply superposition to find B from combinations of current-carrying elements"
+          ],
+          "error_patterns": [
+            "confuses_direction_of_dl_cross_r_hat_in_biot_savart",
+            "uses_distance_to_wire_instead_of_distance_to_element",
+            "forgets_to_integrate_over_entire_current_distribution",
+            "omits_mu_naught_over_four_pi_prefactor"
           ],
           "difficulty_tier": 2
         },
@@ -172,6 +244,12 @@
             "Apply Ampere's law to compute B for systems with high symmetry (solenoid, toroid, coaxial cable)",
             "State the differential form ∇ × B = μ₀J and relate it to Stokes' theorem"
           ],
+          "error_patterns": [
+            "uses_total_current_instead_of_enclosed_current_in_ampere_law",
+            "chooses_amperian_loop_that_does_not_exploit_symmetry",
+            "confuses_ampere_law_with_gauss_law_application",
+            "forgets_field_outside_ideal_solenoid_is_zero"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -182,6 +260,12 @@
             "Define the magnetic dipole moment m = IA for a current loop",
             "Compute torque and potential energy of a magnetic dipole in an external field",
             "Classify magnetic materials as diamagnetic, paramagnetic, or ferromagnetic"
+          ],
+          "error_patterns": [
+            "confuses_magnetic_dipole_moment_direction_with_current_direction",
+            "thinks_torque_is_maximum_when_dipole_aligned_with_field",
+            "confuses_diamagnetic_paramagnetic_and_ferromagnetic_responses",
+            "forgets_area_vector_direction_from_right_hand_rule"
           ],
           "difficulty_tier": 2
         }
@@ -201,6 +285,12 @@
             "Apply Faraday's law to calculate induced EMF in loops and coils",
             "Apply Lenz's law to determine the direction of induced current"
           ],
+          "error_patterns": [
+            "forgets_negative_sign_in_faraday_law",
+            "confuses_magnetic_flux_with_magnetic_field",
+            "applies_lenz_law_in_wrong_direction",
+            "thinks_constant_magnetic_field_through_loop_induces_emf"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -212,6 +302,12 @@
             "Define mutual inductance and compute it for simple coupled circuits",
             "Solve RL circuit transient problems and compute energy stored in an inductor: U = ½LI²"
           ],
+          "error_patterns": [
+            "confuses_self_inductance_with_mutual_inductance",
+            "forgets_inductor_opposes_changes_in_current_not_current_itself",
+            "uses_wrong_time_constant_l_over_r_for_rl_circuit",
+            "assumes_inductor_energy_formula_is_same_as_capacitor"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -222,6 +318,12 @@
             "Compute motional EMF from F = qv × B for a conductor moving through a magnetic field",
             "Analyze generators and alternators using Faraday's law",
             "Explain eddy currents and their role in braking and heating"
+          ],
+          "error_patterns": [
+            "confuses_motional_emf_direction_with_current_direction",
+            "forgets_only_component_of_velocity_perpendicular_to_b_contributes",
+            "thinks_eddy_currents_assist_rather_than_oppose_motion",
+            "assumes_emf_requires_closed_circuit_to_exist"
           ],
           "difficulty_tier": 2
         }
@@ -241,6 +343,12 @@
             "Define impedance Z for resistors, capacitors, and inductors",
             "Analyze series and parallel RLC circuits using complex impedance"
           ],
+          "error_patterns": [
+            "confuses_impedance_with_resistance",
+            "forgets_capacitive_and_inductive_reactance_have_opposite_signs",
+            "adds_impedances_as_real_numbers_instead_of_complex",
+            "confuses_peak_and_rms_values_of_ac_quantities"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -251,6 +359,12 @@
             "Calculate average power, reactive power, and power factor in AC circuits",
             "Analyze series and parallel RLC resonance: resonant frequency, bandwidth, quality factor",
             "Design filters (low-pass, high-pass, band-pass) using RLC combinations"
+          ],
+          "error_patterns": [
+            "confuses_average_power_with_instantaneous_power",
+            "forgets_power_factor_cos_phi_in_ac_power_calculation",
+            "thinks_resonant_frequency_depends_on_resistance",
+            "confuses_bandwidth_with_resonant_frequency"
           ],
           "difficulty_tier": 3
         }
@@ -270,6 +384,12 @@
             "Derive Maxwell's displacement current term J_d = ε₀ ∂E/∂t",
             "Write the complete Ampere-Maxwell law: ∇ × B = μ₀J + μ₀ε₀ ∂E/∂t"
           ],
+          "error_patterns": [
+            "thinks_displacement_current_involves_actual_charge_flow",
+            "forgets_displacement_current_term_in_ampere_maxwell_law",
+            "confuses_displacement_current_with_conduction_current",
+            "assumes_ampere_law_without_correction_is_always_valid"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -281,6 +401,12 @@
             "Identify the physical content and experimental basis of each equation",
             "Apply boundary conditions for E and B at interfaces between media"
           ],
+          "error_patterns": [
+            "mixes_up_which_equation_involves_divergence_vs_curl",
+            "confuses_boundary_conditions_for_normal_vs_tangential_components",
+            "forgets_gauss_law_for_magnetism_means_no_magnetic_monopoles",
+            "omits_displacement_current_when_writing_ampere_maxwell_law"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -291,6 +417,12 @@
             "Derive the wave equation for E and B from Maxwell's equations in free space",
             "Identify the speed of electromagnetic waves as c = 1/√(μ₀ε₀)",
             "Write plane wave solutions and identify wavelength, frequency, and polarization"
+          ],
+          "error_patterns": [
+            "confuses_wave_equation_derivation_steps_from_maxwell",
+            "forgets_e_and_b_waves_are_in_phase_in_free_space",
+            "mistakes_wave_speed_formula_with_wrong_constants",
+            "confuses_wavelength_frequency_speed_relation"
           ],
           "difficulty_tier": 2
         }
@@ -310,6 +442,12 @@
             "Relate E and B amplitudes via E₀ = cB₀",
             "Describe the electromagnetic spectrum and identify regions by wavelength and frequency"
           ],
+          "error_patterns": [
+            "thinks_e_and_b_fields_can_be_parallel_in_em_wave",
+            "confuses_e_and_b_amplitude_ratio_with_energy_ratio",
+            "misorders_electromagnetic_spectrum_by_frequency",
+            "assumes_em_waves_require_medium_to_propagate"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -321,6 +459,12 @@
             "Compute the intensity of an electromagnetic wave as the time-averaged Poynting vector",
             "Calculate radiation pressure and the momentum carried by electromagnetic waves"
           ],
+          "error_patterns": [
+            "confuses_poynting_vector_direction_with_e_or_b_direction",
+            "forgets_time_averaging_for_intensity_calculation",
+            "confuses_radiation_pressure_for_absorption_vs_reflection",
+            "omits_factor_of_mu_naught_in_poynting_vector"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -331,6 +475,12 @@
             "Describe linear, circular, and elliptical polarization of electromagnetic waves",
             "Apply Malus's law to compute intensity through polarizing filters",
             "Analyze polarization using Jones vectors and Jones matrices"
+          ],
+          "error_patterns": [
+            "confuses_left_and_right_circular_polarization_conventions",
+            "applies_malus_law_with_wrong_angle",
+            "thinks_unpolarized_light_has_zero_intensity_after_one_polarizer",
+            "forgets_intensity_goes_as_cosine_squared_in_malus_law"
           ],
           "difficulty_tier": 2
         }
@@ -350,6 +500,12 @@
             "Derive the Fresnel equations for reflection and transmission amplitudes",
             "Compute reflectance and transmittance at dielectric interfaces"
           ],
+          "error_patterns": [
+            "confuses_angle_of_incidence_measured_from_surface_vs_normal",
+            "swaps_refractive_indices_in_snell_law",
+            "confuses_fresnel_coefficients_for_s_and_p_polarization",
+            "forgets_total_internal_reflection_requires_going_from_high_to_low_index"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -360,6 +516,12 @@
             "Model the frequency-dependent dielectric constant using the Lorentz oscillator model",
             "Distinguish between phase velocity and group velocity in dispersive media",
             "Analyze anomalous dispersion and absorption near resonance frequencies"
+          ],
+          "error_patterns": [
+            "confuses_phase_velocity_with_group_velocity",
+            "thinks_group_velocity_always_equals_energy_velocity",
+            "assumes_refractive_index_is_frequency_independent",
+            "confuses_normal_and_anomalous_dispersion_regimes"
           ],
           "difficulty_tier": 3
         }
@@ -379,6 +541,12 @@
             "Explain the physical significance of retarded time t_r = t − |r−r'|/c",
             "Compute retarded potentials for simple time-varying source configurations"
           ],
+          "error_patterns": [
+            "uses_current_time_instead_of_retarded_time_in_potentials",
+            "forgets_retarded_time_depends_on_source_point_position",
+            "confuses_retarded_and_advanced_potentials",
+            "neglects_vector_potential_and_only_considers_scalar_potential"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -390,6 +558,12 @@
             "Describe the radiation pattern of an oscillating electric dipole",
             "Compute radiated power and radiation resistance for a short dipole antenna"
           ],
+          "error_patterns": [
+            "thinks_constant_velocity_charge_radiates",
+            "confuses_near_field_and_far_field_radiation_patterns",
+            "forgets_larmor_formula_depends_on_acceleration_squared",
+            "assumes_radiation_pattern_is_isotropic_for_dipole"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -400,6 +574,12 @@
             "Derive the Abraham-Lorentz formula for radiation reaction force",
             "Identify the problems of runaway solutions and preacceleration",
             "Discuss the limitations of classical electrodynamics for radiating charges"
+          ],
+          "error_patterns": [
+            "thinks_radiation_reaction_is_always_a_friction_like_force",
+            "ignores_runaway_solution_as_unphysical",
+            "confuses_radiation_reaction_with_larmor_radiation",
+            "assumes_abraham_lorentz_force_is_valid_at_all_scales"
           ],
           "difficulty_tier": 3
         }

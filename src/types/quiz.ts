@@ -43,6 +43,14 @@ export interface Feedback {
   struggleAlert?: StruggleAlert;
 }
 
+/** A specific mistake the user made, for feeding into reinforcement lessons. */
+export interface MistakeDetail {
+  questionPrompt: string;
+  userAnswer: string;
+  correctAnswer: string;
+  explanation: string;
+}
+
 export interface QuizSession {
   id: string;
   conceptId: string;

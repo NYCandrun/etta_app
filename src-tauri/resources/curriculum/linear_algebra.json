@@ -19,6 +19,12 @@
             "Perform elementary row operations on an augmented matrix",
             "Classify systems as consistent (unique or infinite solutions) or inconsistent"
           ],
+          "error_patterns": [
+            "forgets_augmentation_bar_when_forming_matrix",
+            "confuses_inconsistent_with_infinite_solutions",
+            "applies_row_operations_to_only_part_of_row",
+            "mistakes_coefficient_signs_when_building_augmented_matrix"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Reduce an augmented matrix to row echelon form (REF) using Gaussian elimination",
             "Reduce to reduced row echelon form (RREF) using Gauss-Jordan elimination",
             "Identify pivot positions, free variables, and express solutions parametrically"
+          ],
+          "error_patterns": [
+            "confuses_ref_with_rref",
+            "forgets_to_check_zero_pivot",
+            "misidentifies_free_variables_as_pivot_variables",
+            "drops_parametric_parameter_when_writing_solution_set"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Compute the transpose of a matrix and identify symmetric matrices",
             "Verify that matrix multiplication is associative but not commutative"
           ],
+          "error_patterns": [
+            "treats_matrix_multiplication_as_commutative",
+            "multiplies_matrices_element_wise_instead_of_row_times_column",
+            "ignores_dimension_mismatch_in_matrix_multiplication",
+            "confuses_transpose_of_product_with_product_of_transposes_in_same_order"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -51,6 +69,12 @@
             "Determine whether a square matrix is invertible",
             "Compute the inverse of a matrix using row reduction of [A | I]",
             "Solve linear systems Ax = b by computing x = A⁻¹b when A is invertible"
+          ],
+          "error_patterns": [
+            "applies_row_operations_to_only_left_half_of_augmented_identity",
+            "assumes_nonsquare_matrices_can_have_inverses",
+            "writes_inverse_as_one_over_matrix_entries",
+            "forgets_to_verify_invertibility_before_computing_inverse"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,12 @@
             "Apply properties of determinants (row operations, transpose, product rule)",
             "Use the determinant to test invertibility of a matrix"
           ],
+          "error_patterns": [
+            "swaps_sign_pattern_in_cofactor_expansion",
+            "thinks_det_of_sum_equals_sum_of_dets",
+            "forgets_sign_change_when_swapping_rows",
+            "uses_wrong_minor_by_not_deleting_correct_row_and_column"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -81,6 +111,12 @@
             "Compute the adjugate (classical adjoint) of a matrix",
             "Express the inverse of a matrix as A⁻¹ = (1/det A) adj A"
           ],
+          "error_patterns": [
+            "replaces_wrong_column_in_cramers_rule",
+            "forgets_to_transpose_cofactor_matrix_for_adjugate",
+            "applies_cramers_rule_when_determinant_is_zero",
+            "confuses_adjugate_with_inverse_without_dividing_by_det"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -91,6 +127,12 @@
             "Interpret the absolute value of the determinant as the scaling factor for area (2D) or volume (3D)",
             "Relate the sign of the determinant to orientation preservation or reversal",
             "Use determinants to compute the area of a parallelogram and the volume of a parallelepiped"
+          ],
+          "error_patterns": [
+            "forgets_absolute_value_when_computing_area_from_determinant",
+            "confuses_area_of_parallelogram_with_area_of_triangle",
+            "ignores_sign_of_determinant_when_determining_orientation",
+            "uses_dot_product_instead_of_cross_product_for_volume"
           ],
           "difficulty_tier": 2
         }
@@ -110,6 +152,12 @@
             "Verify whether a given set with operations is a vector space",
             "Determine whether a subset of a vector space is a subspace"
           ],
+          "error_patterns": [
+            "forgets_to_check_zero_vector_in_subspace_test",
+            "checks_only_addition_closure_but_not_scalar_multiplication",
+            "confuses_vector_space_axioms_with_subspace_criteria",
+            "assumes_all_subsets_of_vector_spaces_are_subspaces"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -120,6 +168,12 @@
             "Determine whether a set of vectors is linearly independent",
             "Determine whether a vector is in the span of a given set",
             "Find a basis for a vector space or subspace"
+          ],
+          "error_patterns": [
+            "confuses_linear_independence_with_orthogonality",
+            "thinks_spanning_set_must_be_linearly_independent",
+            "includes_redundant_vectors_in_basis",
+            "forgets_that_zero_vector_makes_set_linearly_dependent"
           ],
           "difficulty_tier": 2
         },
@@ -132,6 +186,12 @@
             "Compute the rank (dimension of column space) and nullity (dimension of null space) of a matrix",
             "Apply the Rank-Nullity Theorem: rank(A) + nullity(A) = n"
           ],
+          "error_patterns": [
+            "confuses_rank_with_number_of_rows_instead_of_pivots",
+            "uses_number_of_columns_instead_of_rows_in_rank_nullity",
+            "counts_zero_rows_in_ref_as_contributing_to_rank",
+            "confuses_dimension_of_space_with_number_of_vectors_in_spanning_set"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -142,6 +202,12 @@
             "Find bases for the column space, null space, and row space of a matrix",
             "Interpret the null space as the solution set of Ax = 0",
             "Relate the column space to the range of possible outputs b in Ax = b"
+          ],
+          "error_patterns": [
+            "confuses_row_space_with_column_space",
+            "takes_column_space_basis_from_rref_columns_instead_of_original_matrix",
+            "forgets_that_null_space_always_contains_zero_vector",
+            "confuses_null_space_of_a_with_null_space_of_a_transpose"
           ],
           "difficulty_tier": 2
         }
@@ -161,6 +227,12 @@
             "Determine the image and kernel of a linear transformation",
             "Compose linear transformations and relate composition to matrix multiplication"
           ],
+          "error_patterns": [
+            "forgets_to_check_both_additivity_and_homogeneity",
+            "confuses_kernel_with_image",
+            "reverses_order_of_matrix_multiplication_in_composition",
+            "assumes_affine_maps_with_nonzero_constant_are_linear"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -172,6 +244,12 @@
             "Compute the matrix of a linear transformation with respect to given bases",
             "Apply change-of-basis matrices to convert between representations"
           ],
+          "error_patterns": [
+            "places_basis_vectors_as_rows_instead_of_columns_in_standard_matrix",
+            "applies_change_of_basis_matrices_in_wrong_order",
+            "confuses_coordinates_in_new_basis_with_standard_coordinates",
+            "inverts_wrong_matrix_in_change_of_basis_formula"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -182,6 +260,12 @@
             "Identify rotation, reflection, projection, and shear as linear transformations",
             "Write the standard matrices for common geometric transformations",
             "Compose geometric transformations and interpret the resulting matrix"
+          ],
+          "error_patterns": [
+            "uses_wrong_sign_in_rotation_matrix_entries",
+            "confuses_reflection_across_axis_with_reflection_across_line",
+            "applies_composition_of_transforms_in_wrong_order",
+            "mistakes_projection_matrix_as_invertible"
           ],
           "difficulty_tier": 2
         }
@@ -201,6 +285,12 @@
             "Find eigenvectors corresponding to each eigenvalue by solving (A − λI)x = 0",
             "Determine algebraic and geometric multiplicities of eigenvalues"
           ],
+          "error_patterns": [
+            "computes_det_of_a_plus_lambda_i_instead_of_a_minus_lambda_i",
+            "includes_zero_vector_as_an_eigenvector",
+            "confuses_algebraic_multiplicity_with_geometric_multiplicity",
+            "forgets_to_subtract_lambda_from_all_diagonal_entries"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -211,6 +301,12 @@
             "Determine whether a matrix is diagonalizable",
             "Diagonalize a matrix A = PDP⁻¹ where D is diagonal",
             "Use diagonalization to compute powers of a matrix Aⁿ"
+          ],
+          "error_patterns": [
+            "places_eigenvectors_in_p_in_wrong_order_relative_to_d",
+            "assumes_all_matrices_are_diagonalizable",
+            "writes_a_equals_pdp_instead_of_pdp_inverse",
+            "forgets_geometric_multiplicity_must_equal_algebraic_for_diagonalizability"
           ],
           "difficulty_tier": 2
         },
@@ -223,6 +319,12 @@
             "Write real-valued general solutions from complex eigenvalue pairs",
             "Interpret complex eigenvalues geometrically as rotation-scaling"
           ],
+          "error_patterns": [
+            "forgets_complex_eigenvalues_come_in_conjugate_pairs_for_real_matrices",
+            "fails_to_extract_real_and_imaginary_parts_of_eigenvector",
+            "confuses_rotation_angle_with_scaling_factor",
+            "drops_imaginary_part_when_computing_eigenvectors"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -233,6 +335,12 @@
             "Model discrete dynamical systems xₖ₊₁ = Axₖ and analyze long-term behavior",
             "Apply eigenvalue analysis to Markov chains and find steady-state vectors",
             "Use the Cayley-Hamilton theorem to express matrix polynomials"
+          ],
+          "error_patterns": [
+            "confuses_steady_state_vector_with_eigenvector_of_largest_eigenvalue",
+            "forgets_markov_columns_must_sum_to_one",
+            "ignores_dominant_eigenvalue_condition_for_long_term_behavior",
+            "misapplies_cayley_hamilton_by_substituting_matrix_into_wrong_polynomial"
           ],
           "difficulty_tier": 3
         }
@@ -252,6 +360,12 @@
             "Determine orthogonality and compute orthogonal complements",
             "Decompose a vector into components parallel and perpendicular to a subspace"
           ],
+          "error_patterns": [
+            "confuses_orthogonal_complement_with_perpendicular_component",
+            "forgets_to_normalize_when_computing_projection_onto_vector",
+            "assumes_orthogonality_implies_linear_independence_in_general",
+            "computes_dot_product_of_vectors_with_mismatched_dimensions"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -263,6 +377,12 @@
             "Compute the QR factorization of a matrix using Gram-Schmidt",
             "Solve least squares problems using QR factorization"
           ],
+          "error_patterns": [
+            "forgets_to_subtract_all_previous_projections_in_gram_schmidt",
+            "skips_normalization_step_producing_orthogonal_but_not_orthonormal_basis",
+            "uses_wrong_inner_product_in_projection_formula",
+            "divides_by_inner_product_instead_of_squared_norm_in_projection"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -273,6 +393,12 @@
             "Compute the orthogonal projection of a vector onto a subspace",
             "Set up and solve least squares problems Ax ≈ b using the normal equations AᵀAx̂ = Aᵀb",
             "Apply least squares to fit a line or polynomial to data"
+          ],
+          "error_patterns": [
+            "forgets_transpose_on_one_side_of_normal_equations",
+            "confuses_projection_onto_vector_with_projection_onto_subspace",
+            "solves_ax_equals_b_instead_of_normal_equations_for_inconsistent_system",
+            "missets_design_matrix_columns_in_polynomial_fitting"
           ],
           "difficulty_tier": 2
         }
@@ -292,6 +418,12 @@
             "Prove that eigenvectors of distinct eigenvalues of a symmetric matrix are orthogonal",
             "Orthogonally diagonalize a symmetric matrix A = QDQᵀ"
           ],
+          "error_patterns": [
+            "uses_non_orthonormal_eigenvectors_in_orthogonal_diagonalization",
+            "forgets_that_spectral_theorem_requires_symmetry",
+            "writes_q_inverse_instead_of_q_transpose_for_orthogonal_matrix",
+            "assumes_non_symmetric_real_matrices_have_real_eigenvalues"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -302,6 +434,12 @@
             "Express a quadratic form Q(x) = xᵀAx and identify its associated symmetric matrix",
             "Classify a quadratic form as positive definite, negative definite, or indefinite using eigenvalues",
             "Apply Sylvester's criterion (leading principal minors) to test definiteness"
+          ],
+          "error_patterns": [
+            "uses_non_symmetric_matrix_for_quadratic_form",
+            "confuses_positive_semidefinite_with_positive_definite",
+            "checks_all_minors_instead_of_leading_principal_minors_for_sylvesters_criterion",
+            "misclassifies_indefinite_form_by_checking_only_some_eigenvalues"
           ],
           "difficulty_tier": 3
         }
@@ -321,6 +459,12 @@
             "Construct the full SVD factorization A = UΣVᵀ",
             "Interpret the SVD geometrically as a rotation-scaling-rotation decomposition"
           ],
+          "error_patterns": [
+            "confuses_singular_values_with_eigenvalues_of_a",
+            "computes_eigenvalues_of_a_instead_of_a_transpose_a_for_singular_values",
+            "forgets_to_take_square_root_of_eigenvalues_for_singular_values",
+            "swaps_u_and_v_matrices_in_svd_factorization"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -331,6 +475,12 @@
             "Apply the SVD to compute the pseudoinverse and solve least squares problems",
             "Use low-rank SVD approximation for data compression (image compression, dimensionality reduction)",
             "Compute the condition number of a matrix and assess numerical stability"
+          ],
+          "error_patterns": [
+            "truncates_wrong_singular_values_in_low_rank_approximation",
+            "confuses_condition_number_with_determinant_for_stability",
+            "computes_pseudoinverse_without_inverting_nonzero_singular_values",
+            "uses_smallest_singular_value_alone_as_condition_number"
           ],
           "difficulty_tier": 3
         }
@@ -350,6 +500,12 @@
             "Verify that the space of m×n matrices is a vector space",
             "Find bases and dimensions for polynomial and matrix spaces"
           ],
+          "error_patterns": [
+            "confuses_degree_at_most_n_with_degree_exactly_n_for_polynomial_space",
+            "miscounts_dimension_of_polynomial_space_as_n_instead_of_n_plus_one",
+            "assumes_matrix_space_dimension_is_m_plus_n_instead_of_m_times_n",
+            "fails_to_verify_closure_under_nonstandard_operations"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -360,6 +516,12 @@
             "Define inner products on function spaces (e.g., ⟨f,g⟩ = ∫ f(x)g(x) dx)",
             "Verify orthogonality of trigonometric functions {sin(nx), cos(nx)} on [−π, π]",
             "Compute Fourier coefficients as projections onto an orthogonal basis"
+          ],
+          "error_patterns": [
+            "uses_wrong_integration_interval_for_function_inner_product",
+            "forgets_normalization_constant_in_fourier_coefficients",
+            "confuses_pointwise_product_with_inner_product_on_function_space",
+            "fails_to_verify_positive_definiteness_of_proposed_inner_product"
           ],
           "difficulty_tier": 3
         }
@@ -379,6 +541,12 @@
             "Apply partial pivoting to obtain PA = LU when row swaps are needed",
             "Solve systems efficiently using forward and back substitution with LU decomposition"
           ],
+          "error_patterns": [
+            "places_multipliers_in_wrong_position_in_l_matrix",
+            "forgets_permutation_matrix_when_row_swaps_are_needed",
+            "performs_back_substitution_in_wrong_direction",
+            "confuses_lu_with_ldl_decomposition"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -390,6 +558,12 @@
             "Determine convergence conditions for iterative methods",
             "Compare direct and iterative methods in terms of efficiency and applicability"
           ],
+          "error_patterns": [
+            "uses_updated_values_in_jacobi_instead_of_old_values",
+            "confuses_jacobi_with_gauss_seidel_update_order",
+            "ignores_diagonal_dominance_condition_for_convergence",
+            "fails_to_check_spectral_radius_for_convergence_guarantee"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -400,6 +574,12 @@
             "Apply the power method to find the dominant eigenvalue and eigenvector",
             "Apply the inverse power method with shifts to find specific eigenvalues",
             "Describe the QR algorithm for computing all eigenvalues of a matrix"
+          ],
+          "error_patterns": [
+            "forgets_to_normalize_vector_at_each_power_method_iteration",
+            "applies_power_method_when_dominant_eigenvalue_is_not_unique",
+            "uses_wrong_shift_value_in_inverse_power_method",
+            "confuses_qr_factorization_with_qr_algorithm_iteration"
           ],
           "difficulty_tier": 3
         }
