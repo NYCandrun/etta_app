@@ -476,6 +476,12 @@
             "Apply Malus's law to compute intensity through polarizing filters",
             "Analyze polarization using Jones vectors and Jones matrices"
           ],
+          "error_patterns": [
+            "confuses_left_and_right_circular_polarization_conventions",
+            "applies_malus_law_with_wrong_angle",
+            "thinks_unpolarized_light_has_zero_intensity_after_one_polarizer",
+            "forgets_intensity_goes_as_cosine_squared_in_malus_law"
+          ],
           "difficulty_tier": 2
         }
       ]
@@ -494,6 +500,12 @@
             "Derive the Fresnel equations for reflection and transmission amplitudes",
             "Compute reflectance and transmittance at dielectric interfaces"
           ],
+          "error_patterns": [
+            "confuses_angle_of_incidence_measured_from_surface_vs_normal",
+            "swaps_refractive_indices_in_snell_law",
+            "confuses_fresnel_coefficients_for_s_and_p_polarization",
+            "forgets_total_internal_reflection_requires_going_from_high_to_low_index"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -504,6 +516,12 @@
             "Model the frequency-dependent dielectric constant using the Lorentz oscillator model",
             "Distinguish between phase velocity and group velocity in dispersive media",
             "Analyze anomalous dispersion and absorption near resonance frequencies"
+          ],
+          "error_patterns": [
+            "confuses_phase_velocity_with_group_velocity",
+            "thinks_group_velocity_always_equals_energy_velocity",
+            "assumes_refractive_index_is_frequency_independent",
+            "confuses_normal_and_anomalous_dispersion_regimes"
           ],
           "difficulty_tier": 3
         }
@@ -523,6 +541,12 @@
             "Explain the physical significance of retarded time t_r = t − |r−r'|/c",
             "Compute retarded potentials for simple time-varying source configurations"
           ],
+          "error_patterns": [
+            "uses_current_time_instead_of_retarded_time_in_potentials",
+            "forgets_retarded_time_depends_on_source_point_position",
+            "confuses_retarded_and_advanced_potentials",
+            "neglects_vector_potential_and_only_considers_scalar_potential"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -534,6 +558,12 @@
             "Describe the radiation pattern of an oscillating electric dipole",
             "Compute radiated power and radiation resistance for a short dipole antenna"
           ],
+          "error_patterns": [
+            "thinks_constant_velocity_charge_radiates",
+            "confuses_near_field_and_far_field_radiation_patterns",
+            "forgets_larmor_formula_depends_on_acceleration_squared",
+            "assumes_radiation_pattern_is_isotropic_for_dipole"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -544,6 +574,12 @@
             "Derive the Abraham-Lorentz formula for radiation reaction force",
             "Identify the problems of runaway solutions and preacceleration",
             "Discuss the limitations of classical electrodynamics for radiating charges"
+          ],
+          "error_patterns": [
+            "thinks_radiation_reaction_is_always_a_friction_like_force",
+            "ignores_runaway_solution_as_unphysical",
+            "confuses_radiation_reaction_with_larmor_radiation",
+            "assumes_abraham_lorentz_force_is_valid_at_all_scales"
           ],
           "difficulty_tier": 3
         }

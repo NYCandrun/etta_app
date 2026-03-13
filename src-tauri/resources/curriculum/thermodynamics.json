@@ -19,6 +19,12 @@
             "Define temperature operationally via the zeroth law",
             "Convert between Celsius, Fahrenheit, and Kelvin temperature scales"
           ],
+          "error_patterns": [
+            "confuses_thermal_equilibrium_with_equal_heat_content",
+            "makes_errors_converting_celsius_to_fahrenheit",
+            "forgets_kelvin_scale_has_no_negative_values",
+            "thinks_zeroth_law_implies_objects_must_be_in_contact"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -30,6 +36,12 @@
             "Apply the van der Waals equation as a model for real gases",
             "Plot and interpret P-V, P-T, and V-T diagrams for ideal and real gases"
           ],
+          "error_patterns": [
+            "uses_celsius_instead_of_kelvin_in_ideal_gas_law",
+            "confuses_number_of_moles_with_number_of_molecules",
+            "ignores_assumptions_of_ideal_gas_law_for_real_gases",
+            "misinterprets_van_der_waals_correction_terms"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -40,6 +52,12 @@
             "Calculate linear and volumetric thermal expansion",
             "Define specific heat capacity and latent heat",
             "Solve calorimetry problems using conservation of energy"
+          ],
+          "error_patterns": [
+            "forgets_to_include_latent_heat_during_phase_changes",
+            "assumes_temperature_changes_during_phase_transition",
+            "confuses_specific_heat_with_heat_capacity",
+            "uses_volumetric_expansion_coefficient_for_linear_expansion"
           ],
           "difficulty_tier": 1
         }
@@ -59,6 +77,12 @@
             "Distinguish between heat and work as path-dependent energy transfers",
             "State the first law of thermodynamics: ΔU = Q − W"
           ],
+          "error_patterns": [
+            "confuses_sign_convention_for_work_done_by_vs_on_system",
+            "treats_heat_and_work_as_state_functions",
+            "thinks_internal_energy_depends_on_path",
+            "forgets_work_is_area_under_curve_on_pv_diagram"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -70,6 +94,12 @@
             "Derive the adiabatic relation PVᵞ = constant from the first law",
             "Compute Q, W, and ΔU for each type of process"
           ],
+          "error_patterns": [
+            "confuses_isothermal_with_adiabatic_processes",
+            "assumes_q_equals_zero_for_isothermal_instead_of_adiabatic",
+            "uses_wrong_gamma_exponent_in_adiabatic_relation",
+            "forgets_delta_u_is_zero_for_isothermal_ideal_gas_process"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -80,6 +110,12 @@
             "Derive Cᵥ and Cₚ for an ideal gas and show Cₚ − Cᵥ = nR",
             "Apply the equipartition theorem to predict heat capacities from degrees of freedom",
             "Explain the failure of classical equipartition at low temperatures (qualitative quantum preview)"
+          ],
+          "error_patterns": [
+            "confuses_cv_and_cp_for_ideal_gas",
+            "miscounts_degrees_of_freedom_for_polyatomic_molecules",
+            "forgets_cp_is_always_greater_than_cv",
+            "applies_equipartition_at_temperatures_where_modes_are_frozen_out"
           ],
           "difficulty_tier": 2
         }

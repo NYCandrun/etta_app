@@ -742,6 +742,12 @@
             "Relate the predicted helium mass fraction (~25%) to the baryon-to-photon ratio",
             "Compare BBN predictions to observed primordial abundances as a test of cosmology"
           ],
+          "error_patterns": [
+            "thinks_bbn_produced_elements_heavier_than_lithium",
+            "confuses_helium_mass_fraction_with_number_fraction",
+            "forgets_neutron_to_proton_ratio_freezeout_determines_helium_abundance",
+            "assumes_all_observed_helium_is_primordial"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -752,6 +758,12 @@
             "Describe the horizon, flatness, and monopole problems of standard Big Bang cosmology",
             "Explain how a period of exponential expansion (inflation) resolves these problems",
             "Describe how quantum fluctuations during inflation seed the large-scale structure of the universe"
+          ],
+          "error_patterns": [
+            "confuses_horizon_problem_with_flatness_problem",
+            "thinks_inflation_violates_speed_of_light_limit",
+            "assumes_inflation_is_directly_observable",
+            "forgets_inflation_predicts_nearly_scale_invariant_perturbation_spectrum"
           ],
           "difficulty_tier": 3
         }
@@ -771,6 +783,12 @@
             "Explain the physical origin of acoustic peaks from baryon-photon oscillations",
             "Extract cosmological parameters (Ω_m, Ω_b, Ω_Λ, H₀) from the CMB power spectrum"
           ],
+          "error_patterns": [
+            "confuses_multipole_moment_l_with_physical_scale",
+            "thinks_first_acoustic_peak_corresponds_to_smallest_scale",
+            "forgets_odd_and_even_peaks_respond_differently_to_baryon_density",
+            "assumes_cmb_power_spectrum_directly_gives_matter_power_spectrum"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -782,6 +800,12 @@
             "Define the matter power spectrum P(k) and relate it to galaxy survey observations",
             "Explain baryon acoustic oscillations (BAO) as a standard ruler for cosmological distances"
           ],
+          "error_patterns": [
+            "forgets_expansion_suppresses_perturbation_growth_compared_to_static_case",
+            "confuses_bao_standard_ruler_with_standard_candle",
+            "treats_galaxy_distribution_as_unbiased_tracer_of_dark_matter",
+            "confuses_linear_and_nonlinear_regimes_of_structure_growth"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -792,6 +816,12 @@
             "Derive the gravitational lens equation and the Einstein ring radius",
             "Distinguish between strong lensing, weak lensing, and microlensing",
             "Describe how weak lensing surveys map the distribution of dark matter"
+          ],
+          "error_patterns": [
+            "confuses_strong_lensing_with_weak_lensing_regimes",
+            "forgets_einstein_ring_requires_perfect_source_lens_observer_alignment",
+            "thinks_microlensing_resolves_multiple_images",
+            "assumes_lensing_depends_on_lens_composition_not_just_mass"
           ],
           "difficulty_tier": 3
         }
@@ -811,6 +841,12 @@
             "Compute planet mass and radius from radial velocity and transit observations",
             "Discuss the habitable zone and atmospheric characterization via transmission spectroscopy"
           ],
+          "error_patterns": [
+            "forgets_radial_velocity_gives_minimum_mass_not_true_mass",
+            "confuses_transit_depth_with_planet_radius_instead_of_radius_ratio_squared",
+            "assumes_habitable_zone_depends_only_on_distance_not_stellar_luminosity",
+            "thinks_all_planets_are_detectable_by_transit_method"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -821,6 +857,12 @@
             "Describe the complementary information from gravitational waves, electromagnetic radiation, neutrinos, and cosmic rays",
             "Explain the GW170817 neutron star merger as a landmark multi-messenger event",
             "Discuss how multi-messenger observations constrain the neutron star equation of state and the origin of heavy elements"
+          ],
+          "error_patterns": [
+            "thinks_gravitational_waves_carry_same_information_as_electromagnetic",
+            "confuses_kilonova_with_supernova_in_neutron_star_mergers",
+            "forgets_neutrino_detection_requires_extremely_large_detectors",
+            "assumes_all_gravitational_wave_sources_have_electromagnetic_counterparts"
           ],
           "difficulty_tier": 3
         },
@@ -833,6 +875,12 @@
             "Describe direct detection experiments and their sensitivity to WIMP-nucleon interactions",
             "Discuss indirect detection through annihilation products and collider searches"
           ],
+          "error_patterns": [
+            "assumes_dark_matter_must_be_a_single_particle_type",
+            "confuses_direct_and_indirect_dark_matter_detection_methods",
+            "thinks_neutrinos_account_for_all_dark_matter",
+            "forgets_dark_matter_interacts_gravitationally_even_if_not_electromagnetically"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -843,6 +891,12 @@
             "Discuss the cosmological constant problem and the discrepancy with quantum field theory predictions",
             "Describe the hierarchy of approaches to quantum gravity (string theory, loop quantum gravity)",
             "Outline the observational tests that could distinguish between dark energy models"
+          ],
+          "error_patterns": [
+            "underestimates_magnitude_of_cosmological_constant_problem",
+            "confuses_cosmological_constant_problem_with_dark_matter_problem",
+            "treats_string_theory_and_loop_quantum_gravity_as_experimentally_verified",
+            "assumes_dark_energy_equation_of_state_cannot_evolve_with_time"
           ],
           "difficulty_tier": 3
         }
