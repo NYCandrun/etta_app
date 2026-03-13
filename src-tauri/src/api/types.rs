@@ -163,14 +163,6 @@ impl Message {
         }
     }
 
-    #[allow(dead_code)]
-    pub fn assistant_text(text: &str) -> Self {
-        Self {
-            role: "assistant".to_string(),
-            content: MessageContent::Text(text.to_string()),
-        }
-    }
-
     pub fn user_blocks(blocks: Vec<ContentBlock>) -> Self {
         Self {
             role: "user".to_string(),

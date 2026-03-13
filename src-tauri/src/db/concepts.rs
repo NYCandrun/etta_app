@@ -208,25 +208,6 @@ pub fn update_mastery(
     Ok(())
 }
 
-/// Get concepts by domain.
-#[allow(dead_code)]
-pub fn get_concepts_by_domain(conn: &Connection, domain: &str) -> Result<Vec<Concept>> {
-    let mut stmt = conn.prepare(
-        "SELECT id, domain, module, title, prerequisites, learning_objectives,
-                difficulty_tier, error_patterns, mastery_score, ease_factor,
-                interval_days, next_review, last_correct, last_latency_ms, attempt_count,
-                streak_correct
-         FROM concepts WHERE domain = ?1 ORDER BY module, title",
-    )?;
-
-    let rows = stmt.query_map(params![domain], |row| row_to_concept(row))?;
-    let mut concepts = Vec::new();
-    for row in rows {
-        concepts.push(row?);
-    }
-    Ok(concepts)
-}
-
 fn row_to_concept(row: &rusqlite::Row) -> Result<Concept> {
     let prereqs_str: String = row.get(4)?;
     let prerequisites: Vec<String> = serde_json::from_str(&prereqs_str).unwrap_or_default();

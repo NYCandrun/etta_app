@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
-use std::path::Path;
 
 /// A concept definition as loaded from the flat curriculum JSON file.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -54,24 +53,6 @@ pub struct DomainFile {
     pub modules: Vec<DomainModule>,
 }
 
-/// Load curriculum from a flat JSON file (curriculum.json format).
-#[allow(dead_code)]
-pub fn load_curriculum(path: &Path) -> Result<Curriculum, String> {
-    let contents =
-        std::fs::read_to_string(path).map_err(|e| format!("Failed to read curriculum file: {e}"))?;
-
-    let curriculum: Curriculum =
-        serde_json::from_str(&contents).map_err(|e| format!("Failed to parse curriculum JSON: {e}"))?;
-
-    Ok(curriculum)
-}
-
-/// Load curriculum from a flat JSON string.
-#[allow(dead_code)]
-pub fn load_curriculum_from_str(json: &str) -> Result<Curriculum, String> {
-    serde_json::from_str(json).map_err(|e| format!("Failed to parse curriculum JSON: {e}"))
-}
-
 /// Parse a domain JSON string and flatten into CurriculumConcepts.
 pub fn load_domain_from_str(json: &str) -> Result<Vec<CurriculumConcept>, String> {
     let domain: DomainFile =
@@ -93,41 +74,6 @@ pub fn load_domain_from_str(json: &str) -> Result<Vec<CurriculumConcept>, String
         }
     }
     Ok(concepts)
-}
-
-/// Load all domain JSON files from a directory and merge into a single Curriculum.
-/// Skips the flat `curriculum.json` file and reads only individual domain files.
-#[allow(dead_code)]
-pub fn load_all_domains(dir: &Path) -> Result<Curriculum, String> {
-    let mut all_concepts = Vec::new();
-
-    let entries = std::fs::read_dir(dir)
-        .map_err(|e| format!("Failed to read curriculum directory {:?}: {e}", dir))?;
-
-    let mut domain_files: Vec<std::path::PathBuf> = entries
-        .filter_map(|e| e.ok())
-        .map(|e| e.path())
-        .filter(|p| {
-            p.extension().map_or(false, |ext| ext == "json")
-                && p.file_name().map_or(false, |n| n != "curriculum.json")
-        })
-        .collect();
-
-    // Sort for deterministic ordering
-    domain_files.sort();
-
-    for path in &domain_files {
-        let contents = std::fs::read_to_string(path)
-            .map_err(|e| format!("Failed to read domain file {:?}: {e}", path))?;
-        let concepts = load_domain_from_str(&contents)?;
-        all_concepts.extend(concepts);
-    }
-
-    if all_concepts.is_empty() {
-        return Err("No domain files found in curriculum directory".to_string());
-    }
-
-    Ok(Curriculum { concepts: all_concepts })
 }
 
 /// Validate the curriculum DAG:

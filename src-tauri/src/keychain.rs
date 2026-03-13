@@ -27,18 +27,6 @@ pub fn get_api_key() -> Result<Option<String>, String> {
     }
 }
 
-/// Delete the stored API key from the OS keychain.
-#[allow(dead_code)]
-pub fn delete_api_key() -> Result<(), String> {
-    let entry = keyring::Entry::new(SERVICE_NAME, KEY_ACCOUNT)
-        .map_err(|e| format!("Keychain init error: {e}"))?;
-    match entry.delete_credential() {
-        Ok(()) => Ok(()),
-        Err(keyring::Error::NoEntry) => Ok(()), // Already gone — not an error
-        Err(e) => Err(format!("Failed to delete API key from keychain: {e}")),
-    }
-}
-
 /// Retrieve the API key, using the in-memory cache on AppState to avoid
 /// repeated OS keychain prompts (which can require a password on Linux).
 pub fn get_api_key_cached(state: &crate::AppState) -> Result<Option<String>, String> {
