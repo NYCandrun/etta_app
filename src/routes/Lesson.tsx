@@ -20,6 +20,7 @@ export default function Lesson() {
     explanationAttempt,
     incrementExplanationAttempt,
     reinforcementConceptId,
+    reinforcementAttempt,
   } = useSession();
 
   const isReinforcing = reinforcementConceptId !== null;
@@ -55,6 +56,32 @@ export default function Lesson() {
       })
       .finally(() => setLoading(false));
   };
+
+  // Auto-fetch an adapted explanation when re-entering a concept in reinforcement mode.
+  // This ensures the user sees different content each time, using the 5-tier escalation.
+  useEffect(() => {
+    if (
+      isReinforcing &&
+      !isPrereqReview &&
+      currentConcept &&
+      lessonContent &&
+      !extraExplanation &&
+      !explanationLoading
+    ) {
+      setExplanationLoading(true);
+      // Use reinforcementAttempt to escalate through explanation strategies
+      const attempt = reinforcementAttempt + 1;
+      ipc
+        .requestExplanation(currentConcept.id, lessonContent.id, attempt)
+        .then((response) => {
+          setExtraExplanation(response);
+        })
+        .catch(() => {
+          // Silently fail — user still has the base lesson
+        })
+        .finally(() => setExplanationLoading(false));
+    }
+  }, [isReinforcing, isPrereqReview, currentConcept, lessonContent, reinforcementAttempt, extraExplanation, explanationLoading]);
 
   // Pre-fetch quiz in the background once the lesson is loaded
   useEffect(() => {

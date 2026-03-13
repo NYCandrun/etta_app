@@ -19,6 +19,7 @@ export default function Quiz() {
     sessionConcepts,
     selectConcept,
     reinforcementConceptId,
+    reinforcementAttempt,
     enterReinforcement,
     incrementReinforcementAttempt,
     exitReinforcement,
@@ -101,25 +102,40 @@ export default function Quiz() {
         incrementReinforcementAttempt();
       }
 
-      // If there are weak prerequisites, inject them into the session queue
-      if (struggleAlert?.revisitPrerequisites?.length) {
-        try {
+      // Find weak prerequisites to revisit.
+      // Use the backend struggle alert if available, otherwise check ourselves
+      // against the curriculum (any prerequisite with mastery < 0.8).
+      try {
+        let prereqIds = struggleAlert?.revisitPrerequisites ?? [];
+        const hasPrereqs = currentConcept.prerequisites.length > 0;
+
+        if ((prereqIds.length > 0 || hasPrereqs)) {
           const curriculum = await ipc.getCurriculumState();
           if (curriculum) {
-            const prereqConcepts = struggleAlert.revisitPrerequisites
-              .map((id) => curriculum.concepts.find((c) => c.id === id))
-              .filter((c): c is NonNullable<typeof c> => c != null);
-            const firstPrereq = prereqConcepts[0];
-            if (firstPrereq) {
-              insertConceptsAfterCurrent(prereqConcepts);
-              selectConcept(firstPrereq);
-              navigate("/lesson");
-              return;
+            // If backend didn't flag specific prereqs, check them ourselves
+            if (prereqIds.length === 0 && hasPrereqs) {
+              prereqIds = currentConcept.prerequisites.filter((pid) => {
+                const prereq = curriculum.concepts.find((c) => c.id === pid);
+                return prereq && prereq.masteryScore < 0.8;
+              });
+            }
+
+            if (prereqIds.length > 0) {
+              const prereqConcepts = prereqIds
+                .map((id) => curriculum.concepts.find((c) => c.id === id))
+                .filter((c): c is NonNullable<typeof c> => c != null);
+              const firstPrereq = prereqConcepts[0];
+              if (firstPrereq) {
+                insertConceptsAfterCurrent(prereqConcepts);
+                selectConcept(firstPrereq);
+                navigate("/lesson");
+                return;
+              }
             }
           }
-        } catch {
-          // If curriculum fetch fails, just re-do current concept
         }
+      } catch {
+        // If curriculum fetch fails, just re-do current concept
       }
 
       // No prerequisites to review — go straight to adapted lesson for current concept
@@ -133,11 +149,11 @@ export default function Quiz() {
 
   const handleComplete = async (completedSession: QuizSession) => {
     setQuizSession(completedSession);
-    // XP is awarded per-answer on the backend. Refresh gamification state
-    // to reflect the updated total — no frontend lump-sum award needed.
     await refreshGamification();
-    // If the quiz was already marked complete and the user clicks "Done",
-    // advance to the next concept in the session.
+    // If reinforcement cap was reached, exit reinforcement mode on any completion
+    if (reinforcementConceptId && reinforcementAttempt >= 2) {
+      exitReinforcement();
+    }
     if (quizFinished) {
       advanceToNextConcept();
       return;
@@ -233,7 +249,7 @@ export default function Quiz() {
         <QuizShell
           session={quizSession}
           onComplete={(s) => void handleComplete(s)}
-          onReinforce={(alert) => void handleReinforce(alert)}
+          onReinforce={reinforcementAttempt < 2 ? (alert) => void handleReinforce(alert) : undefined}
           onRetry={() => {
             setQuizSession(null);
             setQuizFinished(false);
