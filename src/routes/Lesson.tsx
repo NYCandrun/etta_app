@@ -32,6 +32,9 @@ export default function Lesson() {
   const [explanationLoading, setExplanationLoading] = useState(false);
   const [extraExplanation, setExtraExplanation] =
     useState<ExplanationResponse | null>(null);
+  /** Auto-fetched explanation shown at top during reinforcement — separate from manual requests */
+  const [reinforcementExplanation, setReinforcementExplanation] =
+    useState<ExplanationResponse | null>(null);
 
   // Load lesson when concept changes
   useEffect(() => {
@@ -65,7 +68,7 @@ export default function Lesson() {
       !isPrereqReview &&
       currentConcept &&
       lessonContent &&
-      !extraExplanation &&
+      !reinforcementExplanation &&
       !explanationLoading
     ) {
       setExplanationLoading(true);
@@ -76,14 +79,14 @@ export default function Lesson() {
       ipc
         .requestExplanation(currentConcept.id, lessonContent.id, attempt)
         .then((response) => {
-          setExtraExplanation(response);
+          setReinforcementExplanation(response);
         })
         .catch(() => {
           // Silently fail — user still has the base lesson
         })
         .finally(() => setExplanationLoading(false));
     }
-  }, [isReinforcing, isPrereqReview, currentConcept, lessonContent, reinforcementAttempt, extraExplanation, explanationLoading]);
+  }, [isReinforcing, isPrereqReview, currentConcept, lessonContent, reinforcementAttempt, reinforcementExplanation, explanationLoading]);
 
   // Pre-fetch quiz in the background once the lesson is loaded
   useEffect(() => {
@@ -191,7 +194,7 @@ export default function Lesson() {
       ) : lessonContent ? (
         <>
           {/* In reinforcement mode, show the adapted explanation first */}
-          {isReinforcing && !isPrereqReview && extraExplanation && (
+          {isReinforcing && !isPrereqReview && reinforcementExplanation && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -201,7 +204,7 @@ export default function Lesson() {
                 A different approach
               </p>
               <div className="text-sm leading-relaxed text-warm-700 dark:text-warm-300">
-                <RichText text={extraExplanation.content} />
+                <RichText text={reinforcementExplanation.content} />
               </div>
             </motion.div>
           )}
