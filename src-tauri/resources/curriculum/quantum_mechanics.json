@@ -19,6 +19,12 @@
             "Explain the photoelectric effect and Einstein's photon hypothesis",
             "Describe the Compton effect and its evidence for particle-like behavior of light"
           ],
+          "error_patterns": [
+            "confuses_ultraviolet_catastrophe_with_infrared",
+            "thinks_photoelectric_effect_depends_on_intensity_not_frequency",
+            "treats_photon_energy_as_proportional_to_amplitude",
+            "conflates_compton_scattering_with_photoelectric_effect"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -30,6 +36,12 @@
             "Describe the Davisson-Germer experiment as evidence for electron diffraction",
             "Explain the double-slit experiment and its implications for quantum superposition"
           ],
+          "error_patterns": [
+            "uses_kinetic_energy_instead_of_momentum_in_de_broglie_relation",
+            "treats_wavefunction_as_physical_wave_in_space",
+            "thinks_observation_requires_conscious_observer_in_double_slit",
+            "confuses_wavelength_and_frequency_in_matter_waves"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -40,6 +52,12 @@
             "State the position-momentum uncertainty relation Δx Δp ≥ ℏ/2",
             "State the energy-time uncertainty relation ΔE Δt ≥ ℏ/2",
             "Apply uncertainty relations to estimate ground-state energies and explain the stability of atoms"
+          ],
+          "error_patterns": [
+            "attributes_uncertainty_to_measurement_disturbance_only",
+            "uses_h_instead_of_hbar_over_two_in_uncertainty_relation",
+            "thinks_uncertainty_principle_applies_only_to_simultaneous_measurements",
+            "confuses_delta_x_delta_p_with_x_times_p"
           ],
           "difficulty_tier": 2
         }
@@ -59,6 +77,12 @@
             "Interpret the wave function ψ(x,t) and the probability density |ψ|²",
             "Apply the normalization condition ∫|ψ|² dx = 1"
           ],
+          "error_patterns": [
+            "interprets_psi_as_probability_instead_of_probability_amplitude",
+            "forgets_normalization_of_probability_density",
+            "omits_imaginary_unit_in_schrodinger_equation",
+            "confuses_psi_with_psi_squared_for_measurable_quantity"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -70,6 +94,12 @@
             "State the time-independent Schrodinger equation Ĥψ = Eψ as an eigenvalue problem",
             "Express the general solution as a superposition of stationary states"
           ],
+          "error_patterns": [
+            "confuses_stationary_states_with_static_wavefunctions",
+            "forgets_time_dependent_phase_factor_in_stationary_states",
+            "assumes_superposition_coefficients_must_be_real",
+            "treats_energy_eigenvalue_as_operator"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -80,6 +110,12 @@
             "Derive the probability current density j = (ℏ/2mi)(ψ*∇ψ − ψ∇ψ*)",
             "State the continuity equation ∂ρ/∂t + ∇·j = 0 for quantum probability",
             "Apply boundary conditions requiring continuity of ψ and dψ/dx"
+          ],
+          "error_patterns": [
+            "confuses_probability_current_with_probability_density",
+            "forgets_continuity_of_derivative_at_boundary",
+            "drops_complex_conjugate_in_current_density_formula",
+            "applies_boundary_conditions_to_psi_but_not_dpsi_dx"
           ],
           "difficulty_tier": 2
         }
@@ -99,6 +135,12 @@
             "Derive the quantized energy levels Eₙ = n²π²ℏ²/(2mL²)",
             "Normalize the wave functions and verify their orthogonality"
           ],
+          "error_patterns": [
+            "starts_quantum_number_at_zero_instead_of_one",
+            "uses_wrong_well_width_in_energy_formula",
+            "forgets_wavefunction_must_vanish_at_walls",
+            "confuses_energy_proportional_to_n_vs_n_squared"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -109,6 +151,12 @@
             "Solve the harmonic oscillator Schrodinger equation using power series (Hermite polynomials)",
             "Derive the energy spectrum Eₙ = (n + ½)ℏω and discuss the zero-point energy",
             "Sketch the wave functions and probability densities and compare with classical turning points"
+          ],
+          "error_patterns": [
+            "forgets_zero_point_energy_in_harmonic_oscillator",
+            "confuses_classical_and_quantum_turning_points",
+            "uses_n_instead_of_n_plus_half_in_energy_levels",
+            "thinks_probability_density_vanishes_beyond_classical_turning_points"
           ],
           "difficulty_tier": 2
         },

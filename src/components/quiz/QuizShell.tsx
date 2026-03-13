@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { QuizSession, Answer, Feedback, StruggleAlert } from "@/types/quiz";
+import type { QuizSession, Answer, Feedback, StruggleAlert, MistakeDetail } from "@/types/quiz";
 import { MultipleChoice } from "@/components/quiz/MultipleChoice";
 import { FreeResponse } from "@/components/quiz/FreeResponse";
 import { FillInBlank } from "@/components/quiz/FillInBlank";
@@ -23,7 +23,7 @@ interface QuizShellProps {
   /** Called when the user wants to review the lesson after a low score */
   onReviewLesson?: () => void;
   /** Called when the user should enter a reinforcement loop (adapted lesson + fresh quiz) */
-  onReinforce?: (struggleAlert: StruggleAlert | null) => void;
+  onReinforce?: (struggleAlert: StruggleAlert | null, mistakes: MistakeDetail[]) => void;
   className?: string;
 }
 
@@ -335,7 +335,29 @@ export function QuizShell({
               Let's review this topic with a fresh perspective
             </p>
             <button
-              onClick={() => onReinforce(lastStruggleAlert)}
+              onClick={() => {
+                // Collect the user's specific mistakes for the reinforcement lesson
+                const mistakes: MistakeDetail[] = session.questions
+                  .map((q, i) => {
+                    const fb = session.feedbacks[i];
+                    const ans = session.answers[i];
+                    if (fb?.isCorrect) return null;
+                    const userAnswer = ans?.selectedOptionId
+                      ? q.options?.find((o) => o.id === ans.selectedOptionId)?.text ?? ans.selectedOptionId
+                      : ans?.freeText ?? ans?.filledBlanks?.join(", ") ?? "No answer";
+                    const correctAnswer = q.options?.find((o) => o.isCorrect)?.text
+                      ?? q.blanks?.join(", ")
+                      ?? "See explanation";
+                    return {
+                      questionPrompt: q.prompt,
+                      userAnswer,
+                      correctAnswer,
+                      explanation: fb?.explanation ?? "",
+                    };
+                  })
+                  .filter((m): m is MistakeDetail => m !== null);
+                onReinforce(lastStruggleAlert, mistakes);
+              }}
               className="btn-primary w-full"
             >
               Continue

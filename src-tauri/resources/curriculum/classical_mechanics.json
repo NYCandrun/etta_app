@@ -19,6 +19,12 @@
             "Derive kinematic equations for constant acceleration from integration",
             "Interpret position-time, velocity-time, and acceleration-time graphs"
           ],
+          "error_patterns": [
+            "confuses_velocity_with_acceleration",
+            "treats_displacement_as_distance",
+            "applies_kinematic_equations_to_non_constant_acceleration",
+            "reads_slope_of_position_graph_as_acceleration"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Decompose projectile motion into independent horizontal and vertical components",
             "Derive equations for range, maximum height, and time of flight",
             "Solve projectile problems with non-zero launch height and angled surfaces"
+          ],
+          "error_patterns": [
+            "assumes_horizontal_velocity_changes_during_flight",
+            "forgets_vertical_velocity_is_zero_at_max_height",
+            "uses_same_angle_for_velocity_components_without_sin_cos",
+            "neglects_negative_sign_for_downward_acceleration"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Solve problems involving relative velocity in one and two dimensions",
             "Distinguish between inertial and non-inertial reference frames"
           ],
+          "error_patterns": [
+            "adds_velocities_instead_of_subtracting_for_same_direction",
+            "confuses_velocity_of_a_relative_to_b_with_b_relative_to_a",
+            "treats_non_inertial_frame_as_inertial",
+            "forgets_vector_nature_of_velocity_addition_in_2d"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -51,6 +69,12 @@
             "Express velocity and acceleration in polar coordinates (radial and tangential components)",
             "Analyze circular motion using angular velocity and centripetal acceleration",
             "Derive the acceleration vector in polar coordinates: a = (r̈ − rθ̇²)r̂ + (rθ̈ + 2ṙθ̇)θ̂"
+          ],
+          "error_patterns": [
+            "forgets_that_polar_unit_vectors_change_with_time",
+            "omits_coriolis_term_in_polar_acceleration",
+            "confuses_radial_and_tangential_components",
+            "assumes_centripetal_acceleration_is_tangential"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,13 @@
             "Distinguish between mass and weight and between contact and field forces",
             "Draw free-body diagrams for systems of interacting objects"
           ],
+          "error_patterns": [
+            "confuses_weight_with_mass",
+            "thinks_force_is_needed_to_maintain_constant_velocity",
+            "misidentifies_action_reaction_pairs_on_same_object",
+            "omits_forces_in_free_body_diagram",
+            "believes_heavier_objects_always_fall_faster"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -80,6 +111,12 @@
             "Apply F = ma to solve problems involving friction, normal forces, and tension",
             "Analyze systems with multiple objects connected by strings or in contact",
             "Solve inclined plane problems with and without friction"
+          ],
+          "error_patterns": [
+            "sets_normal_force_equal_to_weight_on_inclined_plane",
+            "confuses_static_and_kinetic_friction",
+            "uses_wrong_angle_for_components_on_inclined_plane",
+            "assumes_tension_is_always_equal_to_weight_in_accelerating_systems"
           ],
           "difficulty_tier": 1
         },

@@ -21,6 +21,7 @@ export default function Lesson() {
     incrementExplanationAttempt,
     reinforcementConceptId,
     reinforcementAttempt,
+    reinforcementMistakes,
   } = useSession();
 
   const isReinforcing = reinforcementConceptId !== null;
@@ -76,8 +77,18 @@ export default function Lesson() {
       // increment explanationAttempt so manual "Another way" continues from here.
       const attempt = reinforcementAttempt + 1;
       incrementExplanationAttempt();
+      // Format the user's specific mistakes so Claude can target them
+      const mistakesContext =
+        reinforcementMistakes.length > 0
+          ? reinforcementMistakes
+              .map(
+                (m, i) =>
+                  `Mistake ${i + 1}:\n  Question: ${m.questionPrompt}\n  Student answered: ${m.userAnswer}\n  Correct answer: ${m.correctAnswer}\n  Why wrong: ${m.explanation}`
+              )
+              .join("\n\n")
+          : undefined;
       ipc
-        .requestExplanation(currentConcept.id, lessonContent.id, attempt)
+        .requestExplanation(currentConcept.id, lessonContent.id, attempt, mistakesContext)
         .then((response) => {
           setReinforcementExplanation(response);
         })
@@ -86,7 +97,7 @@ export default function Lesson() {
         })
         .finally(() => setExplanationLoading(false));
     }
-  }, [isReinforcing, isPrereqReview, currentConcept, lessonContent, reinforcementAttempt, reinforcementExplanation, explanationLoading]);
+  }, [isReinforcing, isPrereqReview, currentConcept, lessonContent, reinforcementAttempt, reinforcementExplanation, explanationLoading, reinforcementMistakes]);
 
   // Pre-fetch quiz in the background once the lesson is loaded
   useEffect(() => {

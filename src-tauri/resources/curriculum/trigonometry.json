@@ -19,6 +19,11 @@
             "Identify complementary and supplementary angle pairs",
             "Convert between degrees, minutes, and seconds (DMS) and decimal degrees"
           ],
+          "error_patterns": [
+            "confuses_complementary_and_supplementary_angles",
+            "incorrectly_converts_dms_minutes_as_decimal_hundredths",
+            "misclassifies_obtuse_angle_as_acute"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +34,11 @@
             "Define a radian as the ratio of arc length to radius",
             "Convert between degree and radian measure",
             "Calculate arc length and sector area using radians"
+          ],
+          "error_patterns": [
+            "multiplies_by_180_over_pi_when_converting_degrees_to_radians",
+            "forgets_to_use_radians_in_arc_length_formula",
+            "confuses_arc_length_formula_with_sector_area_formula"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +51,12 @@
             "Identify coterminal angles and find them by adding or subtracting full rotations",
             "Determine the reference angle for any angle in standard position"
           ],
+          "error_patterns": [
+            "adds_360_instead_of_subtracting_to_find_coterminal_in_range",
+            "computes_reference_angle_by_subtracting_from_360_instead_of_180",
+            "confuses_reference_angle_with_coterminal_angle",
+            "places_terminal_side_in_wrong_quadrant_for_negative_angles"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -51,6 +67,11 @@
             "Calculate angular speed in radians per unit time",
             "Relate angular speed to linear speed via v = rω",
             "Solve applied problems involving rotating objects"
+          ],
+          "error_patterns": [
+            "uses_diameter_instead_of_radius_in_v_equals_r_omega",
+            "forgets_to_convert_revolutions_to_radians_for_angular_speed",
+            "confuses_angular_speed_and_linear_speed_units"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +91,11 @@
             "Define cosecant, secant, and cotangent as reciprocals of the primary ratios",
             "Evaluate trigonometric ratios for given right triangles"
           ],
+          "error_patterns": [
+            "confuses_sin_and_cos_for_adjacent_vs_opposite",
+            "uses_hypotenuse_as_opposite_or_adjacent_side",
+            "inverts_ratio_for_tangent_using_adjacent_over_opposite"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -80,6 +106,11 @@
             "Find unknown sides and angles of a right triangle using trigonometric ratios",
             "Apply the Pythagorean theorem in conjunction with trigonometric ratios",
             "Solve applied problems involving angles of elevation and depression"
+          ],
+          "error_patterns": [
+            "confuses_angle_of_elevation_with_angle_of_depression",
+            "uses_sin_instead_of_inverse_sin_to_find_angle",
+            "applies_pythagorean_theorem_with_leg_as_hypotenuse"
           ],
           "difficulty_tier": 1
         },
@@ -92,6 +123,11 @@
             "Derive these values from the 45-45-90 and 30-60-90 reference triangles",
             "Apply special angle values to simplify expressions"
           ],
+          "error_patterns": [
+            "swaps_sin_30_and_sin_60_values",
+            "uses_1_instead_of_sqrt2_over_2_for_sin_45",
+            "confuses_side_ratios_of_30_60_90_and_45_45_90_triangles"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -102,6 +138,12 @@
             "Solve navigation and bearing problems using right triangle trigonometry",
             "Calculate heights and distances using indirect measurement",
             "Model and solve real-world problems involving right triangles"
+          ],
+          "error_patterns": [
+            "measures_bearing_from_wrong_reference_direction",
+            "forgets_to_add_observer_height_in_elevation_problems",
+            "sets_up_wrong_trig_ratio_for_word_problem_diagram",
+            "misidentifies_which_side_is_unknown_in_applied_problem"
           ],
           "difficulty_tier": 2
         }
@@ -121,6 +163,11 @@
             "Evaluate trigonometric functions for quadrantal angles (0, π/2, π, 3π/2)",
             "Determine the sign of each trigonometric function in each quadrant"
           ],
+          "error_patterns": [
+            "confuses_x_coordinate_as_sin_instead_of_cos_on_unit_circle",
+            "assigns_wrong_sign_to_trig_function_in_quadrant_iii_or_iv",
+            "evaluates_sin_or_cos_at_quadrantal_angles_as_undefined_instead_of_0_or_1"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -132,6 +179,12 @@
             "Reproduce exact values for all multiples of π/6 and π/4 on the unit circle",
             "Evaluate trigonometric functions for negative angles and angles beyond 2π"
           ],
+          "error_patterns": [
+            "forgets_to_apply_correct_sign_after_finding_reference_angle_value",
+            "computes_reference_angle_incorrectly_in_quadrant_iii",
+            "treats_negative_angle_as_positive_without_finding_coterminal_angle",
+            "confuses_pi_over_6_and_pi_over_3_positions_on_unit_circle"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -142,6 +195,12 @@
             "Identify the domain and range of each of the six trigonometric functions",
             "Classify each trigonometric function as even or odd",
             "State the period of each trigonometric function"
+          ],
+          "error_patterns": [
+            "states_range_of_sin_or_cos_as_all_real_numbers",
+            "misidentifies_tangent_as_even_function",
+            "gives_period_of_tangent_as_2pi_instead_of_pi",
+            "confuses_domain_restrictions_of_tan_and_sec"
           ],
           "difficulty_tier": 2
         }
@@ -161,6 +220,12 @@
             "Identify the amplitude, period, and midline of a sinusoidal function",
             "Graph y = A sin(Bx − C) + D and y = A cos(Bx − C) + D with transformations"
           ],
+          "error_patterns": [
+            "computes_period_as_b_instead_of_2pi_over_b",
+            "confuses_phase_shift_direction_using_c_over_b_vs_negative_c_over_b",
+            "treats_negative_amplitude_as_vertical_shift_instead_of_reflection",
+            "reads_amplitude_from_peak_instead_of_midline_to_peak"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -172,6 +237,11 @@
             "Graph y = sec x and y = csc x, identifying period and vertical asymptotes",
             "Apply transformations to the graphs of all six trigonometric functions"
           ],
+          "error_patterns": [
+            "places_vertical_asymptotes_at_wrong_multiples_of_pi",
+            "confuses_graph_shape_of_cot_with_reflected_tan",
+            "misidentifies_horizontal_vs_vertical_asymptote_on_sec_or_csc"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -182,6 +252,12 @@
             "Determine amplitude, period, phase shift, and vertical shift from real-world data",
             "Write a sinusoidal function to model periodic phenomena (tides, temperature, sound)",
             "Use a sinusoidal model to make predictions"
+          ],
+          "error_patterns": [
+            "calculates_amplitude_as_max_minus_min_instead_of_half_that",
+            "uses_period_value_directly_as_b_instead_of_2pi_over_period",
+            "confuses_phase_shift_with_starting_point_of_data",
+            "sets_vertical_shift_as_max_value_instead_of_average_of_max_and_min"
           ],
           "difficulty_tier": 3
         }
@@ -201,6 +277,11 @@
             "Apply reciprocal and quotient identities to simplify expressions",
             "Simplify trigonometric expressions using fundamental identities"
           ],
+          "error_patterns": [
+            "applies_pythagorean_identity_incorrectly_as_sin_sq_minus_cos_sq_equals_1",
+            "confuses_reciprocal_of_sin_with_inverse_sin",
+            "forgets_variant_pythagorean_identities_for_tan_and_sec"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -211,6 +292,12 @@
             "Verify a trigonometric identity by transforming one side to match the other",
             "Select appropriate strategies: work from the more complex side, convert to sines and cosines, factor",
             "Distinguish between conditional equations and identities"
+          ],
+          "error_patterns": [
+            "manipulates_both_sides_simultaneously_instead_of_one_side",
+            "treats_identity_as_equation_and_cross_multiplies",
+            "fails_to_recognize_factorable_trig_expression",
+            "gives_up_when_intermediate_expression_looks_more_complex"
           ],
           "difficulty_tier": 3
         },
@@ -223,6 +310,11 @@
             "Evaluate exact trigonometric values for non-standard angles like 15° and 75°",
             "Use sum and difference formulas to prove or derive other identities"
           ],
+          "error_patterns": [
+            "uses_sin_a_plus_b_equals_sin_a_plus_sin_b",
+            "mixes_up_sign_in_cosine_sum_vs_difference_formula",
+            "chooses_wrong_angle_decomposition_for_non_standard_angle"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -233,6 +325,12 @@
             "Derive and apply double-angle formulas for sine, cosine, and tangent",
             "Derive and apply half-angle formulas for sine, cosine, and tangent",
             "Use these formulas to simplify expressions and solve equations"
+          ],
+          "error_patterns": [
+            "writes_sin_2a_as_2sin_a_without_cos_a_factor",
+            "selects_wrong_sign_for_half_angle_formula_based_on_quadrant",
+            "confuses_double_angle_cos_formula_variants",
+            "applies_half_angle_formula_but_forgets_square_root"
           ],
           "difficulty_tier": 3
         }
@@ -252,6 +350,12 @@
             "Evaluate inverse trigonometric functions for exact and approximate values",
             "Compose trigonometric and inverse trigonometric functions"
           ],
+          "error_patterns": [
+            "confuses_domain_and_range_of_inverse_trig_functions",
+            "gives_arcsin_result_outside_restricted_range",
+            "assumes_sin_of_arcsin_x_equals_x_without_domain_check",
+            "treats_arccos_negative_value_as_negative_angle"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -263,6 +367,12 @@
             "Solve trigonometric equations requiring factoring or the quadratic formula",
             "Find all solutions of a trigonometric equation using periodicity"
           ],
+          "error_patterns": [
+            "finds_only_one_solution_and_misses_other_angles_in_interval",
+            "divides_both_sides_by_trig_function_losing_solutions",
+            "forgets_to_check_factored_solutions_against_original_domain",
+            "omits_periodic_solutions_when_finding_general_solution"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -273,6 +383,12 @@
             "Solve equations involving multiple angles using double-angle or half-angle formulas",
             "Solve equations requiring sum-to-product or product-to-sum transformations",
             "Solve applied trigonometric equations in context"
+          ],
+          "error_patterns": [
+            "fails_to_account_for_multiple_angle_when_listing_solutions",
+            "applies_wrong_identity_for_equation_simplification",
+            "forgets_to_divide_solutions_by_coefficient_of_angle",
+            "misapplies_sum_to_product_formula_sign"
           ],
           "difficulty_tier": 3
         }
@@ -292,6 +408,12 @@
             "Identify and resolve the ambiguous case (SSA) using the law of sines",
             "Determine when a triangle has zero, one, or two solutions"
           ],
+          "error_patterns": [
+            "ignores_ambiguous_case_and_finds_only_one_triangle",
+            "sets_up_law_of_sines_ratio_with_mismatched_angle_and_side",
+            "uses_law_of_sines_for_sss_case_instead_of_law_of_cosines",
+            "forgets_to_check_if_second_solution_produces_valid_triangle"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -303,6 +425,12 @@
             "Recognize when to use the law of cosines versus the law of sines",
             "Derive the law of cosines from the distance formula"
           ],
+          "error_patterns": [
+            "forgets_minus_2ab_cos_c_term_reducing_to_pythagorean_theorem",
+            "plugs_wrong_side_as_c_in_law_of_cosines",
+            "uses_degrees_in_cosine_without_converting_when_calculator_is_in_radians",
+            "applies_law_of_cosines_but_forgets_to_take_square_root_for_side"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -313,6 +441,12 @@
             "Calculate the area of a triangle using A = ½ ab sin C",
             "Apply Heron's formula when three sides are known",
             "Solve applied problems involving area of non-right triangles"
+          ],
+          "error_patterns": [
+            "uses_included_angle_between_wrong_pair_of_sides_in_area_formula",
+            "forgets_one_half_factor_in_area_equals_half_ab_sin_c",
+            "computes_semi_perimeter_incorrectly_in_herons_formula",
+            "takes_square_root_of_each_factor_separately_in_herons_formula"
           ],
           "difficulty_tier": 2
         }
@@ -332,6 +466,12 @@
             "Convert between polar and rectangular coordinates",
             "Graph basic polar equations (circles, cardioids, roses)"
           ],
+          "error_patterns": [
+            "swaps_x_and_y_conversion_formulas_for_polar_to_rectangular",
+            "plots_negative_r_value_in_same_direction_instead_of_opposite",
+            "uses_arctan_without_adjusting_quadrant_when_converting_to_polar",
+            "confuses_number_of_petals_rule_for_rose_curves"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -342,6 +482,12 @@
             "Represent vectors graphically and in component form",
             "Compute vector addition, subtraction, and scalar multiplication",
             "Calculate the magnitude and direction angle of a vector"
+          ],
+          "error_patterns": [
+            "adds_magnitudes_directly_instead_of_using_component_addition",
+            "confuses_position_vector_with_displacement_vector",
+            "computes_direction_angle_using_wrong_trig_ratio",
+            "forgets_to_square_root_sum_of_squares_for_magnitude"
           ],
           "difficulty_tier": 2
         },
@@ -354,6 +500,12 @@
             "Use the dot product to find the angle between two vectors",
             "Determine whether two vectors are orthogonal using the dot product"
           ],
+          "error_patterns": [
+            "computes_dot_product_as_component_wise_vector_instead_of_scalar",
+            "forgets_to_divide_by_product_of_magnitudes_when_finding_angle",
+            "confuses_dot_product_with_cross_product_formula",
+            "assumes_perpendicular_when_dot_product_is_one_instead_of_zero"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -364,6 +516,11 @@
             "Decompose a force vector into horizontal and vertical components",
             "Solve equilibrium and resultant force problems",
             "Compute work as a dot product of force and displacement vectors"
+          ],
+          "error_patterns": [
+            "swaps_sin_and_cos_when_decomposing_force_into_components",
+            "uses_angle_from_wrong_axis_when_resolving_components",
+            "computes_work_as_magnitude_times_magnitude_without_cos_theta"
           ],
           "difficulty_tier": 3
         }

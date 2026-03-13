@@ -19,6 +19,12 @@
             "Construct epsilon-delta proofs for linear and simple polynomial functions",
             "Explain why the formal definition is needed beyond intuitive limit evaluation"
           ],
+          "error_patterns": [
+            "confuses_limit_value_with_function_value",
+            "swaps_epsilon_and_delta_roles",
+            "assumes_limit_requires_function_defined_at_point",
+            "uses_specific_epsilon_instead_of_arbitrary_epsilon"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -29,6 +35,12 @@
             "Apply limit laws to evaluate limits of combined functions",
             "Evaluate limits involving absolute value and piecewise functions",
             "Apply the Squeeze Theorem to evaluate limits"
+          ],
+          "error_patterns": [
+            "applies_limit_laws_when_individual_limits_do_not_exist",
+            "incorrectly_splits_limit_of_product_as_product_of_limits_for_indeterminate_forms",
+            "forgets_to_check_both_sides_for_piecewise_limits",
+            "misidentifies_bounding_functions_in_squeeze_theorem"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Determine continuity of composite and piecewise functions",
             "Apply the Intermediate Value Theorem to guarantee existence of roots"
           ],
+          "error_patterns": [
+            "confuses_removable_and_jump_discontinuities",
+            "applies_ivt_without_verifying_continuity_on_interval",
+            "assumes_ivt_guarantees_uniqueness_of_root",
+            "forgets_to_check_limit_equals_function_value_for_continuity"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -51,6 +69,12 @@
             "Evaluate limits as x approaches infinity for rational, exponential, and logarithmic functions",
             "Identify vertical and horizontal asymptotes using limits",
             "Evaluate limits of indeterminate forms 0/0 and ∞/∞ (preview of L'Hopital's Rule)"
+          ],
+          "error_patterns": [
+            "treats_infinity_as_a_number_in_arithmetic",
+            "incorrectly_cancels_dominant_terms_in_rational_limits",
+            "confuses_horizontal_and_vertical_asymptotes",
+            "assumes_infinity_minus_infinity_equals_zero"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,12 @@
             "Compute derivatives from the limit definition for polynomial and simple radical functions",
             "Interpret the derivative as the instantaneous rate of change and the slope of the tangent line"
           ],
+          "error_patterns": [
+            "omits_limit_in_difference_quotient_and_just_computes_slope",
+            "forgets_to_expand_f_of_x_plus_h_correctly",
+            "confuses_average_rate_of_change_with_instantaneous_rate",
+            "drops_h_terms_before_taking_limit"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -80,6 +110,12 @@
             "Determine whether a function is differentiable at a point",
             "Explain why differentiability implies continuity but not the converse",
             "Identify points where a function fails to be differentiable (corners, cusps, vertical tangents)"
+          ],
+          "error_patterns": [
+            "assumes_continuity_implies_differentiability",
+            "fails_to_check_left_and_right_derivatives_at_corners",
+            "confuses_vertical_tangent_with_no_tangent",
+            "assumes_differentiable_everywhere_if_formula_exists"
           ],
           "difficulty_tier": 2
         },
@@ -92,6 +128,12 @@
             "Differentiate sums and differences of functions",
             "Differentiate polynomial and simple radical functions efficiently"
           ],
+          "error_patterns": [
+            "applies_power_rule_to_exponential_functions",
+            "forgets_to_rewrite_radicals_as_fractional_exponents",
+            "drops_constant_multiplier_during_differentiation",
+            "subtracts_one_from_coefficient_instead_of_exponent"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -102,6 +144,12 @@
             "Interpret the derivative in applied contexts (velocity, marginal cost, growth rate)",
             "Distinguish between average and instantaneous rates of change",
             "Use units to verify and interpret derivative calculations"
+          ],
+          "error_patterns": [
+            "confuses_position_with_velocity_or_velocity_with_acceleration",
+            "ignores_units_when_interpreting_derivative",
+            "computes_average_rate_when_instantaneous_is_asked",
+            "misinterprets_sign_of_derivative_in_context"
           ],
           "difficulty_tier": 1
         }
@@ -121,6 +169,12 @@
             "Derive and apply the quotient rule for differentiation",
             "Differentiate functions requiring both product and quotient rules"
           ],
+          "error_patterns": [
+            "multiplies_derivatives_instead_of_applying_product_rule",
+            "reverses_subtraction_order_in_quotient_rule_numerator",
+            "forgets_to_square_denominator_in_quotient_rule",
+            "applies_quotient_rule_when_simple_rewrite_suffices"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -131,6 +185,12 @@
             "Prove that lim(sin x / x) = 1 as x → 0 using the Squeeze Theorem",
             "Differentiate all six trigonometric functions",
             "Apply differentiation rules to expressions involving trigonometric functions"
+          ],
+          "error_patterns": [
+            "confuses_derivative_of_sin_with_negative_cos",
+            "forgets_negative_sign_in_derivative_of_cos",
+            "mixes_up_derivatives_of_sec_csc_cot",
+            "assumes_sin_x_over_x_limit_works_for_nonzero_arguments"
           ],
           "difficulty_tier": 2
         },
@@ -143,6 +203,12 @@
             "Differentiate nested compositions requiring multiple applications of the chain rule",
             "Combine the chain rule with product, quotient, and trigonometric differentiation rules"
           ],
+          "error_patterns": [
+            "forgets_chain_rule_inner_derivative",
+            "applies_chain_rule_to_non_composite_functions",
+            "stops_after_one_layer_in_nested_compositions",
+            "confuses_chain_rule_with_product_rule"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -154,6 +220,12 @@
             "Find the slope of the tangent line to an implicitly defined curve at a given point",
             "Apply implicit differentiation to equations involving trigonometric and exponential functions"
           ],
+          "error_patterns": [
+            "forgets_dy_dx_factor_when_differentiating_y_terms",
+            "treats_y_as_a_constant_during_differentiation",
+            "fails_to_apply_product_rule_to_xy_terms",
+            "substitutes_point_before_solving_for_dy_dx"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -164,6 +236,12 @@
             "Derive the formula for the derivative of an inverse function",
             "Differentiate inverse trigonometric functions (arcsin, arccos, arctan)",
             "Apply these derivatives in combination with other differentiation rules"
+          ],
+          "error_patterns": [
+            "confuses_derivative_of_arcsin_with_arccos_sign",
+            "forgets_absolute_value_in_derivative_of_arcsec",
+            "omits_chain_rule_when_differentiating_arctan_of_expression",
+            "inverts_the_derivative_formula_for_inverse_functions"
           ],
           "difficulty_tier": 2
         }
@@ -183,6 +261,12 @@
             "Differentiate functions of the form aˣ and e^{g(x)} using the chain rule",
             "Apply exponential derivatives to growth and decay models"
           ],
+          "error_patterns": [
+            "applies_power_rule_to_e_to_the_x",
+            "forgets_ln_a_factor_when_differentiating_a_to_the_x",
+            "omits_chain_rule_for_e_to_the_g_of_x",
+            "confuses_x_e_x_with_e_to_the_x_derivative"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -193,6 +277,12 @@
             "Differentiate ln x and log_a x",
             "Apply logarithmic differentiation to products, quotients, and powers",
             "Differentiate functions of the form [f(x)]^{g(x)} using logarithmic differentiation"
+          ],
+          "error_patterns": [
+            "forgets_change_of_base_factor_for_log_base_a",
+            "omits_chain_rule_inner_derivative_for_ln_of_expression",
+            "fails_to_take_ln_of_both_sides_for_variable_exponent",
+            "confuses_d_dx_ln_x_with_1_over_ln_x"
           ],
           "difficulty_tier": 2
         }
@@ -212,6 +302,12 @@
             "Apply implicit differentiation with respect to time to relate rates",
             "Solve classic related rates problems (expanding circles, ladder, conical tank)"
           ],
+          "error_patterns": [
+            "substitutes_known_values_before_differentiating",
+            "forgets_to_differentiate_with_respect_to_time",
+            "omits_chain_rule_when_differentiating_geometric_formula",
+            "confuses_rate_of_change_with_static_quantity"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -223,6 +319,12 @@
             "Use linear approximation to estimate function values near a known point",
             "Define differentials dx and dy and use them to estimate error propagation"
           ],
+          "error_patterns": [
+            "uses_wrong_base_point_for_linearization",
+            "confuses_dy_with_delta_y",
+            "forgets_to_evaluate_derivative_at_base_point",
+            "applies_linear_approximation_far_from_base_point"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -233,6 +335,12 @@
             "Apply L'Hopital's Rule to indeterminate forms 0/0 and ∞/∞",
             "Convert indeterminate forms 0·∞, ∞ − ∞, 0⁰, 1^∞, ∞⁰ to apply L'Hopital's Rule",
             "Recognize when L'Hopital's Rule does not apply or leads to circular reasoning"
+          ],
+          "error_patterns": [
+            "applies_lhopitals_rule_to_non_indeterminate_forms",
+            "differentiates_as_quotient_rule_instead_of_separately",
+            "fails_to_convert_product_to_quotient_before_applying",
+            "applies_lhopitals_rule_in_infinite_loop_without_recognizing"
           ],
           "difficulty_tier": 2
         }
@@ -252,6 +360,12 @@
             "Find critical points by setting the derivative equal to zero or identifying where it is undefined",
             "Find absolute extrema on a closed interval using the Candidates Test"
           ],
+          "error_patterns": [
+            "forgets_to_check_endpoints_for_absolute_extrema",
+            "ignores_points_where_derivative_is_undefined",
+            "assumes_every_critical_point_is_an_extremum",
+            "applies_extreme_value_theorem_on_open_interval"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -262,6 +376,12 @@
             "State the Mean Value Theorem and its hypothesis",
             "Find the value c guaranteed by the Mean Value Theorem",
             "Apply Rolle's Theorem as a special case of the Mean Value Theorem"
+          ],
+          "error_patterns": [
+            "applies_mvt_without_checking_continuity_and_differentiability",
+            "confuses_mvt_conclusion_with_extreme_value_theorem",
+            "solves_for_c_outside_the_open_interval",
+            "forgets_rolles_theorem_requires_equal_endpoint_values"
           ],
           "difficulty_tier": 2
         },
@@ -274,6 +394,12 @@
             "Determine intervals of increase and decrease using the first derivative",
             "Apply the second derivative test to classify critical points and determine concavity"
           ],
+          "error_patterns": [
+            "confuses_concavity_with_increasing_decreasing",
+            "assumes_second_derivative_zero_means_inflection_point",
+            "reverses_sign_interpretation_in_first_derivative_test",
+            "forgets_second_derivative_test_is_inconclusive_when_zero"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -285,6 +411,12 @@
             "Identify and label all key features on a curve sketch",
             "Relate the graphs of f, f', and f'' to each other"
           ],
+          "error_patterns": [
+            "misreads_f_prime_graph_as_f_graph",
+            "omits_inflection_points_when_sketching",
+            "fails_to_check_end_behavior_from_limits_at_infinity",
+            "draws_sharp_corners_where_function_is_smooth"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -295,6 +427,12 @@
             "Set up an optimization problem by expressing the objective function in terms of one variable",
             "Apply the closed interval method or first/second derivative test to find optimal values",
             "Solve classic optimization problems (maximum area, minimum distance, minimum cost)"
+          ],
+          "error_patterns": [
+            "fails_to_eliminate_variable_using_constraint_equation",
+            "finds_critical_point_but_does_not_verify_max_or_min",
+            "ignores_domain_restrictions_from_physical_context",
+            "optimizes_wrong_quantity_from_problem_statement"
           ],
           "difficulty_tier": 3
         }
@@ -314,6 +452,12 @@
             "Apply initial conditions to find particular antiderivatives",
             "Relate antiderivatives to indefinite integrals and the +C convention"
           ],
+          "error_patterns": [
+            "forgets_constant_of_integration",
+            "uses_power_rule_exponent_adjustment_in_reverse_incorrectly",
+            "confuses_antiderivative_of_1_over_x_with_ln_abs_x",
+            "applies_derivative_rules_instead_of_antiderivative_rules"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -325,6 +469,12 @@
             "Express the exact area as the limit of a Riemann sum as n → ∞",
             "Interpret sigma notation in the context of Riemann sums"
           ],
+          "error_patterns": [
+            "uses_wrong_sample_points_for_left_vs_right_sums",
+            "confuses_delta_x_with_number_of_subintervals",
+            "forgets_to_take_limit_as_n_approaches_infinity",
+            "miscalculates_subinterval_width_for_non_unit_intervals"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -335,6 +485,12 @@
             "Define the definite integral as the limit of Riemann sums",
             "Apply properties of definite integrals (linearity, additivity, order)",
             "Evaluate definite integrals using geometry when the integrand has a simple shape"
+          ],
+          "error_patterns": [
+            "reverses_order_of_integration_bounds",
+            "confuses_definite_integral_with_antiderivative",
+            "ignores_sign_change_when_swapping_bounds",
+            "misapplies_additivity_property_over_non_adjacent_intervals"
           ],
           "difficulty_tier": 2
         }
@@ -354,6 +510,12 @@
             "Differentiate integral functions of the form F(x) = ∫[a to x] f(t) dt",
             "Apply FTC Part 1 with variable upper limits requiring the chain rule"
           ],
+          "error_patterns": [
+            "forgets_chain_rule_when_upper_limit_is_not_just_x",
+            "tries_to_antidifferentiate_instead_of_applying_ftc_directly",
+            "confuses_variable_of_integration_with_bound_variable",
+            "ignores_sign_when_variable_is_in_lower_bound"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -365,6 +527,12 @@
             "Evaluate definite integrals using antiderivatives",
             "Compute net area and total area using definite integrals"
           ],
+          "error_patterns": [
+            "confuses_net_area_with_total_area",
+            "forgets_to_evaluate_antiderivative_at_both_bounds",
+            "adds_constant_of_integration_to_definite_integral",
+            "subtracts_bounds_in_wrong_order"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -375,6 +543,12 @@
             "Interpret the definite integral as net change (displacement, total growth, accumulated quantity)",
             "Distinguish between displacement and total distance traveled",
             "Apply the net change theorem to real-world rate functions"
+          ],
+          "error_patterns": [
+            "confuses_displacement_with_total_distance_traveled",
+            "integrates_position_instead_of_velocity_for_displacement",
+            "forgets_to_take_absolute_value_for_total_distance",
+            "misinterprets_integral_of_rate_as_rate_itself"
           ],
           "difficulty_tier": 2
         }
@@ -394,6 +568,12 @@
             "Choose an effective substitution by identifying the inner function of a composition",
             "Adjust limits of integration when applying substitution to definite integrals"
           ],
+          "error_patterns": [
+            "forgets_to_change_bounds_when_substituting_in_definite_integral",
+            "fails_to_account_for_du_factor_correctly",
+            "chooses_substitution_that_does_not_simplify_integrand",
+            "back_substitutes_after_already_converting_bounds"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -404,6 +584,12 @@
             "Derive integration by parts from the product rule",
             "Apply integration by parts using the LIATE guideline for choosing u and dv",
             "Handle repeated integration by parts and tabular integration"
+          ],
+          "error_patterns": [
+            "chooses_u_and_dv_in_suboptimal_order",
+            "forgets_to_include_integration_constant_in_v",
+            "fails_to_recognize_cyclic_integration_by_parts",
+            "drops_negative_sign_in_repeated_integration_by_parts"
           ],
           "difficulty_tier": 2
         },
@@ -416,6 +602,12 @@
             "Evaluate integrals involving powers of tangent and secant",
             "Apply half-angle and power-reducing identities to integration"
           ],
+          "error_patterns": [
+            "uses_wrong_trig_identity_for_power_reduction",
+            "forgets_to_split_off_one_factor_for_substitution",
+            "misapplies_pythagorean_identity_direction",
+            "confuses_strategy_for_odd_vs_even_powers"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -426,6 +618,12 @@
             "Identify when to use x = a sin θ, x = a tan θ, or x = a sec θ substitutions",
             "Evaluate integrals involving √(a² − x²), √(a² + x²), and √(x² − a²)",
             "Convert back to the original variable using right-triangle diagrams"
+          ],
+          "error_patterns": [
+            "selects_wrong_trig_substitution_for_radical_form",
+            "forgets_to_convert_dx_in_terms_of_d_theta",
+            "makes_error_in_back_substitution_triangle",
+            "omits_absolute_value_when_simplifying_radical"
           ],
           "difficulty_tier": 3
         }
@@ -445,6 +643,12 @@
             "Handle repeated factors in partial fraction decomposition",
             "Integrate rational functions using partial fractions"
           ],
+          "error_patterns": [
+            "forgets_to_perform_long_division_for_improper_fractions",
+            "uses_wrong_form_for_irreducible_quadratic_numerator",
+            "omits_terms_for_repeated_linear_factors",
+            "incorrectly_factors_denominator_missing_irreducible_quadratic"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -456,6 +660,12 @@
             "Evaluate improper integrals with integrand discontinuities",
             "Determine whether an improper integral converges or diverges using direct evaluation and comparison"
           ],
+          "error_patterns": [
+            "evaluates_improper_integral_without_limit_notation",
+            "misses_interior_discontinuity_and_integrates_straight_through",
+            "applies_comparison_test_with_wrong_inequality_direction",
+            "assumes_integral_converges_because_integrand_approaches_zero"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -466,6 +676,12 @@
             "Approximate definite integrals using the Trapezoidal Rule",
             "Approximate definite integrals using Simpson's Rule",
             "Estimate the error bound for numerical integration methods"
+          ],
+          "error_patterns": [
+            "uses_wrong_coefficients_in_simpsons_rule_pattern",
+            "miscalculates_step_size_h_from_n_subintervals",
+            "confuses_error_bound_formulas_for_trapezoid_and_simpson",
+            "applies_simpsons_rule_with_odd_number_of_subintervals"
           ],
           "difficulty_tier": 2
         }
@@ -485,6 +701,12 @@
             "Determine the appropriate variable of integration (dx or dy) for area problems",
             "Handle regions requiring multiple integrals due to crossing curves"
           ],
+          "error_patterns": [
+            "subtracts_curves_in_wrong_order_giving_negative_area",
+            "uses_wrong_intersection_points_as_bounds",
+            "integrates_with_respect_to_wrong_variable",
+            "fails_to_split_integral_where_curves_cross"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -495,6 +717,12 @@
             "Derive and apply the disk method for volumes of revolution about the x-axis and y-axis",
             "Derive and apply the washer method when a region is revolved about an axis",
             "Set up volume integrals for revolution about lines other than the coordinate axes"
+          ],
+          "error_patterns": [
+            "forgets_pi_factor_in_disk_or_washer_formula",
+            "confuses_inner_and_outer_radius_in_washer_method",
+            "subtracts_radii_instead_of_subtracting_squared_radii",
+            "fails_to_adjust_radius_for_non_axis_revolution"
           ],
           "difficulty_tier": 2
         },
@@ -507,6 +735,12 @@
             "Choose between disk/washer and shell methods based on the geometry of the region",
             "Set up shell integrals for revolution about vertical and horizontal axes"
           ],
+          "error_patterns": [
+            "forgets_2_pi_factor_in_shell_method",
+            "uses_wrong_expression_for_shell_radius",
+            "confuses_shell_height_with_shell_radius",
+            "integrates_with_respect_to_wrong_variable_for_chosen_axis"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -517,6 +751,12 @@
             "Compute volumes of solids with known cross-sectional shapes (squares, triangles, semicircles)",
             "Set up the integral for volume as the integral of cross-sectional area",
             "Visualize three-dimensional solids from two-dimensional cross-section descriptions"
+          ],
+          "error_patterns": [
+            "uses_diameter_instead_of_side_length_for_cross_section",
+            "applies_wrong_area_formula_for_cross_sectional_shape",
+            "confuses_cross_section_perpendicular_direction",
+            "forgets_factor_of_one_half_for_semicircular_cross_sections"
           ],
           "difficulty_tier": 2
         }
@@ -536,6 +776,12 @@
             "Compute arc length of a curve y = f(x) over an interval",
             "Set up arc length integrals for parametrically defined curves"
           ],
+          "error_patterns": [
+            "forgets_the_one_under_the_square_root_in_arc_length",
+            "squares_derivative_incorrectly_in_arc_length_formula",
+            "confuses_arc_length_formula_with_surface_area_formula",
+            "uses_delta_x_instead_of_ds_element"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -546,6 +792,12 @@
             "Derive the formula for surface area of a solid of revolution",
             "Compute the surface area generated by revolving a curve about the x-axis or y-axis",
             "Evaluate or set up surface area integrals for given curves"
+          ],
+          "error_patterns": [
+            "forgets_2_pi_r_factor_in_surface_area_formula",
+            "uses_wrong_radius_variable_for_axis_of_revolution",
+            "omits_arc_length_element_ds_in_surface_area_integral",
+            "confuses_surface_area_formula_with_volume_formula"
           ],
           "difficulty_tier": 3
         },
@@ -558,6 +810,12 @@
             "Solve spring, pumping, and lifting problems using integration",
             "Calculate fluid pressure and fluid force on a submerged surface"
           ],
+          "error_patterns": [
+            "uses_constant_force_formula_instead_of_integral_for_variable_force",
+            "sets_up_wrong_distance_expression_in_pumping_problems",
+            "forgets_weight_density_factor_in_fluid_force",
+            "confuses_depth_with_height_in_pumping_work_problems"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -568,6 +826,12 @@
             "Compute the centroid of a planar region using integration",
             "Apply the moment formulas Mx and My for a lamina of uniform density",
             "Apply Pappus' theorem to find volumes and surface areas of revolution"
+          ],
+          "error_patterns": [
+            "swaps_moment_about_x_axis_with_moment_about_y_axis",
+            "forgets_one_half_factor_in_moment_mx_formula",
+            "divides_by_wrong_quantity_when_computing_centroid",
+            "misapplies_pappus_theorem_using_wrong_centroid_distance"
           ],
           "difficulty_tier": 3
         }
@@ -587,6 +851,12 @@
             "Apply the Monotone Convergence Theorem for bounded monotonic sequences",
             "Compute limits of sequences using algebraic techniques and L'Hopital's Rule"
           ],
+          "error_patterns": [
+            "confuses_sequence_convergence_with_series_convergence",
+            "applies_lhopitals_rule_to_discrete_sequence_directly",
+            "assumes_bounded_sequence_must_converge_without_monotonicity",
+            "confuses_limit_of_sequence_with_limit_of_partial_sums"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -598,6 +868,12 @@
             "Apply the divergence test, integral test, and p-series test",
             "Apply the comparison test and limit comparison test"
           ],
+          "error_patterns": [
+            "uses_divergence_test_to_conclude_convergence",
+            "confuses_p_series_convergence_threshold_p_greater_than_1",
+            "applies_integral_test_to_non_positive_decreasing_function",
+            "chooses_wrong_comparison_series_in_limit_comparison_test"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -608,6 +884,12 @@
             "Apply the alternating series test and estimate the remainder",
             "Distinguish between absolute and conditional convergence",
             "Apply the ratio test and root test for absolute convergence"
+          ],
+          "error_patterns": [
+            "confuses_absolute_convergence_with_conditional_convergence",
+            "forgets_to_check_decreasing_condition_in_alternating_series_test",
+            "misinterprets_ratio_test_result_of_one_as_convergent",
+            "applies_alternating_series_test_when_terms_do_not_alternate"
           ],
           "difficulty_tier": 3
         }
@@ -627,6 +909,12 @@
             "Determine the radius and interval of convergence using the ratio or root test",
             "Check convergence at the endpoints of the interval"
           ],
+          "error_patterns": [
+            "forgets_to_check_endpoint_convergence_separately",
+            "confuses_radius_of_convergence_with_interval_of_convergence",
+            "uses_center_of_series_incorrectly_in_ratio_test",
+            "assumes_convergence_at_endpoints_without_testing"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -637,6 +925,12 @@
             "Derive the Taylor series of a function centered at a given point",
             "Write Maclaurin series for eˣ, sin x, cos x, and 1/(1−x)",
             "Use known series to derive new series by substitution, differentiation, or integration"
+          ],
+          "error_patterns": [
+            "uses_wrong_factorial_in_taylor_coefficient",
+            "forgets_to_evaluate_derivatives_at_center_point",
+            "confuses_maclaurin_series_of_sin_and_cos",
+            "substitutes_into_known_series_without_adjusting_convergence_interval"
           ],
           "difficulty_tier": 2
         },
@@ -649,6 +943,12 @@
             "Apply Taylor's inequality (Lagrange remainder) to bound the error of approximation",
             "Determine how many terms are needed for a desired accuracy"
           ],
+          "error_patterns": [
+            "uses_nth_derivative_instead_of_n_plus_1_in_remainder",
+            "fails_to_maximize_remainder_term_over_interval",
+            "confuses_degree_of_polynomial_with_number_of_terms",
+            "evaluates_remainder_at_center_instead_of_maximizing"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -659,6 +959,12 @@
             "Use power series to evaluate integrals that have no closed-form antiderivative",
             "Use power series to solve limits and differential equations",
             "Represent special functions (Bessel functions preview) as power series"
+          ],
+          "error_patterns": [
+            "integrates_power_series_term_by_term_outside_convergence_interval",
+            "forgets_to_update_convergence_radius_after_differentiation",
+            "substitutes_series_incorrectly_when_solving_differential_equation",
+            "confuses_series_representation_with_closed_form_solution"
           ],
           "difficulty_tier": 3
         }

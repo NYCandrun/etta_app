@@ -19,6 +19,12 @@
             "Perform elementary row operations on an augmented matrix",
             "Classify systems as consistent (unique or infinite solutions) or inconsistent"
           ],
+          "error_patterns": [
+            "forgets_augmentation_bar_when_forming_matrix",
+            "confuses_inconsistent_with_infinite_solutions",
+            "applies_row_operations_to_only_part_of_row",
+            "mistakes_coefficient_signs_when_building_augmented_matrix"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Reduce an augmented matrix to row echelon form (REF) using Gaussian elimination",
             "Reduce to reduced row echelon form (RREF) using Gauss-Jordan elimination",
             "Identify pivot positions, free variables, and express solutions parametrically"
+          ],
+          "error_patterns": [
+            "confuses_ref_with_rref",
+            "forgets_to_check_zero_pivot",
+            "misidentifies_free_variables_as_pivot_variables",
+            "drops_parametric_parameter_when_writing_solution_set"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Compute the transpose of a matrix and identify symmetric matrices",
             "Verify that matrix multiplication is associative but not commutative"
           ],
+          "error_patterns": [
+            "treats_matrix_multiplication_as_commutative",
+            "multiplies_matrices_element_wise_instead_of_row_times_column",
+            "ignores_dimension_mismatch_in_matrix_multiplication",
+            "confuses_transpose_of_product_with_product_of_transposes_in_same_order"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -51,6 +69,12 @@
             "Determine whether a square matrix is invertible",
             "Compute the inverse of a matrix using row reduction of [A | I]",
             "Solve linear systems Ax = b by computing x = A⁻¹b when A is invertible"
+          ],
+          "error_patterns": [
+            "applies_row_operations_to_only_left_half_of_augmented_identity",
+            "assumes_nonsquare_matrices_can_have_inverses",
+            "writes_inverse_as_one_over_matrix_entries",
+            "forgets_to_verify_invertibility_before_computing_inverse"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,12 @@
             "Apply properties of determinants (row operations, transpose, product rule)",
             "Use the determinant to test invertibility of a matrix"
           ],
+          "error_patterns": [
+            "swaps_sign_pattern_in_cofactor_expansion",
+            "thinks_det_of_sum_equals_sum_of_dets",
+            "forgets_sign_change_when_swapping_rows",
+            "uses_wrong_minor_by_not_deleting_correct_row_and_column"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -81,6 +111,12 @@
             "Compute the adjugate (classical adjoint) of a matrix",
             "Express the inverse of a matrix as A⁻¹ = (1/det A) adj A"
           ],
+          "error_patterns": [
+            "replaces_wrong_column_in_cramers_rule",
+            "forgets_to_transpose_cofactor_matrix_for_adjugate",
+            "applies_cramers_rule_when_determinant_is_zero",
+            "confuses_adjugate_with_inverse_without_dividing_by_det"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -91,6 +127,12 @@
             "Interpret the absolute value of the determinant as the scaling factor for area (2D) or volume (3D)",
             "Relate the sign of the determinant to orientation preservation or reversal",
             "Use determinants to compute the area of a parallelogram and the volume of a parallelepiped"
+          ],
+          "error_patterns": [
+            "forgets_absolute_value_when_computing_area_from_determinant",
+            "confuses_area_of_parallelogram_with_area_of_triangle",
+            "ignores_sign_of_determinant_when_determining_orientation",
+            "uses_dot_product_instead_of_cross_product_for_volume"
           ],
           "difficulty_tier": 2
         }
@@ -110,6 +152,12 @@
             "Verify whether a given set with operations is a vector space",
             "Determine whether a subset of a vector space is a subspace"
           ],
+          "error_patterns": [
+            "forgets_to_check_zero_vector_in_subspace_test",
+            "checks_only_addition_closure_but_not_scalar_multiplication",
+            "confuses_vector_space_axioms_with_subspace_criteria",
+            "assumes_all_subsets_of_vector_spaces_are_subspaces"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -121,6 +169,12 @@
             "Determine whether a vector is in the span of a given set",
             "Find a basis for a vector space or subspace"
           ],
+          "error_patterns": [
+            "confuses_linear_independence_with_orthogonality",
+            "thinks_spanning_set_must_be_linearly_independent",
+            "includes_redundant_vectors_in_basis",
+            "forgets_that_zero_vector_makes_set_linearly_dependent"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -131,6 +185,12 @@
             "Determine the dimension of a vector space from a basis",
             "Compute the rank (dimension of column space) and nullity (dimension of null space) of a matrix",
             "Apply the Rank-Nullity Theorem: rank(A) + nullity(A) = n"
+          ],
+          "error_patterns": [
+            "confuses_rank_with_number_of_rows_instead_of_pivots",
+            "uses_number_of_columns_instead_of_rows_in_rank_nullity",
+            "counts_zero_rows_in_ref_as_contributing_to_rank",
+            "confuses_dimension_of_space_with_number_of_vectors_in_spanning_set"
           ],
           "difficulty_tier": 2
         },

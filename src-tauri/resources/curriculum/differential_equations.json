@@ -19,6 +19,12 @@
             "Identify the dependent and independent variables in a differential equation",
             "Verify that a given function is a solution to a differential equation"
           ],
+          "error_patterns": [
+            "confuses_order_with_degree_of_differential_equation",
+            "misidentifies_nonlinear_equation_as_linear",
+            "swaps_dependent_and_independent_variables",
+            "forgets_to_substitute_all_derivatives_when_verifying_solution"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -30,6 +36,12 @@
             "Trace solution curves through the direction field from given initial conditions",
             "Identify equilibrium solutions from a direction field"
           ],
+          "error_patterns": [
+            "draws_slope_segments_with_wrong_sign",
+            "traces_solution_curve_crossing_other_solution_curves",
+            "fails_to_identify_equilibrium_where_dy_dx_equals_zero",
+            "confuses_isoclines_with_solution_curves"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -40,6 +52,12 @@
             "State the Picard-Lindelof existence and uniqueness theorem for first-order IVPs",
             "Identify conditions under which uniqueness may fail",
             "Apply the theorem to determine whether a given IVP has a unique solution"
+          ],
+          "error_patterns": [
+            "checks_continuity_of_f_but_not_partial_f_partial_y",
+            "assumes_existence_implies_uniqueness",
+            "applies_theorem_at_point_outside_region_of_continuity",
+            "concludes_no_solution_exists_when_only_uniqueness_fails"
           ],
           "difficulty_tier": 2
         }
@@ -59,6 +77,12 @@
             "Handle implicit solutions and determine explicit solutions when possible",
             "Solve initial value problems for separable equations"
           ],
+          "error_patterns": [
+            "divides_by_expression_that_could_be_zero_losing_solutions",
+            "fails_to_separate_variables_completely_before_integrating",
+            "forgets_constant_of_integration_before_applying_initial_condition",
+            "cannot_identify_equation_as_separable_when_not_in_standard_form"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -69,6 +93,12 @@
             "Identify first-order linear equations in standard form dy/dx + P(x)y = Q(x)",
             "Solve using the integrating factor method",
             "Solve initial value problems for first-order linear equations"
+          ],
+          "error_patterns": [
+            "forgets_to_put_equation_in_standard_form_before_finding_integrating_factor",
+            "computes_integrating_factor_with_wrong_sign_in_exponent",
+            "omits_integrating_factor_on_right_hand_side",
+            "confuses_integrating_factor_method_with_separation_of_variables"
           ],
           "difficulty_tier": 1
         },
@@ -81,6 +111,12 @@
             "Solve exact differential equations by finding the potential function",
             "Find integrating factors to convert non-exact equations to exact form"
           ],
+          "error_patterns": [
+            "swaps_partial_derivative_checks_for_exactness_condition",
+            "forgets_arbitrary_function_of_y_when_integrating_m_with_respect_to_x",
+            "fails_to_determine_arbitrary_function_using_second_equation",
+            "applies_exactness_method_without_verifying_exactness_condition"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -91,6 +127,12 @@
             "Solve homogeneous first-order equations using the substitution v = y/x",
             "Solve Bernoulli equations using the substitution w = y^{1−n}",
             "Identify which substitution technique applies to a given equation"
+          ],
+          "error_patterns": [
+            "uses_wrong_exponent_in_bernoulli_substitution",
+            "forgets_to_substitute_dy_in_terms_of_dv_and_dx",
+            "misidentifies_equation_as_homogeneous_when_degrees_differ",
+            "fails_to_convert_back_to_original_variable_after_solving"
           ],
           "difficulty_tier": 2
         }
@@ -110,6 +152,12 @@
             "Model logistic growth and determine carrying capacity and inflection point",
             "Set up and solve mixing problems involving inflow and outflow rates"
           ],
+          "error_patterns": [
+            "uses_wrong_sign_for_decay_constant",
+            "confuses_half_life_with_time_constant",
+            "sets_up_mixing_rate_as_inflow_minus_outflow_with_wrong_concentration",
+            "forgets_that_logistic_inflection_occurs_at_half_carrying_capacity"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -121,6 +169,12 @@
             "Model simple electric circuits (RC circuits) with first-order linear ODEs",
             "Set up and solve free-fall with air resistance as a first-order ODE"
           ],
+          "error_patterns": [
+            "uses_wrong_sign_convention_in_newtons_cooling_law",
+            "confuses_ambient_temperature_with_initial_temperature",
+            "omits_resistance_term_in_rc_circuit_equation",
+            "forgets_that_terminal_velocity_occurs_when_acceleration_is_zero"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -131,6 +185,12 @@
             "Apply Euler's method to approximate solutions of first-order IVPs",
             "Analyze the effect of step size on the accuracy of Euler's method",
             "Apply the improved Euler method (Heun's method) for better accuracy"
+          ],
+          "error_patterns": [
+            "uses_slope_at_new_point_instead_of_current_point",
+            "confuses_step_size_h_with_number_of_steps",
+            "accumulates_rounding_errors_without_awareness",
+            "applies_heuns_method_without_averaging_the_two_slopes"
           ],
           "difficulty_tier": 2
         }
@@ -150,6 +210,12 @@
             "Handle distinct real, repeated real, and complex conjugate roots",
             "Write the general solution using appropriate basis functions (exponentials, sines, cosines)"
           ],
+          "error_patterns": [
+            "forgets_te_rt_term_for_repeated_roots",
+            "writes_complex_solution_without_converting_to_sin_cos_form",
+            "sets_up_characteristic_equation_with_wrong_coefficients",
+            "omits_second_linearly_independent_solution"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -160,6 +226,12 @@
             "Compute the Wronskian of two solutions",
             "Use the Wronskian to test for linear independence of solutions",
             "Apply Abel's theorem to relate the Wronskian to the coefficients of the ODE"
+          ],
+          "error_patterns": [
+            "computes_wronskian_determinant_with_wrong_row_arrangement",
+            "concludes_linear_dependence_from_wronskian_zero_at_single_point",
+            "confuses_wronskian_test_with_general_linear_independence",
+            "misapplies_abels_theorem_with_wrong_coefficient_function"
           ],
           "difficulty_tier": 2
         },
@@ -172,6 +244,12 @@
             "Apply the method of undetermined coefficients for polynomial, exponential, and sinusoidal forcing",
             "Handle cases where the particular solution form duplicates a homogeneous solution"
           ],
+          "error_patterns": [
+            "confuses_particular_and_general_solution",
+            "forgets_to_multiply_by_t_when_guess_duplicates_homogeneous_solution",
+            "omits_lower_degree_terms_in_polynomial_guess",
+            "uses_wrong_form_for_sinusoidal_forcing_with_both_sin_and_cos"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -182,6 +260,12 @@
             "Derive the variation of parameters formulas for second-order linear ODEs",
             "Apply variation of parameters to solve equations with arbitrary forcing functions",
             "Compare undetermined coefficients and variation of parameters in terms of applicability"
+          ],
+          "error_patterns": [
+            "forgets_to_divide_by_leading_coefficient_to_normalize_equation",
+            "swaps_u1_and_u2_formulas_in_variation_of_parameters",
+            "makes_sign_error_in_wronskian_based_integral_formulas",
+            "omits_homogeneous_solution_when_writing_general_solution"
           ],
           "difficulty_tier": 3
         }
@@ -201,6 +285,12 @@
             "Solve undamped, underdamped, critically damped, and overdamped free vibration problems",
             "Express solutions in amplitude-phase form and interpret physical behavior"
           ],
+          "error_patterns": [
+            "confuses_underdamped_with_overdamped_solution_form",
+            "uses_wrong_sign_for_damping_or_spring_force",
+            "fails_to_convert_to_amplitude_phase_form_correctly",
+            "misidentifies_natural_frequency_vs_damped_frequency"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -212,6 +302,12 @@
             "Identify and analyze resonance when the driving frequency matches the natural frequency",
             "Analyze steady-state and transient responses in damped forced systems"
           ],
+          "error_patterns": [
+            "assumes_resonance_occurs_at_natural_frequency_in_damped_systems",
+            "confuses_transient_and_steady_state_parts_of_solution",
+            "forgets_to_multiply_particular_solution_by_t_at_resonance",
+            "ignores_phase_shift_in_forced_response"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -222,6 +318,12 @@
             "Derive the ODE governing a series RLC circuit using Kirchhoff's voltage law",
             "Solve for current and charge in free and forced RLC circuits",
             "Draw the analogy between mechanical and electrical oscillating systems"
+          ],
+          "error_patterns": [
+            "confuses_charge_and_current_as_dependent_variable",
+            "misapplies_kirchhoffs_voltage_law_sign_convention",
+            "swaps_inductance_and_capacitance_roles_in_analogy",
+            "forgets_derivative_relationship_between_charge_and_current"
           ],
           "difficulty_tier": 2
         }
@@ -241,6 +343,12 @@
             "Apply linearity and the transforms of elementary functions (eᵃᵗ, tⁿ, sin, cos)",
             "Apply the first and second shifting theorems"
           ],
+          "error_patterns": [
+            "forgets_convergence_condition_on_s_for_laplace_integral",
+            "confuses_first_shifting_with_second_shifting_theorem",
+            "applies_wrong_sign_in_exponential_shift",
+            "fails_to_recognize_transform_as_improper_integral"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -251,6 +359,12 @@
             "Compute inverse Laplace transforms using tables and partial fraction decomposition",
             "Apply the convolution theorem to find inverse transforms",
             "Handle transforms involving s-shifting and t-shifting"
+          ],
+          "error_patterns": [
+            "performs_partial_fractions_incorrectly_in_s_domain",
+            "confuses_convolution_integral_bounds",
+            "misidentifies_table_entry_for_inverse_transform",
+            "forgets_unit_step_factor_when_applying_t_shifting"
           ],
           "difficulty_tier": 2
         },
@@ -263,6 +377,12 @@
             "Solve second-order constant-coefficient IVPs using Laplace transforms",
             "Handle discontinuous forcing functions using the unit step function"
           ],
+          "error_patterns": [
+            "forgets_initial_condition_terms_when_transforming_derivatives",
+            "makes_algebraic_error_solving_for_y_of_s",
+            "incorrectly_expresses_piecewise_function_in_terms_of_unit_steps",
+            "omits_s_times_y0_term_in_second_derivative_transform"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -273,6 +393,12 @@
             "Define the Dirac delta function as a limit of unit impulse functions",
             "Compute the Laplace transform of the delta function",
             "Solve IVPs with impulsive forcing using delta functions"
+          ],
+          "error_patterns": [
+            "treats_delta_function_as_ordinary_function_in_integrals",
+            "forgets_exponential_factor_in_laplace_of_shifted_delta",
+            "confuses_delta_function_with_unit_step_function",
+            "misapplies_sifting_property_with_wrong_evaluation_point"
           ],
           "difficulty_tier": 3
         }
@@ -292,6 +418,12 @@
             "Sketch phase portraits for two-dimensional linear systems",
             "Classify equilibrium points from the phase portrait"
           ],
+          "error_patterns": [
+            "introduces_extra_variables_when_converting_to_system",
+            "draws_trajectories_with_wrong_direction_arrows",
+            "confuses_phase_portrait_with_solution_graph_over_time",
+            "misclassifies_equilibrium_type_from_portrait"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -303,6 +435,12 @@
             "Handle real distinct, complex, and repeated eigenvalue cases",
             "Classify equilibrium points as nodes, spirals, or saddles based on eigenvalue type"
           ],
+          "error_patterns": [
+            "computes_eigenvalues_but_finds_wrong_eigenvectors",
+            "omits_generalized_eigenvector_for_repeated_eigenvalue_case",
+            "fails_to_convert_complex_eigenvalue_solution_to_real_form",
+            "confuses_stable_and_unstable_node_based_on_eigenvalue_sign"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -313,6 +451,12 @@
             "Find equilibrium points of nonlinear autonomous systems",
             "Linearize a nonlinear system at an equilibrium point using the Jacobian",
             "Assess stability of equilibrium points using eigenvalues of the Jacobian"
+          ],
+          "error_patterns": [
+            "computes_jacobian_matrix_entries_with_wrong_partial_derivatives",
+            "evaluates_jacobian_at_wrong_equilibrium_point",
+            "concludes_stability_from_linearization_in_borderline_case",
+            "finds_only_trivial_equilibrium_and_misses_nontrivial_ones"
           ],
           "difficulty_tier": 3
         }
@@ -332,6 +476,12 @@
             "Find the radius of convergence of the series solution",
             "Solve second-order ODEs near ordinary points using power series"
           ],
+          "error_patterns": [
+            "misaligns_index_when_shifting_summation_for_recurrence",
+            "forgets_to_match_powers_of_x_when_combining_series",
+            "confuses_ordinary_point_with_singular_point",
+            "drops_initial_terms_outside_summation"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -343,6 +493,12 @@
             "Apply the method of Frobenius to find series solutions y = xʳ Σ aₙ xⁿ",
             "Determine the indicial equation and handle cases of equal and differing roots"
           ],
+          "error_patterns": [
+            "misclassifies_irregular_singular_point_as_regular",
+            "sets_up_indicial_equation_with_wrong_coefficients",
+            "forgets_logarithmic_term_when_indicial_roots_differ_by_integer",
+            "omits_x_to_the_r_factor_in_frobenius_series"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -353,6 +509,12 @@
             "Derive Bessel's equation and identify Bessel functions of the first and second kind",
             "Derive Legendre's equation and identify Legendre polynomials",
             "Recognize the role of these special functions in physics and engineering applications"
+          ],
+          "error_patterns": [
+            "confuses_bessel_function_of_first_and_second_kind",
+            "misidentifies_order_of_bessel_equation_from_parameter",
+            "forgets_normalization_convention_for_legendre_polynomials",
+            "applies_bessel_recurrence_with_wrong_index_shift"
           ],
           "difficulty_tier": 3
         }

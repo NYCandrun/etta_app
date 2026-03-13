@@ -19,6 +19,12 @@
             "Place real numbers on a number line",
             "Identify the properties of real numbers: commutative, associative, distributive, identity, and inverse"
           ],
+          "error_patterns": [
+            "classifies_repeating_decimals_as_irrational",
+            "confuses_whole_numbers_with_natural_numbers_on_zero",
+            "thinks_negative_fractions_are_irrational",
+            "swaps_commutative_and_associative_properties"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Evaluate numerical expressions using the standard order of operations (PEMDAS)",
             "Simplify expressions containing nested grouping symbols",
             "Identify and correct common order-of-operations errors"
+          ],
+          "error_patterns": [
+            "evaluates_addition_before_multiplication",
+            "evaluates_left_to_right_ignoring_precedence",
+            "treats_multiplication_as_higher_precedence_than_division",
+            "ignores_innermost_grouping_symbols_first"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Interpret absolute value as distance from zero on the number line",
             "Calculate the distance between two points on a number line using absolute value"
           ],
+          "error_patterns": [
+            "applies_absolute_value_to_each_term_inside_separately",
+            "thinks_absolute_value_changes_sign_of_all_numbers",
+            "subtracts_coordinates_without_taking_absolute_value_for_distance",
+            "distributes_absolute_value_over_addition"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -52,6 +70,12 @@
             "Apply the product rule, quotient rule, and power rule for integer exponents",
             "Convert between standard notation and scientific notation"
           ],
+          "error_patterns": [
+            "confuses_negative_exponent_with_negative_base",
+            "multiplies_exponents_when_using_product_rule_instead_of_adding",
+            "thinks_zero_exponent_equals_zero",
+            "misplaces_decimal_in_scientific_notation_conversion"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -62,6 +86,12 @@
             "Add, subtract, multiply, and divide positive and negative rational numbers",
             "Apply the rules of signs in multi-step calculations",
             "Evaluate expressions involving combinations of signed-number operations"
+          ],
+          "error_patterns": [
+            "drops_negative_sign_in_subtraction_of_negative",
+            "thinks_negative_times_negative_is_negative",
+            "adds_magnitudes_instead_of_subtracting_when_signs_differ",
+            "loses_track_of_sign_in_chain_of_multiplications"
           ],
           "difficulty_tier": 1
         }
@@ -81,6 +111,12 @@
             "Evaluate algebraic expressions by substituting given values for variables",
             "Distinguish between expressions, equations, and identities"
           ],
+          "error_patterns": [
+            "reverses_order_of_subtraction_in_verbal_translation",
+            "forgets_to_substitute_negative_values_with_parentheses",
+            "confuses_expression_with_equation",
+            "translates_less_than_as_subtraction_in_wrong_order"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -91,6 +127,12 @@
             "Identify like terms in an algebraic expression",
             "Simplify expressions by combining like terms",
             "Rearrange and group terms to simplify multi-variable expressions"
+          ],
+          "error_patterns": [
+            "combines_terms_with_different_variable_parts",
+            "adds_exponents_when_combining_like_terms",
+            "combines_x_and_x_squared_as_like_terms",
+            "drops_coefficient_of_one_when_combining"
           ],
           "difficulty_tier": 1
         },
@@ -103,6 +145,12 @@
             "Combine distribution with like-term collection to simplify expressions",
             "Extend the distributive property to expressions with multiple grouping levels"
           ],
+          "error_patterns": [
+            "distributes_to_first_term_only_inside_parentheses",
+            "forgets_to_distribute_negative_sign_to_all_terms",
+            "multiplies_only_coefficients_and_ignores_variables",
+            "drops_terms_when_distributing_over_three_or_more_terms"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -113,6 +161,12 @@
             "Evaluate common formulas (area, perimeter, temperature conversion) for given inputs",
             "Rearrange simple formulas to solve for a specified variable",
             "Identify domain restrictions on formulas involving division or square roots"
+          ],
+          "error_patterns": [
+            "substitutes_values_into_wrong_variables_in_formula",
+            "applies_inverse_operations_in_wrong_order_when_rearranging",
+            "forgets_domain_restriction_for_denominator_equal_to_zero",
+            "confuses_area_and_perimeter_formulas"
           ],
           "difficulty_tier": 1
         }
@@ -132,6 +186,12 @@
             "Solve equations that require distribution and combining like terms",
             "Verify solutions by substituting back into the original equation"
           ],
+          "error_patterns": [
+            "applies_same_operation_instead_of_inverse",
+            "moves_term_to_other_side_without_changing_sign",
+            "forgets_to_distribute_before_combining_like_terms",
+            "divides_only_one_side_of_equation_by_coefficient"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -142,6 +202,12 @@
             "Clear fractions from an equation by multiplying by the least common denominator",
             "Solve equations containing decimal coefficients",
             "Determine whether an equation is conditional, an identity, or a contradiction"
+          ],
+          "error_patterns": [
+            "multiplies_only_some_terms_by_lcd_not_all",
+            "uses_wrong_lcd_for_fraction_clearing",
+            "misidentifies_identity_as_having_no_solution",
+            "misaligns_decimal_places_when_multiplying_to_clear"
           ],
           "difficulty_tier": 1
         },
@@ -154,6 +220,12 @@
             "Rearrange physics and geometry formulas to isolate any variable",
             "Apply formula rearrangement to unit-conversion and rate problems"
           ],
+          "error_patterns": [
+            "treats_other_variables_as_constants_incorrectly",
+            "fails_to_factor_target_variable_when_it_appears_in_multiple_terms",
+            "inverts_operation_order_when_isolating_variable",
+            "drops_coefficient_attached_to_target_variable"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -165,6 +237,12 @@
             "Solve mixture, rate, and consecutive-integer problems",
             "Interpret and validate the solution in the original problem context"
           ],
+          "error_patterns": [
+            "assigns_variable_to_wrong_unknown_quantity",
+            "sets_up_equation_with_operations_reversed",
+            "ignores_units_leading_to_inconsistent_equation",
+            "accepts_negative_answer_for_quantity_that_must_be_positive"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -175,6 +253,12 @@
             "Solve proportions using cross-multiplication",
             "Model and solve direct-variation and inverse-variation problems",
             "Apply proportional reasoning to scale and similar-figure problems"
+          ],
+          "error_patterns": [
+            "cross_multiplies_incorrectly_by_pairing_wrong_terms",
+            "confuses_direct_variation_with_inverse_variation",
+            "sets_up_proportion_with_mismatched_units_across_ratios",
+            "forgets_to_find_constant_of_variation_first"
           ],
           "difficulty_tier": 2
         }
@@ -194,6 +278,12 @@
             "Express solutions in interval notation and graph them on a number line",
             "Translate inequality word problems into mathematical statements and solve them"
           ],
+          "error_patterns": [
+            "forgets_to_flip_inequality_when_multiplying_by_negative",
+            "uses_closed_bracket_for_strict_inequality_in_interval_notation",
+            "reverses_inequality_direction_when_subtracting_from_both_sides",
+            "shades_number_line_in_wrong_direction"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -204,6 +294,12 @@
             "Solve compound inequalities joined by AND (intersection)",
             "Solve compound inequalities joined by OR (union)",
             "Graph compound inequality solution sets and express them in interval notation"
+          ],
+          "error_patterns": [
+            "confuses_and_intersection_with_or_union",
+            "graphs_union_as_intersection_or_vice_versa",
+            "fails_to_recognize_empty_set_for_contradictory_and_inequality",
+            "writes_or_inequality_as_single_bounded_interval"
           ],
           "difficulty_tier": 2
         },
@@ -216,6 +312,12 @@
             "Identify absolute value equations that have no solution",
             "Solve absolute value equations with expressions on both sides"
           ],
+          "error_patterns": [
+            "only_solves_positive_case_and_forgets_negative_case",
+            "sets_absolute_value_equal_to_negative_and_finds_false_solutions",
+            "negates_only_part_of_expression_inside_absolute_value",
+            "fails_to_isolate_absolute_value_before_splitting_cases"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -226,6 +328,12 @@
             "Solve |ax + b| < c as a compound AND inequality",
             "Solve |ax + b| > c as a compound OR inequality",
             "Graph solutions and express them in interval notation"
+          ],
+          "error_patterns": [
+            "uses_or_compound_for_less_than_absolute_value_inequality",
+            "uses_and_compound_for_greater_than_absolute_value_inequality",
+            "forgets_to_negate_right_side_in_second_case",
+            "fails_to_recognize_all_reals_or_no_solution_for_trivial_cases"
           ],
           "difficulty_tier": 2
         }
@@ -245,6 +353,12 @@
             "Calculate the distance between two points using the distance formula",
             "Find the midpoint of a line segment given its endpoints"
           ],
+          "error_patterns": [
+            "reverses_x_and_y_coordinates_when_plotting",
+            "forgets_to_square_differences_in_distance_formula",
+            "subtracts_coordinates_instead_of_averaging_for_midpoint",
+            "places_point_in_wrong_quadrant_due_to_sign_error"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -255,6 +369,12 @@
             "Calculate slope from two points using the slope formula",
             "Interpret slope as a rate of change in applied contexts",
             "Classify lines as having positive, negative, zero, or undefined slope"
+          ],
+          "error_patterns": [
+            "swaps_x_and_y_differences_in_slope_formula",
+            "subtracts_coordinates_in_inconsistent_order",
+            "confuses_zero_slope_with_undefined_slope",
+            "interprets_negative_slope_as_decreasing_from_left_to_right_incorrectly"
           ],
           "difficulty_tier": 1
         },
@@ -267,6 +387,12 @@
             "Graph a line given its slope and y-intercept",
             "Convert a linear equation from standard form to slope-intercept form"
           ],
+          "error_patterns": [
+            "confuses_slope_and_y_intercept_in_y_equals_mx_plus_b",
+            "plots_y_intercept_on_x_axis_instead_of_y_axis",
+            "sign_error_when_converting_standard_form_to_slope_intercept",
+            "forgets_to_divide_all_terms_when_isolating_y"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -278,6 +404,12 @@
             "Convert between slope-intercept, point-slope, and standard form",
             "Write the equation of a line passing through two given points"
           ],
+          "error_patterns": [
+            "uses_wrong_sign_for_coordinates_in_point_slope_form",
+            "forgets_to_compute_slope_first_when_given_two_points",
+            "leaves_fractions_in_standard_form_instead_of_clearing",
+            "confuses_x1_y1_with_x2_y2_in_point_slope_formula"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -288,6 +420,12 @@
             "Determine whether two lines are parallel, perpendicular, or neither from their slopes",
             "Write the equation of a line parallel to a given line through a given point",
             "Write the equation of a line perpendicular to a given line through a given point"
+          ],
+          "error_patterns": [
+            "uses_same_slope_for_perpendicular_instead_of_negative_reciprocal",
+            "takes_reciprocal_without_negating_for_perpendicular_slope",
+            "uses_negative_reciprocal_for_parallel_instead_of_same_slope",
+            "confuses_same_y_intercept_with_parallel_lines"
           ],
           "difficulty_tier": 2
         }
@@ -307,6 +445,12 @@
             "Classify a system as having one solution, no solution, or infinitely many solutions from its graph",
             "Estimate solutions of systems from graphs and verify algebraically"
           ],
+          "error_patterns": [
+            "misreads_intersection_point_coordinates_from_graph",
+            "confuses_parallel_lines_no_solution_with_same_line_infinite_solutions",
+            "graphs_one_equation_incorrectly_leading_to_wrong_intersection",
+            "assumes_non_integer_intersection_means_no_solution"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -317,6 +461,12 @@
             "Solve a system of two linear equations using the substitution method",
             "Choose the most efficient variable to isolate for substitution",
             "Identify inconsistent and dependent systems algebraically"
+          ],
+          "error_patterns": [
+            "substitutes_expression_back_into_same_equation_instead_of_other",
+            "forgets_to_solve_for_second_variable_after_finding_first",
+            "drops_terms_when_substituting_expression_into_equation",
+            "misidentifies_contradiction_as_dependent_system"
           ],
           "difficulty_tier": 2
         },
@@ -329,6 +479,12 @@
             "Multiply one or both equations to create opposite coefficients before adding",
             "Select substitution or elimination based on the structure of the system"
           ],
+          "error_patterns": [
+            "adds_equations_without_making_coefficients_opposite",
+            "multiplies_only_one_side_of_equation_by_scaling_factor",
+            "subtracts_equations_when_coefficients_already_opposite_and_should_add",
+            "forgets_to_multiply_all_terms_including_constant_by_scaling_factor"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -340,6 +496,12 @@
             "Model real-world scenarios with two variables and two constraints",
             "Interpret the solution of a system in the context of the application"
           ],
+          "error_patterns": [
+            "writes_one_equation_but_reuses_same_relationship_for_second",
+            "mislabels_which_variable_represents_which_quantity",
+            "confuses_total_quantity_equation_with_value_equation_in_mixtures",
+            "ignores_units_when_setting_up_rate_time_distance_system"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -350,6 +512,12 @@
             "Graph a linear inequality in two variables and shade the solution region",
             "Graph a system of linear inequalities and identify the feasible region",
             "Determine whether a given point lies in the solution set of a system of inequalities"
+          ],
+          "error_patterns": [
+            "shades_wrong_side_of_boundary_line",
+            "uses_solid_line_for_strict_inequality",
+            "takes_union_instead_of_intersection_for_system_feasible_region",
+            "tests_point_on_boundary_line_to_determine_shading"
           ],
           "difficulty_tier": 2
         }
@@ -369,6 +537,12 @@
             "Simplify expressions with negative and zero exponents",
             "Combine multiple exponent rules in a single expression"
           ],
+          "error_patterns": [
+            "adds_exponents_when_raising_power_to_power_instead_of_multiplying",
+            "distributes_exponent_over_addition",
+            "confuses_negative_exponents_with_negative_coefficients",
+            "subtracts_exponents_in_wrong_order_for_quotient_rule"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -379,6 +553,12 @@
             "Identify monomials, binomials, and trinomials and state their degree",
             "Write polynomials in standard form (descending order of degree)",
             "Evaluate polynomials for given values of the variable"
+          ],
+          "error_patterns": [
+            "counts_number_of_terms_as_degree_of_polynomial",
+            "identifies_degree_by_largest_coefficient_instead_of_largest_exponent",
+            "forgets_to_include_constant_term_when_writing_standard_form",
+            "substitutes_negative_value_without_parentheses_causing_sign_error"
           ],
           "difficulty_tier": 1
         },
@@ -391,6 +571,12 @@
             "Subtract polynomials by distributing the negative sign and combining like terms",
             "Simplify polynomial expressions involving multiple additions and subtractions"
           ],
+          "error_patterns": [
+            "forgets_to_distribute_negative_to_all_terms_when_subtracting",
+            "adds_exponents_of_like_terms_instead_of_coefficients",
+            "combines_terms_with_different_degrees",
+            "drops_terms_with_no_matching_like_term_in_other_polynomial"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -402,6 +588,12 @@
             "Multiply two binomials using the FOIL method or distribution",
             "Multiply any two polynomials using the distributive property"
           ],
+          "error_patterns": [
+            "multiplies_only_matching_position_terms_instead_of_all_pairs",
+            "adds_exponents_of_coefficients_but_forgets_to_multiply_coefficients",
+            "omits_middle_terms_in_foil_keeping_only_first_and_last",
+            "forgets_to_combine_like_terms_after_distribution"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -412,6 +604,12 @@
             "Expand the square of a binomial: (a + b)² and (a − b)²",
             "Expand the product of conjugates: (a + b)(a − b) = a² − b²",
             "Recognize and apply special product patterns to simplify computation"
+          ],
+          "error_patterns": [
+            "squares_binomial_as_a_squared_plus_b_squared_omitting_middle_term",
+            "uses_wrong_sign_on_middle_term_of_binomial_square",
+            "includes_middle_term_in_difference_of_squares",
+            "forgets_to_square_coefficient_inside_binomial"
           ],
           "difficulty_tier": 2
         }
@@ -431,6 +629,12 @@
             "Factor a four-term polynomial by grouping",
             "Recognize when a polynomial is prime (cannot be factored)"
           ],
+          "error_patterns": [
+            "factors_out_only_numeric_gcf_ignoring_variable_part",
+            "groups_terms_incorrectly_so_no_common_binomial_factor_emerges",
+            "leaves_remaining_factor_with_unfactored_gcf_still_present",
+            "declares_polynomial_prime_without_checking_all_groupings"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -441,6 +645,12 @@
             "Factor trinomials of the form x² + bx + c by finding two integers whose product is c and sum is b",
             "Factor trinomials that require extraction of a GCF before factoring",
             "Determine when a trinomial with leading coefficient 1 is not factorable over the integers"
+          ],
+          "error_patterns": [
+            "finds_factors_of_c_whose_sum_is_c_instead_of_b",
+            "uses_wrong_signs_on_factors_when_c_is_negative",
+            "forgets_to_extract_gcf_before_attempting_to_factor_trinomial",
+            "reverses_sum_and_product_conditions_for_factor_pair"
           ],
           "difficulty_tier": 2
         },
@@ -453,6 +663,12 @@
             "Apply grouping after splitting the middle term in the ac-method",
             "Combine GCF extraction with advanced trinomial factoring"
           ],
+          "error_patterns": [
+            "finds_factors_of_c_instead_of_ac_in_ac_method",
+            "splits_middle_term_with_wrong_factor_pair",
+            "groups_incorrectly_after_splitting_middle_term",
+            "forgets_to_check_by_multiplying_factored_result_back_out"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -464,6 +680,12 @@
             "Factor a perfect square trinomial: a² ± 2ab + b² = (a ± b)²",
             "Factor sums and differences of cubes: a³ ± b³"
           ],
+          "error_patterns": [
+            "attempts_to_factor_sum_of_two_squares_as_two_binomials",
+            "confuses_difference_of_squares_pattern_with_difference_of_cubes",
+            "uses_wrong_signs_in_sum_or_difference_of_cubes_formula",
+            "fails_to_recognize_perfect_square_trinomial_due_to_middle_term_check"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -474,6 +696,12 @@
             "Apply a systematic factoring strategy: GCF first, then recognize the form",
             "Factor polynomials that require multiple factoring techniques in sequence",
             "Verify factoring results by multiplication"
+          ],
+          "error_patterns": [
+            "skips_gcf_extraction_and_jumps_to_trinomial_factoring",
+            "stops_factoring_before_all_factors_are_fully_reduced",
+            "misidentifies_polynomial_form_and_applies_wrong_technique",
+            "factors_correctly_but_loses_gcf_in_final_answer"
           ],
           "difficulty_tier": 2
         }
@@ -493,6 +721,12 @@
             "Simplify rational expressions by factoring and cancelling common factors",
             "Distinguish between legitimate cancellation and common errors"
           ],
+          "error_patterns": [
+            "cancels_individual_terms_instead_of_common_factors",
+            "cancels_additive_terms_across_numerator_and_denominator",
+            "forgets_to_state_domain_restrictions_after_cancelling",
+            "factors_incorrectly_before_cancelling"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -503,6 +737,12 @@
             "Multiply rational expressions by factoring, cancelling, and then multiplying",
             "Divide rational expressions by multiplying by the reciprocal",
             "Simplify complex fractions involving polynomial expressions"
+          ],
+          "error_patterns": [
+            "cross_multiplies_instead_of_multiplying_straight_across",
+            "forgets_to_flip_second_fraction_when_dividing",
+            "cancels_factors_across_addition_in_complex_fraction",
+            "multiplies_before_factoring_missing_cancellation_opportunities"
           ],
           "difficulty_tier": 2
         },
@@ -515,6 +755,12 @@
             "Add and subtract rational expressions with unlike denominators",
             "Simplify the result of addition or subtraction by factoring"
           ],
+          "error_patterns": [
+            "adds_numerators_and_denominators_separately",
+            "multiplies_only_numerator_by_lcd_adjustment_not_denominator",
+            "uses_product_of_denominators_instead_of_lcd",
+            "forgets_to_distribute_negative_when_subtracting_rational_expressions"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -525,6 +771,12 @@
             "Solve equations containing rational expressions by multiplying through by the LCD",
             "Identify and exclude extraneous solutions",
             "Solve applied problems involving rates, work, and proportions"
+          ],
+          "error_patterns": [
+            "forgets_to_check_for_extraneous_solutions_in_denominator",
+            "multiplies_only_some_terms_by_lcd",
+            "accepts_solution_that_makes_original_denominator_zero",
+            "confuses_simplifying_expression_with_solving_equation"
           ],
           "difficulty_tier": 3
         }
@@ -544,6 +796,12 @@
             "Simplify nth roots using the product and quotient rules for radicals",
             "Convert between radical notation and rational exponent notation"
           ],
+          "error_patterns": [
+            "splits_square_root_of_sum_into_sum_of_square_roots",
+            "writes_rational_exponent_with_index_in_wrong_position",
+            "fails_to_extract_largest_perfect_square_factor",
+            "confuses_square_root_with_dividing_by_two"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -554,6 +812,12 @@
             "Add and subtract like radical expressions",
             "Multiply radical expressions, including binomials containing radicals",
             "Simplify products and sums of radicals into simplest radical form"
+          ],
+          "error_patterns": [
+            "adds_unlike_radicals_by_combining_radicands",
+            "multiplies_radical_by_adding_radicands_instead_of_multiplying",
+            "forgets_to_simplify_radical_after_multiplication",
+            "combines_sqrt_2_and_sqrt_3_as_sqrt_5"
           ],
           "difficulty_tier": 2
         },
@@ -566,6 +830,12 @@
             "Rationalize a denominator containing a binomial with radicals using conjugates",
             "Simplify expressions after rationalization"
           ],
+          "error_patterns": [
+            "multiplies_only_denominator_without_multiplying_numerator",
+            "uses_same_binomial_instead_of_conjugate_to_rationalize",
+            "fails_to_simplify_after_rationalizing",
+            "rationalizes_numerator_instead_of_denominator"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -576,6 +846,12 @@
             "Solve equations containing one or two radical terms by isolating and squaring",
             "Identify and reject extraneous solutions introduced by squaring",
             "Solve radical equations involving rational exponents"
+          ],
+          "error_patterns": [
+            "squares_both_sides_without_isolating_radical_first",
+            "forgets_to_check_for_extraneous_solutions_after_squaring",
+            "squares_each_term_separately_instead_of_entire_side",
+            "fails_to_square_again_when_equation_has_two_radical_terms"
           ],
           "difficulty_tier": 3
         }
@@ -595,6 +871,12 @@
             "Factor and solve quadratic equations of the form ax² + bx + c = 0",
             "Solve equations reducible to quadratic form by factoring"
           ],
+          "error_patterns": [
+            "sets_each_factor_equal_to_constant_instead_of_zero",
+            "divides_both_sides_by_x_losing_x_equals_zero_solution",
+            "forgets_to_set_equation_to_zero_before_factoring",
+            "applies_zero_product_property_to_sum_instead_of_product"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -605,6 +887,12 @@
             "Transform a quadratic expression into the form (x + p)² + q",
             "Solve quadratic equations by completing the square",
             "Derive the vertex of a parabola by completing the square"
+          ],
+          "error_patterns": [
+            "uses_b_instead_of_b_over_2_when_completing_the_square",
+            "forgets_to_subtract_added_constant_to_maintain_equality",
+            "fails_to_divide_all_terms_by_leading_coefficient_first",
+            "takes_wrong_sign_for_vertex_coordinates_from_completed_form"
           ],
           "difficulty_tier": 2
         },
@@ -617,6 +905,12 @@
             "Use the discriminant to determine the number and type of solutions",
             "Select the most efficient method for solving a given quadratic equation"
           ],
+          "error_patterns": [
+            "places_negative_b_only_in_numerator_not_under_radical",
+            "forgets_2a_in_denominator_or_divides_only_one_term_by_2a",
+            "computes_discriminant_as_b_squared_plus_4ac_instead_of_minus",
+            "fails_to_simplify_radical_in_final_answer"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -628,6 +922,12 @@
             "Graph a quadratic function using its vertex and intercepts",
             "Convert between standard form and vertex form of a quadratic function"
           ],
+          "error_patterns": [
+            "uses_wrong_sign_for_h_in_vertex_from_vertex_form",
+            "confuses_axis_of_symmetry_with_y_intercept",
+            "determines_wrong_direction_of_opening_from_leading_coefficient_sign",
+            "plots_vertex_but_draws_parabola_asymmetrically"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -638,6 +938,12 @@
             "Model projectile motion and area optimization problems with quadratic equations",
             "Determine maximum or minimum values using the vertex",
             "Interpret quadratic solutions in real-world contexts"
+          ],
+          "error_patterns": [
+            "confuses_x_coordinate_of_vertex_with_maximum_value_instead_of_y",
+            "uses_x_intercept_as_maximum_height_in_projectile_problems",
+            "accepts_negative_time_or_negative_length_as_valid_answer",
+            "sets_function_to_zero_instead_of_finding_vertex_for_optimization"
           ],
           "difficulty_tier": 3
         }
@@ -657,6 +963,12 @@
             "Evaluate functions using function notation f(x)",
             "Interpret function notation in applied contexts"
           ],
+          "error_patterns": [
+            "interprets_f_of_x_as_f_times_x",
+            "applies_horizontal_line_test_instead_of_vertical_line_test",
+            "evaluates_f_of_3_by_replacing_only_first_x_occurrence",
+            "confuses_f_of_a_plus_b_with_f_of_a_plus_f_of_b"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -667,6 +979,12 @@
             "Determine the domain and range of a function from its equation",
             "Identify domain restrictions from denominators and even roots",
             "Express domain and range in interval notation"
+          ],
+          "error_patterns": [
+            "includes_values_that_make_denominator_zero_in_domain",
+            "allows_negative_radicand_under_even_root_in_domain",
+            "confuses_domain_with_range",
+            "writes_interval_notation_with_brackets_reversed"
           ],
           "difficulty_tier": 2
         },
@@ -679,6 +997,12 @@
             "Evaluate and simplify the composition of two functions (f ∘ g)(x)",
             "Determine the domain of a composite function"
           ],
+          "error_patterns": [
+            "computes_f_of_g_as_f_times_g_instead_of_substituting",
+            "evaluates_composition_in_wrong_order_f_of_g_vs_g_of_f",
+            "forgets_to_restrict_domain_of_composite_function",
+            "distributes_function_operation_over_composition"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -690,6 +1014,12 @@
             "Find the inverse of a one-to-one function algebraically",
             "Verify that two functions are inverses by showing f(f⁻¹(x)) = x and f⁻¹(f(x)) = x"
           ],
+          "error_patterns": [
+            "computes_inverse_as_reciprocal_one_over_f_instead_of_swapping_x_and_y",
+            "forgets_to_swap_x_and_y_before_solving_for_inverse",
+            "applies_vertical_line_test_instead_of_horizontal_for_one_to_one",
+            "fails_to_restrict_domain_when_original_function_is_not_one_to_one"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -700,6 +1030,12 @@
             "Identify and apply vertical and horizontal shifts to function graphs",
             "Identify and apply reflections across the x-axis and y-axis",
             "Identify and apply vertical and horizontal stretches and compressions"
+          ],
+          "error_patterns": [
+            "shifts_graph_right_for_f_of_x_plus_h_instead_of_left",
+            "confuses_vertical_stretch_with_horizontal_stretch",
+            "applies_horizontal_shift_in_wrong_direction_due_to_sign",
+            "reflects_across_wrong_axis_for_negative_sign_placement"
           ],
           "difficulty_tier": 2
         }

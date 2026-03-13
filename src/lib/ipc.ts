@@ -359,12 +359,14 @@ function parseMarkdownIntoLesson(markdown: string, conceptId: string): LessonCon
 export async function requestExplanation(
   conceptId: string,
   lessonId: string,
-  attempt: number
+  attempt: number,
+  mistakesContext?: string
 ): Promise<ExplanationResponse> {
   return tauriInvoke<ExplanationResponse>("request_explanation", {
     conceptId,
     lessonId,
     attempt,
+    mistakesContext: mistakesContext ?? null,
   });
 }
 

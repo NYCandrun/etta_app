@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { Concept } from "@/types/concept";
-import type { QuizSession } from "@/types/quiz";
+import type { QuizSession, MistakeDetail } from "@/types/quiz";
 import type { LessonContent } from "@/types/lesson";
 
 interface SessionState {
@@ -18,6 +18,8 @@ interface SessionState {
   reinforcementConceptId: string | null;
   /** Which reinforcement attempt we're on (drives explanation strategy escalation) */
   reinforcementAttempt: number;
+  /** Specific mistakes from the last quiz, used to focus reinforcement lessons */
+  reinforcementMistakes: MistakeDetail[];
 
   setActiveSession: (id: string | null) => void;
   setCurrentConcept: (concept: Concept | null) => void;
@@ -33,7 +35,7 @@ interface SessionState {
   /** Get total minutes including any active segment */
   getTodayMinutes: () => number;
   /** Enter reinforcement loop for a struggled concept */
-  enterReinforcement: (conceptId: string) => void;
+  enterReinforcement: (conceptId: string, mistakes?: MistakeDetail[]) => void;
   /** Increment the reinforcement attempt counter */
   incrementReinforcementAttempt: () => void;
   /** Exit reinforcement loop */
@@ -54,6 +56,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   activeSegmentStart: null,
   reinforcementConceptId: null,
   reinforcementAttempt: 0,
+  reinforcementMistakes: [],
 
   setActiveSession: (id) => set({ activeSessionId: id }),
   setCurrentConcept: (concept) => set({ currentConcept: concept }),
@@ -63,12 +66,12 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     set((s) => ({ explanationAttempt: s.explanationAttempt + 1 })),
   resetExplanationAttempt: () => set({ explanationAttempt: 0 }),
   setSessionConcepts: (concepts) => set({ sessionConcepts: concepts }),
-  enterReinforcement: (conceptId) =>
-    set({ reinforcementConceptId: conceptId, reinforcementAttempt: 0 }),
+  enterReinforcement: (conceptId, mistakes) =>
+    set({ reinforcementConceptId: conceptId, reinforcementAttempt: 0, reinforcementMistakes: mistakes ?? [] }),
   incrementReinforcementAttempt: () =>
     set((s) => ({ reinforcementAttempt: s.reinforcementAttempt + 1 })),
   exitReinforcement: () =>
-    set({ reinforcementConceptId: null, reinforcementAttempt: 0 }),
+    set({ reinforcementConceptId: null, reinforcementAttempt: 0, reinforcementMistakes: [] }),
   insertConceptsAfterCurrent: (concepts) => {
     const { currentConcept, sessionConcepts } = get();
     if (!currentConcept || concepts.length === 0) return;
@@ -107,5 +110,6 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       sessionConcepts: [],
       reinforcementConceptId: null,
       reinforcementAttempt: 0,
+      reinforcementMistakes: [],
     }),
 }));
