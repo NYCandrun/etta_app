@@ -435,6 +435,12 @@
             "Classify a quadratic form as positive definite, negative definite, or indefinite using eigenvalues",
             "Apply Sylvester's criterion (leading principal minors) to test definiteness"
           ],
+          "error_patterns": [
+            "uses_non_symmetric_matrix_for_quadratic_form",
+            "confuses_positive_semidefinite_with_positive_definite",
+            "checks_all_minors_instead_of_leading_principal_minors_for_sylvesters_criterion",
+            "misclassifies_indefinite_form_by_checking_only_some_eigenvalues"
+          ],
           "difficulty_tier": 3
         }
       ]
@@ -453,6 +459,12 @@
             "Construct the full SVD factorization A = UΣVᵀ",
             "Interpret the SVD geometrically as a rotation-scaling-rotation decomposition"
           ],
+          "error_patterns": [
+            "confuses_singular_values_with_eigenvalues_of_a",
+            "computes_eigenvalues_of_a_instead_of_a_transpose_a_for_singular_values",
+            "forgets_to_take_square_root_of_eigenvalues_for_singular_values",
+            "swaps_u_and_v_matrices_in_svd_factorization"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -463,6 +475,12 @@
             "Apply the SVD to compute the pseudoinverse and solve least squares problems",
             "Use low-rank SVD approximation for data compression (image compression, dimensionality reduction)",
             "Compute the condition number of a matrix and assess numerical stability"
+          ],
+          "error_patterns": [
+            "truncates_wrong_singular_values_in_low_rank_approximation",
+            "confuses_condition_number_with_determinant_for_stability",
+            "computes_pseudoinverse_without_inverting_nonzero_singular_values",
+            "uses_smallest_singular_value_alone_as_condition_number"
           ],
           "difficulty_tier": 3
         }

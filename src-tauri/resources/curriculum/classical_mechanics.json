@@ -337,6 +337,12 @@
             "Apply conservation of angular momentum to collisions and variable-inertia systems",
             "Analyze precession qualitatively using the torque-angular momentum relation τ = dL/dt"
           ],
+          "error_patterns": [
+            "confuses_angular_momentum_with_linear_momentum",
+            "forgets_angular_momentum_is_conserved_only_when_net_torque_is_zero",
+            "assumes_angular_velocity_is_conserved_instead_of_angular_momentum",
+            "neglects_orbital_angular_momentum_for_point_particles"
+          ],
           "difficulty_tier": 2
         }
       ]
@@ -355,6 +361,12 @@
             "Identify amplitude, frequency, period, and phase of SHM",
             "Analyze energy oscillation between kinetic and potential in SHM"
           ],
+          "error_patterns": [
+            "confuses_angular_frequency_with_regular_frequency",
+            "thinks_period_depends_on_amplitude_in_shm",
+            "forgets_phase_constant_in_general_solution",
+            "confuses_maximum_velocity_position_with_maximum_displacement"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -365,6 +377,12 @@
             "Derive and solve the damped oscillator equation ẍ + 2γẋ + ω₀²x = 0",
             "Classify motion as underdamped, critically damped, or overdamped",
             "Calculate the quality factor Q and relate it to energy dissipation rate"
+          ],
+          "error_patterns": [
+            "confuses_damping_regimes_based_on_discriminant_sign",
+            "thinks_critically_damped_means_no_motion",
+            "forgets_damped_frequency_differs_from_natural_frequency",
+            "assumes_energy_decays_linearly_instead_of_exponentially"
           ],
           "difficulty_tier": 2
         },

@@ -401,6 +401,12 @@
             "Write the two-particle wave function as a Slater determinant for fermions",
             "Explain exchange degeneracy and its resolution by symmetrization"
           ],
+          "error_patterns": [
+            "swaps_symmetric_and_antisymmetric_for_bosons_and_fermions",
+            "forgets_normalization_factor_in_slater_determinant",
+            "constructs_product_state_instead_of_symmetrized_state",
+            "treats_distinguishable_particles_as_identical"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -412,6 +418,12 @@
             "Apply the aufbau principle and Hund's rules to determine electron configurations",
             "Explain the structure of the periodic table using quantum numbers and the exclusion principle"
           ],
+          "error_patterns": [
+            "applies_exclusion_principle_to_bosons",
+            "confuses_exclusion_principle_with_no_two_electrons_in_same_orbital",
+            "misorders_subshell_filling_in_aufbau_principle",
+            "violates_hunds_rule_by_pairing_before_filling_degenerate_orbitals"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -422,6 +434,12 @@
             "Describe the exchange interaction and its effect on the energy of multi-electron states",
             "Analyze the ground state and first excited states of helium (singlet and triplet)",
             "Apply variational methods to estimate the ground-state energy of helium"
+          ],
+          "error_patterns": [
+            "treats_exchange_force_as_a_real_physical_force",
+            "confuses_singlet_and_triplet_spin_states_for_helium",
+            "forgets_spatial_antisymmetry_when_spin_is_symmetric",
+            "uses_wrong_trial_wavefunction_in_variational_method"
           ],
           "difficulty_tier": 3
         }
