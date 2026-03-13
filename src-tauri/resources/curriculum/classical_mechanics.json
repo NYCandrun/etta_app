@@ -129,6 +129,12 @@
             "Analyze banked curves, vertical loops, and conical pendulums",
             "Distinguish between centripetal acceleration and centrifugal effects in rotating frames"
           ],
+          "error_patterns": [
+            "treats_centripetal_force_as_separate_force_in_free_body_diagram",
+            "forgets_centripetal_direction_is_inward",
+            "confuses_centripetal_and_centrifugal_force",
+            "uses_mg_for_normal_force_at_top_of_vertical_loop"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -139,6 +145,12 @@
             "Model linear and quadratic drag forces and solve the resulting ODEs",
             "Derive terminal velocity from the force balance condition",
             "Analyze motion with drag in both horizontal and vertical contexts"
+          ],
+          "error_patterns": [
+            "thinks_terminal_velocity_means_zero_velocity",
+            "confuses_linear_and_quadratic_drag_regimes",
+            "forgets_drag_force_direction_opposes_velocity",
+            "assumes_constant_acceleration_with_drag_present"
           ],
           "difficulty_tier": 2
         }
@@ -158,6 +170,12 @@
             "Derive and apply the work-energy theorem: W_net = ΔKE",
             "Calculate work done by gravity, spring forces, and friction"
           ],
+          "error_patterns": [
+            "forgets_to_use_dot_product_for_work_calculation",
+            "confuses_work_done_by_system_with_work_done_on_system",
+            "treats_work_as_always_positive",
+            "uses_total_force_instead_of_net_force_in_work_energy_theorem"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -169,6 +187,12 @@
             "Verify that a force is conservative using the curl test",
             "Construct energy diagrams and identify equilibrium points from U(x)"
           ],
+          "error_patterns": [
+            "forgets_negative_sign_in_force_potential_relation",
+            "treats_friction_as_conservative_force",
+            "confuses_stable_and_unstable_equilibrium_on_energy_diagram",
+            "assumes_all_forces_have_potential_energy"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -179,6 +203,12 @@
             "Apply conservation of mechanical energy to closed systems",
             "Incorporate non-conservative forces (friction, drag) using the work-energy theorem",
             "Solve problems combining gravitational and elastic potential energy"
+          ],
+          "error_patterns": [
+            "applies_energy_conservation_when_non_conservative_forces_present",
+            "forgets_to_include_all_forms_of_potential_energy",
+            "confuses_initial_and_final_energy_states",
+            "sets_reference_point_inconsistently_during_problem"
           ],
           "difficulty_tier": 2
         }
@@ -198,6 +228,12 @@
             "Compute impulse as J = ∫F dt and apply the impulse-momentum theorem",
             "Analyze force-time graphs to determine impulse"
           ],
+          "error_patterns": [
+            "confuses_impulse_with_momentum",
+            "forgets_momentum_is_a_vector_quantity",
+            "uses_f_equals_ma_instead_of_dp_dt_for_variable_mass",
+            "reads_force_time_graph_area_incorrectly"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -208,6 +244,12 @@
             "Apply conservation of momentum to isolated systems",
             "Analyze elastic and perfectly inelastic collisions in one and two dimensions",
             "Use conservation of energy in conjunction with momentum for elastic collisions"
+          ],
+          "error_patterns": [
+            "assumes_kinetic_energy_is_conserved_in_inelastic_collisions",
+            "forgets_to_account_for_direction_in_momentum_conservation",
+            "confuses_elastic_and_perfectly_inelastic_collisions",
+            "applies_momentum_conservation_to_non_isolated_systems"
           ],
           "difficulty_tier": 2
         },

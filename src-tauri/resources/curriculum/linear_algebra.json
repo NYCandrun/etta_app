@@ -203,6 +203,12 @@
             "Interpret the null space as the solution set of Ax = 0",
             "Relate the column space to the range of possible outputs b in Ax = b"
           ],
+          "error_patterns": [
+            "confuses_row_space_with_column_space",
+            "takes_column_space_basis_from_rref_columns_instead_of_original_matrix",
+            "forgets_that_null_space_always_contains_zero_vector",
+            "confuses_null_space_of_a_with_null_space_of_a_transpose"
+          ],
           "difficulty_tier": 2
         }
       ]
@@ -221,6 +227,12 @@
             "Determine the image and kernel of a linear transformation",
             "Compose linear transformations and relate composition to matrix multiplication"
           ],
+          "error_patterns": [
+            "forgets_to_check_both_additivity_and_homogeneity",
+            "confuses_kernel_with_image",
+            "reverses_order_of_matrix_multiplication_in_composition",
+            "assumes_affine_maps_with_nonzero_constant_are_linear"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -232,6 +244,12 @@
             "Compute the matrix of a linear transformation with respect to given bases",
             "Apply change-of-basis matrices to convert between representations"
           ],
+          "error_patterns": [
+            "places_basis_vectors_as_rows_instead_of_columns_in_standard_matrix",
+            "applies_change_of_basis_matrices_in_wrong_order",
+            "confuses_coordinates_in_new_basis_with_standard_coordinates",
+            "inverts_wrong_matrix_in_change_of_basis_formula"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -242,6 +260,12 @@
             "Identify rotation, reflection, projection, and shear as linear transformations",
             "Write the standard matrices for common geometric transformations",
             "Compose geometric transformations and interpret the resulting matrix"
+          ],
+          "error_patterns": [
+            "uses_wrong_sign_in_rotation_matrix_entries",
+            "confuses_reflection_across_axis_with_reflection_across_line",
+            "applies_composition_of_transforms_in_wrong_order",
+            "mistakes_projection_matrix_as_invertible"
           ],
           "difficulty_tier": 2
         }
@@ -261,6 +285,12 @@
             "Find eigenvectors corresponding to each eigenvalue by solving (A − λI)x = 0",
             "Determine algebraic and geometric multiplicities of eigenvalues"
           ],
+          "error_patterns": [
+            "computes_det_of_a_plus_lambda_i_instead_of_a_minus_lambda_i",
+            "includes_zero_vector_as_an_eigenvector",
+            "confuses_algebraic_multiplicity_with_geometric_multiplicity",
+            "forgets_to_subtract_lambda_from_all_diagonal_entries"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -271,6 +301,12 @@
             "Determine whether a matrix is diagonalizable",
             "Diagonalize a matrix A = PDP⁻¹ where D is diagonal",
             "Use diagonalization to compute powers of a matrix Aⁿ"
+          ],
+          "error_patterns": [
+            "places_eigenvectors_in_p_in_wrong_order_relative_to_d",
+            "assumes_all_matrices_are_diagonalizable",
+            "writes_a_equals_pdp_instead_of_pdp_inverse",
+            "forgets_geometric_multiplicity_must_equal_algebraic_for_diagonalizability"
           ],
           "difficulty_tier": 2
         },
@@ -283,6 +319,12 @@
             "Write real-valued general solutions from complex eigenvalue pairs",
             "Interpret complex eigenvalues geometrically as rotation-scaling"
           ],
+          "error_patterns": [
+            "forgets_complex_eigenvalues_come_in_conjugate_pairs_for_real_matrices",
+            "fails_to_extract_real_and_imaginary_parts_of_eigenvector",
+            "confuses_rotation_angle_with_scaling_factor",
+            "drops_imaginary_part_when_computing_eigenvectors"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -293,6 +335,12 @@
             "Model discrete dynamical systems xₖ₊₁ = Axₖ and analyze long-term behavior",
             "Apply eigenvalue analysis to Markov chains and find steady-state vectors",
             "Use the Cayley-Hamilton theorem to express matrix polynomials"
+          ],
+          "error_patterns": [
+            "confuses_steady_state_vector_with_eigenvector_of_largest_eigenvalue",
+            "forgets_markov_columns_must_sum_to_one",
+            "ignores_dominant_eigenvalue_condition_for_long_term_behavior",
+            "misapplies_cayley_hamilton_by_substituting_matrix_into_wrong_polynomial"
           ],
           "difficulty_tier": 3
         }
