@@ -14,6 +14,10 @@ interface SessionState {
   todayMinutes: number;
   /** Timestamp when the current active segment started (null = not actively learning) */
   activeSegmentStart: number | null;
+  /** Non-null when user is in a reinforcement loop for a struggled concept */
+  reinforcementConceptId: string | null;
+  /** Which reinforcement attempt we're on (drives explanation strategy escalation) */
+  reinforcementAttempt: number;
 
   setActiveSession: (id: string | null) => void;
   setCurrentConcept: (concept: Concept | null) => void;
@@ -28,6 +32,14 @@ interface SessionState {
   stopTimeTracking: () => void;
   /** Get total minutes including any active segment */
   getTodayMinutes: () => number;
+  /** Enter reinforcement loop for a struggled concept */
+  enterReinforcement: (conceptId: string) => void;
+  /** Increment the reinforcement attempt counter */
+  incrementReinforcementAttempt: () => void;
+  /** Exit reinforcement loop */
+  exitReinforcement: () => void;
+  /** Insert concepts into the session queue right after the current concept */
+  insertConceptsAfterCurrent: (concepts: Concept[]) => void;
   reset: () => void;
 }
 
@@ -40,6 +52,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   sessionConcepts: [],
   todayMinutes: 0,
   activeSegmentStart: null,
+  reinforcementConceptId: null,
+  reinforcementAttempt: 0,
 
   setActiveSession: (id) => set({ activeSessionId: id }),
   setCurrentConcept: (concept) => set({ currentConcept: concept }),
@@ -49,6 +63,25 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     set((s) => ({ explanationAttempt: s.explanationAttempt + 1 })),
   resetExplanationAttempt: () => set({ explanationAttempt: 0 }),
   setSessionConcepts: (concepts) => set({ sessionConcepts: concepts }),
+  enterReinforcement: (conceptId) =>
+    set({ reinforcementConceptId: conceptId, reinforcementAttempt: 0 }),
+  incrementReinforcementAttempt: () =>
+    set((s) => ({ reinforcementAttempt: s.reinforcementAttempt + 1 })),
+  exitReinforcement: () =>
+    set({ reinforcementConceptId: null, reinforcementAttempt: 0 }),
+  insertConceptsAfterCurrent: (concepts) => {
+    const { currentConcept, sessionConcepts } = get();
+    if (!currentConcept || concepts.length === 0) return;
+    const idx = sessionConcepts.findIndex((c) => c.id === currentConcept.id);
+    if (idx < 0) return;
+    const updated = [...sessionConcepts];
+    // Filter out duplicates already in the queue
+    const toInsert = concepts.filter(
+      (c) => !sessionConcepts.some((s) => s.id === c.id)
+    );
+    updated.splice(idx + 1, 0, ...toInsert);
+    set({ sessionConcepts: updated });
+  },
   startTimeTracking: () => set({ activeSegmentStart: Date.now() }),
   stopTimeTracking: () => {
     const { activeSegmentStart, todayMinutes } = get();
@@ -72,5 +105,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       lessonContent: null,
       explanationAttempt: 0,
       sessionConcepts: [],
+      reinforcementConceptId: null,
+      reinforcementAttempt: 0,
     }),
 }));

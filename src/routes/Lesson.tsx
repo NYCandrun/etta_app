@@ -19,7 +19,12 @@ export default function Lesson() {
     quizSession,
     explanationAttempt,
     incrementExplanationAttempt,
+    reinforcementConceptId,
   } = useSession();
+
+  const isReinforcing = reinforcementConceptId !== null;
+  const isPrereqReview =
+    isReinforcing && currentConcept?.id !== reinforcementConceptId;
 
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -138,6 +143,17 @@ export default function Lesson() {
         </h1>
       </div>
 
+      {/* Reinforcement banner */}
+      {isReinforcing && (
+        <div className="rounded-xl border border-accent-200 bg-accent-50/50 px-4 py-3 dark:border-accent-800 dark:bg-accent-950/20">
+          <p className="text-sm font-medium text-accent-700 dark:text-accent-300">
+            {isPrereqReview
+              ? "Strengthening a prerequisite before moving forward"
+              : "Reviewing this topic with a fresh perspective"}
+          </p>
+        </div>
+      )}
+
       {/* Content */}
       {loading ? (
         <div className="card">
@@ -174,7 +190,7 @@ export default function Lesson() {
               onClick={handleReadyForQuiz}
               className="btn-primary"
             >
-              I'm ready for the quiz
+              {isReinforcing ? "Continue" : "I'm ready for the quiz"}
             </button>
           </div>
         </>

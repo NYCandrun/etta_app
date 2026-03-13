@@ -27,6 +27,12 @@ export interface Answer {
   timeSpentMs: number;
 }
 
+export interface StruggleAlert {
+  isStruggling: boolean;
+  recommendation?: string;
+  revisitPrerequisites: string[]; // concept IDs
+}
+
 export interface Feedback {
   questionId: string;
   isCorrect: boolean;
@@ -34,6 +40,7 @@ export interface Feedback {
   explanation: string;
   encouragement: string;
   nextHint?: string;
+  struggleAlert?: StruggleAlert;
 }
 
 export interface QuizSession {
