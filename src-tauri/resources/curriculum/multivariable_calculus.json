@@ -19,6 +19,12 @@
             "Compute distances between points in R³",
             "Write equations of spheres and identify their center and radius"
           ],
+          "error_patterns": [
+            "confuses_distance_formula_signs_by_not_squaring_differences",
+            "misidentifies_center_of_sphere_by_getting_signs_wrong",
+            "forgets_to_complete_the_square_when_finding_sphere_center",
+            "mixes_up_axes_orientation_in_right_hand_coordinate_system"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Represent vectors in R³ in component form and perform vector arithmetic",
             "Compute the magnitude and unit vector in the direction of a given vector",
             "Express vectors in terms of the standard basis vectors i, j, k"
+          ],
+          "error_patterns": [
+            "forgets_to_divide_by_magnitude_when_computing_unit_vector",
+            "subtracts_initial_point_from_terminal_in_wrong_order",
+            "confuses_position_vector_with_displacement_vector",
+            "adds_magnitudes_instead_of_components_when_adding_vectors"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Interpret the cross product geometrically as area and direction (right-hand rule)",
             "Apply the cross product to find the area of a parallelogram and a triangle in R³"
           ],
+          "error_patterns": [
+            "uses_left_hand_rule_instead_of_right_hand_rule",
+            "treats_cross_product_as_commutative_ignoring_sign_change",
+            "computes_cross_product_of_parallel_vectors_and_expects_nonzero",
+            "forgets_to_halve_parallelogram_area_for_triangle_area"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -51,6 +69,12 @@
             "Write parametric and symmetric equations of a line in R³",
             "Write the equation of a plane given a point and a normal vector",
             "Compute the distance from a point to a plane and the angle between two planes"
+          ],
+          "error_patterns": [
+            "confuses_direction_vector_with_normal_vector_for_line_vs_plane",
+            "forgets_absolute_value_in_point_to_plane_distance_formula",
+            "uses_direction_vectors_instead_of_normal_vectors_for_angle_between_planes",
+            "writes_symmetric_equations_with_zero_denominator_without_handling_it"
           ],
           "difficulty_tier": 2
         }
@@ -70,6 +94,12 @@
             "Compute limits and determine continuity of vector-valued functions",
             "Parameterize common space curves (helix, circle in R³)"
           ],
+          "error_patterns": [
+            "confuses_parameter_range_with_spatial_range_of_curve",
+            "takes_limit_of_magnitude_instead_of_component_wise_limit",
+            "uses_wrong_parameter_interval_for_closed_curve",
+            "forgets_that_different_parameterizations_can_trace_same_curve"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -81,6 +111,12 @@
             "Interpret r'(t) as the tangent vector and compute the unit tangent vector",
             "Integrate vector-valued functions to find position from velocity"
           ],
+          "error_patterns": [
+            "forgets_constant_vector_of_integration_when_integrating",
+            "differentiates_magnitude_instead_of_differentiating_components",
+            "confuses_tangent_vector_with_unit_tangent_vector",
+            "applies_scalar_product_rule_instead_of_vector_product_rules"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -91,6 +127,12 @@
             "Compute arc length of a space curve using integration",
             "Define and compute the curvature κ of a space curve",
             "Find the unit normal and binormal vectors (TNB frame)"
+          ],
+          "error_patterns": [
+            "forgets_to_take_magnitude_of_derivative_in_arc_length_integral",
+            "confuses_curvature_formula_for_parametric_vs_arc_length_parameterization",
+            "computes_normal_vector_without_normalizing",
+            "reverses_order_of_cross_product_when_computing_binormal"
           ],
           "difficulty_tier": 2
         }
@@ -110,6 +152,12 @@
             "Sketch level curves for functions of two variables",
             "Describe level surfaces for functions of three variables"
           ],
+          "error_patterns": [
+            "confuses_level_curves_with_cross_sections",
+            "forgets_domain_restrictions_from_square_roots_or_logarithms",
+            "treats_level_curves_as_having_varying_function_values",
+            "sketches_level_curves_at_unequal_increments_and_misreads_steepness"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -120,6 +168,12 @@
             "Evaluate limits of multivariable functions along different paths",
             "Prove a limit does not exist by finding two paths with different limits",
             "Apply the Squeeze Theorem in multiple variables"
+          ],
+          "error_patterns": [
+            "concludes_limit_exists_after_checking_only_straight_line_paths",
+            "assumes_limit_exists_because_two_paths_give_same_value",
+            "applies_single_variable_lhopitals_rule_directly_to_multivariable",
+            "forgets_to_approach_from_all_directions_not_just_axes"
           ],
           "difficulty_tier": 2
         },
@@ -132,6 +186,12 @@
             "Compute second-order and mixed partial derivatives",
             "Apply Clairaut's theorem on equality of mixed partials"
           ],
+          "error_patterns": [
+            "differentiates_held_constant_variable_instead_of_treating_as_constant",
+            "applies_clairaut_theorem_when_mixed_partials_are_not_continuous",
+            "confuses_partial_derivative_notation_with_total_derivative",
+            "forgets_product_rule_when_both_factors_depend_on_differentiation_variable"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -143,6 +203,12 @@
             "Draw and use tree diagrams to organize chain rule computations",
             "Compute implicit partial derivatives using the chain rule"
           ],
+          "error_patterns": [
+            "misses_a_path_in_tree_diagram_for_chain_rule",
+            "applies_single_variable_chain_rule_ignoring_additional_dependencies",
+            "confuses_partial_and_total_derivatives_in_chain_rule",
+            "forgets_to_multiply_by_inner_derivative_in_one_branch"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -153,6 +219,12 @@
             "Compute the gradient vector ∇f for scalar-valued functions",
             "Compute directional derivatives using the gradient and a unit direction vector",
             "Interpret the gradient as the direction of steepest ascent and its magnitude as the maximum rate of change"
+          ],
+          "error_patterns": [
+            "uses_non_unit_vector_when_computing_directional_derivative",
+            "confuses_gradient_direction_with_direction_of_steepest_descent",
+            "thinks_directional_derivative_is_always_positive",
+            "forgets_gradient_is_perpendicular_to_level_curves"
           ],
           "difficulty_tier": 2
         }
@@ -172,6 +244,12 @@
             "Use the tangent plane for linear approximation of multivariable functions",
             "Compute the total differential and estimate error in calculated quantities"
           ],
+          "error_patterns": [
+            "evaluates_partial_derivatives_at_wrong_point_for_tangent_plane",
+            "confuses_linearization_with_quadratic_approximation",
+            "uses_dx_and_dy_as_actual_changes_instead_of_differentials",
+            "forgets_to_include_function_value_at_base_point_in_linear_approximation"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -183,6 +261,12 @@
             "Apply the second derivative test (using the Hessian determinant) to classify critical points",
             "Find absolute extrema on closed bounded regions"
           ],
+          "error_patterns": [
+            "forgets_to_check_boundary_for_absolute_extrema_on_closed_region",
+            "misapplies_second_derivative_test_by_using_wrong_hessian_formula",
+            "classifies_saddle_point_as_extremum",
+            "ignores_inconclusive_case_when_hessian_determinant_is_zero"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -193,6 +277,12 @@
             "Set up and solve constrained optimization problems using Lagrange multipliers",
             "Handle optimization with multiple constraints",
             "Interpret the Lagrange multiplier λ as the rate of change of the optimum with respect to the constraint"
+          ],
+          "error_patterns": [
+            "forgets_to_include_constraint_equation_in_lagrange_system",
+            "sets_gradient_of_f_equal_to_gradient_of_g_without_lambda",
+            "fails_to_check_all_candidate_points_for_global_extremum",
+            "confuses_lagrange_multiplier_sign_convention"
           ],
           "difficulty_tier": 3
         }
@@ -212,6 +302,12 @@
             "Interpret double integrals as volume under a surface",
             "Apply Fubini's theorem to change the order of integration over rectangles"
           ],
+          "error_patterns": [
+            "reverses_integration_limits_when_changing_order",
+            "treats_double_integral_as_product_of_two_single_integrals_for_non_separable_functions",
+            "forgets_that_fubini_requires_continuity_or_integrability",
+            "evaluates_inner_integral_with_respect_to_wrong_variable"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -222,6 +318,12 @@
             "Set up iterated integrals over Type I and Type II regions",
             "Change the order of integration by re-describing the region",
             "Compute areas and volumes using double integrals"
+          ],
+          "error_patterns": [
+            "confuses_type_i_and_type_ii_region_descriptions",
+            "uses_constant_limits_when_limits_should_depend_on_outer_variable",
+            "draws_incorrect_region_when_reversing_order_of_integration",
+            "sets_up_limits_with_outer_variable_depending_on_inner_variable"
           ],
           "difficulty_tier": 2
         },
@@ -234,6 +336,12 @@
             "Set up and evaluate double integrals in polar coordinates over appropriate regions",
             "Recognize regions that are simpler to describe in polar coordinates"
           ],
+          "error_patterns": [
+            "forgets_jacobian_r_when_converting_to_polar_coordinates",
+            "uses_wrong_theta_limits_for_region_not_centered_at_origin",
+            "confuses_r_limits_with_theta_limits",
+            "writes_dx_dy_instead_of_r_dr_dtheta_after_substitution"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -244,6 +352,12 @@
             "Compute mass, center of mass, and moments of inertia of planar laminae with variable density",
             "Compute surface area using double integrals",
             "Apply double integrals to probability (joint density functions)"
+          ],
+          "error_patterns": [
+            "forgets_to_divide_moment_by_total_mass_for_center_of_mass",
+            "confuses_moment_about_x_axis_with_moment_about_y_axis",
+            "omits_density_function_in_mass_integral",
+            "uses_wrong_surface_area_element_formula"
           ],
           "difficulty_tier": 2
         }
@@ -263,6 +377,12 @@
             "Describe three-dimensional regions with appropriate integration limits",
             "Compute volume and mass of solid regions using triple integrals"
           ],
+          "error_patterns": [
+            "sets_up_integration_limits_in_wrong_order_for_projection",
+            "uses_two_dimensional_region_limits_for_three_dimensional_integral",
+            "forgets_density_function_when_computing_mass_from_volume_integral",
+            "confuses_upper_and_lower_bounding_surfaces"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -273,6 +393,12 @@
             "Convert between Cartesian and cylindrical coordinates",
             "Set up and evaluate triple integrals in cylindrical coordinates with Jacobian r",
             "Identify solids best described in cylindrical coordinates"
+          ],
+          "error_patterns": [
+            "forgets_jacobian_r_in_cylindrical_coordinate_integral",
+            "confuses_cylindrical_with_spherical_coordinate_variables",
+            "uses_cartesian_limits_without_converting_to_cylindrical",
+            "writes_z_limits_in_terms_of_x_y_instead_of_r_theta"
           ],
           "difficulty_tier": 2
         },
@@ -285,6 +411,12 @@
             "Set up and evaluate triple integrals in spherical coordinates with Jacobian ρ² sin φ",
             "Identify solids best described in spherical coordinates (spheres, cones)"
           ],
+          "error_patterns": [
+            "forgets_rho_squared_sin_phi_jacobian_in_spherical_integral",
+            "swaps_theta_and_phi_angle_conventions",
+            "uses_phi_limits_of_zero_to_two_pi_instead_of_zero_to_pi",
+            "confuses_spherical_rho_with_cylindrical_r"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -295,6 +427,12 @@
             "Compute the Jacobian determinant for a general change of variables",
             "Apply the change of variables formula for double and triple integrals",
             "Design custom transformations to simplify integration regions"
+          ],
+          "error_patterns": [
+            "computes_jacobian_of_inverse_transformation_instead_of_forward",
+            "forgets_absolute_value_of_jacobian_determinant",
+            "sets_up_jacobian_matrix_with_rows_and_columns_swapped",
+            "fails_to_transform_integration_limits_to_new_variables"
           ],
           "difficulty_tier": 3
         }
@@ -314,6 +452,12 @@
             "Identify gradient vector fields (conservative fields)",
             "Compute the divergence and curl of a vector field"
           ],
+          "error_patterns": [
+            "confuses_divergence_scalar_output_with_curl_vector_output",
+            "applies_curl_formula_with_wrong_component_order",
+            "thinks_zero_divergence_implies_conservative_field",
+            "confuses_gradient_of_scalar_field_with_divergence_of_vector_field"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -325,6 +469,12 @@
             "Evaluate line integrals of vector fields (work integrals) along parameterized curves",
             "Interpret line integrals as work done by a force along a path"
           ],
+          "error_patterns": [
+            "forgets_to_substitute_parameterization_into_integrand",
+            "uses_magnitude_of_derivative_for_vector_line_integral_instead_of_dot_product",
+            "confuses_scalar_line_integral_ds_with_vector_line_integral_dr",
+            "ignores_orientation_of_curve_in_work_integral"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -335,6 +485,12 @@
             "Determine whether a vector field is conservative by checking curl = 0",
             "Find a potential function for a conservative vector field",
             "Apply the Fundamental Theorem of Line Integrals"
+          ],
+          "error_patterns": [
+            "assumes_curl_zero_implies_conservative_on_non_simply_connected_domain",
+            "forgets_constant_of_integration_when_reconstructing_potential_function",
+            "evaluates_potential_at_wrong_endpoints_in_ftli",
+            "checks_only_one_component_equation_when_finding_potential"
           ],
           "difficulty_tier": 2
         }
@@ -354,6 +510,12 @@
             "Apply Green's theorem to evaluate line integrals by computing double integrals",
             "Use Green's theorem to compute areas of regions bounded by curves"
           ],
+          "error_patterns": [
+            "applies_greens_theorem_with_wrong_orientation_of_boundary_curve",
+            "confuses_which_partial_derivative_is_subtracted_in_greens_theorem",
+            "uses_greens_theorem_on_non_closed_curve",
+            "forgets_greens_theorem_requires_simply_connected_region"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -364,6 +526,12 @@
             "State and apply the flux form of Green's theorem",
             "Compute the outward flux of a vector field across a closed curve",
             "Relate the flux form to the divergence of the vector field"
+          ],
+          "error_patterns": [
+            "confuses_circulation_form_with_flux_form_of_greens_theorem",
+            "uses_inward_normal_instead_of_outward_normal_for_flux",
+            "mixes_up_components_in_flux_integral_formula",
+            "applies_flux_form_to_non_closed_curve"
           ],
           "difficulty_tier": 3
         }
@@ -383,6 +551,12 @@
             "Compute the tangent plane to a parametric surface",
             "Compute the surface area element dS from a parameterization"
           ],
+          "error_patterns": [
+            "uses_wrong_parameter_domain_for_surface_parameterization",
+            "computes_cross_product_of_tangent_vectors_in_wrong_order",
+            "confuses_surface_area_element_ds_with_volume_element",
+            "forgets_to_take_magnitude_of_cross_product_for_area_element"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -393,6 +567,12 @@
             "Evaluate surface integrals of scalar functions over parametric surfaces",
             "Evaluate flux integrals of vector fields through oriented surfaces",
             "Choose and apply the correct orientation (outward normal) for flux integrals"
+          ],
+          "error_patterns": [
+            "uses_wrong_normal_orientation_for_flux_integral",
+            "forgets_to_dot_vector_field_with_normal_in_flux_integral",
+            "confuses_scalar_surface_integral_with_flux_integral",
+            "fails_to_substitute_parameterization_into_vector_field_before_integrating"
           ],
           "difficulty_tier": 3
         }
@@ -412,6 +592,12 @@
             "Apply Stokes' theorem to convert between surface and line integrals",
             "Verify Stokes' theorem by computing both sides for a given example"
           ],
+          "error_patterns": [
+            "uses_inconsistent_orientation_between_surface_normal_and_boundary_curve",
+            "applies_stokes_theorem_to_non_oriented_surface",
+            "confuses_stokes_theorem_with_divergence_theorem",
+            "forgets_to_compute_curl_before_setting_up_surface_integral"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -423,6 +609,12 @@
             "Apply the Divergence Theorem to evaluate flux integrals over closed surfaces",
             "Interpret the Divergence Theorem physically as conservation of flow"
           ],
+          "error_patterns": [
+            "applies_divergence_theorem_to_non_closed_surface",
+            "computes_curl_instead_of_divergence_inside_triple_integral",
+            "forgets_outward_orientation_requirement_for_divergence_theorem",
+            "confuses_divergence_theorem_with_stokes_theorem"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -433,6 +625,12 @@
             "Identify Green's, Stokes', and the Divergence Theorem as instances of the generalized Stokes' theorem",
             "Select the appropriate theorem for a given vector calculus problem",
             "Interpret all three theorems as relating an integral over a boundary to an integral over the enclosed region"
+          ],
+          "error_patterns": [
+            "applies_wrong_theorem_for_the_given_geometric_setting",
+            "confuses_boundary_integral_with_region_integral_in_theorem_selection",
+            "fails_to_recognize_greens_theorem_as_special_case_of_stokes",
+            "misidentifies_which_differential_operator_pairs_with_which_theorem"
           ],
           "difficulty_tier": 3
         }

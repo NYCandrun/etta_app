@@ -500,6 +500,12 @@
             "Verify that the space of m×n matrices is a vector space",
             "Find bases and dimensions for polynomial and matrix spaces"
           ],
+          "error_patterns": [
+            "confuses_degree_at_most_n_with_degree_exactly_n_for_polynomial_space",
+            "miscounts_dimension_of_polynomial_space_as_n_instead_of_n_plus_one",
+            "assumes_matrix_space_dimension_is_m_plus_n_instead_of_m_times_n",
+            "fails_to_verify_closure_under_nonstandard_operations"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -510,6 +516,12 @@
             "Define inner products on function spaces (e.g., ⟨f,g⟩ = ∫ f(x)g(x) dx)",
             "Verify orthogonality of trigonometric functions {sin(nx), cos(nx)} on [−π, π]",
             "Compute Fourier coefficients as projections onto an orthogonal basis"
+          ],
+          "error_patterns": [
+            "uses_wrong_integration_interval_for_function_inner_product",
+            "forgets_normalization_constant_in_fourier_coefficients",
+            "confuses_pointwise_product_with_inner_product_on_function_space",
+            "fails_to_verify_positive_definiteness_of_proposed_inner_product"
           ],
           "difficulty_tier": 3
         }
@@ -529,6 +541,12 @@
             "Apply partial pivoting to obtain PA = LU when row swaps are needed",
             "Solve systems efficiently using forward and back substitution with LU decomposition"
           ],
+          "error_patterns": [
+            "places_multipliers_in_wrong_position_in_l_matrix",
+            "forgets_permutation_matrix_when_row_swaps_are_needed",
+            "performs_back_substitution_in_wrong_direction",
+            "confuses_lu_with_ldl_decomposition"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -540,6 +558,12 @@
             "Determine convergence conditions for iterative methods",
             "Compare direct and iterative methods in terms of efficiency and applicability"
           ],
+          "error_patterns": [
+            "uses_updated_values_in_jacobi_instead_of_old_values",
+            "confuses_jacobi_with_gauss_seidel_update_order",
+            "ignores_diagonal_dominance_condition_for_convergence",
+            "fails_to_check_spectral_radius_for_convergence_guarantee"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -550,6 +574,12 @@
             "Apply the power method to find the dominant eigenvalue and eigenvector",
             "Apply the inverse power method with shifts to find specific eigenvalues",
             "Describe the QR algorithm for computing all eigenvalues of a matrix"
+          ],
+          "error_patterns": [
+            "forgets_to_normalize_vector_at_each_power_method_iteration",
+            "applies_power_method_when_dominant_eigenvalue_is_not_unique",
+            "uses_wrong_shift_value_in_inverse_power_method",
+            "confuses_qr_factorization_with_qr_algorithm_iteration"
           ],
           "difficulty_tier": 3
         }

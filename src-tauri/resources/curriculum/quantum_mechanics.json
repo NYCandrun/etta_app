@@ -459,6 +459,12 @@
             "Compute second-order energy corrections using summation over unperturbed states",
             "Apply perturbation theory to the ground state of helium (first-order energy correction)"
           ],
+          "error_patterns": [
+            "includes_n_equals_m_term_in_second_order_energy_sum",
+            "uses_perturbed_states_instead_of_unperturbed_in_matrix_elements",
+            "forgets_energy_denominator_in_first_order_wavefunction_correction",
+            "applies_non_degenerate_theory_to_degenerate_states"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -470,6 +476,12 @@
             "Diagonalize the perturbation matrix within the degenerate subspace",
             "Apply degenerate perturbation theory to the Stark effect in hydrogen"
           ],
+          "error_patterns": [
+            "diagonalizes_full_hamiltonian_instead_of_perturbation_in_degenerate_subspace",
+            "fails_to_identify_degeneracy_requiring_degenerate_theory",
+            "uses_wrong_basis_for_degenerate_subspace",
+            "confuses_stark_effect_linear_vs_quadratic_regimes"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -480,6 +492,12 @@
             "Calculate the relativistic kinetic energy correction to hydrogen energy levels",
             "Calculate the spin-orbit coupling correction using degenerate perturbation theory",
             "Derive the fine structure formula and compare energy level splittings to spectral data"
+          ],
+          "error_patterns": [
+            "omits_darwin_term_in_fine_structure_calculation",
+            "confuses_fine_structure_with_hyperfine_structure",
+            "uses_wrong_quantum_numbers_j_vs_l_for_fine_structure_splitting",
+            "forgets_spin_orbit_coupling_vanishes_for_l_equals_zero"
           ],
           "difficulty_tier": 3
         }
@@ -499,6 +517,12 @@
             "Apply the result to sudden and adiabatic perturbations",
             "Compute transition probabilities for sinusoidal perturbations"
           ],
+          "error_patterns": [
+            "confuses_sudden_and_adiabatic_approximation_regimes",
+            "forgets_interaction_picture_phase_in_transition_amplitude",
+            "squares_amplitude_before_integrating_over_time",
+            "neglects_energy_conservation_condition_in_sinusoidal_perturbation"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -510,6 +534,12 @@
             "Apply Fermi's Golden Rule to calculate photoelectric effect transition rates",
             "Identify the role of the density of states in determining transition rates"
           ],
+          "error_patterns": [
+            "forgets_density_of_states_factor_in_fermis_golden_rule",
+            "confuses_transition_rate_with_transition_probability",
+            "applies_golden_rule_to_discrete_spectrum_without_modification",
+            "omits_two_pi_over_hbar_prefactor_in_golden_rule"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -520,6 +550,12 @@
             "Derive electric dipole selection rules Δl = ±1, Δm = 0, ±1 from matrix elements",
             "Apply Einstein's A and B coefficients to relate spontaneous and stimulated emission",
             "Compute spontaneous emission rates for hydrogen transitions"
+          ],
+          "error_patterns": [
+            "allows_delta_l_equals_zero_in_electric_dipole_transitions",
+            "confuses_spontaneous_and_stimulated_emission_coefficients",
+            "forgets_delta_m_selection_rule_for_polarization",
+            "treats_forbidden_transitions_as_completely_impossible"
           ],
           "difficulty_tier": 3
         }
@@ -539,6 +575,12 @@
             "Derive the Bell (CHSH) inequality from local hidden variable assumptions",
             "Explain how quantum mechanics violates Bell's inequality and the implications for locality"
           ],
+          "error_patterns": [
+            "thinks_entanglement_allows_faster_than_light_communication",
+            "confuses_entangled_state_with_classical_correlation",
+            "misidentifies_product_states_as_entangled",
+            "assumes_bell_violation_disproves_all_hidden_variable_theories"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -550,6 +592,12 @@
             "Compute expectation values and time evolution using the density matrix",
             "Perform partial traces to describe subsystems of entangled states"
           ],
+          "error_patterns": [
+            "confuses_mixed_state_with_coherent_superposition",
+            "forgets_trace_rho_squared_less_than_one_for_mixed_states",
+            "performs_partial_trace_over_wrong_subsystem",
+            "treats_density_matrix_probabilities_as_amplitudes"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -560,6 +608,12 @@
             "Represent qubit states on the Bloch sphere",
             "Define and apply common quantum gates (Hadamard, CNOT, Pauli, phase)",
             "Analyze simple quantum circuits and compute output states"
+          ],
+          "error_patterns": [
+            "confuses_bloch_sphere_angles_with_physical_angles",
+            "applies_cnot_gate_with_control_and_target_swapped",
+            "forgets_global_phase_irrelevance_for_single_qubit_states",
+            "miscomputes_tensor_product_of_multi_qubit_gates"
           ],
           "difficulty_tier": 3
         }

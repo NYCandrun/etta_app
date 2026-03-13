@@ -19,6 +19,12 @@
             "Convert between coordinate systems using spherical trigonometry",
             "Explain sidereal time, hour angle, and the relation between observer location and visible sky"
           ],
+          "error_patterns": [
+            "confuses_right_ascension_with_longitude",
+            "swaps_altitude_azimuth_with_equatorial_coordinates",
+            "forgets_precession_shifts_equatorial_coordinates_over_time",
+            "confuses_sidereal_time_with_solar_time"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -29,6 +35,12 @@
             "Define apparent and absolute magnitude and convert between them using the distance modulus",
             "Relate magnitude differences to flux ratios using Pogson's equation",
             "Describe the electromagnetic windows of the atmosphere and the rationale for multi-wavelength astronomy"
+          ],
+          "error_patterns": [
+            "reverses_sign_convention_brighter_is_lower_magnitude",
+            "confuses_apparent_and_absolute_magnitude",
+            "uses_wrong_base_in_pogson_equation_log_vs_ln",
+            "forgets_factor_of_five_in_magnitude_flux_ratio"
           ],
           "difficulty_tier": 1
         },
@@ -41,6 +53,12 @@
             "Describe standard candles (Cepheids, Type Ia supernovae) and their role in the distance ladder",
             "Apply the distance modulus m − M = 5 log(d/10 pc) to compute distances"
           ],
+          "error_patterns": [
+            "confuses_parallax_angle_with_total_angular_shift",
+            "uses_wrong_baseline_for_stellar_parallax",
+            "forgets_ten_parsec_reference_in_distance_modulus",
+            "confuses_parsec_with_light_year_in_distance_formula"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -51,6 +69,12 @@
             "Describe the principles of reflecting and refracting telescopes and their resolving power",
             "Explain the operation of CCD detectors and their quantum efficiency",
             "Discuss the principles of radio, infrared, and X-ray astronomy instrumentation"
+          ],
+          "error_patterns": [
+            "confuses_resolving_power_with_magnification",
+            "thinks_larger_aperture_only_increases_magnification_not_resolution",
+            "forgets_diffraction_limit_depends_on_wavelength",
+            "confuses_quantum_efficiency_with_gain_in_detectors"
           ],
           "difficulty_tier": 1
         }
@@ -70,6 +94,12 @@
             "Estimate stellar surface temperatures from peak wavelength or color indices",
             "Compute stellar luminosity from surface temperature and radius: L = 4πR²σT⁴"
           ],
+          "error_patterns": [
+            "confuses_wien_peak_wavelength_with_peak_frequency",
+            "forgets_radius_squared_in_luminosity_formula",
+            "uses_T_instead_of_T_to_the_fourth_in_stefan_boltzmann_law",
+            "assumes_all_stars_are_perfect_blackbodies"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -80,6 +110,12 @@
             "Explain the formation of absorption and emission lines from atomic energy transitions",
             "Apply selection rules to determine which transitions produce spectral lines",
             "Describe line broadening mechanisms: natural, thermal (Doppler), and pressure broadening"
+          ],
+          "error_patterns": [
+            "confuses_absorption_and_emission_line_formation_conditions",
+            "attributes_all_line_broadening_to_doppler_effect",
+            "forgets_that_line_strength_depends_on_temperature_and_abundance",
+            "confuses_equivalent_width_with_line_depth"
           ],
           "difficulty_tier": 2
         },
@@ -92,6 +128,12 @@
             "Explain the physical basis for the spectral sequence in terms of temperature and ionization",
             "Plot and interpret the Hertzsprung-Russell diagram, identifying the main sequence, giants, and white dwarfs"
           ],
+          "error_patterns": [
+            "thinks_spectral_type_reflects_composition_not_temperature",
+            "reverses_temperature_axis_direction_on_hr_diagram",
+            "confuses_luminosity_class_with_spectral_type",
+            "assumes_hydrogen_line_strength_increases_monotonically_with_temperature"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -102,6 +144,12 @@
             "Apply the Doppler formula (classical and relativistic) to compute radial velocities from spectral line shifts",
             "Describe how radial velocity measurements reveal binary stars and exoplanets",
             "Explain the cosmological redshift and its distinction from the kinematic Doppler shift"
+          ],
+          "error_patterns": [
+            "treats_cosmological_redshift_as_doppler_velocity",
+            "confuses_blueshift_and_redshift_sign_conventions",
+            "uses_classical_doppler_formula_at_relativistic_speeds",
+            "forgets_radial_velocity_only_measures_line_of_sight_component"
           ],
           "difficulty_tier": 2
         }
@@ -121,6 +169,12 @@
             "Apply Kepler's third law to determine total mass from orbital period and semi-major axis",
             "Extract individual masses from radial velocity curves of double-lined spectroscopic binaries"
           ],
+          "error_patterns": [
+            "uses_solar_units_inconsistently_in_keplers_third_law",
+            "forgets_inclination_correction_for_spectroscopic_binaries",
+            "confuses_semi_major_axis_with_separation_at_observation",
+            "extracts_mass_ratio_from_single_lined_binary_as_if_double_lined"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -132,6 +186,12 @@
             "Compute the surface temperature ratio from the depth of primary and secondary eclipses",
             "Discuss the mass-luminosity relation for main sequence stars"
           ],
+          "error_patterns": [
+            "confuses_primary_and_secondary_eclipse_definitions",
+            "applies_mass_luminosity_relation_to_evolved_stars",
+            "forgets_limb_darkening_affects_eclipse_light_curves",
+            "uses_wrong_contact_times_when_computing_stellar_radii"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -142,6 +202,12 @@
             "Describe Roche lobe geometry and the conditions for mass transfer in close binaries",
             "Classify mass transfer types (wind accretion, Roche lobe overflow)",
             "Explain the role of mass transfer in novae, X-ray binaries, and Type Ia supernovae"
+          ],
+          "error_patterns": [
+            "confuses_roche_lobe_with_roche_limit",
+            "thinks_mass_transfer_always_widens_the_orbit",
+            "forgets_angular_momentum_conservation_during_mass_transfer",
+            "confuses_nova_with_supernova_mechanism"
           ],
           "difficulty_tier": 3
         }
@@ -161,6 +227,12 @@
             "Estimate central pressure and temperature using the virial theorem",
             "Explain the interplay between gravity and pressure that determines stellar structure"
           ],
+          "error_patterns": [
+            "omits_negative_sign_in_hydrostatic_equilibrium_equation",
+            "confuses_virial_theorem_factor_of_two_between_kinetic_and_potential",
+            "forgets_pressure_must_increase_inward",
+            "neglects_radiation_pressure_in_massive_stars"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -171,6 +243,12 @@
             "Derive the radiative transport equation in terms of opacity and temperature gradient",
             "State the Schwarzschild criterion for convective instability",
             "Describe the structure of convective and radiative zones in low-mass and high-mass stars"
+          ],
+          "error_patterns": [
+            "reverses_schwarzschild_criterion_inequality_for_convection",
+            "confuses_radiative_and_convective_zone_locations_in_low_vs_high_mass_stars",
+            "forgets_opacity_dependence_on_temperature_and_density",
+            "assumes_convection_is_always_more_efficient_than_radiation"
           ],
           "difficulty_tier": 2
         },
@@ -183,6 +261,12 @@
             "Describe the proton-proton chain and CNO cycle for hydrogen fusion",
             "Calculate energy release per reaction using nuclear binding energies and mass defect"
           ],
+          "error_patterns": [
+            "thinks_entire_stellar_mass_converts_to_energy",
+            "confuses_which_cycle_dominates_in_low_vs_high_mass_stars",
+            "forgets_neutrino_energy_losses_in_pp_chain",
+            "confuses_binding_energy_per_nucleon_with_total_binding_energy"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -193,6 +277,12 @@
             "State the four equations of stellar structure: mass conservation, hydrostatic equilibrium, energy transport, and energy generation",
             "Describe the boundary conditions at the center and surface of a star",
             "Explain how stellar models are constructed numerically from these equations"
+          ],
+          "error_patterns": [
+            "omits_energy_transport_equation_from_stellar_structure_set",
+            "applies_wrong_boundary_conditions_at_stellar_center",
+            "confuses_luminosity_equation_with_radiative_transfer_equation",
+            "forgets_constitutive_relations_needed_to_close_the_system"
           ],
           "difficulty_tier": 3
         }
@@ -212,6 +302,12 @@
             "Describe the stages of protostellar collapse from molecular cloud to T Tauri star",
             "Explain the role of angular momentum conservation and magnetic fields in star formation"
           ],
+          "error_patterns": [
+            "confuses_jeans_mass_with_jeans_length_scaling",
+            "thinks_all_molecular_clouds_collapse_immediately",
+            "forgets_angular_momentum_barrier_in_protostellar_collapse",
+            "ignores_magnetic_pressure_support_against_collapse"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -222,6 +318,12 @@
             "Explain the main sequence as the locus of hydrogen-burning stars in the HR diagram",
             "Relate main sequence lifetime to stellar mass: t_MS ∝ M/L ∝ M^{−2.5}",
             "Describe the evolution of chemical composition and structure during main sequence burning"
+          ],
+          "error_patterns": [
+            "thinks_more_massive_stars_live_longer_due_to_more_fuel",
+            "confuses_main_sequence_with_evolutionary_track",
+            "forgets_luminosity_scales_steeply_with_mass",
+            "assumes_stars_burn_all_their_hydrogen_before_leaving_main_sequence"
           ],
           "difficulty_tier": 2
         },
@@ -234,6 +336,12 @@
             "Explain the helium flash and subsequent helium burning (triple-alpha process)",
             "Describe planetary nebula ejection and white dwarf formation"
           ],
+          "error_patterns": [
+            "thinks_helium_flash_destroys_the_star",
+            "confuses_planetary_nebula_with_planet_formation",
+            "misorders_post_main_sequence_evolutionary_phases",
+            "assumes_red_giants_are_hotter_because_more_luminous"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -244,6 +352,12 @@
             "Describe successive nuclear burning stages (H, He, C, Ne, O, Si) in massive stars",
             "Explain the iron core collapse mechanism for core-collapse supernovae",
             "Describe the role of neutrinos in core-collapse supernovae and the formation of neutron stars"
+          ],
+          "error_patterns": [
+            "thinks_iron_fusion_releases_energy",
+            "confuses_core_collapse_supernova_with_thermonuclear_supernova",
+            "misorders_nuclear_burning_stages_in_massive_stars",
+            "underestimates_role_of_neutrinos_in_supernova_energy_budget"
           ],
           "difficulty_tier": 3
         }
@@ -263,6 +377,12 @@
             "Derive the mass-radius relation for white dwarfs using the Fermi gas model",
             "State the Chandrasekhar limit (~1.4 M☉) and its derivation from relativistic degeneracy"
           ],
+          "error_patterns": [
+            "thinks_white_dwarfs_are_supported_by_thermal_pressure",
+            "gets_inverse_mass_radius_relation_backwards_for_white_dwarfs",
+            "confuses_chandrasekhar_limit_with_tolman_oppenheimer_volkoff_limit",
+            "forgets_degeneracy_pressure_is_independent_of_temperature"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -273,6 +393,12 @@
             "Describe the internal structure of a neutron star (crust, neutron superfluid, core)",
             "Explain the pulsar mechanism as a rotating magnetic dipole emitting beamed radiation",
             "Apply conservation of angular momentum and magnetic flux to predict neutron star properties"
+          ],
+          "error_patterns": [
+            "thinks_pulsars_pulsate_rather_than_rotate",
+            "confuses_neutron_degeneracy_with_electron_degeneracy_pressure",
+            "forgets_magnetic_axis_misalignment_is_needed_for_pulsar_emission",
+            "assumes_all_neutron_stars_are_observable_as_pulsars"
           ],
           "difficulty_tier": 2
         },
@@ -285,6 +411,12 @@
             "Describe the spacetime geometry around a non-rotating black hole (Schwarzschild metric)",
             "Explain the event horizon, gravitational redshift, and time dilation near a black hole"
           ],
+          "error_patterns": [
+            "thinks_black_hole_is_a_physical_surface",
+            "confuses_event_horizon_with_singularity",
+            "assumes_tidal_forces_are_always_extreme_at_event_horizon",
+            "forgets_schwarzschild_metric_is_only_for_non_rotating_case"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -295,6 +427,12 @@
             "Derive the Eddington luminosity as the maximum luminosity supported by radiation pressure",
             "Describe accretion disk structure and the conversion of gravitational energy to radiation",
             "Explain the observational signatures of X-ray binaries and active galactic nuclei"
+          ],
+          "error_patterns": [
+            "thinks_eddington_limit_is_absolute_maximum_luminosity",
+            "forgets_accretion_efficiency_depends_on_innermost_stable_orbit",
+            "confuses_accretion_luminosity_with_nuclear_luminosity",
+            "assumes_all_accreting_systems_have_geometrically_thin_disks"
           ],
           "difficulty_tier": 3
         }
@@ -314,6 +452,12 @@
             "Explain interstellar extinction and reddening due to dust",
             "Compute column density from 21-cm hydrogen line observations"
           ],
+          "error_patterns": [
+            "confuses_interstellar_reddening_with_redshift",
+            "thinks_extinction_only_blocks_light_not_scatters_it",
+            "forgets_21_cm_line_is_from_neutral_hydrogen_not_molecular",
+            "assumes_interstellar_medium_is_uniform_in_density"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -324,6 +468,12 @@
             "Derive the Stromgren radius from the balance between ionization and recombination rates",
             "Describe the emission spectrum of HII regions and forbidden line transitions",
             "Estimate the temperature and density of nebulae from emission line ratios"
+          ],
+          "error_patterns": [
+            "confuses_stromgren_radius_scaling_with_density_vs_luminosity",
+            "thinks_forbidden_lines_cannot_occur_at_all",
+            "forgets_recombination_rate_depends_on_density_squared",
+            "confuses_hii_regions_with_planetary_nebulae"
           ],
           "difficulty_tier": 3
         }
@@ -343,6 +493,12 @@
             "Analyze the rotation curve of the galaxy and derive enclosed mass from V(R)",
             "Explain differential rotation and Oort's constants"
           ],
+          "error_patterns": [
+            "treats_spiral_arms_as_fixed_material_structures",
+            "confuses_oort_constants_a_and_b_meanings",
+            "assumes_solid_body_rotation_for_the_galaxy",
+            "forgets_enclosed_mass_formula_assumes_spherical_symmetry"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -353,6 +509,12 @@
             "Compare observed flat rotation curves to the Keplerian prediction for visible mass",
             "Estimate the mass of the dark matter halo from rotation curve fitting",
             "Discuss additional evidence for dark matter (gravitational lensing, CMB, large-scale structure)"
+          ],
+          "error_patterns": [
+            "thinks_flat_rotation_curve_means_no_mass_beyond_visible_disk",
+            "confuses_dark_matter_with_dark_energy",
+            "assumes_dark_matter_is_concentrated_in_galactic_disk",
+            "forgets_keplerian_decline_requires_all_mass_interior_to_orbit"
           ],
           "difficulty_tier": 2
         }
@@ -372,6 +534,12 @@
             "Relate galaxy morphology to star formation rate, gas content, and dynamics",
             "Explain the surface brightness profiles: de Vaucouleurs law for ellipticals, exponential disk for spirals"
           ],
+          "error_patterns": [
+            "treats_hubble_sequence_as_evolutionary_sequence",
+            "confuses_elliptical_galaxy_classification_number_with_inclination",
+            "assumes_elliptical_galaxies_are_flattened_disks_seen_face_on",
+            "forgets_lenticular_galaxies_exist_between_spirals_and_ellipticals"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -383,6 +551,12 @@
             "Explain how supermassive black hole accretion powers AGN luminosity",
             "Discuss the Eddington limit, jet formation, and feedback effects on the host galaxy"
           ],
+          "error_patterns": [
+            "treats_different_agn_types_as_fundamentally_different_objects",
+            "confuses_agn_luminosity_source_with_stellar_nuclear_fusion",
+            "forgets_viewing_angle_determines_agn_classification",
+            "assumes_all_galaxies_with_supermassive_black_holes_are_active"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -393,6 +567,12 @@
             "Describe hierarchical structure formation in the ΛCDM framework",
             "Explain the role of galaxy mergers in morphological transformation",
             "Discuss the evolution of the galaxy luminosity function and star formation rate density over cosmic time"
+          ],
+          "error_patterns": [
+            "thinks_galaxies_formed_monolithically_not_hierarchically",
+            "assumes_mergers_always_produce_elliptical_galaxies",
+            "confuses_lookback_time_with_comoving_distance",
+            "forgets_star_formation_rate_peaked_at_intermediate_redshift"
           ],
           "difficulty_tier": 3
         }
@@ -412,6 +592,12 @@
             "Describe spacetime as a curved manifold and geodesics as free-fall trajectories",
             "Interpret the metric tensor as encoding distances and time intervals in curved spacetime"
           ],
+          "error_patterns": [
+            "confuses_weak_and_strong_equivalence_principles",
+            "thinks_gravity_is_a_force_in_general_relativity",
+            "confuses_coordinate_acceleration_with_proper_acceleration",
+            "treats_geodesics_as_straight_lines_in_coordinate_space"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -423,6 +609,12 @@
             "Describe the Schwarzschild metric as the vacuum solution for a spherical mass",
             "Derive the classical tests of GR: perihelion precession, light deflection, gravitational redshift"
           ],
+          "error_patterns": [
+            "confuses_einstein_tensor_with_ricci_tensor",
+            "forgets_schwarzschild_solution_is_vacuum_only",
+            "gets_factor_of_two_wrong_in_light_deflection_angle",
+            "confuses_gravitational_redshift_with_doppler_redshift"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -433,6 +625,12 @@
             "Describe gravitational waves as ripples in spacetime propagating at the speed of light",
             "Derive the quadrupole formula for gravitational wave emission (order of magnitude)",
             "Explain the LIGO detection of binary black hole and neutron star mergers"
+          ],
+          "error_patterns": [
+            "thinks_gravitational_waves_are_longitudinal_like_sound",
+            "confuses_quadrupole_radiation_with_dipole_radiation",
+            "assumes_gravitational_waves_travel_faster_than_light",
+            "forgets_spherically_symmetric_collapse_produces_no_gravitational_waves"
           ],
           "difficulty_tier": 3
         }
@@ -452,6 +650,12 @@
             "Write the Friedmann-Robertson-Walker metric and identify the scale factor a(t)",
             "Relate the cosmological redshift to the scale factor: 1 + z = a(t₀)/a(t_emit)"
           ],
+          "error_patterns": [
+            "applies_cosmological_principle_on_small_scales",
+            "confuses_scale_factor_with_physical_distance",
+            "treats_cosmological_redshift_as_objects_moving_through_space",
+            "forgets_scale_factor_is_normalized_to_one_at_present"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -462,6 +666,12 @@
             "Derive the Friedmann equations from Einstein's field equations for a homogeneous universe",
             "Define the critical density, density parameter Ω, and the deceleration parameter",
             "Solve the Friedmann equations for matter-dominated, radiation-dominated, and dark-energy-dominated universes"
+          ],
+          "error_patterns": [
+            "confuses_critical_density_with_actual_density",
+            "uses_wrong_scale_factor_power_law_for_radiation_vs_matter_era",
+            "forgets_curvature_term_in_friedmann_equation",
+            "confuses_deceleration_parameter_sign_convention"
           ],
           "difficulty_tier": 3
         },
