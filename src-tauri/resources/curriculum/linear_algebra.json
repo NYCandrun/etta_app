@@ -360,6 +360,12 @@
             "Determine orthogonality and compute orthogonal complements",
             "Decompose a vector into components parallel and perpendicular to a subspace"
           ],
+          "error_patterns": [
+            "confuses_orthogonal_complement_with_perpendicular_component",
+            "forgets_to_normalize_when_computing_projection_onto_vector",
+            "assumes_orthogonality_implies_linear_independence_in_general",
+            "computes_dot_product_of_vectors_with_mismatched_dimensions"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -371,6 +377,12 @@
             "Compute the QR factorization of a matrix using Gram-Schmidt",
             "Solve least squares problems using QR factorization"
           ],
+          "error_patterns": [
+            "forgets_to_subtract_all_previous_projections_in_gram_schmidt",
+            "skips_normalization_step_producing_orthogonal_but_not_orthonormal_basis",
+            "uses_wrong_inner_product_in_projection_formula",
+            "divides_by_inner_product_instead_of_squared_norm_in_projection"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -381,6 +393,12 @@
             "Compute the orthogonal projection of a vector onto a subspace",
             "Set up and solve least squares problems Ax ≈ b using the normal equations AᵀAx̂ = Aᵀb",
             "Apply least squares to fit a line or polynomial to data"
+          ],
+          "error_patterns": [
+            "forgets_transpose_on_one_side_of_normal_equations",
+            "confuses_projection_onto_vector_with_projection_onto_subspace",
+            "solves_ax_equals_b_instead_of_normal_equations_for_inconsistent_system",
+            "missets_design_matrix_columns_in_polynomial_fitting"
           ],
           "difficulty_tier": 2
         }
@@ -399,6 +417,12 @@
             "Prove that eigenvalues of a real symmetric matrix are real",
             "Prove that eigenvectors of distinct eigenvalues of a symmetric matrix are orthogonal",
             "Orthogonally diagonalize a symmetric matrix A = QDQᵀ"
+          ],
+          "error_patterns": [
+            "uses_non_orthonormal_eigenvectors_in_orthogonal_diagonalization",
+            "forgets_that_spectral_theorem_requires_symmetry",
+            "writes_q_inverse_instead_of_q_transpose_for_orthogonal_matrix",
+            "assumes_non_symmetric_real_matrices_have_real_eigenvalues"
           ],
           "difficulty_tier": 2
         },

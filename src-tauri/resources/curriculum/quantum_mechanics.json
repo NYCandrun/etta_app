@@ -319,6 +319,12 @@
             "Identify the quantum numbers n, l, m and their relationship to orbitals",
             "Sketch radial wave functions and probability distributions for low-n states"
           ],
+          "error_patterns": [
+            "confuses_n_with_l_when_counting_radial_nodes",
+            "thinks_energy_depends_on_l_for_hydrogen",
+            "forgets_l_ranges_from_zero_to_n_minus_one",
+            "interprets_orbital_shape_as_electron_trajectory"
+          ],
           "difficulty_tier": 2
         }
       ]
@@ -337,6 +343,12 @@
             "Represent spin-½ states as two-component spinors and spin operators as Pauli matrices",
             "Compute expectation values and probabilities for spin measurements along arbitrary axes"
           ],
+          "error_patterns": [
+            "treats_spin_as_literal_rotation_of_particle",
+            "confuses_spin_up_down_with_definite_state_along_all_axes",
+            "forgets_factor_of_hbar_over_two_in_spin_eigenvalues",
+            "misapplies_pauli_matrix_algebra_in_spin_calculations"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -348,6 +360,12 @@
             "Determine the allowed values of total angular momentum quantum numbers",
             "Apply angular momentum addition to spin-orbit coupling in hydrogen"
           ],
+          "error_patterns": [
+            "adds_angular_momentum_quantum_numbers_instead_of_using_triangle_rule",
+            "forgets_total_j_ranges_from_abs_l_minus_s_to_l_plus_s",
+            "misidentifies_clebsch_gordan_coefficients_from_table",
+            "confuses_coupled_and_uncoupled_basis_representations"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -358,6 +376,12 @@
             "Describe the Stern-Gerlach experiment and its demonstration of spin quantization",
             "Analyze sequential Stern-Gerlach measurements and state collapse",
             "Discuss the measurement problem and the projection postulate"
+          ],
+          "error_patterns": [
+            "expects_continuous_distribution_in_stern_gerlach_experiment",
+            "thinks_second_measurement_remembers_first_axis_result",
+            "confuses_state_preparation_with_measurement",
+            "assumes_measurement_always_returns_same_value_regardless_of_axis"
           ],
           "difficulty_tier": 2
         }

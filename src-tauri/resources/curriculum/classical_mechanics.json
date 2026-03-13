@@ -262,6 +262,12 @@
             "Apply Newton's second law to the center of mass of a system",
             "Derive the Tsiolkovsky rocket equation from conservation of momentum"
           ],
+          "error_patterns": [
+            "confuses_center_of_mass_with_geometric_center",
+            "forgets_to_account_for_changing_mass_in_rocket_equation",
+            "assumes_center_of_mass_must_be_inside_the_object",
+            "applies_f_equals_ma_with_constant_mass_to_rocket"
+          ],
           "difficulty_tier": 2
         }
       ]
@@ -280,6 +286,12 @@
             "Derive rotational kinematic equations analogous to linear kinematics",
             "Relate angular and linear quantities (v = rω, a_t = rα)"
           ],
+          "error_patterns": [
+            "confuses_angular_velocity_with_linear_velocity",
+            "uses_degrees_instead_of_radians_in_rotational_equations",
+            "forgets_to_multiply_by_radius_when_converting_angular_to_linear",
+            "applies_rotational_kinematics_to_non_constant_angular_acceleration"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -291,6 +303,12 @@
             "Apply the parallel-axis theorem to find moment of inertia about shifted axes",
             "Compute moments of inertia for standard shapes (rod, disk, sphere, cylinder)"
           ],
+          "error_patterns": [
+            "uses_parallel_axis_theorem_with_non_center_of_mass_axis",
+            "confuses_moment_of_inertia_formulas_for_different_shapes",
+            "forgets_moment_of_inertia_depends_on_axis_of_rotation",
+            "treats_moment_of_inertia_as_scalar_mass"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -301,6 +319,12 @@
             "Define torque as τ = r × F and apply Newton's second law for rotation τ = Iα",
             "Analyze rolling motion (rolling without slipping) combining translation and rotation",
             "Solve problems involving pulleys, wheels, and gears with rotational inertia"
+          ],
+          "error_patterns": [
+            "uses_force_magnitude_instead_of_perpendicular_component_for_torque",
+            "forgets_rolling_constraint_v_equals_r_omega",
+            "neglects_rotational_inertia_of_pulley_in_atwood_machine",
+            "confuses_torque_direction_with_force_direction"
           ],
           "difficulty_tier": 2
         },
