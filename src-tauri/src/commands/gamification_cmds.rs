@@ -110,6 +110,7 @@ fn xp_at_level_start(level: i64) -> i64 {
     accumulated
 }
 
+#[allow(dead_code)]
 fn xp_to_next(xp: i64) -> i64 {
     let level = level_from_xp(xp);
     let current_level_xp = xp - xp_at_level_start(level);

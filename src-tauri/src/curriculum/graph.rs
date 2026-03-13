@@ -55,6 +55,7 @@ pub struct DomainFile {
 }
 
 /// Load curriculum from a flat JSON file (curriculum.json format).
+#[allow(dead_code)]
 pub fn load_curriculum(path: &Path) -> Result<Curriculum, String> {
     let contents =
         std::fs::read_to_string(path).map_err(|e| format!("Failed to read curriculum file: {e}"))?;
@@ -66,6 +67,7 @@ pub fn load_curriculum(path: &Path) -> Result<Curriculum, String> {
 }
 
 /// Load curriculum from a flat JSON string.
+#[allow(dead_code)]
 pub fn load_curriculum_from_str(json: &str) -> Result<Curriculum, String> {
     serde_json::from_str(json).map_err(|e| format!("Failed to parse curriculum JSON: {e}"))
 }
@@ -95,6 +97,7 @@ pub fn load_domain_from_str(json: &str) -> Result<Vec<CurriculumConcept>, String
 
 /// Load all domain JSON files from a directory and merge into a single Curriculum.
 /// Skips the flat `curriculum.json` file and reads only individual domain files.
+#[allow(dead_code)]
 pub fn load_all_domains(dir: &Path) -> Result<Curriculum, String> {
     let mut all_concepts = Vec::new();
 

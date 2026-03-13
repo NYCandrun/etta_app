@@ -209,6 +209,7 @@ pub fn update_mastery(
 }
 
 /// Get concepts by domain.
+#[allow(dead_code)]
 pub fn get_concepts_by_domain(conn: &Connection, domain: &str) -> Result<Vec<Concept>> {
     let mut stmt = conn.prepare(
         "SELECT id, domain, module, title, prerequisites, learning_objectives,

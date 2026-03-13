@@ -28,6 +28,7 @@ pub fn get_api_key() -> Result<Option<String>, String> {
 }
 
 /// Delete the stored API key from the OS keychain.
+#[allow(dead_code)]
 pub fn delete_api_key() -> Result<(), String> {
     let entry = keyring::Entry::new(SERVICE_NAME, KEY_ACCOUNT)
         .map_err(|e| format!("Keychain init error: {e}"))?;

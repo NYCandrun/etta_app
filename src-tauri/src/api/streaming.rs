@@ -1,6 +1,7 @@
 use super::types::StreamDelta;
 
 /// Parsed SSE event from a Claude streaming response.
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub enum SseEvent {
     /// A delta containing new text.
@@ -16,10 +17,12 @@ pub enum SseEvent {
 ///   event: <event_type>
 ///   data: <json>
 ///   (blank line)
+#[allow(dead_code)]
 pub struct SseParser {
     buffer: String,
 }
 
+#[allow(dead_code)]
 impl SseParser {
     pub fn new() -> Self {
         Self {
@@ -46,6 +49,7 @@ impl SseParser {
     }
 }
 
+#[allow(dead_code)]
 fn parse_event_block(block: &str) -> Option<SseEvent> {
     let mut event_type = String::new();
     let mut data_lines = Vec::new();
@@ -92,14 +96,14 @@ fn parse_event_block(block: &str) -> Option<SseEvent> {
 
 /// Convenience: collect all text from a streaming response into a single string.
 /// Takes the raw reqwest Response and consumes it.
+#[allow(dead_code)]
 pub async fn collect_stream_text(response: reqwest::Response) -> Result<String, String> {
     use futures_lite::StreamExt;
-    use reqwest::Response;
 
     let mut parser = SseParser::new();
     let mut full_text = String::new();
 
-    let mut stream = response.bytes_stream();
+    let stream = response.bytes_stream();
 
     // We use a manual loop with pin since bytes_stream requires Stream trait.
     // reqwest's bytes_stream returns impl Stream<Item = Result<Bytes, reqwest::Error>>.

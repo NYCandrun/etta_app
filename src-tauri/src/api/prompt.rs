@@ -72,6 +72,7 @@ impl From<&Concept> for LearnerContext {
 }
 
 /// Build a complete API request for a given tutor mode.
+#[allow(dead_code)]
 pub fn build_request(
     mode: &TutorMode,
     concept: &Concept,
@@ -106,6 +107,7 @@ pub fn build_request_with_model(
 }
 
 /// Build a streaming API request.
+#[allow(dead_code)]
 pub fn build_streaming_request(
     mode: &TutorMode,
     concept: &Concept,

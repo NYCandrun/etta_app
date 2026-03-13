@@ -6,6 +6,7 @@ use super::graph::{self, Curriculum};
 
 /// Seed the concepts table from individual domain JSON files in the curriculum directory.
 /// Falls back to the flat curriculum.json if domain files can't be loaded.
+#[allow(dead_code)]
 pub fn seed_concepts_from_file(conn: &Connection, resource_dir: &Path) -> Result<(), String> {
     let curriculum_dir = resource_dir.join("curriculum");
 

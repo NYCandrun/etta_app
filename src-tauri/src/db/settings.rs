@@ -23,6 +23,7 @@ pub fn set_setting(conn: &Connection, key: &str, value: &str) -> Result<()> {
 }
 
 /// Delete a setting by key.
+#[allow(dead_code)]
 pub fn delete_setting(conn: &Connection, key: &str) -> Result<()> {
     conn.execute("DELETE FROM settings WHERE key = ?1", params![key])?;
     Ok(())

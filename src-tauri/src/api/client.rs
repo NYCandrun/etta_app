@@ -47,6 +47,7 @@ impl ClaudeClient {
     }
 
     /// Send a streaming request and return the raw reqwest::Response for SSE processing.
+    #[allow(dead_code)]
     pub async fn send_streaming(
         &self,
         request: &MessagesRequest,
