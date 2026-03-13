@@ -19,12 +19,21 @@ export default function Lesson() {
     quizSession,
     explanationAttempt,
     incrementExplanationAttempt,
+    reinforcementConceptId,
+    reinforcementAttempt,
   } = useSession();
+
+  const isReinforcing = reinforcementConceptId !== null;
+  const isPrereqReview =
+    isReinforcing && currentConcept?.id !== reinforcementConceptId;
 
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [explanationLoading, setExplanationLoading] = useState(false);
   const [extraExplanation, setExtraExplanation] =
+    useState<ExplanationResponse | null>(null);
+  /** Auto-fetched explanation shown at top during reinforcement — separate from manual requests */
+  const [reinforcementExplanation, setReinforcementExplanation] =
     useState<ExplanationResponse | null>(null);
 
   // Load lesson when concept changes
@@ -50,6 +59,34 @@ export default function Lesson() {
       })
       .finally(() => setLoading(false));
   };
+
+  // Auto-fetch an adapted explanation when re-entering a concept in reinforcement mode.
+  // This ensures the user sees different content each time, using the 5-tier escalation.
+  useEffect(() => {
+    if (
+      isReinforcing &&
+      !isPrereqReview &&
+      currentConcept &&
+      lessonContent &&
+      !reinforcementExplanation &&
+      !explanationLoading
+    ) {
+      setExplanationLoading(true);
+      // Use reinforcementAttempt to pick the initial strategy, but also
+      // increment explanationAttempt so manual "Another way" continues from here.
+      const attempt = reinforcementAttempt + 1;
+      incrementExplanationAttempt();
+      ipc
+        .requestExplanation(currentConcept.id, lessonContent.id, attempt)
+        .then((response) => {
+          setReinforcementExplanation(response);
+        })
+        .catch(() => {
+          // Silently fail — user still has the base lesson
+        })
+        .finally(() => setExplanationLoading(false));
+    }
+  }, [isReinforcing, isPrereqReview, currentConcept, lessonContent, reinforcementAttempt, reinforcementExplanation, explanationLoading]);
 
   // Pre-fetch quiz in the background once the lesson is loaded
   useEffect(() => {
@@ -138,6 +175,17 @@ export default function Lesson() {
         </h1>
       </div>
 
+      {/* Reinforcement banner */}
+      {isReinforcing && (
+        <div className="rounded-xl border border-accent-200 bg-accent-50/50 px-4 py-3 dark:border-accent-800 dark:bg-accent-950/20">
+          <p className="text-sm font-medium text-accent-700 dark:text-accent-300">
+            {isPrereqReview
+              ? "Strengthening a prerequisite before moving forward"
+              : "Reviewing this topic with a fresh perspective"}
+          </p>
+        </div>
+      )}
+
       {/* Content */}
       {loading ? (
         <div className="card">
@@ -145,10 +193,26 @@ export default function Lesson() {
         </div>
       ) : lessonContent ? (
         <>
+          {/* In reinforcement mode, show the adapted explanation first */}
+          {isReinforcing && !isPrereqReview && reinforcementExplanation && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="card border-l-4 border-primary-400"
+            >
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-primary-500">
+                A different approach
+              </p>
+              <div className="text-sm leading-relaxed text-warm-700 dark:text-warm-300">
+                <RichText text={reinforcementExplanation.content} />
+              </div>
+            </motion.div>
+          )}
+
           <LessonContent lesson={lessonContent} />
 
-          {/* Extra explanation */}
-          {extraExplanation && (
+          {/* In normal mode, show extra explanation below the lesson */}
+          {(!isReinforcing || isPrereqReview) && extraExplanation && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -174,7 +238,7 @@ export default function Lesson() {
               onClick={handleReadyForQuiz}
               className="btn-primary"
             >
-              I'm ready for the quiz
+              {isReinforcing ? "Continue" : "I'm ready for the quiz"}
             </button>
           </div>
         </>

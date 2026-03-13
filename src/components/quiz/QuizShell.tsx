@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { QuizSession, Answer, Feedback } from "@/types/quiz";
+import type { QuizSession, Answer, Feedback, StruggleAlert } from "@/types/quiz";
 import { MultipleChoice } from "@/components/quiz/MultipleChoice";
 import { FreeResponse } from "@/components/quiz/FreeResponse";
 import { FillInBlank } from "@/components/quiz/FillInBlank";
@@ -22,6 +22,8 @@ interface QuizShellProps {
   onRetry?: () => void;
   /** Called when the user wants to review the lesson after a low score */
   onReviewLesson?: () => void;
+  /** Called when the user should enter a reinforcement loop (adapted lesson + fresh quiz) */
+  onReinforce?: (struggleAlert: StruggleAlert | null) => void;
   className?: string;
 }
 
@@ -32,6 +34,7 @@ export function QuizShell({
   onComplete,
   onRetry,
   onReviewLesson,
+  onReinforce,
   className = "",
 }: QuizShellProps) {
   const [session, setSession] = useState(initialSession);
@@ -40,6 +43,7 @@ export function QuizShell({
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [hasFileUpload, setHasFileUpload] = useState(false);
   const [lastUserAnswer, setLastUserAnswer] = useState("");
+  const [lastStruggleAlert, setLastStruggleAlert] = useState<StruggleAlert | null>(null);
 
   const currentQuestion = session.questions[session.currentIndex];
   const isLastQuestion =
@@ -81,6 +85,9 @@ export function QuizShell({
       try {
         const feedback = await ipc.submitAnswer(session.id, answer, questionCtx);
         setCurrentFeedback(feedback);
+        if (feedback.struggleAlert?.isStruggling) {
+          setLastStruggleAlert(feedback.struggleAlert);
+        }
         setSession((prev) => ({
           ...prev,
           answers: [...prev.answers, answer],
@@ -322,6 +329,24 @@ export function QuizShell({
           <button onClick={() => onComplete(session)} className="btn-primary w-full">
             Done
           </button>
+        ) : onReinforce ? (
+          <div className="space-y-3">
+            <p className="text-center text-sm text-warm-500 dark:text-warm-400">
+              Let's review this topic with a fresh perspective
+            </p>
+            <button
+              onClick={() => onReinforce(lastStruggleAlert)}
+              className="btn-primary w-full"
+            >
+              Continue
+            </button>
+            <button
+              onClick={() => onComplete(session)}
+              className="mx-auto block text-xs text-warm-400 hover:text-warm-600 dark:text-warm-500 dark:hover:text-warm-300"
+            >
+              Skip
+            </button>
+          </div>
         ) : (
           <div className="flex gap-3">
             {onRetry && (

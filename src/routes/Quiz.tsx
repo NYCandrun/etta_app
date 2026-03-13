@@ -6,7 +6,7 @@ import { SkeletonLoader } from "@/components/shared/SkeletonLoader";
 import { useSession } from "@/hooks/useSession";
 import { useGamification } from "@/hooks/useGamification";
 import * as ipc from "@/lib/ipc";
-import type { QuizSession } from "@/types/quiz";
+import type { QuizSession, StruggleAlert } from "@/types/quiz";
 
 export default function Quiz() {
   const navigate = useNavigate();
@@ -15,8 +15,15 @@ export default function Quiz() {
     quizSession,
     loadQuiz,
     setQuizSession,
+    setLessonContent,
     sessionConcepts,
     selectConcept,
+    reinforcementConceptId,
+    reinforcementAttempt,
+    enterReinforcement,
+    incrementReinforcementAttempt,
+    exitReinforcement,
+    insertConceptsAfterCurrent,
   } = useSession();
   const { refresh: refreshGamification } = useGamification();
   const [loading, setLoading] = useState(false);
@@ -54,25 +61,99 @@ export default function Quiz() {
       navigate("/");
       return;
     }
+
+    // If we're in a reinforcement loop and just finished a prerequisite review,
+    // route back to the reinforcement concept's lesson (not the next in queue).
+    if (reinforcementConceptId && currentConcept.id !== reinforcementConceptId) {
+      const reinforcementConcept = sessionConcepts.find(
+        (c) => c.id === reinforcementConceptId
+      );
+      if (reinforcementConcept) {
+        selectConcept(reinforcementConcept);
+        navigate("/lesson");
+        return;
+      }
+    }
+
+    // If we just completed the reinforcement concept's re-quiz successfully,
+    // exit reinforcement and continue normally.
+    if (reinforcementConceptId && currentConcept.id === reinforcementConceptId) {
+      exitReinforcement();
+    }
+
     const idx = sessionConcepts.findIndex((c) => c.id === currentConcept.id);
     const next = idx >= 0 ? sessionConcepts[idx + 1] : undefined;
     if (next) {
-      // Move to the next concept's lesson
       selectConcept(next);
       navigate("/lesson");
     } else {
-      // No more concepts — return to dashboard
       navigate("/");
     }
-  }, [currentConcept, sessionConcepts, selectConcept, navigate]);
+  }, [currentConcept, sessionConcepts, selectConcept, navigate, reinforcementConceptId, exitReinforcement]);
+
+  const handleReinforce = useCallback(
+    async (struggleAlert: StruggleAlert | null) => {
+      if (!currentConcept) return;
+
+      // Enter reinforcement mode for this concept
+      if (!reinforcementConceptId) {
+        enterReinforcement(currentConcept.id);
+      } else {
+        incrementReinforcementAttempt();
+      }
+
+      // Find weak prerequisites to revisit.
+      // Use the backend struggle alert if available, otherwise check ourselves
+      // against the curriculum (any prerequisite with mastery < 0.8).
+      try {
+        let prereqIds = struggleAlert?.revisitPrerequisites ?? [];
+        const hasPrereqs = currentConcept.prerequisites.length > 0;
+
+        if ((prereqIds.length > 0 || hasPrereqs)) {
+          const curriculum = await ipc.getCurriculumState();
+          if (curriculum) {
+            // If backend didn't flag specific prereqs, check them ourselves
+            if (prereqIds.length === 0 && hasPrereqs) {
+              prereqIds = currentConcept.prerequisites.filter((pid) => {
+                const prereq = curriculum.concepts.find((c) => c.id === pid);
+                return prereq && prereq.masteryScore < 0.8;
+              });
+            }
+
+            if (prereqIds.length > 0) {
+              const prereqConcepts = prereqIds
+                .map((id) => curriculum.concepts.find((c) => c.id === id))
+                .filter((c): c is NonNullable<typeof c> => c != null);
+              const firstPrereq = prereqConcepts[0];
+              if (firstPrereq) {
+                insertConceptsAfterCurrent(prereqConcepts);
+                selectConcept(firstPrereq);
+                navigate("/lesson");
+                return;
+              }
+            }
+          }
+        }
+      } catch {
+        // If curriculum fetch fails, just re-do current concept
+      }
+
+      // No prerequisites to review — go straight to adapted lesson for current concept
+      await ipc.invalidateQuizCache(currentConcept.id);
+      setQuizSession(null);
+      setLessonContent(null);
+      navigate("/lesson");
+    },
+    [currentConcept, reinforcementConceptId, enterReinforcement, incrementReinforcementAttempt, insertConceptsAfterCurrent, selectConcept, setQuizSession, setLessonContent, navigate]
+  );
 
   const handleComplete = async (completedSession: QuizSession) => {
     setQuizSession(completedSession);
-    // XP is awarded per-answer on the backend. Refresh gamification state
-    // to reflect the updated total — no frontend lump-sum award needed.
     await refreshGamification();
-    // If the quiz was already marked complete and the user clicks "Done",
-    // advance to the next concept in the session.
+    // If reinforcement cap was reached, exit reinforcement mode on any completion
+    if (reinforcementConceptId && reinforcementAttempt >= 2) {
+      exitReinforcement();
+    }
     if (quizFinished) {
       advanceToNextConcept();
       return;
@@ -168,6 +249,7 @@ export default function Quiz() {
         <QuizShell
           session={quizSession}
           onComplete={(s) => void handleComplete(s)}
+          onReinforce={reinforcementAttempt < 2 ? (alert) => void handleReinforce(alert) : undefined}
           onRetry={() => {
             setQuizSession(null);
             setQuizFinished(false);
