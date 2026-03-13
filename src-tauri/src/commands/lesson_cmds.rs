@@ -11,6 +11,7 @@ pub async fn get_lesson(
     state: State<'_, AppState>,
     app_handle: tauri::AppHandle,
     concept_id: String,
+    mistakes_context: Option<String>,
 ) -> Result<String, String> {
     rate_limit::check_rate_limit("get_lesson")?;
 
@@ -29,6 +30,7 @@ pub async fn get_lesson(
     };
 
     // Check content cache with mastery- and model-aware lookup.
+    // Skip cache when mistakes_context is provided — reinforcement lessons must be fresh.
     // Validate cached content is non-empty; invalidate corrupt entries.
     let model = {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
@@ -38,18 +40,20 @@ pub async fn get_lesson(
             .map(|v| v.trim_matches('"').to_string())
             .filter(|v| !v.is_empty())
             .unwrap_or_else(|| prompt::DEFAULT_MODEL.to_string());
-        if let Some(cached) =
-            db::content_cache::get_cached_content_personalized(
-                &conn, &concept_id, "lesson",
-                Some(concept.mastery_score), Some(&m),
-            ).map_err(|e| format!("DB error: {e}"))?
-        {
-            if cached.payload_json.trim().len() > 20 {
-                return Ok(cached.payload_json);
+        if mistakes_context.is_none() {
+            if let Some(cached) =
+                db::content_cache::get_cached_content_personalized(
+                    &conn, &concept_id, "lesson",
+                    Some(concept.mastery_score), Some(&m),
+                ).map_err(|e| format!("DB error: {e}"))?
+            {
+                if cached.payload_json.trim().len() > 20 {
+                    return Ok(cached.payload_json);
+                }
+                // Cached lesson is empty/corrupt — invalidate so we regenerate.
+                eprintln!("[get_lesson] Invalidating cached lesson with no content for {concept_id}");
+                let _ = db::content_cache::invalidate_cache(&conn, &concept_id, "lesson");
             }
-            // Cached lesson is empty/corrupt — invalidate so we regenerate.
-            eprintln!("[get_lesson] Invalidating cached lesson with no content for {concept_id}");
-            let _ = db::content_cache::invalidate_cache(&conn, &concept_id, "lesson");
         }
         m
     };
@@ -68,7 +72,8 @@ pub async fn get_lesson(
     let learner_ctx = LearnerContext::from(&concept);
 
     let request = prompt::build_request_with_model(
-        &model, &TutorMode::Lesson, &concept, &learner_ctx, &system_prompt, None, false,
+        &model, &TutorMode::Lesson, &concept, &learner_ctx, &system_prompt,
+        mistakes_context.as_deref(), false,
     );
 
     let client = ClaudeClient::new(&api_key);

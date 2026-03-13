@@ -121,6 +121,7 @@ pub async fn get_quiz(
     state: State<'_, AppState>,
     app_handle: tauri::AppHandle,
     concept_id: String,
+    mistakes_context: Option<String>,
 ) -> Result<String, String> {
     rate_limit::check_rate_limit("get_quiz")?;
 
@@ -143,8 +144,9 @@ pub async fn get_quiz(
     };
 
     // Check cache with mastery- and model-aware lookup.
+    // Skip cache when mistakes_context is provided — reinforcement quizzes must target specific errors.
     // Validate cached content actually contains questions; delete stale/corrupt entries.
-    {
+    if mistakes_context.is_none() {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         if let Some(cached) =
             db::content_cache::get_cached_content_personalized(
@@ -173,7 +175,8 @@ pub async fn get_quiz(
     let learner_ctx = LearnerContext::from(&concept);
 
     let request = prompt::build_request_with_model(
-        &model, &TutorMode::Quiz, &concept, &learner_ctx, &system_prompt, None, false,
+        &model, &TutorMode::Quiz, &concept, &learner_ctx, &system_prompt,
+        mistakes_context.as_deref(), false,
     );
 
     let client = ClaudeClient::new(&api_key);
