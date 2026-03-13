@@ -51,6 +51,17 @@ export default function Quiz() {
     }
   }, [currentConcept, quizSession, fetchQuiz]);
 
+  // Pre-generate the next concept's lesson in the background while the user
+  // takes this quiz. Only for normal progression — skip during reinforcement.
+  useEffect(() => {
+    if (!currentConcept || !quizSession || reinforcementConceptId) return;
+    const idx = sessionConcepts.findIndex((c) => c.id === currentConcept.id);
+    const nextConcept = idx >= 0 ? sessionConcepts[idx + 1] : undefined;
+    if (nextConcept) {
+      void ipc.prefetchLesson(nextConcept.id);
+    }
+  }, [currentConcept, quizSession, reinforcementConceptId, sessionConcepts]);
+
   // Detect empty quiz that was "loaded" but has no questions
   const quizIsEmpty = quizSession !== null && quizSession.questions.length === 0;
 

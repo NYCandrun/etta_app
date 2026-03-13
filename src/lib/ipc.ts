@@ -356,6 +356,32 @@ function parseMarkdownIntoLesson(markdown: string, conceptId: string): LessonCon
   };
 }
 
+/**
+ * Pre-generate a lesson so it's cached for when the user arrives.
+ * Fire-and-forget — errors are silently ignored since this is speculative.
+ */
+export async function prefetchLesson(conceptId: string): Promise<void> {
+  if (!isTauri()) return;
+  try {
+    await tauriInvoke<unknown>("get_lesson", { conceptId });
+  } catch {
+    // Prefetch failure is fine — the lesson will be generated on demand
+  }
+}
+
+/**
+ * Pre-generate a quiz so it's cached for when the user arrives.
+ * Fire-and-forget — errors are silently ignored since this is speculative.
+ */
+export async function prefetchQuiz(conceptId: string): Promise<void> {
+  if (!isTauri()) return;
+  try {
+    await tauriInvoke<unknown>("get_quiz", { conceptId });
+  } catch {
+    // Prefetch failure is fine — the quiz will be generated on demand
+  }
+}
+
 export async function requestExplanation(
   conceptId: string,
   lessonId: string,

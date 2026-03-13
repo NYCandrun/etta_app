@@ -22,6 +22,7 @@ export default function Lesson() {
     reinforcementConceptId,
     reinforcementAttempt,
     reinforcementMistakes,
+    sessionConcepts,
   } = useSession();
 
   const isReinforcing = reinforcementConceptId !== null;
@@ -105,6 +106,18 @@ export default function Lesson() {
       loadQuiz(currentConcept.id).catch(() => { /* prefetch — errors handled when quiz page loads */ });
     }
   }, [currentConcept, lessonContent, quizSession, loadQuiz]);
+
+  // Pre-generate the next concept's lesson in the background once the current
+  // lesson loads. Only for normal progression — skip during reinforcement to
+  // avoid wasting API calls on content the user may not reach.
+  useEffect(() => {
+    if (!currentConcept || !lessonContent || isReinforcing) return;
+    const idx = sessionConcepts.findIndex((c) => c.id === currentConcept.id);
+    const nextConcept = idx >= 0 ? sessionConcepts[idx + 1] : undefined;
+    if (nextConcept) {
+      void ipc.prefetchLesson(nextConcept.id);
+    }
+  }, [currentConcept, lessonContent, isReinforcing, sessionConcepts]);
 
   const handleExplainRequest = async () => {
     if (!currentConcept || !lessonContent) return;

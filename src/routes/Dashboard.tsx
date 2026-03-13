@@ -17,7 +17,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { xp, level, streak } = useGamification();
   const { dailyGoal } = useSettings();
-  const { startSession, startLearningPath, sessionConcepts, todayMinutes } = useSession();
+  const { startSession, startLearningPath, sessionConcepts, todayMinutes, currentConcept, quizSession } = useSession();
   const [curriculum, setCurriculum] = useState<CurriculumState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -129,8 +129,20 @@ export default function Dashboard() {
                   hasStarted={path.hasStarted}
                   onOpen={() => navigate(`/path/${path.domainId}`)}
                   onStart={() => {
+                    // If the user has an active quiz for the concept this path
+                    // would resume, go straight back to the quiz instead of
+                    // restarting from the lesson.
+                    const resumeConcept = path.concepts.find(
+                      (c) => c.state === "in_progress" || c.state === "unlocked"
+                    ) ?? path.concepts[0];
+                    const hasActiveQuiz =
+                      resumeConcept &&
+                      currentConcept?.id === resumeConcept.id &&
+                      quizSession != null &&
+                      quizSession.completedAt == null;
+
                     startLearningPath(path.concepts);
-                    navigate("/lesson");
+                    navigate(hasActiveQuiz ? "/quiz" : "/lesson");
                   }}
                 />
               ))}
@@ -247,10 +259,26 @@ function buildLearningPaths(curriculum: CurriculumState): PathInfo[] {
     });
   }
 
+  // Sort by curriculum progression order (left-to-right, top-to-bottom matches
+  // the prerequisite chain so users naturally progress through the grid).
+  const domainOrder: Record<string, number> = {
+    "Algebra": 0,
+    "Trigonometry": 1,
+    "Precalculus": 2,
+    "Single Variable Calculus": 3,
+    "Multivariable Calculus": 4,
+    "Linear Algebra": 5,
+    "Differential Equations": 6,
+    "Classical Mechanics": 7,
+    "Electromagnetism": 8,
+    "Thermodynamics": 9,
+    "Quantum Mechanics": 10,
+    "Astrophysics": 11,
+  };
   paths.sort((a, b) => {
-    if (a.hasStarted && !b.hasStarted) return -1;
-    if (!a.hasStarted && b.hasStarted) return 1;
-    return a.domainName.localeCompare(b.domainName);
+    const orderA = domainOrder[a.domainName] ?? 999;
+    const orderB = domainOrder[b.domainName] ?? 999;
+    return orderA - orderB;
   });
 
   return paths;
