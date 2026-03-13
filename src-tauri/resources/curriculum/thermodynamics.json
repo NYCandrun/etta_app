@@ -135,6 +135,12 @@
             "Define and compute the efficiency of a heat engine and the coefficient of performance of a refrigerator",
             "Prove that no engine operating between two reservoirs can exceed Carnot efficiency"
           ],
+          "error_patterns": [
+            "confuses_efficiency_with_coefficient_of_performance",
+            "thinks_100_percent_efficiency_is_theoretically_possible",
+            "confuses_kelvin_planck_and_clausius_statements",
+            "uses_celsius_temperatures_in_efficiency_formulas"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -145,6 +151,12 @@
             "Describe the four steps of the Carnot cycle on a P-V diagram",
             "Derive the Carnot efficiency η = 1 − Tᶜ/Tₕ",
             "Explain the significance of the Carnot cycle as the most efficient cycle between two temperatures"
+          ],
+          "error_patterns": [
+            "confuses_order_of_isothermal_and_adiabatic_steps_in_carnot_cycle",
+            "inverts_temperature_ratio_in_carnot_efficiency",
+            "thinks_carnot_engine_is_a_practical_engine_design",
+            "forgets_carnot_cycle_is_reversible"
           ],
           "difficulty_tier": 2
         },
@@ -157,6 +169,12 @@
             "Compute entropy changes for reversible and irreversible processes",
             "State the entropy form of the second law: ΔS_universe ≥ 0"
           ],
+          "error_patterns": [
+            "thinks_entropy_of_a_system_can_never_decrease",
+            "confuses_entropy_change_of_system_with_entropy_change_of_universe",
+            "calculates_entropy_change_using_irreversible_path_directly",
+            "assumes_entropy_is_zero_at_room_temperature"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -167,6 +185,12 @@
             "Derive the entropy of an ideal gas as a function of T and V (or T and P)",
             "Plot thermodynamic cycles on T-S diagrams and interpret enclosed area as net heat",
             "Compute entropy changes for mixing, free expansion, and phase transitions"
+          ],
+          "error_patterns": [
+            "forgets_entropy_increases_in_free_expansion_despite_no_heat_transfer",
+            "confuses_area_on_ts_diagram_with_area_on_pv_diagram",
+            "assumes_mixing_of_identical_gases_increases_entropy",
+            "uses_wrong_formula_for_entropy_when_both_t_and_v_change"
           ],
           "difficulty_tier": 2
         }
@@ -186,6 +210,12 @@
             "Identify the natural variables for each potential (U: S,V; H: S,P; F: T,V; G: T,P)",
             "Determine the appropriate potential for a given set of constraints"
           ],
+          "error_patterns": [
+            "confuses_natural_variables_of_different_potentials",
+            "mixes_up_definitions_of_helmholtz_and_gibbs_free_energy",
+            "uses_wrong_potential_for_given_experimental_constraints",
+            "forgets_sign_in_legendre_transform_relating_potentials"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -197,6 +227,12 @@
             "Use Maxwell relations to express difficult-to-measure quantities in terms of measurable ones",
             "Apply Maxwell relations to derive relationships between Cₚ, Cᵥ, and the equation of state"
           ],
+          "error_patterns": [
+            "derives_maxwell_relation_from_wrong_potential",
+            "forgets_sign_in_maxwell_relation",
+            "confuses_which_variables_are_held_constant_in_partial_derivatives",
+            "applies_maxwell_relation_to_irreversible_process"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -207,6 +243,12 @@
             "Describe first-order and continuous (second-order) phase transitions",
             "Derive and apply the Clausius-Clapeyron equation dP/dT = L/(TΔV)",
             "Interpret phase diagrams and identify triple points and critical points"
+          ],
+          "error_patterns": [
+            "confuses_first_order_and_second_order_phase_transitions",
+            "forgets_delta_v_in_clausius_clapeyron_equation",
+            "misidentifies_triple_point_and_critical_point_on_phase_diagram",
+            "assumes_boiling_point_is_always_100_celsius_regardless_of_pressure"
           ],
           "difficulty_tier": 2
         }
@@ -226,6 +268,12 @@
             "Compute the most probable speed, mean speed, and root-mean-square speed",
             "Relate the macroscopic pressure and temperature to molecular kinetic energy"
           ],
+          "error_patterns": [
+            "confuses_most_probable_mean_and_rms_speeds",
+            "thinks_most_probable_speed_equals_mean_speed",
+            "forgets_maxwell_boltzmann_distribution_is_for_speed_not_velocity",
+            "uses_wrong_power_of_velocity_in_distribution_function"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -236,6 +284,12 @@
             "Derive the mean free path λ = 1/(nσ√2) from molecular collision cross-sections",
             "Relate mean free path to viscosity, thermal conductivity, and diffusion coefficients",
             "Apply kinetic theory to explain macroscopic transport phenomena"
+          ],
+          "error_patterns": [
+            "forgets_sqrt_2_factor_in_mean_free_path_formula",
+            "confuses_collision_cross_section_with_molecular_radius",
+            "assumes_mean_free_path_is_independent_of_temperature",
+            "confuses_diffusion_coefficient_with_thermal_conductivity"
           ],
           "difficulty_tier": 3
         }
@@ -255,6 +309,12 @@
             "State the Boltzmann entropy formula S = k_B ln Ω",
             "Calculate the number of microstates for simple systems (two-state, Einstein solid)"
           ],
+          "error_patterns": [
+            "confuses_microstates_with_macrostates",
+            "forgets_logarithm_in_boltzmann_entropy_formula",
+            "uses_log_base_10_instead_of_natural_log_in_entropy",
+            "miscounts_microstates_by_treating_identical_particles_as_distinguishable"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -266,6 +326,12 @@
             "Define and compute the partition function Z = Σ e^{−Eᵢ/k_BT}",
             "Derive thermodynamic quantities (U, S, F) from the partition function"
           ],
+          "error_patterns": [
+            "confuses_canonical_and_microcanonical_ensembles",
+            "forgets_to_sum_over_all_states_in_partition_function",
+            "uses_wrong_sign_in_boltzmann_factor_exponent",
+            "confuses_partition_function_with_probability"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -276,6 +342,12 @@
             "Compute the partition function and thermodynamic properties of the ideal gas",
             "Analyze the two-state paramagnet using the partition function",
             "Derive the Planck distribution for blackbody radiation from the partition function (preview)"
+          ],
+          "error_patterns": [
+            "forgets_gibbs_factor_for_indistinguishable_particles_in_ideal_gas",
+            "confuses_single_particle_and_system_partition_functions",
+            "makes_errors_in_energy_level_spacing_for_two_state_system",
+            "assumes_partition_function_is_always_dimensionless"
           ],
           "difficulty_tier": 3
         }
@@ -295,6 +367,12 @@
             "Derive the Bose-Einstein and Fermi-Dirac distribution functions",
             "Recover the classical Maxwell-Boltzmann distribution as a high-temperature limit"
           ],
+          "error_patterns": [
+            "confuses_which_particles_are_bosons_vs_fermions",
+            "swaps_plus_and_minus_signs_in_bose_einstein_vs_fermi_dirac",
+            "forgets_pauli_exclusion_applies_only_to_fermions",
+            "assumes_quantum_statistics_always_differ_significantly_from_classical"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -306,6 +384,12 @@
             "Derive the Stefan-Boltzmann law and Wien's displacement law from the Planck distribution",
             "Explain how Planck's distribution resolves the ultraviolet catastrophe"
           ],
+          "error_patterns": [
+            "confuses_wien_displacement_law_with_wien_approximation",
+            "thinks_blackbody_peak_wavelength_increases_with_temperature",
+            "forgets_stefan_boltzmann_law_goes_as_t_to_fourth_power",
+            "confuses_spectral_energy_density_per_frequency_vs_per_wavelength"
+          ],
           "difficulty_tier": 3
         },
         {
@@ -316,6 +400,12 @@
             "Define the Fermi energy and Fermi temperature for a free electron gas",
             "Compute the density of states and total energy of a degenerate Fermi gas at T = 0",
             "Apply Fermi gas theory to electrons in metals and degenerate stellar matter (white dwarfs)"
+          ],
+          "error_patterns": [
+            "confuses_fermi_energy_with_chemical_potential_at_nonzero_temperature",
+            "forgets_factor_of_two_for_spin_degeneracy_in_density_of_states",
+            "assumes_all_electrons_have_energy_equal_to_fermi_energy",
+            "thinks_fermi_temperature_is_actual_temperature_of_electron_gas"
           ],
           "difficulty_tier": 3
         }
@@ -335,6 +425,12 @@
             "Explain the unattainability of absolute zero",
             "Apply the third law to determine absolute entropies of substances"
           ],
+          "error_patterns": [
+            "thinks_absolute_zero_can_be_reached_in_finite_steps",
+            "confuses_nernst_and_planck_statements_of_third_law",
+            "assumes_entropy_at_absolute_zero_is_always_exactly_zero",
+            "forgets_residual_entropy_exists_for_some_substances"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -345,6 +441,12 @@
             "Derive the critical temperature for Bose-Einstein condensation in an ideal gas",
             "Describe the macroscopic occupation of the ground state below T_c",
             "Discuss experimental realizations of BEC in dilute atomic gases"
+          ],
+          "error_patterns": [
+            "thinks_bec_occurs_for_fermions",
+            "confuses_bec_with_ordinary_gas_to_liquid_phase_transition",
+            "assumes_all_particles_are_in_ground_state_below_critical_temperature",
+            "forgets_bec_requires_non_interacting_or_weakly_interacting_bosons"
           ],
           "difficulty_tier": 3
         }
