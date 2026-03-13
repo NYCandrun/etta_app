@@ -684,6 +684,12 @@
             "Calculate lookback time and the age of the universe for different cosmological models",
             "Describe the observational evidence for the expansion of the universe"
           ],
+          "error_patterns": [
+            "thinks_hubble_constant_is_truly_constant_over_cosmic_time",
+            "confuses_age_of_universe_with_inverse_hubble_constant",
+            "assumes_expansion_implies_a_center_of_the_universe",
+            "applies_hubble_law_at_very_large_redshifts_without_correction"
+          ],
           "difficulty_tier": 2
         },
         {
@@ -694,6 +700,12 @@
             "Describe the Type Ia supernova evidence for accelerating cosmic expansion",
             "Introduce the cosmological constant Λ as a dark energy candidate and its equation of state w = −1",
             "Discuss the ΛCDM model as the concordance cosmology and its parameters"
+          ],
+          "error_patterns": [
+            "confuses_dark_energy_with_dark_matter",
+            "thinks_accelerating_expansion_means_hubble_constant_is_increasing",
+            "assumes_equation_of_state_w_equals_negative_one_is_the_only_possibility",
+            "forgets_type_ia_supernovae_must_be_standardizable_candles"
           ],
           "difficulty_tier": 3
         }
@@ -712,6 +724,12 @@
             "Describe the thermal history of the universe from the Planck epoch to recombination",
             "Explain recombination, decoupling, and the origin of the cosmic microwave background (CMB)",
             "Interpret the CMB blackbody spectrum and its temperature T = 2.725 K"
+          ],
+          "error_patterns": [
+            "confuses_recombination_with_decoupling_epoch",
+            "thinks_cmb_was_emitted_at_the_big_bang_itself",
+            "assumes_recombination_temperature_equals_hydrogen_ionization_energy",
+            "forgets_cmb_temperature_scales_with_redshift"
           ],
           "difficulty_tier": 2
         },

@@ -418,6 +418,12 @@
             "Identify the speed of electromagnetic waves as c = 1/√(μ₀ε₀)",
             "Write plane wave solutions and identify wavelength, frequency, and polarization"
           ],
+          "error_patterns": [
+            "confuses_wave_equation_derivation_steps_from_maxwell",
+            "forgets_e_and_b_waves_are_in_phase_in_free_space",
+            "mistakes_wave_speed_formula_with_wrong_constants",
+            "confuses_wavelength_frequency_speed_relation"
+          ],
           "difficulty_tier": 2
         }
       ]
@@ -436,6 +442,12 @@
             "Relate E and B amplitudes via E₀ = cB₀",
             "Describe the electromagnetic spectrum and identify regions by wavelength and frequency"
           ],
+          "error_patterns": [
+            "thinks_e_and_b_fields_can_be_parallel_in_em_wave",
+            "confuses_e_and_b_amplitude_ratio_with_energy_ratio",
+            "misorders_electromagnetic_spectrum_by_frequency",
+            "assumes_em_waves_require_medium_to_propagate"
+          ],
           "difficulty_tier": 1
         },
         {
@@ -446,6 +458,12 @@
             "Derive the Poynting vector S = (1/μ₀)(E × B) and interpret it as energy flux",
             "Compute the intensity of an electromagnetic wave as the time-averaged Poynting vector",
             "Calculate radiation pressure and the momentum carried by electromagnetic waves"
+          ],
+          "error_patterns": [
+            "confuses_poynting_vector_direction_with_e_or_b_direction",
+            "forgets_time_averaging_for_intensity_calculation",
+            "confuses_radiation_pressure_for_absorption_vs_reflection",
+            "omits_factor_of_mu_naught_in_poynting_vector"
           ],
           "difficulty_tier": 2
         },
