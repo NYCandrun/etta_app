@@ -188,10 +188,26 @@ export default function Lesson() {
         </div>
       ) : lessonContent ? (
         <>
+          {/* In reinforcement mode, show the adapted explanation first */}
+          {isReinforcing && !isPrereqReview && extraExplanation && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="card border-l-4 border-primary-400"
+            >
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-primary-500">
+                A different approach
+              </p>
+              <div className="text-sm leading-relaxed text-warm-700 dark:text-warm-300">
+                <RichText text={extraExplanation.content} />
+              </div>
+            </motion.div>
+          )}
+
           <LessonContent lesson={lessonContent} />
 
-          {/* Extra explanation */}
-          {extraExplanation && (
+          {/* In normal mode, show extra explanation below the lesson */}
+          {(!isReinforcing || isPrereqReview) && extraExplanation && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
