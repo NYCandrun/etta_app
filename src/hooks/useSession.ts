@@ -46,12 +46,16 @@ export function useSession() {
         concepts.find(
           (c) => c.state === "in_progress" || c.state === "unlocked"
         ) ?? concepts[0];
+      const isSameConcept = store.currentConcept?.id === current?.id;
       store.setSessionConcepts(concepts);
       store.setCurrentConcept(current ?? null);
-      // Clear stale lesson/quiz content from previous path
-      store.setLessonContent(null);
-      store.setQuizSession(null);
-      store.resetExplanationAttempt();
+      // Only clear lesson/quiz content if switching to a different concept;
+      // preserving state lets users resume an in-progress quiz.
+      if (!isSameConcept) {
+        store.setLessonContent(null);
+        store.setQuizSession(null);
+        store.resetExplanationAttempt();
+      }
       store.setActiveSession(`path_${current?.domain?.id ?? "custom"}`);
     },
     [store]
@@ -88,10 +92,16 @@ export function useSession() {
 
   const selectConcept = useCallback(
     (concept: Concept) => {
+      // If selecting the same concept, preserve existing lesson/quiz state
+      // so that in-progress quizzes aren't lost when the user navigates away
+      // and comes back.
+      const isSameConcept = store.currentConcept?.id === concept.id;
       store.setCurrentConcept(concept);
-      store.setLessonContent(null);
-      store.setQuizSession(null);
-      store.resetExplanationAttempt();
+      if (!isSameConcept) {
+        store.setLessonContent(null);
+        store.setQuizSession(null);
+        store.resetExplanationAttempt();
+      }
     },
     [store]
   );
