@@ -100,6 +100,7 @@ pub fn run() {
             commands::gamification_cmds::get_gamification_state,
             commands::gamification_cmds::award_xp,
             commands::gamification_cmds::check_badges,
+            commands::gamification_cmds::check_curriculum_rewards,
             // Projects
             commands::project_cmds::get_projects,
             commands::project_cmds::submit_project,

@@ -414,20 +414,10 @@ pub async fn submit_answer(
                 &conn, &question.concept_id, old_mastery, new_mastery,
             );
 
-            // Award per-answer XP atomically with the mastery update.
-            // 2 XP base per answer + up to 8 bonus for correct answers = max 10 per answer.
-            // This replaces the frontend-driven award_xp call for quiz answers.
-            let xp_amount = if is_correct { 2 + (score * 8.0) as i64 } else { 2 };
-            let current_xp = db::settings::get_setting(&conn, "total_xp")
-                .ok()
-                .flatten()
-                .and_then(|v| v.parse::<i64>().ok())
-                .unwrap_or(0);
-            let _ = db::settings::set_setting(&conn, "total_xp", &(current_xp + xp_amount).to_string());
-            let _ = db::xp_events::insert_xp_event(
-                &conn, xp_amount, "quiz_answer",
-                &format!("Answer for {}", concept.title),
-            );
+            // Check curriculum milestone rewards (concept started, mastered, module/domain completed).
+            // This replaces the old per-answer XP system — points are now tied to
+            // meaningful curriculum progress rather than individual quiz answers.
+            let _ = crate::commands::gamification_cmds::award_curriculum_milestones(&conn);
         }
 
         // Persist per-question answer for data export
@@ -587,17 +577,15 @@ pub fn complete_quiz(
         clamped.iter().sum::<f64>() / clamped.len() as f64
     };
 
-    // XP was already awarded per-answer in submit_answer (backend-authoritative).
-    // Sum the most recent quiz_answer XP events to report the total earned.
+    // XP is now awarded via curriculum milestones (concept started/mastered,
+    // module/domain completed) rather than per quiz answer.
+    // Run a final milestone check and report any XP earned.
     let xp_earned = {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
-        let recent_events = db::xp_events::get_recent_xp_events(&conn, scores.len() as i64)
-            .unwrap_or_default();
-        recent_events
-            .iter()
-            .filter(|e| e.source == "quiz_answer")
-            .map(|e| e.amount)
-            .sum::<i64>() as u32
+        match crate::commands::gamification_cmds::award_curriculum_milestones(&conn) {
+            Ok(result) => result.total_xp_awarded as u32,
+            Err(_) => 0,
+        }
     };
 
     eprintln!("Quiz {} completed: score={:.2}, xp_earned={}", session_id, total_score, xp_earned);

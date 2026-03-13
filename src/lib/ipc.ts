@@ -7,7 +7,7 @@ import type {
   Submission,
   FeedbackResult,
 } from "@/types/submission";
-import type { GamificationState, XPSource } from "@/types/gamification";
+import type { GamificationState, XPSource, CurriculumRewardResult } from "@/types/gamification";
 
 // ─── Settings ──────────────────────────────────────────────
 
@@ -726,6 +726,11 @@ export async function awardXp(
 ): Promise<void> {
   if (!isTauri()) return;
   return tauriInvoke<void>("award_xp", { amount, source, description });
+}
+
+export async function checkCurriculumRewards(): Promise<CurriculumRewardResult | null> {
+  if (!isTauri()) return null;
+  return tauriInvoke<CurriculumRewardResult>("check_curriculum_rewards");
 }
 
 export async function activateStreakFreeze(): Promise<boolean> {
