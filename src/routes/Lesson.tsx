@@ -69,8 +69,10 @@ export default function Lesson() {
       !explanationLoading
     ) {
       setExplanationLoading(true);
-      // Use reinforcementAttempt to escalate through explanation strategies
+      // Use reinforcementAttempt to pick the initial strategy, but also
+      // increment explanationAttempt so manual "Another way" continues from here.
       const attempt = reinforcementAttempt + 1;
+      incrementExplanationAttempt();
       ipc
         .requestExplanation(currentConcept.id, lessonContent.id, attempt)
         .then((response) => {
