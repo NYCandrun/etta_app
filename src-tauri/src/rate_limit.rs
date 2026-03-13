@@ -7,7 +7,7 @@
 
 use std::collections::HashMap;
 use std::sync::Mutex;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 /// Global rate-limiter state, keyed by command name.
 static RATE_LIMITER: Mutex<Option<HashMap<String, Bucket>>> = Mutex::new(None);

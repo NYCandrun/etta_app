@@ -67,6 +67,7 @@ pub struct CacheControl {
 // ── Response types ─────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct MessagesResponse {
     pub id: String,
     #[serde(rename = "type")]
@@ -94,6 +95,7 @@ pub struct Usage {
 // ── Streaming types ────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct StreamEvent {
     #[serde(rename = "type")]
     pub event_type: String,
@@ -110,6 +112,7 @@ pub struct StreamEvent {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct StreamDelta {
     #[serde(rename = "type")]
     pub delta_type: Option<String>,
@@ -118,6 +121,7 @@ pub struct StreamDelta {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct StreamMessage {
     pub id: String,
     pub model: String,
@@ -125,6 +129,7 @@ pub struct StreamMessage {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct StreamContentBlock {
     #[serde(rename = "type")]
     pub block_type: String,
@@ -134,6 +139,7 @@ pub struct StreamContentBlock {
 // ── API error response ─────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct ApiError {
     #[serde(rename = "type")]
     pub error_type: String,
@@ -153,13 +159,6 @@ impl Message {
     pub fn user_text(text: &str) -> Self {
         Self {
             role: "user".to_string(),
-            content: MessageContent::Text(text.to_string()),
-        }
-    }
-
-    pub fn assistant_text(text: &str) -> Self {
-        Self {
-            role: "assistant".to_string(),
             content: MessageContent::Text(text.to_string()),
         }
     }

@@ -9,6 +9,7 @@ import { useSettings } from "@/hooks/useSettings";
 import { useGamification } from "@/hooks/useGamification";
 import { useSaveProgress } from "@/hooks/useSaveProgress";
 import { useSession } from "@/hooks/useSession";
+import { getCurriculumState } from "@/lib/ipc";
 import Dashboard from "@/routes/Dashboard";
 import Lesson from "@/routes/Lesson";
 import Quiz from "@/routes/Quiz";
@@ -40,7 +41,6 @@ export default function App() {
         if (saved && saved.route !== "/") {
           // If user was on a lesson/quiz, restore the concept via curriculum
           if (saved.conceptId && (saved.route === "/lesson" || saved.route === "/quiz")) {
-            const { getCurriculumState } = await import("@/lib/ipc");
             const curriculum = await getCurriculumState();
             const concept = curriculum?.concepts.find((c) => c.id === saved.conceptId);
             if (concept) {

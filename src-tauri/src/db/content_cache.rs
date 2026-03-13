@@ -27,13 +27,6 @@ pub fn mastery_band(score: f64) -> &'static str {
     }
 }
 
-/// Insert a new cache entry with an HMAC integrity hash.
-/// Returns the new row id.
-/// Also prunes old entries for the same concept+type to prevent bloat (keeps most recent 3).
-pub fn insert_cache_entry(conn: &Connection, entry: &CachedContent) -> Result<i64> {
-    insert_cache_entry_with_mastery(conn, entry, None)
-}
-
 /// Insert a cache entry tagged with the learner's current mastery band.
 pub fn insert_cache_entry_with_mastery(
     conn: &Connection,

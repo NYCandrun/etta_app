@@ -46,31 +46,6 @@ impl ClaudeClient {
         Err(last_err)
     }
 
-    /// Send a streaming request and return the raw reqwest::Response for SSE processing.
-    pub async fn send_streaming(
-        &self,
-        request: &MessagesRequest,
-    ) -> Result<reqwest::Response, String> {
-        let resp = self
-            .http
-            .post(ANTHROPIC_API_URL)
-            .header("x-api-key", &self.api_key)
-            .header("anthropic-version", ANTHROPIC_VERSION)
-            .header("content-type", "application/json")
-            .json(request)
-            .send()
-            .await
-            .map_err(|e| format!("Network error: {e}"))?;
-
-        if !resp.status().is_success() {
-            let status = resp.status();
-            let body = resp.text().await.unwrap_or_default();
-            return Err(format!("API error (HTTP {status}): {body}"));
-        }
-
-        Ok(resp)
-    }
-
     /// Internal: execute a single request attempt.
     async fn do_request(&self, request: &MessagesRequest) -> Result<MessagesResponse, String> {
         let resp = self

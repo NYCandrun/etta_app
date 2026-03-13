@@ -1,6 +1,6 @@
 use crate::api::client::{extract_text, ClaudeClient};
 use crate::api::prompt::{self, LearnerContext, TutorMode};
-use crate::api::types::{ContentBlock, DocumentSource, ImageSource, Message, MessageContent};
+use crate::api::types::{ContentBlock, DocumentSource, ImageSource, Message};
 use crate::db;
 use crate::engine::{mastery, spaced_rep};
 use crate::file_handler;

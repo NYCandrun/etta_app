@@ -71,17 +71,6 @@ impl From<&Concept> for LearnerContext {
     }
 }
 
-/// Build a complete API request for a given tutor mode.
-pub fn build_request(
-    mode: &TutorMode,
-    concept: &Concept,
-    learner_ctx: &LearnerContext,
-    system_prompt: &str,
-    extra_user_text: Option<&str>,
-) -> MessagesRequest {
-    build_request_with_model(DEFAULT_MODEL, mode, concept, learner_ctx, system_prompt, extra_user_text, false)
-}
-
 /// Build a request with a specific model. Uses mode-specific max tokens and
 /// extracts only the relevant system prompt sections for the given mode.
 pub fn build_request_with_model(
@@ -103,17 +92,6 @@ pub fn build_request_with_model(
         vec![Message::user_text(&user_message)],
         stream,
     )
-}
-
-/// Build a streaming API request.
-pub fn build_streaming_request(
-    mode: &TutorMode,
-    concept: &Concept,
-    learner_ctx: &LearnerContext,
-    system_prompt: &str,
-    extra_user_text: Option<&str>,
-) -> MessagesRequest {
-    build_request_with_model(DEFAULT_MODEL, mode, concept, learner_ctx, system_prompt, extra_user_text, true)
 }
 
 fn build_user_message(

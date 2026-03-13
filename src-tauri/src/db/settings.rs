@@ -22,12 +22,6 @@ pub fn set_setting(conn: &Connection, key: &str, value: &str) -> Result<()> {
     Ok(())
 }
 
-/// Delete a setting by key.
-pub fn delete_setting(conn: &Connection, key: &str) -> Result<()> {
-    conn.execute("DELETE FROM settings WHERE key = ?1", params![key])?;
-    Ok(())
-}
-
 /// Get all settings as key-value pairs.
 pub fn get_all_settings(conn: &Connection) -> Result<Vec<(String, String)>> {
     let mut stmt = conn.prepare("SELECT key, value FROM settings ORDER BY key")?;

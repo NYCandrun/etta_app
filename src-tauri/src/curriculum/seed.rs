@@ -1,31 +1,7 @@
 use crate::db::concepts::{self, Concept};
 use rusqlite::Connection;
-use std::path::Path;
 
 use super::graph::{self, Curriculum};
-
-/// Seed the concepts table from individual domain JSON files in the curriculum directory.
-/// Falls back to the flat curriculum.json if domain files can't be loaded.
-pub fn seed_concepts_from_file(conn: &Connection, resource_dir: &Path) -> Result<(), String> {
-    let curriculum_dir = resource_dir.join("curriculum");
-
-    // Try loading all individual domain files first (preferred)
-    let curriculum = match graph::load_all_domains(&curriculum_dir) {
-        Ok(c) => c,
-        Err(e) => {
-            eprintln!("Warning: failed to load domain files ({e}), falling back to curriculum.json");
-            let curriculum_path = curriculum_dir.join("curriculum.json");
-            graph::load_curriculum(&curriculum_path)?
-        }
-    };
-
-    graph::validate_dag(&curriculum)?;
-    eprintln!("Seeding {} concepts from {} domains",
-        curriculum.concepts.len(),
-        curriculum.concepts.iter().map(|c| c.domain.as_str()).collect::<std::collections::HashSet<_>>().len()
-    );
-    insert_curriculum(conn, &curriculum)
-}
 
 /// Seed concepts from the built-in domain files (fallback if resource directory not found).
 /// Reads all 12 domain JSON files compiled into the binary.
