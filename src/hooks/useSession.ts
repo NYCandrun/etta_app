@@ -58,9 +58,9 @@ export function useSession() {
   );
 
   const loadLesson = useCallback(
-    async (conceptId: string) => {
+    async (conceptId: string, mistakesContext?: string) => {
       try {
-        const lesson = await ipc.getLesson(conceptId);
+        const lesson = await ipc.getLesson(conceptId, mistakesContext);
         store.setLessonContent(lesson);
         store.resetExplanationAttempt();
         return lesson;
@@ -73,9 +73,9 @@ export function useSession() {
   );
 
   const loadQuiz = useCallback(
-    async (conceptId: string) => {
+    async (conceptId: string, mistakesContext?: string) => {
       try {
-        const quiz = await ipc.getQuiz(conceptId);
+        const quiz = await ipc.getQuiz(conceptId, mistakesContext);
         store.setQuizSession(quiz);
         return quiz;
       } catch (err) {

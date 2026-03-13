@@ -196,8 +196,14 @@ export async function getDailySession(): Promise<DailySessionResponse | null> {
 
 // ─── Lessons ───────────────────────────────────────────────
 
-export async function getLesson(conceptId: string): Promise<LessonContent> {
-  const raw = await tauriInvoke<LessonContent | string>("get_lesson", { conceptId });
+export async function getLesson(
+  conceptId: string,
+  mistakesContext?: string
+): Promise<LessonContent> {
+  const raw = await tauriInvoke<LessonContent | string>("get_lesson", {
+    conceptId,
+    mistakesContext: mistakesContext ?? null,
+  });
   return normalizeLessonContent(raw, conceptId);
 }
 
@@ -372,8 +378,14 @@ export async function requestExplanation(
 
 // ─── Quiz ──────────────────────────────────────────────────
 
-export async function getQuiz(conceptId: string): Promise<QuizSession> {
-  const raw = await tauriInvoke<QuizSession | string>("get_quiz", { conceptId });
+export async function getQuiz(
+  conceptId: string,
+  mistakesContext?: string
+): Promise<QuizSession> {
+  const raw = await tauriInvoke<QuizSession | string>("get_quiz", {
+    conceptId,
+    mistakesContext: mistakesContext ?? null,
+  });
   return normalizeQuizSession(raw, conceptId);
 }
 

@@ -32,6 +32,8 @@ Adapt depth based on learner context:
 - mastery_score 0.3-0.6: Standard depth, introduce edge cases.
 - mastery_score > 0.6: Emphasize nuance, proofs, and connections to advanced topics.
 
+If the <user_input> contains specific mistakes the student made, this is a reinforcement lesson. Lead with content that directly addresses their misunderstandings before covering the full concept. Make the "Common Pitfalls" section specifically reference their errors.
+
 ### Mode: quiz
 Generate a set of quiz questions for the given concept. Return a JSON array of question objects.
 
@@ -97,6 +99,8 @@ Adapt difficulty based on learner context:
 - Low mastery (< 0.3): More conceptual and definitional questions. Keep difficulty 1-2. Do NOT ask for lengthy proofs or multi-step derivations. Answers should be achievable in 1-3 minutes.
 - Medium mastery (0.3-0.6): Procedural and application questions. Difficulty 2-3.
 - High mastery (> 0.6): Analysis, proof, and transfer questions. Difficulty 3-5. Free response is appropriate here.
+
+If <error_patterns> are listed, design wrong options (distractors) that reflect those misconceptions — this tests whether the student truly understands or is falling into known traps. If the <user_input> contains specific student mistakes, include at least 2-3 questions that directly probe the misunderstood areas.
 
 Important grading constraints:
 - For fill_in_blank: only use answers with ONE unambiguous correct form. If a numerical answer could reasonably be expressed multiple ways (fraction vs decimal, exact vs approximate), use free_response instead.
@@ -173,6 +177,18 @@ Use this context to calibrate your response. A learner with mastery 0.1 and 0 at
   - WRONG: "$\frac{22}{7}$22/7" — LaTeX then plain text duplicate
 - Keep each $...$ expression short and self-contained. Do not wrap long sentences in a single $...$ pair — only the mathematical symbols and expressions should be inside dollar signs, not surrounding prose.
 - For quiz option text: use $...$ delimiters around mathematical content. For simple numbers like 0.25, use plain text without delimiters. Only use LaTeX when you need special symbols ($\frac{22}{7}$, $\sqrt{2}$, $\pi$, etc.).
+
+## Error Patterns and Student Mistakes
+
+The <concept> tag may include an <error_patterns> list of common misconceptions students have with this concept (in snake_case). The <user_input> tag may include specific mistakes the student made on a recent quiz.
+
+Use this information across all modes:
+- **lesson**: If error_patterns are present, proactively address them in the "Common Pitfalls" section. If specific student mistakes are provided, weave targeted clarifications into the Core Explanation — don't wait until Common Pitfalls to address them.
+- **quiz**: Design distractors (wrong answers) that test for the listed error patterns. If student mistakes are provided, include questions that specifically probe whether those misunderstandings have been resolved.
+- **explain**: If student mistakes are provided, focus your explanation on correcting those specific misunderstandings. Use the error_patterns to anticipate related confusion.
+- **review**: Use error_patterns to target Quick Recall questions at known weak spots.
+
+When both error_patterns and specific student mistakes are present, prioritize the student's actual mistakes — they tell you exactly where this learner went wrong, while error_patterns tell you what to watch out for more broadly.
 
 ## Important Constraints
 
