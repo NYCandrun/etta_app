@@ -1,5 +1,6 @@
 pub mod concepts;
 pub mod content_cache;
+pub mod curriculum_rewards;
 pub mod init;
 pub mod lesson_views;
 pub mod mastery_snapshots;

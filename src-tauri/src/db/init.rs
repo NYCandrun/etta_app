@@ -97,6 +97,15 @@ pub fn initialize_database() -> Result<Connection, Box<dyn std::error::Error>> {
             created_at      TEXT NOT NULL
         );
 
+        CREATE TABLE IF NOT EXISTS curriculum_rewards (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            reward_type     TEXT NOT NULL,
+            entity_id       TEXT NOT NULL,
+            xp_awarded      INTEGER NOT NULL CHECK(xp_awarded >= 0),
+            awarded_at      TEXT NOT NULL,
+            UNIQUE(reward_type, entity_id)
+        );
+
         CREATE TABLE IF NOT EXISTS lesson_views (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
             concept_id      TEXT NOT NULL,

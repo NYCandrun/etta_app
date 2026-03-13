@@ -324,6 +324,28 @@ pub fn check_badges(state: State<'_, AppState>) -> Result<Vec<Badge>, String> {
         .unwrap_or_else(|| "[]".to_string());
     let mut badges: Vec<Badge> = serde_json::from_str(&badges_json).unwrap_or_default();
 
+    // Check domain completions for curriculum badges
+    let mut domains: std::collections::HashMap<&str, (usize, usize)> = std::collections::HashMap::new();
+    for c in &all_concepts {
+        let entry = domains.entry(c.domain.as_str()).or_insert((0, 0));
+        entry.0 += 1; // total
+        if c.mastery_score >= 0.8 {
+            entry.1 += 1; // mastered
+        }
+    }
+    let algebra_complete = domains.get("algebra").map_or(false, |(t, m)| m >= t && *t > 0);
+    let precalculus_complete = domains.get("precalculus").map_or(false, |(t, m)| m >= t && *t > 0);
+    let trigonometry_complete = domains.get("trigonometry").map_or(false, |(t, m)| m >= t && *t > 0);
+
+    // Count modules completed (all concepts in module mastered)
+    let mut modules: std::collections::HashMap<(&str, &str), (usize, usize)> = std::collections::HashMap::new();
+    for c in &all_concepts {
+        let entry = modules.entry((c.domain.as_str(), c.module.as_str())).or_insert((0, 0));
+        entry.0 += 1;
+        if c.mastery_score >= 0.8 { entry.1 += 1; }
+    }
+    let modules_completed = modules.values().filter(|(t, m)| m >= t && *t > 0).count();
+
     // Define badge conditions and check each.
     let badge_defs: Vec<(&str, &str, &str, &str, &str, bool)> = vec![
         ("first_step", "First Step", "Complete your first quiz", "star", "special", total_attempts >= 1),
@@ -336,6 +358,12 @@ pub fn check_badges(state: State<'_, AppState>) -> Result<Vec<Badge>, String> {
         ("mastery_10", "Decathlon", "Master 10 concepts", "trophy", "mastery", mastered_count >= 10),
         ("mastery_50", "Half Century", "Master 50 concepts", "trophy", "mastery", mastered_count >= 50),
         ("attempts_100", "Persistent Learner", "Complete 100 quiz attempts", "target", "special", total_attempts >= 100),
+        // Curriculum progress badges
+        ("module_5", "Module Maven", "Complete 5 modules", "book-open", "mastery", modules_completed >= 5),
+        ("module_15", "Curriculum Conqueror", "Complete 15 modules", "book-open", "mastery", modules_completed >= 15),
+        ("domain_algebra", "Algebra Graduate", "Master all algebra concepts", "graduation-cap", "mastery", algebra_complete),
+        ("domain_precalculus", "Precalculus Pro", "Master all precalculus concepts", "graduation-cap", "mastery", precalculus_complete),
+        ("domain_trigonometry", "Trig Titan", "Master all trigonometry concepts", "graduation-cap", "mastery", trigonometry_complete),
     ];
 
     let mut changed = false;
@@ -372,4 +400,167 @@ pub fn check_badges(state: State<'_, AppState>) -> Result<Vec<Badge>, String> {
     }
 
     Ok(badges)
+}
+
+// ── Curriculum milestone rewards ─────────────────────────────────────────────
+
+/// XP awarded for each curriculum milestone type.
+const XP_CONCEPT_STARTED: i64 = 1;
+const XP_CONCEPT_MASTERED: i64 = 2;
+const XP_MODULE_COMPLETED: i64 = 5;
+const XP_DOMAIN_COMPLETED: i64 = 25;
+
+/// Returned from check_curriculum_rewards so the frontend can show popups.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CurriculumRewardResult {
+    pub rewards_granted: Vec<GrantedReward>,
+    pub total_xp_awarded: i64,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GrantedReward {
+    pub reward_type: String,
+    pub entity_id: String,
+    pub label: String,
+    pub xp: i64,
+}
+
+/// Check all curriculum milestones and award XP for any newly achieved ones.
+/// This is called after mastery updates and lesson views. Each milestone is
+/// only rewarded once (enforced by UNIQUE constraint in curriculum_rewards).
+pub fn award_curriculum_milestones(conn: &rusqlite::Connection) -> Result<CurriculumRewardResult, String> {
+    let all_concepts =
+        db::concepts::get_all_concepts(conn).map_err(|e| format!("DB error: {e}"))?;
+
+    let mut rewards_granted: Vec<GrantedReward> = Vec::new();
+    let mut total_xp: i64 = 0;
+
+    // 1. Concept started: first engagement (attempt_count > 0)
+    for concept in &all_concepts {
+        if concept.attempt_count > 0 {
+            let entity = format!("concept:{}", concept.id);
+            if let Ok(true) = db::curriculum_rewards::award_reward(
+                conn, "concept_started", &entity, XP_CONCEPT_STARTED,
+            ) {
+                rewards_granted.push(GrantedReward {
+                    reward_type: "concept_started".to_string(),
+                    entity_id: entity,
+                    label: format!("Started: {}", concept.title),
+                    xp: XP_CONCEPT_STARTED,
+                });
+                total_xp += XP_CONCEPT_STARTED;
+            }
+        }
+    }
+
+    // 2. Concept mastered: mastery >= 0.8 for the first time
+    for concept in &all_concepts {
+        if concept.mastery_score >= 0.8 {
+            let entity = format!("concept:{}", concept.id);
+            if let Ok(true) = db::curriculum_rewards::award_reward(
+                conn, "concept_mastered", &entity, XP_CONCEPT_MASTERED,
+            ) {
+                rewards_granted.push(GrantedReward {
+                    reward_type: "concept_mastered".to_string(),
+                    entity_id: entity,
+                    label: format!("Mastered: {}", concept.title),
+                    xp: XP_CONCEPT_MASTERED,
+                });
+                total_xp += XP_CONCEPT_MASTERED;
+            }
+        }
+    }
+
+    // 3. Module completed: all concepts in a module mastered
+    // Group concepts by (domain, module)
+    let mut modules: std::collections::HashMap<(String, String), Vec<&db::concepts::Concept>> =
+        std::collections::HashMap::new();
+    for concept in &all_concepts {
+        modules
+            .entry((concept.domain.clone(), concept.module.clone()))
+            .or_default()
+            .push(concept);
+    }
+
+    for ((domain, module), concepts) in &modules {
+        let all_mastered = concepts.iter().all(|c| c.mastery_score >= 0.8);
+        if all_mastered {
+            let entity = format!("module:{}:{}", domain, module);
+            if let Ok(true) = db::curriculum_rewards::award_reward(
+                conn, "module_completed", &entity, XP_MODULE_COMPLETED,
+            ) {
+                rewards_granted.push(GrantedReward {
+                    reward_type: "module_completed".to_string(),
+                    entity_id: entity,
+                    label: format!("Completed module: {}", module),
+                    xp: XP_MODULE_COMPLETED,
+                });
+                total_xp += XP_MODULE_COMPLETED;
+            }
+        }
+    }
+
+    // 4. Domain completed: all concepts in a domain mastered
+    let mut domains: std::collections::HashMap<String, Vec<&db::concepts::Concept>> =
+        std::collections::HashMap::new();
+    for concept in &all_concepts {
+        domains
+            .entry(concept.domain.clone())
+            .or_default()
+            .push(concept);
+    }
+
+    for (domain, concepts) in &domains {
+        let all_mastered = concepts.iter().all(|c| c.mastery_score >= 0.8);
+        if all_mastered {
+            let entity = format!("domain:{}", domain);
+            if let Ok(true) = db::curriculum_rewards::award_reward(
+                conn, "domain_completed", &entity, XP_DOMAIN_COMPLETED,
+            ) {
+                rewards_granted.push(GrantedReward {
+                    reward_type: "domain_completed".to_string(),
+                    entity_id: entity,
+                    label: format!("Completed curriculum: {}", domain),
+                    xp: XP_DOMAIN_COMPLETED,
+                });
+                total_xp += XP_DOMAIN_COMPLETED;
+            }
+        }
+    }
+
+    // Add the total XP to the user's running total
+    if total_xp > 0 {
+        let current_xp = db::settings::get_setting(conn, "total_xp")
+            .ok()
+            .flatten()
+            .and_then(|v| v.parse::<i64>().ok())
+            .unwrap_or(0);
+        let _ = db::settings::set_setting(conn, "total_xp", &(current_xp + total_xp).to_string());
+
+        // Log each reward as an XP event for the audit trail
+        for reward in &rewards_granted {
+            let _ = db::xp_events::insert_xp_event(
+                conn,
+                reward.xp,
+                &reward.reward_type,
+                &reward.label,
+            );
+        }
+    }
+
+    Ok(CurriculumRewardResult {
+        rewards_granted,
+        total_xp_awarded: total_xp,
+    })
+}
+
+/// Tauri command: check and award curriculum milestone rewards.
+#[tauri::command]
+pub fn check_curriculum_rewards(
+    state: State<'_, AppState>,
+) -> Result<CurriculumRewardResult, String> {
+    let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
+    award_curriculum_milestones(&conn)
 }

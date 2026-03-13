@@ -15,10 +15,31 @@ pub async fn get_lesson(
 ) -> Result<String, String> {
     rate_limit::check_rate_limit("get_lesson")?;
 
-    // Record the lesson view for export/analytics
+    // Record the lesson view for export/analytics and check for curriculum rewards
+    // (e.g., "concept started" milestone on first engagement).
     {
         let conn = state.db.lock().map_err(|e| format!("Lock error: {e}"))?;
         let _ = db::lesson_views::insert_lesson_view(&conn, &concept_id, "");
+
+        // Award "concept_started" if this is the first engagement with this concept.
+        // Uses the same entity key as award_curriculum_milestones so quiz attempts
+        // and lesson views both count toward the same one-time reward.
+        let entity = format!("concept:{}", concept_id);
+        if let Ok(true) = db::curriculum_rewards::award_reward(
+            &conn, "concept_started", &entity,
+            1, // XP_CONCEPT_STARTED
+        ) {
+            let current_xp = db::settings::get_setting(&conn, "total_xp")
+                .ok()
+                .flatten()
+                .and_then(|v| v.parse::<i64>().ok())
+                .unwrap_or(0);
+            let _ = db::settings::set_setting(&conn, "total_xp", &(current_xp + 1).to_string());
+            let _ = db::xp_events::insert_xp_event(
+                &conn, 1, "concept_started",
+                &format!("Started learning: {}", concept_id),
+            );
+        }
     }
 
     // Get concept metadata (needed for mastery-aware cache lookup).

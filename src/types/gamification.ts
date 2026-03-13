@@ -50,13 +50,26 @@ export interface XPEvent {
 }
 
 export type XPSource =
-  | "lesson_complete"
-  | "quiz_perfect"
-  | "quiz_pass"
+  | "concept_started"
+  | "concept_mastered"
+  | "module_completed"
+  | "domain_completed"
   | "project_pass"
   | "streak_bonus"
   | "badge_earned"
   | "daily_goal";
+
+export interface CurriculumRewardResult {
+  rewardsGranted: GrantedReward[];
+  totalXpAwarded: number;
+}
+
+export interface GrantedReward {
+  rewardType: string;
+  entityId: string;
+  label: string;
+  xp: number;
+}
 
 export const LEVEL_TITLES: Record<number, string> = {
   1: "Curious Novice",
